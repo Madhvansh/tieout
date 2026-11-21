@@ -115,7 +115,13 @@ class Executor:
         env: dict = {}
         try:
             for step in plan["steps"]:
-                env[step["id"]] = getattr(self, "_op_" + step["op"])(step, env)
+                res = getattr(self, "_op_" + step["op"])(step, env)
+                ref = step.get("company")
+                if isinstance(ref, str) and ref.startswith("$") and ref[1:] in env:
+                    # a company or line picked by an earlier step: what that step read is part of the proof
+                    prior = env[ref[1:]]
+                    res.leaves, res.notes = list(prior.leaves) + res.leaves, list(prior.notes) + res.notes
+                env[step["id"]] = res
         except PlanTypeError as e:
             return abstain(f"type error: {e}")
         except Abstained as e:
@@ -143,7 +149,8 @@ class Executor:
 
     def _pid(self, ticker: str, spec: dict, nature: str) -> str:
         base = f"FY{self._fy(ticker, spec)}"
-        if spec.get("q"):
+        q4_is_year = spec.get("q") and int(spec["q"]) == 4 and (nature == "stock" or spec.get("ytd"))
+        if spec.get("q") and not q4_is_year:              # Q4 balance = year end; Q4 year to date = the year
             base += f"Q{int(spec['q'])}"
             if spec.get("ytd") and nature == "flow" and int(spec["q"]) > 1:
                 base += "YTD"
@@ -190,6 +197,8 @@ class Executor:
         if self.use_checks and self.require_verified and r.status != "verified":
             return abstain(f"{ticker} {what} {pid} is not covered by any passing check (strict policy)", [leaf])
         value = abs(r.value) if outflow else r.value
+        if unit == "percent" or r.unit == "percent":       # printed 15.7% enters as 0.157, like every ratio
+            value, unit = value / 100.0, "ratio"
         notes = [f"{ticker} {pid} ends {r.period_end}"] if r.period_end else []
         if f.binding_state != "active":
             notes.append(f"{ticker} {what}: label '{r.label[:40]}' matched by wording only, structure did not confirm it")
@@ -311,6 +320,9 @@ class Executor:
         a, b = self.measure(ticker, m, start, first), self.measure(ticker, m, end, first)
         if not (a.ok and b.ok):
             return _merge_abstain(a, b)
+        if a.leaves and {lf.id for lf in a.leaves} == {lf.id for lf in b.leaves}:
+            return abstain(f"{ticker} {_name(m)}: both periods read the same printed figure, which has no period of "
+                           "its own, so no change can be computed", a.leaves)
         leaves, notes = a.leaves + b.leaves, a.notes + b.notes
         if mode == "abs":
             value, unit = b.value - a.value, a.unit
@@ -447,6 +459,8 @@ class Executor:
                             cell["text"], "verified" if cell["ok"] else "unverified", cell["value"])
                 notes = ([f"the parts of this total were grouped by their heading on page {line['page']}, "
                           "not by a recovered formula"] if line.get("grouped_by") == "heading" else [])
+                if line["unit"] == "percent":                # printed percentages enter as fractions
+                    return Result("number", cell["value"] / 100.0, "ratio", [leaf], notes)
                 return Result("number", cell["value"], line["unit"], [leaf], notes)
         return abstain(f"'{line['label']}' has no value for {self._pid(ticker, spec, 'flow')}")
 
@@ -540,7 +554,7 @@ class Executor:
             for t in members:
                 r = self._attr(t, w["attr"])
                 leaves.extend(r.leaves)
-                if r.ok and _norm(r.value) == _norm(w["eq"]):
+                if r.ok and same_name(r.value, w["eq"]):
                     keep.append((t, r.value))
             return Result("companies", keep, "", leaves, [], {"op": "filter", "what": str(w), "value": keep})
         spec = w.get("period") or s.get("period") or self._set_period(s.get("over"), env) or {}
@@ -753,6 +767,17 @@ def _name(m: dict) -> str:
 
 def _norm(x) -> str:
     return re.sub(r"[^a-z0-9]", "", str(x).lower())
+
+
+_LEGAL = re.compile(r"\b(llp|llc|inc|corp|corporation|company|co|the|plc|ltd|n a)\b\.?")
+
+
+def same_name(a, b) -> bool:
+    """Two names of the same thing: "KPMG LLP" and "KPMG", "Ernst & Young LLP" and "Ernst and Young"."""
+    def key(x):
+        return re.sub(r"[^a-z0-9]", "", _LEGAL.sub(" ", str(x).lower().replace("&", " and ")))
+    ka, kb = key(a), key(b)
+    return bool(ka) and bool(kb) and (ka == kb or ka in kb or kb in ka)
 
 
 def render(r: Result) -> str:
