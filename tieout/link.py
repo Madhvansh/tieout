@@ -361,16 +361,31 @@ def _columns(row: dict) -> list:
     return list(dict.fromkeys(c.get("col", "") for c in row["cells"]))
 
 
-def _show(i: int, cand: dict, g: Graph) -> str:
+def acronym_note(phrase: str, text: str) -> str:
+    """" [ARR = annualized recurring revenue]" when the phrase's words abbreviate to an acronym the
+    candidate prints (small models miss these), else ""."""
+    acronyms = {a.rstrip("s") for a in _ACRONYM.findall(text)}
+    words = _words_in_order(phrase)
+    for i in range(len(words)):
+        for n in range(5, 1, -1):
+            run = words[i:i + n]
+            if len(run) == n and "".join(w[0] for w in run).upper() in acronyms:
+                return f" [{''.join(w[0] for w in run).upper()} = {' '.join(run)}]"
+    return ""
+
+
+def _show(i: int, cand: dict, g: Graph, phrase: str = "") -> str:
     ref = cand["ref"]
     filing = f"{g.filings[ref['doc']]['form']} {g.filings[ref['doc']]['fiscal_year']}"
     if cand["kind"] == "sentence":
-        return f"{i}: SENTENCE ({filing}, page {ref['page']}): {shown_sentence(ref)[:360]}"
+        return (f"{i}: SENTENCE ({filing}, page {ref['page']}): {shown_sentence(ref)[:360]}"
+                + acronym_note(phrase, ref["masked"]))
     dated = any(c.get("pid") for c in ref["cells"])
     cols = "periods" if dated else "; ".join(f"[{j}] {h[:40]}" for j, h in enumerate(_columns(ref)))
     return (f"{i}: ROW ({filing}, page {ref['page']}): label '{ref['label'][:80]}' | section '{ref['section'][:50]}' | "
             f"table '{ref['title'][:90]}' | note '{ref.get('context', '')[:50]}' | columns: {cols} | "
-            f"role {ref['role']} | unit {ref['unit']}")
+            f"role {ref['role']} | unit {ref['unit']}"
+            + acronym_note(phrase, " ".join((ref["label"], ref["section"], ref["title"]))))
 
 
 def shown_sentence(m: dict) -> str:
@@ -436,7 +451,7 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
                    if f["ticker"] == ticker and f["fiscal_year"] == fiscal_year and f.get("period_end")})
     period = fiscal_year + (f" (fiscal year ending {ends[-1]})" if ends else "")
     user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nItem asked for: {phrase}\nPeriod asked: {period}\n"
-            f"Question: {question}\n\nCandidates:\n" + "\n".join(_show(i, c, g) for i, c in enumerate(cands)))
+            f"Question: {question}\n\nCandidates:\n" + "\n".join(_show(i, c, g, phrase) for i, c in enumerate(cands)))
     try:
         ans = ask_json(SYSTEM, user, model=link_model(model), tag="link", offline=offline)
     except DailyLimit:
