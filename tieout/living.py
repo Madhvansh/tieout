@@ -27,6 +27,7 @@ The store only grows; every entry records where it came from.
 from __future__ import annotations
 
 import json
+import re
 import pathlib
 import time
 from collections import defaultdict
@@ -118,6 +119,12 @@ def gate(g: Graph, doc: str, concept: str, row: int, rows: dict) -> tuple:
              and b.state == "active" and b.concept != concept]
     if taken:
         objections.append(f"row is already bound to {taken[0].concept}")
+    if concept in COST_PARTS and _is_all_costs(g, doc, d):
+        objections.append("revenue minus this row is operating income: it is all operating costs, not one of them")
+    siblings = _one_of_several(concept, row, rows)
+    if siblings:
+        objections.append(f"the heading names the concept and this is one of {siblings} lines under it; "
+                          "the concept is their total")
     s = c.structure
     if s.get("total_of"):
         if d["role"] == "total":
@@ -156,6 +163,37 @@ def gate(g: Graph, doc: str, concept: str, row: int, rows: dict) -> tuple:
     elif prior:
         evidence.append(f"role agrees with other companies ({'total' if prior == 'total' else 'line item'})")
     return (not objections), evidence, objections
+
+
+COST_PARTS = {"CostOfRevenue", "SellingGeneralAdmin", "ResearchAndDevelopment", "SalesAndMarketing",
+              "GeneralAndAdministrative"}
+
+
+def _is_all_costs(g: Graph, doc: str, d: dict) -> bool:
+    """True when the row, taken from revenue, leaves exactly operating income for some printed period:
+    then it is the total of all operating costs, which no single cost concept may be bound to."""
+    ticker = g.filings[doc]["ticker"]
+    for r in d["readings"]:
+        rev, oi = g.fact(ticker, "Revenue", r.period), g.fact(ticker, "OperatingIncome", r.period)
+        if rev is None or oi is None or r.value is None:
+            continue
+        rv, ov = g.best_reading(rev).value, g.best_reading(oi).value
+        if rv is not None and ov is not None and abs(rv - abs(r.value) - ov) <= max(1.0, 0.0005 * abs(rv)):
+            return True
+    return False
+
+
+def _one_of_several(concept: str, row: int, rows: dict) -> int:
+    """How many amount lines share this row's heading, when the heading (not the row's own label) carries
+    the concept's words: "Long-term debt due after one year" over two lines is the total of both."""
+    def words(text: str) -> set:
+        return {w for w in re.findall(r"[a-z]+", text.lower()) if len(w) > 3}
+    key = words(SAYS.get(concept, "")) or {concept.lower()}
+    d = rows[row]
+    if not d["section"] or (key & words(d["label"])) or not (key & words(d["section"])):
+        return 0
+    same = [r for r, x in rows.items() if x["section"] == d["section"] and x["unit"] == d["unit"]]
+    return len(same) if len(same) >= 2 else 0
 
 
 def _derived_from_cf_row(g: Graph, doc: str, d: dict, rows: dict):
@@ -317,6 +355,57 @@ def load_learned(g: Graph, path: pathlib.Path = LEARNED) -> int:
             if e.get("state") == "active" and e.get("label"):
                 n += apply_entry(g, e)
     return n
+
+
+# ------------------------------------------------------------ the coverage pass and absence
+
+ABSENT = ROOT / "semantics" / "absent.jsonl"
+
+SYSTEM_MANY = """You map financial concepts to rows of one company's financial statement.
+You are shown the printed row labels with their section headings and structural roles. You are never
+shown values. For each concept listed, give the single row that reports it for the whole company
+(consolidated, attributable to the parent where the statement separates it), or null if no row
+reports it. Never a component of the concept, never a per-share row for an amount.
+Answer as JSON, one key per concept: {"<Concept>": <row number or null>, ...}"""
+
+
+def propose_rows(g: Graph, ticker: str, kind: str, concepts: list, model: Optional[str] = None,
+                 offline: bool = False) -> dict:
+    """One model call for every unbound concept of one statement: {concept: row or None}. Labels only."""
+    doc = latest_doc(g, ticker)
+    rows = row_table(g, doc, kind) if doc else {}
+    if not rows or not concepts:
+        return {}
+    bound = {b.row: b.concept for b in g.bindings if b.doc == doc and b.kind == kind and b.state == "active"}
+    user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nStatement: {kind}\nConcepts:\n"
+            + "\n".join(f"{c}: {SAYS.get(c, '')}" for c in concepts)
+            + "\n\nRows (number: label (section) <role>):\n" + describe(rows, bound))
+    ans = ask_json(SYSTEM_MANY, user, model=link_model(model), tag="bindmany", offline=offline)
+    out = {}
+    for c in concepts:
+        row = ans.get(c) if isinstance(ans, dict) else None
+        row = int(row) if isinstance(row, str) and row.strip().isdigit() else row
+        out[c] = row if isinstance(row, int) and not isinstance(row, bool) and row in rows else None
+    return out
+
+
+def closure(g: Graph, doc: str, kind: str) -> tuple:
+    """(rows inside a passing formula, amount rows) of one statement: how completely it was read."""
+    rows = [d for d in row_table(g, doc, kind).values() if d["unit"] == "USD" and d["label"].strip()]
+    return sum(1 for d in rows if d["verified"]), len(rows)
+
+
+def load_absent(g: Graph, path: pathlib.Path = ABSENT) -> int:
+    """Facts of the form "this company does not report this concept", each with its evidence."""
+    if not hasattr(g, "absent"):
+        g.absent = {}
+    if not path.exists():
+        return 0
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if line.strip():
+            e = json.loads(line)
+            g.absent[(e["ticker"], e["concept"])] = e["evidence"]
+    return len(g.absent)
 
 
 SAYS = {

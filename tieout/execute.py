@@ -93,6 +93,7 @@ class Executor:
         self.use_derivations = use_derivations    # ablation: no metric formulas, no equation solving
         self.use_solving = use_solving            # ablation: no fourth quarter from the year, no identities
         self.use_links = use_links                # ablation: no line items, sentences or breakdowns
+        self._in_set = 0                          # inside a rank, filter or agg: compare statement lines only
         self.concepts = concept_defs()
         self.metrics = metric_defs()
         self.identities = identity_defs()
@@ -164,9 +165,19 @@ class Executor:
             if solved is not None:
                 return solved
         reason = getattr(self.g, "absent", {}).get((ticker, concept))
-        if reason:
+        if reason and (self._in_set or not self.use_links):
+            # in a comparison, a company that does not print the concept is named as such, not as a gap
             return Result("abstain", notes=[f"{ticker} does not report {concept}: {reason}"],
                           extra={"not_reported": True})
+        if derive and self.use_links and c.unit == "USD" and not self._in_set:
+            # not a line of the statement: a note or a sentence of the filing may still print it
+            words = concept_words(concept)
+            noted = self._item(ticker, words, spec, first)
+            if noted.ok:
+                noted.notes.append(f"{ticker} prints no {concept} line on its {c.statement} statement; this is the "
+                                   f"line or sentence the linker tied to '{words}'")
+                return noted
+            return abstain(f"no fact for {ticker} {concept} {pid}", missing=[(ticker, concept, spec)] + noted.missing)
         return abstain(f"no fact for {ticker} {concept} {pid}", missing=[(ticker, concept, spec)])
 
     def _from_fact(self, f, ticker: str, what: str, pid: str, first: bool, unit: str, outflow: bool) -> Result:
@@ -397,7 +408,11 @@ class Executor:
         kind, members, leaves = self._members(step.get("over"), env)
         rows, skipped, absent, missing = [], [], [], []
         for member in members:
-            r = self.measure(member, m, spec) if kind == "companies" else self._line_measure(member, m, spec)
+            self._in_set += 1                         # a comparison across a set uses statement lines only
+            try:
+                r = self.measure(member, m, spec) if kind == "companies" else self._line_measure(member, m, spec)
+            finally:
+                self._in_set -= 1
             leaves.extend(r.leaves)
             name = member if kind == "companies" else member["label"]
             if r.ok:
@@ -700,6 +715,11 @@ def _coverage_notes(ranked: int, skipped: list, absent: list) -> list:
     if skipped:
         notes.append(f"covered {ranked} of {ranked + len(skipped)}; no fact found for: {', '.join(skipped)}")
     return notes
+
+
+def concept_words(concept: str) -> str:
+    """A concept's name as words a filing might print: "ResearchAndDevelopment" -> "research and development"."""
+    return re.sub(r"(?<!^)(?=[A-Z])", " ", concept).lower()
 
 
 def _on_value(m: Optional[dict]) -> dict:
