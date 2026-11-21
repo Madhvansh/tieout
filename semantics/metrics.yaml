@@ -50,9 +50,9 @@ metrics:
     says: capital expenditures as a share of revenue
 
   - name: return_on_equity
-    formula: NetIncome / TotalEquity
+    formula: NetIncome / ShareholdersEquity
     unit: ratio
-    says: net income divided by total equity at period end
+    says: net income divided by shareholders' equity at period end
 
   - name: return_on_assets
     formula: NetIncome / TotalAssets

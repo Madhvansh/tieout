@@ -245,6 +245,7 @@ def _add_filing(g: Graph, m: dict, verbose: bool) -> None:
         t = st.table
         tid = f"{doc}:p{t.page}:{kind}"
         g.tables[tid] = {"doc": doc, "page": t.page, "kind": kind, "title": t.title, "scale": t.scale,
+                         "pages": sorted({c.page for r in t.rows for c in r.cells.values()}),
                          "columns": [{"header": c.header, "end": c.end_date, "months": c.months} for c in t.columns],
                          "verified": st.verified, "cells": st.cells}
         ok = verified_cells(t, st.checks)

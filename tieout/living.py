@@ -107,7 +107,7 @@ def gate(g: Graph, doc: str, concept: str, row: int, rows: dict) -> tuple:
     evidence, objections = [], []
     if not d["label"].strip():
         objections.append("row has no printed label")
-    want = "USD/share" if c.unit == "USD/share" else "USD"
+    want = c.unit if c.unit in ("USD/share", "shares") else "USD"
     if d["unit"] != want:
         objections.append(f"unit is {d['unit']}, concept needs {want}")
     if d["verified"]:
@@ -326,9 +326,16 @@ SAYS = {
     "OperatingIncome": "operating income / income from operations / earnings from operations",
     "PretaxIncome": "income before income taxes",
     "IncomeTax": "provision for income taxes (income tax expense)",
-    "NetIncome": "net income for the period (attributable to the company if the statement separates noncontrolling interests)",
+    "NetIncome": "net income attributable to the company's own shareholders (the usual meaning of net income, profit or earnings)",
+    "ConsolidatedNetIncome": "net income including the share of noncontrolling (minority) interests; same as NetIncome when there are none",
     "EPSDiluted": "diluted earnings per share",
+    "EPSBasic": "basic earnings per share",
     "SharesDiluted": "diluted weighted-average number of shares used for diluted earnings per share",
+    "SharesBasic": "basic weighted-average number of shares outstanding",
+    "InterestExpense": "interest expense",
+    "SalesAndMarketing": "sales and marketing expense, where printed as its own line",
+    "GeneralAndAdministrative": "general and administrative expense, where printed as its own line",
+    "NoninterestIncome": "total noninterest income (banks)",
     "NetInterestIncome": "net interest income (banks)",
     "ProvisionForCreditLosses": "provision for credit losses (banks)",
     "NoninterestExpense": "total noninterest expense (banks)",
@@ -337,7 +344,14 @@ SAYS = {
     "TotalAssets": "total assets",
     "TotalCurrentLiabilities": "total current liabilities",
     "TotalLiabilities": "total liabilities (only if printed as a line)",
-    "TotalEquity": "total shareholders' equity (total equity)",
+    "ShareholdersEquity": "equity belonging to the company's own shareholders (stockholders' equity, book value)",
+    "TotalEquity": "total equity including noncontrolling interests; same as ShareholdersEquity when there are none",
+    "AccountsReceivable": "accounts receivable, net",
+    "PropertyPlantEquipment": "property, plant and equipment, net",
+    "IntangibleAssets": "intangible assets other than goodwill, net",
+    "AccountsPayable": "accounts payable",
+    "RetainedEarnings": "retained earnings (or accumulated deficit)",
+    "Loans": "total loans, net (banks)",
     "TotalLiabilitiesAndEquity": "total liabilities and equity (equals total assets)",
     "Inventory": "inventories",
     "Goodwill": "goodwill",

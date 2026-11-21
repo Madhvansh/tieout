@@ -89,6 +89,7 @@ def propose(st, defs: Optional[list] = None) -> dict:
     defs = defs or load_seed()
     t = st.table
     totals = {ch.total for ch in st.checks if ch.status != "fail"}
+    by_total = {ch.total: ch for ch in st.checks if ch.status != "fail"}
     out: dict = {}
     for c in defs:
         if c.statement != st.kind:
@@ -103,6 +104,12 @@ def propose(st, defs: Optional[list] = None) -> dict:
             lab = norm_label(r.label)
             if any(p.search(lab) for p in c.labels):
                 hits.append(r.idx)
+        not_after = c.structure.get("not_after")
+        if not_after:
+            # "Net income applicable to common shareholders" is net income minus preferred
+            # dividends: a different quantity. The recovered formula says which row is which.
+            hits = [h for h in hits if not _subtracts(t, by_total.get(h), not_after)
+                    and not (h not in by_total and re.search(r"\bto common\b", norm_label(t.rows[h].label)))]
         if not hits:
             continue
         if c.prefer_section:
@@ -119,24 +126,116 @@ def propose(st, defs: Optional[list] = None) -> dict:
     return out
 
 
+def _subtracts(t, check, pattern: str) -> bool:
+    """Does this recovered formula have an operand whose label matches `pattern`?"""
+    return check is not None and any(re.search(pattern, t.rows[row].label, re.I) for row, _sign in check.operands)
+
+
+def structural_proposals(st, proposals: dict) -> dict:
+    """Proposals that need no label at all: {concept: (row, evidence)}.
+
+    Balance sheet: the two rows that print identical values in every column are
+    total assets and total liabilities and equity, in that order. Merck prints
+    both with no label; the tie still names them.
+
+    Income statement: a per-share row e, a share-count row s and an income row n
+    with n / s = e in every column are earnings per share, its share count and
+    the income it is computed on. Of two such pairs the one with more shares is
+    the diluted one. Wording is not consulted unless only one pair exists.
+    """
+    t, out = st.table, {}
+    if st.kind == "BS" and st.ties:
+        a, b = max(st.ties, key=lambda pair: max(abs(v) for v in _ints(t, t.rows[pair[0]]) if v is not None))
+        why = "prints the same values in every column as the row that closes the statement"
+        out["TotalAssets"] = (min(a, b), why)
+        out["TotalLiabilitiesAndEquity"] = (max(a, b), why)
+    pairs = per_share_identities(t, proposals) if st.kind == "IS" else []
+    if pairs:
+        eps_rows, share_rows = sorted({p["eps"] for p in pairs}), sorted({p["shares"] for p in pairs})
+        income = t.rows[pairs[0]["income"]].label[:40]
+
+        def first_value(row: int) -> float:
+            return next(c.value for _, c in sorted(t.rows[row].cells.items()) if c.value)
+
+        def choose(rows: list, word: str, largest: bool) -> int:
+            """The row whose wording says `word`; without such wording, the largest or smallest."""
+            said = [r for r in rows if word in (t.rows[r].label + " " + t.rows[r].section).lower()]
+            return said[0] if said else sorted(rows, key=first_value, reverse=largest)[0]
+
+        # dilution adds shares and lowers the per-share amount
+        chosen = {"Diluted": (choose(eps_rows, "dilut", False), choose(share_rows, "dilut", True))}
+        if len(eps_rows) > 1 or len(share_rows) > 1:
+            chosen["Basic"] = (choose(eps_rows, "basic", True), choose(share_rows, "basic", False))
+        for kind, (eps_row, share_row) in chosen.items():
+            why = f"'{income}' divided by the share count reproduces the printed per-share amount in every column"
+            out[f"EPS{kind}"] = (eps_row, why)
+            out[f"Shares{kind}"] = (share_row, why)
+    return out
+
+
+def per_share_identities(t, proposals: dict) -> list:
+    """Every (per-share row, share-count row, income row) with income / shares = per-share amount.
+
+    Found from arithmetic alone. The share scale is solved for as well: a filer
+    that prints dollars in millions and shares in thousands satisfies the
+    identity at exactly one scale.
+    """
+    start = min((proposals[c] for c in ("NetIncome", "ConsolidatedNetIncome") if c in proposals), default=None)
+    if start is None:
+        return []
+    income_rows = [r for r in t.rows if r.idx >= start and row_pool(t, r) == "money"]
+    share_rows = [r for r in t.rows if row_pool(t, r) == "shares"]
+    amount_rows = [r for r in t.rows if row_pool(t, r) == "ratio" and not any(c.is_percent for c in r.cells.values())]
+    found = []
+    for e in amount_rows:
+        for s in share_rows:
+            for n in income_rows:
+                cols = [c for c in range(t.ncols) if all(c in r.cells and r.cells[c].value for r in (e, s, n))]
+                if len(cols) < 2:
+                    continue
+                for share_scale in dict.fromkeys((t.share_scale, 1.0, 1e3, 1e6)):
+                    if all(abs(n.cells[c].value * t.scale / (s.cells[c].value * share_scale) - e.cells[c].value)
+                           <= max(0.02, 0.012 * abs(e.cells[c].value)) for c in cols):
+                        found.append({"eps": e.idx, "shares": s.idx, "income": n.idx, "cols": cols,
+                                      "share_scale": share_scale})
+                        break
+                else:
+                    continue
+                break                                  # first income row that fits this pair is enough
+    return found
+
+
 def gate(doc: str, statements: dict, proposals: dict) -> tuple:
     """Judge every proposal against the recovered structure.
 
-    Returns (bindings, ratio_checks). A ratio check is the per-share identity:
-    net income divided by diluted shares must reproduce the printed diluted
-    earnings per share. Per-share rows belong to no sum, so this is what
-    verifies them, and because earnings per share is printed in plain
-    dollars it also pins the scale of the income statement.
+    Returns (bindings, ratio_checks). A ratio check is a per-share identity:
+    income divided by a share count reproduces a printed per-share amount.
+    Per-share rows belong to no sum, so this is what verifies them, and because
+    earnings per share is printed in plain dollars it also pins the scale of
+    the income statement.
     """
     defs = concept_defs()
     bindings = []
     ratio_checks = []
     cf = statements.get("CF")
-    eps_ok = None
-    if "IS" in statements:
-        eps_ok = _eps_identity(statements["IS"].table, proposals.get("IS", {}))
-        if eps_ok:
-            ratio_checks.append(("IS", eps_ok))
+    structural: dict = {}
+    for kind, st in statements.items():
+        for concept, (row, why) in structural_proposals(st, proposals.get(kind, {})).items():
+            if concept not in defs:
+                continue
+            worded = proposals.setdefault(kind, {}).get(concept)
+            if kind == "BS" and worded not in (None, row):
+                continue                             # wording and the tie disagree: the gate below holds it
+            proposals[kind][concept] = row           # per-share rows: the identity outranks wording
+            structural[(kind, concept)] = why
+    if "IS" in statements and "IS" in proposals:
+        t = statements["IS"].table
+        pairs = per_share_identities(t, proposals["IS"])
+        scales = {p["share_scale"] for p in pairs}
+        if len(scales) == 1:
+            t.share_scale = scales.pop()             # the identity holds at exactly this share scale
+        for p in pairs:
+            ratio_checks.append(("IS", {"rows": (p["eps"], p["income"], p["shares"]), "cols": p["cols"]}))
     for kind, st in statements.items():
         t = st.table
         ok_cells = verified_cells(t, st.checks)
@@ -183,9 +282,9 @@ def gate(doc: str, statements: dict, proposals: dict) -> tuple:
                                             + "', which reappears on the cash-flow statement")
                             break
             if s.get("eps_identity"):
-                confirmed = bool(eps_ok)
-                if confirmed:
-                    evidence.append("net income divided by diluted shares reproduces diluted earnings per share")
+                confirmed = (kind, concept) in structural
+            if (kind, concept) in structural:
+                evidence.append(structural[(kind, concept)])
             if confirmed is None:
                 state = "active" if evidence else "proposed"       # no structural rule: a verified value is enough
             else:
@@ -193,26 +292,6 @@ def gate(doc: str, statements: dict, proposals: dict) -> tuple:
             bindings.append(Binding(doc=doc, kind=kind, row=row, label=r.label, concept=concept,
                                     origin="seed", state=state, evidence=evidence))
     return bindings, ratio_checks
-
-
-def _eps_identity(t, prop: dict):
-    """{"rows": (eps, net income, shares), "cols": [...]} if NI / diluted shares = diluted EPS in every column."""
-    rows = [prop.get("EPSDiluted"), prop.get("NetIncome"), prop.get("SharesDiluted")]
-    if any(x is None for x in rows):
-        return None
-    eps, ni, sh = (t.rows[x] for x in rows)
-    cols = []
-    for c in range(t.ncols):
-        if not (c in eps.cells and c in ni.cells and c in sh.cells):
-            continue
-        e, n, d = eps.cells[c].value, ni.cells[c].value, sh.cells[c].value
-        if not d or e is None or n is None:
-            return None
-        implied = (n * t.scale) / (d * t.share_scale)
-        if abs(implied - e) > max(0.02, 0.012 * abs(e)):      # cents rounding; preferred dividends at a few filers
-            return None
-        cols.append(c)
-    return {"rows": tuple(rows), "cols": cols} if cols else None
 
 
 def _within(by_total: dict, top, row: int, depth: int = 2) -> bool:

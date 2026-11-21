@@ -45,7 +45,7 @@ def build_raw(g, verbose: bool = True) -> list:
         ticker = f["ticker"]
         cal = g.calendars[ticker]
         pages = pdfio.load_pages(doc)
-        skip = {t["page"] for t in g.tables.values() if t["doc"] == doc}
+        skip = {p for t in g.tables.values() if t["doc"] == doc for p in t.get("pages", [t["page"]])}
         # values of bound facts in this filing, to recognise a table that restates one of them
         anchors = {}
         for fact in g.facts.values():

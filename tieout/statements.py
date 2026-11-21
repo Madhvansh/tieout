@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import itertools
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Optional
 
 from .calc import coverage, discover, ties
@@ -37,7 +37,9 @@ OTHER_TITLE = re.compile(
     r"equity|redeemable|total equity)|comprehensive (income|loss|earnings)\b", re.I)
 YEAR_ONLY = re.compile(r"^(19|20)\d\d$")
 COMBINED_OK = re.compile(r"statements? of (consolidated )?(operations|income|earnings) and comprehensive", re.I)
+ANY_TITLE = re.compile(r"statements?\b|balance sheets?|notes to|report of independent|financial position", re.I)
 MIN_NUMBERS = 18
+MAX_CONTINUATION_PAGES = 2
 
 
 @dataclass
@@ -116,6 +118,7 @@ def split_regions(lines: list) -> list:
 
 def candidates(doc_id: str, pages: list) -> list:
     out = []
+    continued = set()                             # (kind, page) absorbed into the statement before it
     for i, page in enumerate(pages):
         lines = page_lines(page)
         if not lines:
@@ -127,12 +130,59 @@ def candidates(doc_id: str, pages: list) -> list:
             t = build_table(doc_id, i + 1, region, title)
             if t is None or len(t.rows) < 8:
                 continue
-            checks = discover(t)
-            ok, total = coverage(t, checks)
-            st = Statement(kind, t, checks, ties(t), ok, total)
-            st.score = _score(st)
+            st = _statement(kind, t)
+            for nxt in range(i + 1, min(i + 1 + MAX_CONTINUATION_PAGES, len(pages))):
+                longer = _with_next_page(doc_id, st, pages[nxt], nxt + 1)
+                if longer is None:
+                    break
+                st = longer
+                continued.add((kind, nxt + 1))
             out.append(st)
-    return out
+    return [st for st in out if (st.kind, st.table.page) not in continued]
+
+
+def _statement(kind: str, t: Table) -> Statement:
+    checks = discover(t)
+    ok, total = coverage(t, checks)
+    st = Statement(kind, t, checks, ties(t), ok, total)
+    st.score = _score(st)
+    return st
+
+
+def _with_next_page(doc_id: str, st: Statement, page: dict, page_no: int) -> Optional[Statement]:
+    """The statement extended by the next page, if that page continues it.
+
+    A long cash-flow statement or a bank's balance sheet runs over two pages.
+    The next page is taken as a continuation when it repeats the title with
+    "(continued)", or when it carries no title of its own and the arithmetic
+    joins the pages: a formula of the combined table has rows on both (the
+    subtotal that closes "financing activities" sits on the second page and
+    sums rows of the first). A separate statement that merely follows, such as
+    comprehensive income, adds up only within itself and is left alone.
+    """
+    lines = page_lines(page)
+    if not lines:
+        return None
+    head = " ".join(w.text for ln in lines[:8] for w in ln)
+    same_kind = [region for kind, _title, region in split_regions(lines) if kind == st.kind]
+    titled = bool(same_kind) and re.search(r"\bcontinued\b", head, re.I) is not None
+    if titled:
+        region = same_kind[0]
+    elif ANY_TITLE.search(head):
+        return None                               # another statement or a note starts here
+    else:
+        region = lines
+    t2 = build_table(doc_id, page_no, region, st.table.title)
+    if t2 is None or t2.ncols != st.table.ncols:
+        return None
+    first_page_rows = len(st.table.rows)
+    rows = list(st.table.rows) + [replace(r, idx=first_page_rows + n) for n, r in enumerate(t2.rows)]
+    longer = _statement(st.kind, replace(st.table, rows=rows))
+    # a formula that holds in all but one column across the page break is still evidence of the join
+    joined = any(min(ch.rows) < first_page_rows <= max(ch.rows) for ch in longer.checks)
+    if longer.cells - st.cells < 4 or not (titled or joined):
+        return None
+    return longer
 
 
 def _score(st: Statement) -> float:

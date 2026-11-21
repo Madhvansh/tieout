@@ -105,20 +105,40 @@ concepts:
       - '^taxes on income$'
       - '^total income tax expense$'
 
+  # Net income comes in two forms where a company has minority owners. NetIncome is the
+  # part attributable to the company's own shareholders (the earnings-per-share numerator);
+  # ConsolidatedNetIncome includes noncontrolling interests (the line the cash-flow
+  # statement starts from). With no minority owners both bind to the same row.
   - name: NetIncome
     statement: IS
     unit: USD
     nature: flow
-    pick: last          # where a statement separates noncontrolling interests, the line attributable to the company
+    pick: last          # the attributable line is printed after the consolidated one
     labels:
       - '^(consolidated )?net (income|earnings)( \(loss\))?$'
       - '^net (income|earnings)( \(loss\))? including non-?controlling interests?$'
+      - '^profit( \(loss\))?( \d)?$'
+      - '^(consolidated )?(net )?(income|earnings|profit)( \(loss\))? (attributable|applicable) to (?!.*non-?controlling)(?!.*redeemable).*'
+    structure:
+      ties_with_cf_first_row: true
+      not_after: 'preferred'     # net income less preferred dividends is a different quantity
+
+  - name: ConsolidatedNetIncome
+    statement: IS
+    unit: USD
+    nature: flow
+    pick: first
+    labels:
+      - '^(consolidated )?net (income|earnings)( \(loss\))?$'
+      - '^net (income|earnings)( \(loss\))? (including|before) .*non-?controlling interests?$'
+      - '^net (income|earnings) before (allocation|attribution) to non-?controlling interests$'
       - '^profit of consolidated and affiliated companies$'
-      - '^profit$'
-      - '^(consolidated )?net (income|earnings)( \(loss\))? (attributable|applicable) to (?!.*non-?controlling)(?!.*redeemable)(?!.*common).*'
     structure:
       ties_with_cf_first_row: true
 
+  # Per-share rows and their share counts are found by arithmetic (income / shares = the
+  # per-share amount in every column; see concepts.per_share_identities). These labels are
+  # only the fallback for a statement where the identity cannot be evaluated.
   - name: EPSDiluted
     statement: IS
     unit: USD/share
@@ -126,10 +146,23 @@ concepts:
     pick: last
     labels:
       - '^diluted$'
-      - '^diluted (net )?(earnings|income)( \(loss\))? per (common |ordinary )?share$'
+      - '^diluted (net )?(earnings|income)( \(loss\))?( per (common |ordinary )?share)?.*'
       - '^(net )?(earnings|income)( \(loss\))? per (common )?share[ ,:—–-]+(assuming dilution|diluted)$'
       - '^diluted (eps|earnings per common share)$'
       - '^profit per (common )?share[ ,:—–-]+diluted$'
+    section: 'per (common |ordinary )?share|earnings per|eps'
+    structure:
+      eps_identity: true
+
+  - name: EPSBasic
+    statement: IS
+    unit: USD/share
+    nature: flow
+    pick: first
+    labels:
+      - '^basic$'
+      - '^basic (net )?(earnings|income)( \(loss\))?( per (common |ordinary )?share)?.*'
+      - '^(net )?(earnings|income)( \(loss\))? per (common )?share[ ,:—–-]+basic$'
     section: 'per (common |ordinary )?share|earnings per|eps'
     structure:
       eps_identity: true
@@ -148,6 +181,54 @@ concepts:
     section: 'shares|weighted'
     structure:
       eps_identity: true
+
+  - name: SharesBasic
+    statement: IS
+    unit: shares
+    nature: flow
+    pick: first
+    labels:
+      - '^basic$'
+      - '^basic (weighted[- ]average )?(common )?shares( outstanding)?$'
+      - '^weighted[- ]average .*basic.*'
+    section: 'shares|weighted'
+    structure:
+      eps_identity: true
+
+  - name: InterestExpense
+    statement: IS
+    unit: USD
+    nature: flow
+    pick: first
+    labels:
+      - '^(total )?interest expense(, net)?$'
+      - '^interest and debt expense$'
+      - '^interest expense(, net of| \(income\)).*'
+
+  - name: SalesAndMarketing
+    statement: IS
+    unit: USD
+    nature: flow
+    pick: first
+    labels:
+      - '^(sales|selling) and marketing( expenses?)?$'
+      - '^marketing and sales$'
+
+  - name: GeneralAndAdministrative
+    statement: IS
+    unit: USD
+    nature: flow
+    pick: first
+    labels:
+      - '^general and administrative( expenses?)?$'
+
+  - name: NoninterestIncome
+    statement: IS
+    unit: USD
+    nature: flow
+    pick: total
+    labels:
+      - '^total non-?interest (income|revenues?)$'
 
   - name: NetInterestIncome
     statement: IS
@@ -224,22 +305,99 @@ concepts:
     structure:
       total_of: true
 
+  # Equity also comes in two forms. ShareholdersEquity belongs to the company's own
+  # shareholders; TotalEquity adds noncontrolling interests. The same wording matches both:
+  # the shareholders' line is printed first and the total last, and with no minority owners
+  # both bind to the same row. "Total liabilities and equity" also says "equity", so each
+  # must be an operand of the row that ties to total assets (found by the first audit
+  # against SEC data: wording plus "is a total" bound the wrong row).
+  - name: ShareholdersEquity
+    statement: BS
+    unit: USD
+    nature: stock
+    pick: first
+    labels: &equity_labels
+      - '^total (stockholders|shareholders|shareowners|share-owners)[’'']? ?(equity|investment)( \(deficit\))?$'
+      - '^total equity( \(deficit\))?$'
+      - '^total (?!liabilities).{0,60}(stockholders|shareholders|shareowners)[’'']? ?(equity|investment)( \(deficit\))?$'
+      - '^total shareholders[’'']? (deficit|equity \(deficit\))$'
+      - '^(total )?equity attributable to (?!.*non-?controlling).*'
+    structure:
+      total_of: true
+      operand_of: TotalLiabilitiesAndEquity
+
   - name: TotalEquity
     statement: BS
     unit: USD
     nature: stock
-    pick: first         # the company's own shareholders' equity, before noncontrolling interests
-    labels:
-      - '^total (stockholders|shareholders|shareowners|share-owners)[’'']? ?(equity|investment)( \(deficit\))?$'
-      - '^total equity( \(deficit\))?$'
-      - '^total (?!liabilities).{0,40}(stockholders|shareholders|shareowners)[’'']? ?equity$'
-      - '^total shareholders[’'']? (deficit|equity \(deficit\))$'
+    pick: last
+    labels: *equity_labels
     structure:
       total_of: true
-      # "Total liabilities and equity" is also a total and also says "equity". Total equity is
-      # the one that is an operand of the row that ties to total assets. (Found by the first
-      # audit against SEC data: wording plus "is a total" bound the wrong row.)
       operand_of: TotalLiabilitiesAndEquity
+
+  - name: AccountsReceivable
+    statement: BS
+    unit: USD
+    nature: stock
+    pick: first
+    labels:
+      - '^(trade )?(accounts|trade) receivables?(, net)?( of allowances?.*)?$'
+      - '^accounts and notes receivable(, net)?.*'
+      - '^receivables(, net)?$'
+      - '^accounts receivable,? (net|less) .*'
+
+  - name: PropertyPlantEquipment
+    statement: BS
+    unit: USD
+    nature: stock
+    pick: first
+    labels:
+      - '^(net )?property(, plant)?,? and equipment(, net| - net|, at cost)?.*'
+      - '^property, plant and equipment.*net.*'
+      - '^property and equipment, net.*'
+      - '^(total )?property, plant and equipment(, net)?$'
+
+  - name: IntangibleAssets
+    statement: BS
+    unit: USD
+    nature: stock
+    pick: first
+    labels:
+      - '^(other )?intangible assets(, net)?( of accumulated amortization.*)?$'
+      - '^(acquired|purchased) intangible assets(, net)?$'
+      - '^intangibles(, net)?$'
+
+  - name: AccountsPayable
+    statement: BS
+    unit: USD
+    nature: stock
+    pick: first
+    labels:
+      - '^(trade )?accounts payable$'
+      - '^accounts payable and accrued (liabilities|expenses)$'
+      - '^(trade )?payables$'
+
+  - name: RetainedEarnings
+    statement: BS
+    unit: USD
+    nature: stock
+    pick: first
+    labels:
+      - '^retained earnings( \(accumulated deficit\))?$'
+      - '^(reinvested|accumulated) earnings$'
+      - '^accumulated deficit$'
+      - '^earnings reinvested( in the business)?$'
+
+  - name: Loans
+    statement: BS
+    unit: USD
+    nature: stock
+    pick: last
+    labels:
+      - '^(total )?loans(, net)?( of (unearned income|allowance).*)?$'
+      - '^loans(,| and leases,?) net of allowance.*'
+      - '^net loans( and leases)?$'
 
   - name: TotalLiabilitiesAndEquity
     statement: BS

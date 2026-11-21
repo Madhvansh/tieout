@@ -1,0 +1,22 @@
+{
+ "MCD_FY2025_10K": {
+  "pages_decoded": 74,
+  "font_units": 9,
+  "glyph_codes": 344,
+  "occurrences": 281068,
+  "width": 117558,
+  "vocabulary": 163395,
+  "arithmetic": 0,
+  "undecoded": 115,
+  "references": {
+   "UFSCXJ+Arial-BoldMT": "Helvetica-Bold",
+   "UFSCXJ+ArialUnicodeMS": "Helvetica",
+   "UFSCXJ+ArialMT": "Helvetica",
+   "UFSCXJ+TimesNewRoman": "Times-Roman",
+   "UFSCXJ+TimesNewRoman-Bold": "Times-Bold",
+   "UFSCXJ+Arial-BoldItalicMT": "Helvetica-BoldOblique",
+   "UFSCXJ+Arial-ItalicMT": "Helvetica-Oblique",
+   "UFSCXJ+TimesNewRoman-BoldItalic": "Times-BoldItalic"
+  }
+ }
+}
