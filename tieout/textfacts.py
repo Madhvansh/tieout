@@ -70,6 +70,8 @@ PCAOB_IDS = {238: "PricewaterhouseCoopers", 42: "Ernst & Young", 34: "Deloitte",
 
 @dataclass
 class TextFact:
+    """One fact read by rule. `share_class` names the class of stock a per-class fact
+    is about ("Class A"), "all classes" on a total over several classes, else None."""
     doc: str
     attr: str
     value: str
@@ -77,6 +79,7 @@ class TextFact:
     quote: str
     bbox: Optional[tuple]
     confidence: str
+    share_class: Optional[str] = None
 
 
 # --------------------------------------------------------------------------- page text
@@ -230,17 +233,23 @@ def title_name(name: str) -> str:
 
 
 class Collector:
+    """The facts of one filing, in the order the rules find them."""
+
     def __init__(self, doc: str):
         self.doc = doc
         self.facts: list = []
 
-    def add(self, attr, value, page, quote, words, confidence):
+    def add(self, attr, value, page, quote, words, confidence, share_class=None, bbox=None):
+        """Keep one fact; its box is `bbox` if given, else the box around `words`."""
         self.facts.append(TextFact(self.doc, attr, str(value), page, quote[:300],
-                                   bbox_of(words), confidence))
+                                   bbox or bbox_of(words), confidence, share_class))
 
-    def from_flow(self, attr, value, flow: Flow, s, e, confidence, quote=None, prefix=""):
+    def from_flow(self, attr, value, flow: Flow, s, e, confidence, quote=None, prefix="", share_class=None):
         q = quote if quote is not None else clip_quote(flow.text, s, e, 300 - len(prefix))
-        self.add(attr, value, flow.page, prefix + q, flow.span_words(s, e), confidence)
+        self.add(attr, value, flow.page, prefix + q, flow.span_words(s, e), confidence, share_class)
+
+    def has(self, attr: str) -> bool:
+        return any(f.attr == attr for f in self.facts)
 
 
 # --------------------------------------------------------------------------- cover page

@@ -411,6 +411,53 @@ def _apply_scale(t: Table, intro: str, default_scale: float) -> None:
     t.scale_source = "inherited"
 
 
+def _decimal_column(t: Table, ci: int) -> bool:
+    cells = [r.cells[ci] for r in t.rows if ci in r.cells and r.cells[ci].text not in DASH_TOKENS]
+    return bool(cells) and all("." in c.text and not c.is_percent for c in cells)
+
+
+def _column_scales(t: Table, region: list, default_scale: float) -> None:
+    """A scale caption printed over some value columns only ("(Dollars in billions)" under a
+    "Variance Due To" group, right of "2025  2024") scales those columns: they get
+    column.scale and column.scale_text. If it was the table's only scale word, the other
+    columns fall back to the document default."""
+    if t.ncols < 2:
+        return
+    first_right = min(c.x_right for c in t.columns)
+    for ln in region:
+        if ln.kind == "num":
+            break
+        for ph in _phrases(ln.words):
+            text = " ".join(w.text for w in ph).replace(LABEL_MARK, "")
+            if not SCALE_WORD_RE.search(text) or ph[0].x0 <= first_right + 5:
+                continue
+            cols = [c for c in t.columns if c.x_right >= ph[0].x0 + 5]
+            if not cols or len(cols) == t.ncols:
+                continue
+            # decimal columns just left of the caption belong to the same group ("Volume  Mix" under it)
+            k = cols[0].idx - 1
+            while k >= 0 and _decimal_column(t, k):
+                cols.insert(0, t.columns[k])
+                k -= 1
+            if len(cols) == t.ncols:
+                continue
+            # scoped only when the page shows it: the other columns are periods and these are not
+            # ("2025 2024 | Volume Mix"), or other header words on the same line sit over the other columns
+            # ("Stores   Retail Square Feet (in thousands)"); "(in millions)" under "2026 2025 2024" is the table's
+            others = [c for c in t.columns if c not in cols]
+            dated = any(c.year or c.end_date for c in others) and not any(c.year or c.end_date for c in cols)
+            beside = any(p[-1].x1 < ph[0].x0 and p[-1].x1 >= min(c.x_left for c in others) - 30
+                         for p in _phrases(ln.words) if p is not ph)
+            if not (dated or beside):
+                continue
+            for c in cols:
+                c.scale, c.scale_text = _scale(text)[0], text
+            rest = (t.caption + " " + t.header_text).replace(text, " ")
+            if not SCALE_WORD_RE.search(rest) and getattr(t, "scale_source", "") == "caption":
+                t.scale = t.share_scale = default_scale
+                t.scale_source = "inherited"
+
+
 # --------------------------------------------------------------- post-build
 
 def _mark_percent_cells(t: Table, pct: set) -> None:
@@ -807,7 +854,9 @@ def _cut_spanning_tables(zone: list, g: float) -> list:
     flags = []
     for ln in zone:
         left, right = halves(ln)
-        flags.append(bool(left and right and _is_value(left[-1].text) and _is_value(right[0].text)))
+        # "... 15,118 | $ 53,766", or a label on the left with nothing but its values on the right ("GMNA | 119")
+        flags.append(bool(left and right and _is_value(right[0].text) and (
+            _is_value(left[-1].text) or all(_is_value(w.text) for w in right) and left[0].text[:1].isalpha())))
     hits = [i for i, f in enumerate(flags) if f]
     if len(hits) < 2:
         return [(True, zone)]
@@ -867,6 +916,59 @@ def _streams(lines: list, page_w: float) -> list:
     return out
 
 
+def _second_label_at(ln: list) -> Optional[float]:
+    """x where a second label starts after values on one line ("Alabama 23 3,153  Montana 7 777"),
+    when values follow it too. None otherwise."""
+    for k in range(2, len(ln) - 1):
+        a, b = ln[k - 1], ln[k]
+        if (is_numeric(a.text) or a.text in DASH_TOKENS) and b.text[:1].isalpha() and b.text not in VALUE_WORDS \
+                and b.x0 - a.x1 > 8 and _wordy(ln[0].text) and any(is_numeric(w.text) for w in ln[k + 1:]):
+            return b.x0
+    return None
+
+
+def _side_by_side(stream: list) -> list:
+    """Split a stream that holds tables printed side by side (stores by state in two or three
+    blocks across the page) into one stream per block. A block boundary is a consistent x
+    where, on four or more lines, a new label starts right after a value and is followed by
+    values of its own, about as many as the block on its left has."""
+    marks = [(i, _second_label_at(ln)) for i, ln in enumerate(stream)]
+    xs = [x for _, x in marks if x is not None]
+    if len(xs) < 4:
+        return [stream]
+    best = max(xs, key=lambda x: sum(1 for y in xs if abs(y - x) <= 15))
+    hits = [i for i, x in marks if x is not None and abs(x - best) <= 15]
+    if len(hits) < 4:
+        return [stream]
+    cut = min(marks[i][1] for i in hits) - 2
+
+    def straddles(ln):
+        return any(w.x0 < cut < w.x1 for w in ln)
+
+    def balanced(ln):
+        left = sum(1 for w in ln if w.x1 <= cut and is_numeric(w.text))
+        right = sum(1 for w in ln if w.x0 >= cut and is_numeric(w.text))
+        return right >= 1 and abs(left - right) <= 1
+    if sum(1 for i in hits if balanced(stream[i])) < 0.6 * len(hits):
+        return [stream]
+    def both_sides(ln):
+        return any(w.x1 <= cut for w in ln) and any(w.x0 >= cut for w in ln)
+
+    lo, hi = hits[0], hits[-1]
+    while lo > 0 and hits[0] - lo < 4 and not straddles(stream[lo - 1]) and both_sides(stream[lo - 1]) \
+            and not _gap_too_big(stream[lo - 1], stream[lo]):
+        lo -= 1                                       # the column headers repeated over both blocks
+    while hi + 1 < len(stream) and not straddles(stream[hi + 1]) and not _gap_too_big(stream[hi], stream[hi + 1]):
+        hi += 1                                       # rows of the longer block below the shorter one
+    zone = stream[lo:hi + 1]
+    left = [p for p in ([w for w in ln if w.x1 <= cut] for ln in zone) if p]
+    right = [p for p in ([w for w in ln if w.x1 > cut] for ln in zone) if p]
+    out = [stream[:lo] + left] + _side_by_side(right)
+    if hi + 1 < len(stream):
+        out.append(stream[hi + 1:])
+    return out
+
+
 def page_tables(doc_id: str, page_no: int, page: dict, default_scale: float = 1.0,
                 prev_title: str = "", ctx: Optional[_Context] = None) -> list:
     """Every table on one page (page_no is 1-based)."""
@@ -874,7 +976,8 @@ def page_tables(doc_id: str, page_no: int, page: dict, default_scale: float = 1.
     if not raw:
         return []
     out: list = []
-    for stream in _streams(raw, page["w"]):
+    streams = [part for s in _streams(raw, page["w"]) for part in _side_by_side(s)]
+    for stream in streams:
         out.extend(_stream_tables(doc_id, page_no, stream, default_scale,
                                   prev_title if not out else "", ctx, out))
     return out
@@ -937,6 +1040,7 @@ def _stream_tables(doc_id: str, page_no: int, raw: list, default_scale: float,
         _text_headers(t, region)
         _spread_panel_year(t)
         _apply_scale(t, intro, default_scale)
+        _column_scales(t, region, default_scale)
         t.intro = intro
         t.context = context
         t.bbox_y = (region[0].y0, region[-1].y1)

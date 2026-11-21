@@ -57,13 +57,13 @@ def income_statements() -> Graph:
 def test_reclassification():
     d = restate.diagnose(balance_sheets(), "X", "FY1@end", label="Other assets", explain=False)
     assert d["kind"] == "reclassification"
-    assert d["delta"] == -30 * SCALE
-    assert d["line"]["old"]["printed"] == "100" and d["line"]["new"]["printed"] == "70"
+    assert d["line"]["delta"] == -30 * SCALE
+    assert d["line"]["old_printed"] == "100" and d["line"]["new_printed"] == "70"
     assert [(c["label"], c["new"], c["new_line"]) for c in d["counterparts"]] == \
         [("Intangible assets, net", 30 * SCALE, True)]
-    assert d["unchanged_total"]["label"] == "Total assets" and d["unchanged_total"]["value"] == 150 * SCALE
-    for ref in (d["line"]["old"], d["line"]["new"], *d["counterparts"][0]["readings"]):
-        assert {"id", "doc", "page", "label", "printed"} <= set(ref)
+    assert [(t["label"], t["value"]) for t in d["unchanged_totals"]] == [("Total assets", 150 * SCALE)]
+    for ref in (d["line"]["old_reading"], d["line"]["new_reading"], d["counterparts"][0]["new_reading"]):
+        assert {"id", "doc", "page", "label", "printed", "value"} <= set(ref)
     assert "reclassification" in d["summary"]
 
 
@@ -71,16 +71,15 @@ def test_restatement():
     g = income_statements()
     d = restate.diagnose(g, "Y", "FY1", concept="NetIncome", explain=False)
     assert d["kind"] == "restatement"
-    assert d["delta"] == -20 * SCALE
-    assert d["unchanged_total"] is None
+    assert d["line"]["delta"] == -20 * SCALE
+    assert d["unchanged_totals"] == []
     assert {(c["label"], c["delta"]) for c in d["changes"]} == {("Revenue", -20 * SCALE), ("Net income", -20 * SCALE)}
-    assert d["changed_lines"] == 2
     assert [e["kind"] for e in restate.events(g)] == ["restatement"]
 
 
 def test_unchanged():
     d = restate.diagnose(balance_sheets(), "X", "FY1@end", label="Cash", explain=False)
-    assert d["kind"] == "unchanged" and d["delta"] == 0
+    assert d["kind"] == "unchanged" and d["line"]["delta"] == 0
     assert d["explanations"] == []
 
 

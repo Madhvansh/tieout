@@ -34,6 +34,11 @@ MONTHS = {
     )
 }
 MONTH_ABBR = {k[:3]: v for k, v in MONTHS.items()}
+# a line inside a table that holds only a date starts a block of rows for that date
+# ("December 2024" between two stacked blocks of the same columns)
+PERIOD_LINE_RE = re.compile(
+    r"^(?:(?:as of|as at|at|years? ended|fiscal years? ended|(?:three|six|nine|twelve) months ended|quarter ended)\s+)?"
+    r"(?:(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?\s+(?:\d{1,2},?\s+)?)?(?:19|20)\d\d:?$", re.I)
 
 
 @dataclass
@@ -70,6 +75,7 @@ class Row:
     label_bbox: Optional[tuple]
     cells: dict = field(default_factory=dict)   # col index -> Cell
     section: str = ""                           # nearest label-only row above
+    period_mark: str = ""                       # nearest date-only line above inside the table ("December 2024")
 
     def values(self, ncols: int) -> list:
         return [self.cells[c].value if c in self.cells else None for c in range(ncols)]
@@ -409,10 +415,15 @@ def build_table(doc_name: str, page_no: int, lines: list, title: str = "") -> Op
     scale, share_scale = _scale(caption + " " + header_text)
 
     rows: list = []
-    section = ""
+    section, period_mark = "", ""
     pending_label: list = []          # label-only line that may continue below
     for ln in lines[body_start:]:
         found = cells_of(ln)
+        if not found and rows and PERIOD_LINE_RE.match(" ".join(w.text for w in ln).strip()):
+            if pending_label:
+                section, pending_label = " ".join(w.text for w in pending_label), []
+            period_mark = " ".join(w.text for w in ln).strip().rstrip(":")
+            continue
         label_words = [w for w in ln if w.x1 <= label_limit + 2 or
                        (not is_numeric(w.text) and w.text not in DASH_TOKENS and w.text != "$"
                         and _col_of(w, cols) is None and w.x0 < label_limit + 40)]
@@ -451,7 +462,8 @@ def build_table(doc_name: str, page_no: int, lines: list, title: str = "") -> Op
         pending_label = []
         r = Row(idx=len(rows), page=page_no, y=ln[0].yc, label=label,
                 indent=label_words[0].x0 if label_words else 0.0,
-                label_bbox=_bbox(label_words) if label_words else None, section=section)
+                label_bbox=_bbox(label_words) if label_words else None, section=section,
+                period_mark=period_mark)
         dollar_x = [w.x0 for w in ln if w.text == "$"]
         for ci, (w, v) in found.items():
             r.cells[ci] = Cell(page=page_no, bbox=(w.x0, w.y0, w.x1, w.y1), text=w.text,

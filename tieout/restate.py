@@ -1,25 +1,30 @@
 """Why did a figure change between two filings?
 
-A company prints last year's statement again in this year's filing. When a
-line differs from what it first printed, the graph already knows the two
-numbers (a CARRY check with status "restated"). This module explains the
-change structurally, from the statements themselves:
+A company prints last year's statements again in this year's filing. When a
+line differs from what it first printed, the graph already holds both numbers
+(a CARRY check with status "restated"). This module explains the change from
+the statements themselves.
 
-1. Align. Take the same statement kind and the same period column in the
-   earliest and the latest filing that print it. Both print their lines in
-   the same order, so rows are aligned as two sequences of label keys
-   (normalised label without parentheticals or digits); inside a stretch that
-   differs, rows pair by equal value (a renamed line) or shared label words.
-   A row printed only in the later filing is "new", one printed only in the
-   earlier is "dropped". Printed page numbers caught as cells are ignored.
-2. Climb. The SUM checks (later filing first) say which subtotal each line
-   feeds. From the changed line go up subtotal by subtotal. If a subtotal
-   printed the same in both filings is reached, and the changes beneath it net
-   to zero, money moved between lines: a RECLASSIFICATION, and the other
-   changed lines beneath it are the counterparts. If the climb leaves the
+1. Align. Take one statement kind and one period column in the first and the
+   latest filing that print it. Both list their lines in the same order, so the
+   rows are aligned as two sequences of label keys (the label without
+   parentheticals or digits). Inside a stretch that differs, rows pair by equal
+   value (a renamed line) or by shared label words. A row printed only in the
+   later filing is "new"; one printed only in the earlier filing is "dropped".
+   A bare number on a row with fewer cells than the statement has columns, in
+   no check that holds, is left out: it is a page number, a year in a footer or
+   a number inside a footnote sentence, not a statement figure.
+2. Climb. The SUM checks say which subtotal each line feeds. From a changed
+   line go up subtotal by subtotal until one is printed the same in both
+   filings and the changes beneath it cancel. Then money moved between lines:
+   a RECLASSIFICATION, and its counterparts are the fewest other changed lines
+   there whose changes cancel this one. One exception: when a line of that
+   group is a figure the filing also prints on another statement (net income
+   opens the cash-flow statement) and that statement restated it, the group
+   only absorbs a restatement, so it is a RESTATEMENT. If the climb leaves the
    statement with totals still moving, the figures themselves changed: a
-   RESTATEMENT. A line, or a whole block with its subtotal, that was only
-   added or dropped (a supplemental line) is a PRESENTATION change.
+   RESTATEMENT. A line, or a block with its own subtotal, that was only added
+   or dropped is a PRESENTATION change.
 3. Quote. Sentences of the later filing that say why prior-period figures
    changed (reclassified, retrospectively, recast, ...) are quoted verbatim
    with their page. Nothing is generated.
@@ -33,59 +38,53 @@ import re
 from collections import defaultdict
 from difflib import SequenceMatcher
 from functools import lru_cache
+from itertools import combinations
 from typing import Optional
 
 from .concepts import norm_label
 
 KIND_ORDER = ("IS", "BS", "CF")
-# Why prior-period figures changed, strongest wording first. Legal "Restated Certificate"
-# and the routine "reclassified into earnings" of hedge accounting are not explanations.
+STATEMENT = {"IS": "income statement", "BS": "balance sheet", "CF": "cash-flow statement"}
+MAX_GROUP = 6                     # most other lines one reclassification is searched across
+# Why prior-period figures changed, strongest wording first.
 STRONG = re.compile(r"retrospectiv|conform(?:ed|s)? (?:\w+ ){0,3}current[- ](?:year|period)|"
                     r"prior[- ](?:year|period)s?\b.{0,80}\b(?:reclassif|recast|revised|restated)", re.I)
 MEDIUM = re.compile(r"reclassif|\brecast\b|\brestat(?:ed|ement)", re.I)
 WEAK = re.compile(r"\brevised\b|held for sale|changes? in accounting", re.I)
+# Not explanations: legal names, the routine "reclassified into earnings" of hedge accounting,
+# compensation clawback policies, and sentences about what can or may happen.
 NOISE = re.compile(r"restated (?:certificate|bylaws|by-laws|declaration)|amended and restated|"
-                   r"reclassified (?:in)?to (?:net )?(?:earnings|income)|reclassified from accumulated", re.I)
+                   r"reclassified (?:in)?to (?:net )?(?:earnings|income)|reclassified from accumulated|"
+                   r"(?:accounting|financial) restatement|event of a restatement", re.I)
+MODAL = re.compile(r"\b(?:can|could|may|might|will|would)\b")
 STOP = {"and", "the", "of", "for", "net", "other", "total", "assets", "liabilities", "from", "with", "less"}
 
 
 # ------------------------------------------------------------------ readings
 
-def _ref(r) -> dict:
+def _ref(r) -> Optional[dict]:
     """What an answer needs to cite one printed number."""
-    return {"id": r.id, "doc": r.doc, "page": r.page, "label": r.label, "printed": r.text,
-            "value": int(r.value), "period": r.period}
+    if r is None:
+        return None
+    return {"id": r.id, "doc": r.doc, "page": r.page, "label": r.label, "printed": r.text, "value": int(r.value)}
 
 
 def _unit(r) -> int:
     """One printed unit in full units (the table scale), read off the cell itself."""
     digits = re.sub(r"\D", "", r.text.split(".")[0])
-    if digits and int(digits):
-        return max(1, round(abs(r.value) / int(digits)))
-    return 1
+    return max(1, round(abs(r.value) / int(digits))) if digits and int(digits) else 1
 
 
 class Pair:
-    """One statement line aligned across the earlier (old) and later (new) filing."""
+    """One statement line aligned across the earlier (old) and the later (new) filing."""
 
     def __init__(self, old=None, new=None):
         self.old, self.new = old, new
-
-    @property
-    def label(self) -> str:
-        return (self.new or self.old).label
-
-    @property
-    def delta(self) -> int:
-        return int((self.new.value if self.new else 0) - (self.old.value if self.old else 0))
-
-    @property
-    def unit(self) -> int:
-        return max(_unit(r) for r in (self.old, self.new) if r is not None)
-
-    @property
-    def changed(self) -> bool:
-        return self.delta != 0                         # a new or dropped line printed as "—" is no change
+        self.label = (new or old).label
+        self.delta = int((new.value if new else 0) - (old.value if old else 0))
+        self.unit = max(_unit(r) for r in (old, new) if r is not None)
+        self.changed = self.delta != 0                 # a new or dropped line printed as "—" is no change
+        self.both = old is not None and new is not None
 
     def row(self) -> dict:
         return {"label": self.label, "old": int(self.old.value) if self.old else None,
@@ -93,41 +92,46 @@ class Pair:
                 "old_printed": self.old.text if self.old else None,
                 "new_printed": self.new.text if self.new else None,
                 "new_line": self.old is None, "dropped": self.new is None,
-                "readings": [_ref(r) for r in (self.old, self.new) if r is not None]}
+                "old_reading": _ref(self.old), "new_reading": _ref(self.new)}
 
 
 # ----------------------------------------------------------------- alignment
 
-def _folio(r) -> bool:
-    """A printed page number caught as a statement cell: a bare small integer, a few
-    pages below the PDF page it sits on, inside no check."""
-    return not r.checks and re.fullmatch(r"\d{1,3}", r.text) is not None and 0 <= r.page - int(r.text) <= 12
-
-
 class Index:
-    """Readings by statement column and SUM checks by filing, built once per graph pass."""
+    """The statement columns and SUM checks of one graph, and the columns aligned so far."""
 
     def __init__(self, g):
+        self.g = g
+        cells, cols = defaultdict(int), defaultdict(set)
+        for r in g.readings.values():
+            cells[(r.table, r.row)] += 1
+            cols[r.table].add(r.col)
+        holds = {c.id for c in g.checks.values() if c.type != "CARRY" and c.status != "fail"}
         self.columns: dict = defaultdict(list)
         for r in g.readings.values():
-            if r.unit == "USD" and not _folio(r):
+            stray = re.fullmatch(r"\d+", r.text) and cells[(r.table, r.row)] < len(cols[r.table]) \
+                and not holds.intersection(r.checks)
+            if r.unit == "USD" and not stray:
                 self.columns[(r.ticker, r.kind, r.period)].append(r)
         self.sums: dict = defaultdict(list)
         for c in g.checks.values():
             if c.type == "SUM" and c.status != "fail":
                 self.sums[c.doc].append(c)
+        self.aligned: dict = {}
 
+    def column(self, ticker: str, kind: str, period: str) -> "Column":
+        key = (ticker, kind, period)
+        if key not in self.aligned:
+            self.aligned[key] = Column(self, *key)
+        return self.aligned[key]
 
-def _statement(g, idx: Index, ticker: str, kind: str, period: str) -> dict:
-    """{doc: [readings]} for one statement column, docs in filing order."""
-    by_doc: dict = defaultdict(lambda: defaultdict(list))
-    for r in idx.columns.get((ticker, kind, period), []):
-        by_doc[r.doc][r.table].append(r)
-    out = {}
-    for doc in sorted(by_doc, key=lambda d: g.filings[d]["period_end"]):
-        rs = max(by_doc[doc].values(), key=len)       # the statement table, if a doc has two
-        out[doc] = sorted(rs, key=lambda r: r.row)
-    return out
+    def statement(self, ticker: str, kind: str, period: str) -> dict:
+        """{doc: readings in row order} for one statement column, docs in filing order."""
+        by_doc: dict = defaultdict(lambda: defaultdict(list))
+        for r in self.columns.get((ticker, kind, period), []):
+            by_doc[r.doc][r.table].append(r)
+        docs = sorted(by_doc, key=lambda d: self.g.filings[d]["period_end"])
+        return {d: sorted(max(by_doc[d].values(), key=len), key=lambda r: r.row) for d in docs}
 
 
 def _key(label: str) -> str:
@@ -141,12 +145,11 @@ def _words(label: str) -> set:
 
 
 def align(old: list, new: list) -> list:
-    """Pair the rows of one statement column in two filings (see module doc, step 1).
+    """Pair the rows of one statement column in two filings (module doc, step 1).
 
-    Both filings print the lines in the same order, so the rows are aligned as
-    two sequences of label keys. Inside a stretch that differs, rows pair by
-    equal value (a renamed line) or by shared label words; whatever is left
-    is a new or dropped line, and a last pass pairs those by equal value.
+    Rows align as two sequences of label keys. Inside a stretch that differs,
+    rows pair by equal value (a renamed line) or by shared label words; what is
+    left is a new or dropped line, and a last pass pairs those by equal value.
     """
     pairs, left, right = [], [], []
     sm = SequenceMatcher(None, [_key(r.label) for r in old], [_key(r.label) for r in new], autojunk=False)
@@ -175,57 +178,47 @@ def align(old: list, new: list) -> list:
 
 
 def _parents(g, checks: list, period: str) -> dict:
-    """reading id -> (total id, [(operand id, sign)]) from the given SUM checks."""
+    """reading id -> (subtotal reading id, sign) from SUM checks, for subtotals of the period."""
     out: dict = {}
     for c in checks:
-        groups, cur = [], None
+        total = None
         for rid, role in c.members:                    # members: total, operands, total, operands ...
             if role == "total":
-                cur = [rid, []]
-                groups.append(cur)
-            elif cur is not None:
-                cur[1].append((rid, int(role)))
-        for total, ops in groups:
-            if total in g.readings and g.readings[total].period == period:
-                for rid, _ in ops:
-                    out.setdefault(rid, (total, ops))
+                total = rid if rid in g.readings and g.readings[rid].period == period else None
+            elif total is not None:
+                out.setdefault(rid, (total, int(role)))
     return out
 
 
 class Column:
-    """One statement column aligned across its first and latest filing."""
+    """One statement column aligned across the first and the latest filing that print it."""
 
-    def __init__(self, g, ticker: str, kind: str, period: str, idx: Optional[Index] = None):
-        idx = idx or Index(g)
-        self.kind, self.period = kind, period
-        st = _statement(g, idx, ticker, kind, period)
-        self.docs = list(st)
-        self.old_doc, self.new_doc = (self.docs[0], self.docs[-1]) if self.docs else (None, None)
-        self.pairs = align(st[self.old_doc], st[self.new_doc]) if len(self.docs) > 1 else []
+    def __init__(self, idx: Index, ticker: str, kind: str, period: str):
+        self.idx, self.ticker, self.kind, self.period = idx, ticker, kind, period
+        st = idx.statement(ticker, kind, period)
+        docs = list(st)
+        self.old_doc, self.new_doc = (docs[0], docs[-1]) if docs else (None, None)
+        self.pairs = align(st[docs[0]], st[docs[-1]]) if len(docs) > 1 else []
         self.by_id = {r.id: p for p in self.pairs for r in (p.old, p.new) if r is not None}
-        self.parent = {**_parents(g, idx.sums.get(self.old_doc, []), period),
-                       **_parents(g, idx.sums.get(self.new_doc, []), period)}
-        self._up = {id(p): self._climb(p) for p in self.pairs}
+        parent = {**_parents(idx.g, idx.sums.get(self.old_doc, []), period),
+                  **_parents(idx.g, idx.sums.get(self.new_doc, []), period)}
+        self.up: dict = {}                             # id(pair) -> (subtotal pair, sign), later filing first
+        self.kids: dict = defaultdict(list)
+        for p in self.pairs:
+            for r in (p.new, p.old):
+                if r is not None and r.id in parent and self.by_id.get(parent[r.id][0]) not in (None, p):
+                    self.up[id(p)] = (self.by_id[parent[r.id][0]], parent[r.id][1])
+                    self.kids[id(self.up[id(p)][0])].append((p, parent[r.id][1]))
+                    break
 
-    def up(self, p: Pair):
-        """(total pair, [(operand pair, sign)]) of the subtotal p feeds, preferring the later filing."""
-        return self._up.get(id(p))
-
-    def _climb(self, p: Pair):
-        for r in (p.new, p.old):
-            if r is not None and r.id in self.parent:
-                total, ops = self.parent[r.id]
-                tp = self.by_id.get(total)
-                if tp is not None:
-                    return tp, [(self.by_id[i], s) for i, s in ops if i in self.by_id]
-        return None
-
-    def beneath(self, total: Pair) -> list:
-        """Every line inside a subtotal, recursively."""
-        kids = {id(p): p for p in self.pairs if (u := self.up(p)) and u[0] is total}
-        out = list(kids.values())
-        for k in kids.values():
-            out += self.beneath(k)
+    def beneath(self, total: Pair, sign: int = 1, seen: Optional[set] = None) -> list:
+        """[(pair, sign as it feeds `total`)] for every line inside a subtotal, recursively."""
+        seen = {id(total)} if seen is None else seen
+        out = []
+        for p, s in self.kids[id(total)]:
+            if id(p) not in seen:
+                seen.add(id(p))
+                out += [(p, sign * s)] + self.beneath(p, sign * s, seen)
         return out
 
     def changes(self) -> list:
@@ -234,34 +227,68 @@ class Column:
 
 # ----------------------------------------------------------------- diagnosis
 
-def classify(col: Column, p: Pair) -> dict:
-    """Reclassification or restatement of one changed line (module doc, step 2)."""
-    cur, seen, unchanged, path = p, set(), [], [p]
-    while (u := col.up(cur)) and id(cur) not in seen:
-        seen.add(id(cur))
-        total, ops = u
+def _same(p: Pair) -> bool:
+    return p.both and abs(p.delta) <= p.unit
+
+
+def _fewest(delta: int, unit: int, others: list) -> list:
+    """The fewest of `others` [(pair, sign)] whose changes cancel `delta`; all of them if none do sooner."""
+    for n in range(1, min(len(others), MAX_GROUP) + 1):
+        for combo in combinations(others, n):
+            if abs(delta + sum(s * q.delta for q, s in combo)) <= unit + sum(q.unit for q, _ in combo):
+                return [q for q, _ in combo]
+    return [q for q, _ in others]
+
+
+def _restated_elsewhere(col: Column, p: Pair) -> Optional[dict]:
+    """The same figure on another statement of the filing (a TIE check), if that statement restated it."""
+    g = col.idx.g
+    for r in (x for x in (p.new, p.old) if x is not None):
+        for rid, _ in (m for cid in r.checks if g.checks[cid].type == "TIE" for m in g.checks[cid].members):
+            m = g.readings.get(rid)
+            if m is None or m.kind == col.kind:
+                continue
+            other = col.idx.column(col.ticker, m.kind, m.period)
+            q = other.by_id.get(m.id)
+            if q is not None and classify(other, q, follow=False)["kind"] == "restatement":
+                return {"line": p.label, "statement": m.kind, "label": q.label,
+                        "old_printed": q.old.text if q.old else None, "new_printed": q.new.text if q.new else None}
+    return None
+
+
+def classify(col: Column, p: Pair, follow: bool = True) -> dict:
+    """{kind, counterparts, totals, carried_from, block} for one line (module doc, step 2).
+
+    counterparts and totals are pairs: the lines that moved with this one and the
+    unchanged subtotals above them. `follow` looks across to other statements.
+    """
+    out = {"kind": "unchanged", "counterparts": [], "totals": [], "carried_from": None, "block": p}
+    if not p.changed or _same(p):
+        return out                                     # no change, or one printed unit of rounding
+    path, sign = [p], 1
+    while id(path[-1]) in col.up and len(path) <= len(col.pairs):
+        total, s = col.up[id(path[-1])]
         path.append(total)
-        same = bool(total.old and total.new) and abs(total.delta) <= total.unit
-        nets = abs(sum(s * o.delta for o, s in ops)) <= sum(o.unit for o, _ in ops)
-        if same and (unchanged or nets):
-            unchanged.append(total)                    # first one must also net to zero beneath
-        elif unchanged:
-            break                                      # the chain of unchanged subtotals ended
-        cur = total
-    if not unchanged:
-        if abs(p.delta) <= p.unit and p.old and p.new:
-            kind = "unchanged"                         # one printed unit: rounding
-        elif all(x.old is None or x.new is None for x in path):
-            kind = "presentation"                      # a line, or a block of lines, added or dropped
-        else:
-            kind = "restatement"
-        return {"kind": kind, "unchanged_total": None, "unchanged_totals": [], "counterparts": []}
-    inside = col.beneath(unchanged[0])
-    parts = [o for o in inside if o.changed and o is not p]
-    tot = lambda t: {"label": t.label, "value": int(t.new.value), "printed": t.new.text,
-                     "readings": [_ref(t.old), _ref(t.new)]}
-    return {"kind": "reclassification", "unchanged_total": tot(unchanged[0]),
-            "unchanged_totals": [tot(t) for t in unchanged], "counterparts": [o.row() for o in parts]}
+        sign *= s
+        leaves = [(q, t) for q, t in col.beneath(total) if q.changed and not any(k.changed for k, _ in col.kids[id(q)])]
+        if _same(total) and abs(sum(t * q.delta for q, t in leaves)) <= sum(q.unit for q, _ in leaves):
+            break
+    else:                                              # totals still move: restated, or only added or dropped
+        moved = any(x.both for x in path)
+        return {**out, "kind": "restatement" if moved else "presentation", "block": path[-1]}
+    mine = {id(x) for x in path} | {id(q) for q, _ in col.beneath(p)}
+    group = _fewest(sign * p.delta, p.unit, [(q, t) for q, t in leaves if id(q) not in mine])
+    totals = [path[-1]]
+    while id(totals[-1]) in col.up and _same(col.up[id(totals[-1])][0]) and len(totals) <= len(col.pairs):
+        totals.append(col.up[id(totals[-1])][0])        # the chain of unchanged subtotals above it
+    carried = next(filter(None, (_restated_elsewhere(col, q) for q in [p] + group)), None) if follow else None
+    return {**out, "kind": "restatement" if carried else "reclassification", "counterparts": group,
+            "totals": totals, "carried_from": carried}
+
+
+def _total(t: Pair) -> dict:
+    return {"label": t.label, "value": int(t.new.value), "printed": t.new.text,
+            "old_reading": _ref(t.old), "new_reading": _ref(t.new)}
 
 
 def _find(g, ticker: str, period: str, label: Optional[str], concept: Optional[str], kind: Optional[str]):
@@ -286,54 +313,52 @@ def diagnose(g, ticker: str, period: str, label: Optional[str] = None, concept: 
     """Why the line (named by printed label or by concept) differs between two filings."""
     r = _find(g, ticker, period, label, concept, kind)
     if r is None:
-        return {"kind": "not_found", "summary": f"No printed line found for {label or concept} {period}."}
-    col = Column(g, ticker, r.kind, period)
+        return {"kind": "not_found", "counterparts": [], "explanations": [],
+                "summary": f"No printed line found for {label or concept} {period}."}
+    col = Index(g).column(ticker, r.kind, period)
     p = col.by_id.get(r.id)
-    if p is None:                                      # printed in one filing only
-        return {"kind": "single_filing", "line": {"label": r.label, "old": None, "new": _ref(r)}, "delta": 0,
-                "counterparts": [], "unchanged_total": None, "changed_lines": 0, "explanations": [],
+    if p is None:
+        return {"kind": "single_filing", "counterparts": [], "explanations": [],
                 "summary": f"{r.label} for {period} is printed in one filing only ({r.doc} p{r.page}: {r.text})."}
-    changes = col.changes()
-    out = classify(col, p) if p.changed else \
-        {"kind": "unchanged", "unchanged_total": None, "unchanged_totals": [], "counterparts": []}
-    out.update(line={"label": p.label, "old": _ref(p.old) if p.old else None, "new": _ref(p.new) if p.new else None},
-               delta=p.delta, changed_lines=len(changes), changes=[c.row() for c in changes],
-               statement=r.kind, period=period, old_doc=col.old_doc, new_doc=col.new_doc)
+    v = classify(col, p)
+    out = {"kind": v["kind"], "line": p.row(), "counterparts": [q.row() for q in v["counterparts"]],
+           "unchanged_totals": [_total(t) for t in v["totals"]], "carried_from": v["carried_from"],
+           "changes": [c.row() for c in col.changes()], "statement": r.kind, "period": period,
+           "old_doc": col.old_doc, "new_doc": col.new_doc}
     words = [p.label] + [c["label"] for c in out["counterparts"]]
     out["explanations"] = explanations(col.new_doc, (p.new or p.old).page, words) \
-        if explain and out["kind"] != "unchanged" else []
+        if explain and v["kind"] != "unchanged" else []
     out["summary"] = _summary(out)
     return out
 
 
-def _fmt(p: Optional[dict]) -> str:
-    return p["printed"] if p else "not printed"
+def _moved(c: dict) -> str:
+    return f"{c['label']} ({c['old_printed'] or 'not printed'} -> {c['new_printed'] or 'not printed'})"
 
 
 def _summary(d: dict) -> str:
-    ln, k = d["line"], d["kind"]
-    head = f"{ln['label']} ({d['statement']} {d['period']}) was {_fmt(ln['old'])} in {d['old_doc']} " \
-           f"and is {_fmt(ln['new'])} in {d['new_doc']}"
+    ln, k, c = d["line"], d["kind"], d["carried_from"]
+    head = f"{_moved(ln)} ({d['statement']} {d['period']}, {d['old_doc']} -> {d['new_doc']})"
+    tots = " and ".join(f"{t['label']} {t['printed']}" for t in d["unchanged_totals"])
     if k == "unchanged":
-        return f"{head}: unchanged" + (" apart from rounding." if d["delta"] else ".")
-    if k == "reclassification":
-        cps = "; ".join(f"{c['label']} {c['old_printed'] or 'not printed'} -> {c['new_printed'] or 'not printed'}"
-                        + (" (new line)" if c["new_line"] else "") for c in d["counterparts"]) or "no other line"
-        tots = " and ".join(f"{t['label']} {t['printed']}" for t in d["unchanged_totals"])
-        return f"{head}: a reclassification; the amount moved to or from {cps}, while {tots} did not change."
+        return f"{head}: unchanged" + (" apart from rounding." if ln["delta"] else ".")
     if k == "presentation":
-        return f"{head}: a presentation change; the line sits outside every subtotal of the statement."
-    return f"{head}: a restatement; totals moved and {d['changed_lines']} lines of the statement changed."
+        return f"{head}: a presentation change; the line was added or dropped without moving a total both print."
+    if k == "reclassification":
+        cps = "; ".join(_moved(x) for x in d["counterparts"]) or "no other line"
+        return f"{head}: a reclassification; the amount moved to or from {cps}, while {tots} did not change."
+    if c:
+        rest = ", ".join(x["label"] for x in [ln] + d["counterparts"] if x["label"] != c["line"])
+        return (f"{head}: a restatement; the {STATEMENT[c['statement']]} restated {c['label']} "
+                f"({c['old_printed']} -> {c['new_printed']}), and {rest} offset it here, so {tots} did not change.")
+    return f"{head}: a restatement; totals moved and {len(d['changes'])} lines of the statement changed."
 
 
 # -------------------------------------------------------------- explanations
 
 def _columns(page: dict) -> list:
-    """The words of a page split at a column gutter, if the page has one.
-
-    A gutter is a vertical line near the middle that almost no word crosses
-    while plenty of words sit on each side of it.
-    """
+    """The words of a page split at a column gutter, if it has one: a vertical line near the
+    middle that almost no word crosses while plenty of words sit on each side of it."""
     words, best = page["words"], None
     for x in range(int(page["w"] * 0.4), int(page["w"] * 0.6), 2):
         cross = sum(1 for w in words if w.x0 < x < w.x1)
@@ -343,8 +368,7 @@ def _columns(page: dict) -> list:
                 best = (cross, x)
     if best is None:
         return [words]
-    x = best[1]
-    return [[w for w in words if (w.x0 + w.x1) / 2 < x], [w for w in words if (w.x0 + w.x1) / 2 >= x]]
+    return [[w for w in words if (w.x0 + w.x1) / 2 < best[1]], [w for w in words if (w.x0 + w.x1) / 2 >= best[1]]]
 
 
 @lru_cache(maxsize=8)
@@ -366,17 +390,15 @@ def _sentences(doc: str) -> tuple:
 def explanations(doc: str, page: int, labels: list, limit: int = 3) -> list:
     """Up to `limit` sentences of `doc` that say why prior-period figures changed.
 
-    Sentences with a strong pattern (reclassified, retrospectively, recast,
-    restated, conformed to the current presentation) or mentioning a word of a
-    changed line's label come first; ties go to pages nearer the statement.
+    Strong wording (retrospectively, conformed to the current presentation,
+    prior periods recast) ranks first, then mention of a changed line's label
+    words, then nearness to the statement page.
     """
     words = {w for lab in labels for w in re.findall(r"[a-z]{4,}", norm_label(lab)) if w not in STOP}
     hits = []
     for pg, s in _sentences(doc):
-        if NOISE.search(s) and not STRONG.search(s):
-            continue
         tier = 4 if STRONG.search(s) else 2 if MEDIUM.search(s) else 1 if WEAK.search(s) else 0
-        if not tier:
+        if not tier or NOISE.search(s) or MODAL.search(s):
             continue
         named = sum(1 for w in words if re.search(rf"\b{w}", s, re.I))
         hits.append(((-tier - min(named, 2), abs(pg - page)), pg, s))
@@ -386,33 +408,41 @@ def explanations(doc: str, page: int, labels: list, limit: int = 3) -> list:
 
 # --------------------------------------------------------------------- corpus
 
-def events(g, explain: bool = False) -> list:
-    """Every statement column printed differently by two filings, classified.
+def _merge(sets: list) -> list:
+    """Join overlapping sets until none overlap."""
+    out: list = []
+    for s in sets:
+        for o in [o for o in out if o & s]:
+            out.remove(o)
+            s = s | o
+        out.append(s)
+    return out
 
-    An event is a restatement when any changed line moves totals, else a
-    reclassification when a changed line climbs to an unchanged subtotal,
-    else a presentation change.
+
+def events(g, explain: bool = False) -> list:
+    """Every change between the first and the latest filing that print a statement column.
+
+    The changed lines of a column split by cause: a reclassification is a line
+    with its counterparts, a presentation change is a line or block added or
+    dropped, and all lines a restatement moves are one event. Rounding is none.
     """
-    idx = Index(g)
-    out = []
-    for ticker, kind, period in sorted(idx.columns):
-        if len({r.doc for r in idx.columns[(ticker, kind, period)]}) < 2:
-            continue
-        col = Column(g, ticker, kind, period, idx)
-        changes = col.changes()
-        if not changes:
-            continue
-        verdicts = [classify(col, p) for p in changes]
-        kinds = {v["kind"] for v in verdicts}
-        ev = next((k for k in ("restatement", "reclassification", "presentation") if k in kinds), None)
-        if ev is None:
-            continue                                   # rounding differences only
-        totals = {t["label"]: t["value"] for v in verdicts for t in v["unchanged_totals"][:1]}
-        e = {"ticker": ticker, "statement": kind, "period": period, "kind": ev, "old_doc": col.old_doc,
-             "new_doc": col.new_doc, "changed_lines": len(changes), "changes": [c.row() for c in changes],
-             "unchanged_totals": totals}
-        if explain:
-            e["explanations"] = explanations(col.new_doc, (changes[0].new or changes[0].old).page,
-                                             [c.label for c in changes])
-        out.append(e)
+    idx, out = Index(g), []
+    for key in sorted(idx.columns):
+        col = idx.column(*key)
+        found = {id(p): (p, classify(col, p)) for p in col.changes()}
+        found = {i: (p, v) for i, (p, v) in found.items() if v["kind"] != "unchanged"}
+        links = [{i, *(id(q) for q in v["counterparts"]), "restated" if v["kind"] == "restatement" else i,
+                  ("block", id(v["block"]))} for i, (p, v) in found.items()]
+        for ids in _merge(links):
+            lines = sorted((found[i] for i in ids if i in found), key=lambda pv: col.pairs.index(pv[0]))
+            kinds = {v["kind"] for _, v in lines}
+            p, v = next((pv for pv in lines if pv[0].both), lines[0])
+            e = {"ticker": key[0], "statement": key[1], "period": key[2],
+                 "kind": next(k for k in ("restatement", "reclassification", "presentation") if k in kinds),
+                 "old_doc": col.old_doc, "new_doc": col.new_doc, "line": p.row(),
+                 "counterparts": [{**q.row(), "kind": w["kind"]} for q, w in lines if q is not p],
+                 "unchanged_totals": [_total(t) for t in v["totals"]], "carried_from": v["carried_from"]}
+            if explain:
+                e["explanations"] = explanations(col.new_doc, (p.new or p.old).page, [q.label for q, _ in lines])
+            out.append(e)
     return out

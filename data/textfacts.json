@@ -1404,7 +1404,7 @@
   "attr": "ceo",
   "value": "Lisa T. Su",
   "page": 109,
-  "quote": "/s/Lisa T. Su | Lisa T. Su (Principal Executive Officer), Director",
+  "quote": "/s/Lisa T. Su | Lisa T. Su (Principal Executive Officer), Director February 3, 2026",
   "bbox": [
    103.63,
    233.87,
@@ -1418,7 +1418,7 @@
   "attr": "cfo",
   "value": "Jean Hu",
   "page": 109,
-  "quote": "/s/Jean Hu | Jean Hu (Principal Financial Officer)",
+  "quote": "/s/Jean Hu | Jean Hu (Principal Financial Officer) February 3, 2026",
   "bbox": [
    105.97,
    263.87,
@@ -1600,7 +1600,7 @@
   "attr": "cfo",
   "value": "Hilary Maxson",
   "page": 112,
-  "quote": "/s/ HILARY MAXSON | (Principal Financial Officer)",
+  "quote": "/s/ HILARY MAXSON | Hilary Maxson (Principal Financial Officer)",
   "bbox": [
    83.35,
    306.97,
@@ -1782,7 +1782,7 @@
   "attr": "ceo",
   "value": "Marc Benioff",
   "page": 109,
-  "quote": "/s/ Marc Benioff | Officer (Principal Executive Officer)",
+  "quote": "/s/ Marc Benioff | Marc Benioff Officer (Principal Executive Officer)",
   "bbox": [
    88.86,
    186.51,
@@ -2160,7 +2160,7 @@
   "attr": "employees",
   "value": "82400",
   "page": 28,
-  "quote": "As of July 25, 2026, we had approximately 82,400 employees and they are categorized as follows: Employees by Geography Employee by Line Items on Consolidated Statement of Operations General and Cost of sales administrative 29.3% 10.8% United States Rest of World 46.3% Sales and marketing 53.7% 30.8%",
+  "quote": "As of July 25, 2026, we had approximately 82,400 employees and they are categorized as follows: Employees by Geography Employee by Line Items on Consolidated Statement of Operations General and administrative Cost of sales 10.8% 29.3% United States Rest of World 46.3% Sales and marketing 53.7% 30.8%",
   "bbox": [
    167.01,
    208.76,
@@ -2566,7 +2566,7 @@
   "attr": "ceo",
   "value": "Brian T. Moynihan",
   "page": 183,
-  "quote": "/s/ Brian T. Moynihan | (Principal Executive Officer)",
+  "quote": "/s/ Brian T. Moynihan | (Principal Executive Officer) February 25, 2026",
   "bbox": [
    126.12,
    231.73,
@@ -2580,7 +2580,7 @@
   "attr": "cfo",
   "value": "Alastair M. Borthwick",
   "page": 183,
-  "quote": "*/s/ Alastair M. Borthwick (Principal Financial Officer)",
+  "quote": "*/s/ Alastair M. Borthwick (Principal Financial Officer) February 25, 2026",
   "bbox": [
    119.89,
    265.65,
@@ -2776,7 +2776,7 @@
   "attr": "auditor",
   "value": "KPMG",
   "page": 15,
-  "quote": "Segments Accounting Firm – Opinion on Internal Control Over Financial Reporting (KPMG LLP, Charlotte, 159 20 Revenue and Expenses NC, Auditor Firm ID: 185) 162 21 Employee Benefits Financial Statements 77 Consolidated Statement of Income 166 22 Income Taxes 78 Consolidated Statement of Comprehensive",
+  "quote": "Segments Accounting Firm – Opinion on Internal Control Over Financial Reporting (KPMG LLP, Charlotte, 159 20 Revenue and Expenses NC, Auditor Firm ID: 185) Financial Statements 162 21 Employee Benefits 77 Consolidated Statement of Income 166 22 Income Taxes 78 Consolidated Statement of Comprehensive",
   "bbox": [
    147.15,
    485.24,
@@ -2972,7 +2972,7 @@
   "attr": "ceo",
   "value": "David Solomon",
   "page": 253,
-  "quote": "/s/ David Solomon | Officer (Principal Executive Officer)",
+  "quote": "/s/ David Solomon | Officer (Principal Executive Officer) Date: February 25, 2026",
   "bbox": [
    73.37,
    279.39,
@@ -2986,7 +2986,7 @@
   "attr": "cfo",
   "value": "Denis P. Coleman III",
   "page": 253,
-  "quote": "/s/ Denis P. Coleman III | (Principal Financial Officer)",
+  "quote": "/s/ Denis P. Coleman III | Title: Director (Principal Financial Officer)",
   "bbox": [
    353.63,
    531.85,
@@ -5432,6 +5432,174 @@
   "confidence": "high"
  },
  {
+  "doc": "MCD_FY2025_10K",
+  "attr": "fiscal_year_end",
+  "value": "2025-12-31",
+  "page": 9,
+  "quote": "For the fiscal year ended December 31, 2025",
+  "bbox": [
+   217.58,
+   127.27,
+   385.43,
+   135.64
+  ],
+  "confidence": "high"
+ },
+ {
+  "doc": "MCD_FY2025_10K",
+  "attr": "state_of_incorporation",
+  "value": "Delaware",
+  "page": 9,
+  "quote": "Delaware 36-2361282 | (State or other jurisdiction of incorporation or organization) (I.R.S. Employer Identification No.)",
+  "bbox": [
+   44.79,
+   282.04,
+   81.54,
+   290.41
+  ],
+  "confidence": "high"
+ },
+ {
+  "doc": "MCD_FY2025_10K",
+  "attr": "hq_city",
+  "value": "Chicago",
+  "page": 9,
+  "quote": "110 North Carpenter Street, Chicago, Illinois | (Address of principal executive offices) (Zip code)",
+  "bbox": [
+   44.79,
+   309.94,
+   227.55,
+   318.31
+  ],
+  "confidence": "high"
+ },
+ {
+  "doc": "MCD_FY2025_10K",
+  "attr": "hq_state",
+  "value": "IL",
+  "page": 9,
+  "quote": "110 North Carpenter Street, Chicago, Illinois | (Address of principal executive offices) (Zip code)",
+  "bbox": [
+   44.79,
+   309.94,
+   227.55,
+   318.31
+  ],
+  "confidence": "high"
+ },
+ {
+  "doc": "MCD_FY2025_10K",
+  "attr": "trading_symbol",
+  "value": "MCD",
+  "page": 9,
+  "quote": "Common Stock, $0.01 par value MCD New York Stock Exchange",
+  "bbox": [
+   292.99,
+   379.95,
+   309.91,
+   387.39
+  ],
+  "confidence": "high"
+ },
+ {
+  "doc": "MCD_FY2025_10K",
+  "attr": "exchange",
+  "value": "NYSE",
+  "page": 9,
+  "quote": "Common Stock, $0.01 par value MCD New York Stock Exchange",
+  "bbox": [
+   75.42,
+   379.95,
+   518.03,
+   387.39
+  ],
+  "confidence": "high"
+ },
+ {
+  "doc": "MCD_FY2025_10K",
+  "attr": "shares_outstanding",
+  "value": "710398642",
+  "page": 9,
+  "quote": "The number of shares outstanding of the registrant’s common stock as of January 31, 2026: 710,398,642.",
+  "bbox": [
+   345.71,
+   661.7,
+   389.06,
+   669.14
+  ],
+  "confidence": "high"
+ },
+ {
+  "doc": "MCD_FY2025_10K",
+  "attr": "auditor_since",
+  "value": "1964",
+  "page": 74,
+  "quote": "We have served as the Company’s auditor since 1964.",
+  "bbox": [
+   33.03,
+   397.61,
+   235.56,
+   405.98
+  ],
+  "confidence": "high"
+ },
+ {
+  "doc": "MCD_FY2025_10K",
+  "attr": "auditor",
+  "value": "Ernst & Young",
+  "page": 74,
+  "quote": "/s/ Ernst & Young LLP",
+  "bbox": [
+   33.03,
+   380.13,
+   114.48,
+   388.5
+  ],
+  "confidence": "high"
+ },
+ {
+  "doc": "MCD_FY2025_10K",
+  "attr": "auditor_location",
+  "value": "Chicago, IL",
+  "page": 74,
+  "quote": "Chicago, Illinois",
+  "bbox": [
+   33.03,
+   415.1,
+   91.64,
+   423.47
+  ],
+  "confidence": "high"
+ },
+ {
+  "doc": "MCD_FY2025_10K",
+  "attr": "ceo",
+  "value": "Jennifer L. Taubert",
+  "page": 81,
+  "quote": "/s/ Jennifer L. Taubert | (Principal Executive Officer)",
+  "bbox": [
+   416.5,
+   445.66,
+   487.78,
+   453.1
+  ],
+  "confidence": "low"
+ },
+ {
+  "doc": "MCD_FY2025_10K",
+  "attr": "cfo",
+  "value": "Ian F. Borden",
+  "page": 81,
+  "quote": "/s/ Ian F. Borden | (Principal Financial Officer)",
+  "bbox": [
+   148.2,
+   244.08,
+   202.38,
+   251.52
+  ],
+  "confidence": "high"
+ },
+ {
   "doc": "HD_FY2025_10K",
   "attr": "fiscal_year_end",
   "value": "2026-02-01",
@@ -5604,7 +5772,7 @@
   "attr": "ceo",
   "value": "Edward P. Decker",
   "page": 89,
-  "quote": "/s/ EDWARD P. DECKER | (Principal Executive Officer)",
+  "quote": "/s/ EDWARD P. DECKER | Edward P. Decker (Principal Executive Officer)",
   "bbox": [
    52.13,
    202.27,
@@ -8390,7 +8558,7 @@
   "attr": "ceo",
   "value": "Brian T. Moynihan",
   "page": 183,
-  "quote": "/s/ Brian T. Moynihan | (Principal Executive Officer)",
+  "quote": "/s/ Brian T. Moynihan | Brian T. Moynihan (Principal Executive Officer)",
   "bbox": [
    126.12,
    231.73,
@@ -8586,7 +8754,7 @@
   "attr": "ceo",
   "value": "David Solomon",
   "page": 249,
-  "quote": "/s/ David Solomon | Officer (Principal Executive Officer)",
+  "quote": "/s/ David Solomon | Officer (Principal Executive Officer) Date: February 26, 2025",
   "bbox": [
    73.37,
    279.39,
@@ -8600,7 +8768,7 @@
   "attr": "cfo",
   "value": "Denis P. Coleman III",
   "page": 249,
-  "quote": "/s/ Denis P. Coleman III | (Principal Financial Officer)",
+  "quote": "/s/ Denis P. Coleman III | Title: Director (Principal Financial Officer)",
   "bbox": [
    353.63,
    531.85,
