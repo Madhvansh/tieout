@@ -74,7 +74,7 @@ Cross-filing & 5/10 & 0.90 & 0.54 \\
 
 \sub{Benchmark.} 48 candidate questions were drafted by an AI agent that could read only the PDFs: no code, no graph, no system output. Each has a gold answer, document, PDF page, printed value and derivation. They were committed before any run. A seeded split gave 30 benchmark and 18 development questions; only the development ones were used for debugging. \todo{I checked each of the 30 gold answers against its page; corrections made: N.} Traps: fiscal year not matching calendar year (12), restated (3), scale (2), segment versus consolidated (2), unanswerable (2). Scoring rules were fixed in advance; abstaining is correct only on an unanswerable question.
 
-\sub{LLM use.} Gemini 3.5 Flash-Lite, free tier, writes plans and proposes bindings; every call is cached. A local Ollama model is the no-key path: \todo{local model score}. \todo{fine-tuned planner result.} An AI coding assistant wrote the code; the README says exactly who did what.
+\sub{LLM use.} Gemini 3.5 Flash-Lite, free tier, writes plans and proposes bindings; every call is cached. A local 4B model through Ollama is the no-key path: 19/30 on v1.1, with no API key. \todo{fine-tuned planner result.} An AI coding assistant wrote the code; the README says exactly who did what.
 
 \head{3. Gaps}
 \begin{tight}
