@@ -74,7 +74,9 @@ For a ROW whose columns are not periods, also give the number of the column that
 For a SENTENCE, give the slot that holds the item's figure for the period asked (a count for "number of",
 an amount for revenue or spending, a percentage only when a percentage is asked).
 When a ROW whose columns are periods reports the item, prefer it to a SENTENCE or to a ROW without
-period columns: sentences and summary tables often round.
+period columns: sentences and summary tables often round. For a figure of the whole company, prefer
+the consolidated statements' row to a row of a segment table. A sentence slot that holds a change
+(an increase or a decrease) is not the item itself.
 Answer null only if no candidate reports the item.
 Answer as JSON: {"pick": <candidate number or null>, "column": <column number or null>,
 "slot": "<slot or null>", "reason": "<one short sentence>"}"""
@@ -292,6 +294,7 @@ def candidates(st: Store, g: Graph, ticker: str, phrase: str, wanted: set, fisca
                  + (1.5 if any(c.get("pid") in wanted for c in r["cells"]) else 0.0) + (0.5 if r["verified"] else 0.0)
                  + (0.5 if r.get("anchor") or r.get("ties_to") else 0.0)
                  + (0.75 if g.filings[r["doc"]]["fiscal_year"] == fiscal_year else 0.0)
+                 + (1.0 if any(c.get("rid") for c in r["cells"]) else 0.0)     # a line of a primary statement
                  + 2.0 * covered + _unit_fit(r["unit"], want_unit))
         scored.append((score, "row", r, covered))
     for m in st.mentions_by_ticker.get(ticker, []):

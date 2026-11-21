@@ -29,6 +29,7 @@ CACHE = ROOT / "cache" / "llm"
 CALLS = {"live": 0, "cached": 0, "seconds": 0.0, "tokens_in": 0, "tokens_out": 0}
 CALL_LOG: list = []          # one record per call: provider, model, tag, tokens, seconds, cached
 REPLAY_MODEL = "gemini:gemini-3.5-flash-lite"      # the model the cached benchmark plans were written by
+LOCAL_MODEL = "ollama:tieout-planner"              # finetune/MODEL_CARD.md: plans, and links, with no key
 _USAGE: dict = {}                                  # token counts of the last live call
 
 
@@ -62,7 +63,7 @@ def default_model() -> str:
         return "gemini:gemini-3.5-flash-lite"
     if os.environ.get("GROQ_API_KEY"):
         return "groq:openai/gpt-oss-120b"
-    return "ollama:qwen3.5:4b"
+    return LOCAL_MODEL                             # no key anywhere: the fine-tuned local model, on CPU
 
 
 def ask_json(system: str, user: str, schema: Optional[dict] = None, model: Optional[str] = None,
