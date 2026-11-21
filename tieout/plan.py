@@ -113,6 +113,71 @@ def step_measure(step: dict) -> Optional[dict]:
     return None
 
 
+def _key(name: str) -> str:
+    return "".join(ch for ch in str(name).lower() if ch.isalnum())
+
+
+def _as_measure(m):
+    """A measure written loosely, made exact from the vocabulary when there is one clear reading:
+    "net_income" or {"metric": "inventory"} name a concept; {"delta": "NetIncome"} wraps it.
+    Anything unclear is left as it was, for the validator to report."""
+    concepts, metrics = concept_defs(), metric_defs()
+    by_key = {**{_key(c): {"concept": c} for c in concepts}, **{_key(n): {"metric": n} for n in metrics}}
+    if isinstance(m, str):
+        return dict(by_key.get(_key(m), {"item": m}))
+    if not isinstance(m, dict):
+        return m
+    for wrap in ("growth", "delta"):
+        if wrap in m:
+            return {wrap: _as_measure(m[wrap])}
+    if "ratio" in m and isinstance(m["ratio"], list):
+        return {"ratio": [_as_measure(x) for x in m["ratio"]]}
+    if "concept" in m and m["concept"] not in concepts and _key(m["concept"]) in by_key:
+        return dict(by_key[_key(m["concept"])])
+    if "metric" in m and m["metric"] not in metrics and _key(m["metric"]) in by_key:
+        return dict(by_key[_key(m["metric"])])
+    return m
+
+
+def normalize(plan: dict) -> dict:
+    """Fix the small slips a planner makes without changing what the plan asks.
+
+    Deterministic and vocabulary-only: a measure spelled as a string or with the wrong case, a
+    concept named as a metric (or the reverse), a step that reads a line picked earlier but
+    forgot the period (it takes the period of the step it refers to). No value is involved.
+    """
+    if not isinstance(plan, dict) or not isinstance(plan.get("steps"), list):
+        return plan
+    steps, period_of = [], {}
+    for s in plan["steps"]:
+        if not isinstance(s, dict):
+            steps.append(s)
+            continue
+        s = dict(s)
+        if isinstance(s.get("by"), (str, dict)):
+            s["by"] = _as_measure(s["by"])
+        if isinstance(s.get("where"), dict) and "by" in s["where"]:
+            s["where"] = {**s["where"], "by": _as_measure(s["where"]["by"])}
+        for key in ("concept", "metric"):
+            if isinstance(s.get(key), str) and s.get("op") != "attr":
+                fixed = _as_measure({key: s[key]})
+                if fixed != {key: s[key]}:
+                    del s[key]
+                    if s.get("op") == "metric" and "concept" in fixed:
+                        s["op"] = "get"
+                    if s.get("op") == "get" and "metric" in fixed:
+                        s["op"] = "metric"
+                    s.update(fixed)
+        ref = s.get("company") if isinstance(s.get("company"), str) and s["company"].startswith("$") else None
+        if s.get("op") in ("get", "metric", "members", "restated") and not s.get("period") and ref:
+            if ref[1:] in period_of:
+                s["period"] = period_of[ref[1:]]
+        if s.get("id") and isinstance(s.get("period"), dict):
+            period_of[s["id"]] = s["period"]
+        steps.append(s)
+    return {**plan, "steps": steps}
+
+
 def measure_errors(m, where: str) -> list:
     """Why `m` is not a well-formed measure (empty list if it is)."""
     if not isinstance(m, dict) or not m:

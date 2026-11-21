@@ -1,0 +1,835 @@
+{
+ "A01": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "ADBE",
+    "item": "Digital Media ARR",
+    "period": {
+     "fy": 2025
+    }
+   }
+  ],
+  "answer": "s1"
+ },
+ "A02": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "CRM",
+    "item": "total remaining performance obligation",
+    "period": {
+     "fy": 2026
+    }
+   }
+  ],
+  "answer": "s1"
+ },
+ "A03": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "AMZN",
+    "item": "Advertising services net sales",
+    "period": {
+     "fy": 2025
+    }
+   }
+  ],
+  "answer": "s1"
+ },
+ "A04": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "AAPL",
+    "item": "Greater China net sales",
+    "period": {
+     "fy": 2026,
+     "q": 3
+    }
+   }
+  ],
+  "answer": "s1"
+ },
+ "A05": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "BAC",
+    "concept": "NetInterestIncome",
+    "period": {
+     "fy": 2025,
+     "q": 3
+    }
+   }
+  ],
+  "answer": "s1"
+ },
+ "A06": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "TGT",
+    "item": "number of stores in California",
+    "period": {
+     "fy": 2025
+    }
+   }
+  ],
+  "answer": "s1"
+ },
+ "A07": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "BLK",
+    "item": "total net inflows",
+    "period": {
+     "fy": 2025
+    }
+   }
+  ],
+  "answer": "s1"
+ },
+ "A08": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "MS",
+    "item": "Wealth Management client assets",
+    "period": {
+     "fy": 2025
+    }
+   }
+  ],
+  "answer": "s1"
+ },
+ "A09": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "XOM",
+    "item": "Upstream capital and exploration expenditures",
+    "period": {
+     "fy": 2024
+    },
+    "as": "first_reported"
+   }
+  ],
+  "answer": "s1"
+ },
+ "A10": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "WMT",
+    "item": "number of Walmart U.S. Supercenters",
+    "period": {
+     "fy": 2025
+    }
+   }
+  ],
+  "answer": "s1"
+ },
+ "A11": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "AMD",
+    "item": "Data Center net revenue",
+    "period": {
+     "fy": 2025
+    }
+   }
+  ],
+  "answer": "s1"
+ },
+ "A12": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "HD",
+    "item": "number of stores in Canada",
+    "period": {
+     "fy": 2025
+    }
+   }
+  ],
+  "answer": "s1"
+ },
+ "A13": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "KO",
+    "concept": "OperatingIncome",
+    "period": {
+     "fy": 2025,
+     "q": 3
+    }
+   }
+  ],
+  "answer": "s1"
+ },
+ "A14": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "PG",
+    "concept": "EPSDiluted",
+    "period": {
+     "fy": 2026
+    }
+   }
+  ],
+  "answer": "s1"
+ },
+ "A15": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "CVX",
+    "concept": "CapitalExpenditures",
+    "period": {
+     "fy": 2025
+    }
+   }
+  ],
+  "answer": "s1"
+ },
+ "A16": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "V",
+    "concept": "ShareRepurchases",
+    "period": {
+     "fy": 2026
+    }
+   }
+  ],
+  "answer": "s1"
+ },
+ "A17": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "metric",
+    "company": "ORCL",
+    "metric": "free_cash_flow",
+    "period": {
+     "fy": 2026
+    }
+   }
+  ],
+  "answer": "s1"
+ },
+ "A18": {
+  "steps": [],
+  "answer": null,
+  "cannot": "audit fees are disclosed in the proxy statement, not the annual report"
+ },
+ "A19": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "COST",
+    "item": "net sales",
+    "period": {
+     "fy": 2026
+    }
+   },
+   {
+    "id": "s2",
+    "op": "get",
+    "company": "COST",
+    "item": "total number of warehouses in operation",
+    "period": {
+     "fy": 2026
+    }
+   },
+   {
+    "id": "s3",
+    "op": "calc",
+    "expr": "s1 / s2"
+   }
+  ],
+  "answer": "s3"
+ },
+ "A20": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "members",
+    "company": "CRM",
+    "of": "subscription and support revenue by service offering",
+    "period": {
+     "fy": 2026
+    }
+   },
+   {
+    "id": "s2",
+    "op": "rank",
+    "over": "$s1",
+    "by": {
+     "growth": {
+      "value": true
+     }
+    },
+    "period": {
+     "fy": 2026
+    },
+    "order": "desc",
+    "k": 1
+   },
+   {
+    "id": "s3",
+    "op": "get",
+    "company": "$s2",
+    "period": {
+     "fy": 2026
+    }
+   }
+  ],
+  "answer": "s3"
+ },
+ "A21": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "MRK",
+    "item": "Keytruda sales",
+    "period": {
+     "fy": 2025
+    }
+   },
+   {
+    "id": "s2",
+    "op": "get",
+    "company": "MRK",
+    "concept": "Revenue",
+    "period": {
+     "fy": 2025
+    }
+   },
+   {
+    "id": "s3",
+    "op": "calc",
+    "expr": "s1 / s2"
+   }
+  ],
+  "answer": "s3"
+ },
+ "A22": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "JNJ",
+    "concept": "Revenue",
+    "period": {
+     "fy": 2025,
+     "q": 4
+    }
+   }
+  ],
+  "answer": "s1"
+ },
+ "A23": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "NKE",
+    "item": "Greater China revenues",
+    "period": {
+     "fy": 2026
+    }
+   },
+   {
+    "id": "s2",
+    "op": "get",
+    "company": "NKE",
+    "concept": "Revenue",
+    "period": {
+     "fy": 2026
+    }
+   },
+   {
+    "id": "s3",
+    "op": "calc",
+    "expr": "s1 / s2"
+   }
+  ],
+  "answer": "s3"
+ },
+ "A24": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "TSLA",
+    "item": "Automotive sales revenue",
+    "period": {
+     "fy": 2025
+    }
+   },
+   {
+    "id": "s2",
+    "op": "get",
+    "company": "TSLA",
+    "item": "consumer vehicles delivered",
+    "period": {
+     "fy": 2025
+    }
+   },
+   {
+    "id": "s3",
+    "op": "calc",
+    "expr": "s1 / s2"
+   }
+  ],
+  "answer": "s3"
+ },
+ "A25": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "members",
+    "company": "UNH",
+    "of": "earnings from operations by segment",
+    "period": {
+     "fy": 2025
+    }
+   },
+   {
+    "id": "s2",
+    "op": "filter",
+    "over": "$s1",
+    "where": {
+     "by": {
+      "value": true
+     },
+     "period": {
+      "fy": 2025
+     },
+     "lt": 0
+    }
+   },
+   {
+    "id": "s3",
+    "op": "get",
+    "company": "$s2",
+    "period": {
+     "fy": 2025
+    }
+   },
+   {
+    "id": "s4",
+    "op": "calc",
+    "expr": "abs(s3)"
+   }
+  ],
+  "answer": "s4"
+ },
+ "A26": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "GS",
+    "item": "Global Banking & Markets pre-tax earnings",
+    "period": {
+     "fy": 2024
+    },
+    "as": "first_reported"
+   },
+   {
+    "id": "s2",
+    "op": "get",
+    "company": "GS",
+    "item": "Global Banking & Markets pre-tax earnings",
+    "period": {
+     "fy": 2024
+    }
+   },
+   {
+    "id": "s3",
+    "op": "calc",
+    "expr": "s2 - s1"
+   }
+  ],
+  "answer": "s3"
+ },
+ "A27": {
+  "steps": [],
+  "answer": null,
+  "cannot": "Starbucks is not among the listed companies"
+ },
+ "B01": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "HD",
+    "item": "Primary segment net sales",
+    "period": {
+     "fy": 2025
+    }
+   },
+   {
+    "id": "s2",
+    "op": "get",
+    "company": "HD",
+    "item": "total number of stores",
+    "period": {
+     "fy": 2025
+    }
+   },
+   {
+    "id": "s3",
+    "op": "calc",
+    "expr": "s1 / s2"
+   }
+  ],
+  "answer": "s3"
+ },
+ "B02": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "V",
+    "concept": "Revenue",
+    "period": {
+     "fy": 2026
+    }
+   },
+   {
+    "id": "s2",
+    "op": "get",
+    "company": "V",
+    "item": "client incentives",
+    "period": {
+     "fy": 2026
+    }
+   },
+   {
+    "id": "s3",
+    "op": "calc",
+    "expr": "s1 + abs(s2)"
+   },
+   {
+    "id": "s4",
+    "op": "calc",
+    "expr": "abs(s2) / s3"
+   }
+  ],
+  "answer": "s4"
+ },
+ "B05": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "rank",
+    "over": [
+     "JPM",
+     "BAC",
+     "C",
+     "WFC"
+    ],
+    "by": {
+     "item": "CET1 capital ratio (Standardized approach)"
+    },
+    "period": {
+     "fy": 2025
+    },
+    "order": "desc",
+    "k": 4
+   }
+  ],
+  "answer": "s1"
+ },
+ "B07": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "rank",
+    "over": [
+     "GS",
+     "MS"
+    ],
+    "by": {
+     "ratio": [
+      {
+       "item": "compensation and benefits"
+      },
+      {
+       "concept": "Revenue"
+      }
+     ]
+    },
+    "period": {
+     "fy": 2025
+    },
+    "order": "desc",
+    "k": 2
+   }
+  ],
+  "answer": "s1"
+ },
+ "B08": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "rank",
+    "over": [
+     "ORCL",
+     "CRM"
+    ],
+    "by": {
+     "growth": {
+      "concept": "Revenue"
+     }
+    },
+    "period": {
+     "fy": 2026
+    },
+    "order": "desc",
+    "k": 2
+   }
+  ],
+  "answer": "s1"
+ },
+ "B10": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "TSLA",
+    "item": "Automotive sales revenue",
+    "period": {
+     "fy": 2025
+    }
+   },
+   {
+    "id": "s2",
+    "op": "get",
+    "company": "TSLA",
+    "item": "consumer vehicles delivered",
+    "period": {
+     "fy": 2025
+    }
+   },
+   {
+    "id": "s3",
+    "op": "calc",
+    "expr": "s1 / s2"
+   }
+  ],
+  "answer": "s3"
+ },
+ "B12": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "rank",
+    "over": [
+     "V",
+     "MA",
+     "AXP",
+     "BLK"
+    ],
+    "by": {
+     "concept": "TotalAssets"
+    },
+    "period": {
+     "fy": "latest"
+    },
+    "order": "desc",
+    "k": 1
+   },
+   {
+    "id": "s2",
+    "op": "attr",
+    "company": "$s1",
+    "attr": "auditor"
+   }
+  ],
+  "answer": "s2"
+ },
+ "B13": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "rank",
+    "over": [
+     "WMT",
+     "COST",
+     "TGT",
+     "HD"
+    ],
+    "by": {
+     "ratio": [
+      {
+       "concept": "Inventory"
+      },
+      {
+       "concept": "CostOfRevenue"
+      }
+     ]
+    },
+    "period": {
+     "fy": "latest"
+    },
+    "order": "desc",
+    "k": 4
+   }
+  ],
+  "answer": "s1"
+ },
+ "B14": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "rank",
+    "over": [
+     "KO",
+     "PEP"
+    ],
+    "by": {
+     "concept": "OperatingIncome"
+    },
+    "period": {
+     "fy": 2025
+    },
+    "order": "desc",
+    "k": 2
+   },
+   {
+    "id": "s2",
+    "op": "rank",
+    "over": [
+     "KO",
+     "PEP"
+    ],
+    "by": {
+     "metric": "operating_margin"
+    },
+    "period": {
+     "fy": 2025
+    },
+    "order": "desc",
+    "k": 2
+   }
+  ],
+  "answer": "s1"
+ },
+ "B20": {
+  "steps": [],
+  "answer": null,
+  "cannot": "U.S. Bancorp is not among the listed companies"
+ },
+ "B22": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "filter",
+    "over": [
+     "KO",
+     "PEP",
+     "PG",
+     "NKE",
+     "TGT",
+     "COST"
+    ],
+    "where": {
+     "by": {
+      "delta": {
+       "concept": "NetIncome"
+      }
+     },
+     "period": {
+      "fy": "latest"
+     },
+     "lt": 0
+    }
+   },
+   {
+    "id": "s2",
+    "op": "count",
+    "of": "$s1"
+   }
+  ],
+  "answer": "s2"
+ },
+ "B24": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "META",
+    "item": "Reality Labs income (loss) from operations",
+    "period": {
+     "fy": 2025
+    }
+   },
+   {
+    "id": "s2",
+    "op": "get",
+    "company": "META",
+    "concept": "OperatingIncome",
+    "period": {
+     "fy": 2025
+    }
+   },
+   {
+    "id": "s3",
+    "op": "calc",
+    "expr": "abs(s1) / s2"
+   }
+  ],
+  "answer": "s3"
+ },
+ "_notes": {
+  "A01": "item worded 'Digital Media ARR' (Adobe's label for Digital Media annualized recurring revenue); 'going out of fiscal 2025' read as the FY2025 year-end figure",
+  "A07": "'net new money across all of its products' read as BlackRock's total net inflows (long-term plus cash management), item 'total net inflows'",
+  "A09": "'In its 2024 annual report ... say' stresses the original report, so as:first_reported",
+  "A16": "concept ShareRepurchases, not an item: Visa's cash-flow line 'Repurchase of class A common stock' is its whole repurchase line, so it is not narrower than the concept and the question asks for cash paid",
+  "A17": "metric free_cash_flow (operating cash flow less capex) taken as the free cash flow Oracle reports",
+  "A18": "cannot: audit fees are a proxy-statement disclosure (rule 12)",
+  "A19": "Costco net sales is an item (excludes membership fees, rule 1); warehouses = count in operation at FY2026 year-end",
+  "A21": "single item 'Keytruda sales' read as the Keytruda line including Keytruda Qlex; not summed with a separate Qlex item to avoid double counting if the filing combines them",
+  "A22": "Q4 written as {fy:2025,q:4} per the Nike Q4 example (executor derives FY less nine months if no Q4 filing)",
+  "A24": "Automotive sales line (not total automotive revenues) over consumer vehicles delivered",
+  "A25": "filter segments with negative earnings from operations, get the chosen line, abs() for 'how big' (rule 10); assumes one loss-making business",
+  "A26": "change = latest (2025 annual report) minus first reported (2024 annual report) via two gets and calc, so the answer is the numeric change; restated op not used",
+  "A27": "cannot: Starbucks is not listed",
+  "B01": "Primary segment net sales over total year-end store count (all stores sit in Primary; SRS excluded)",
+  "B02": "gross revenue = net revenue + |client incentives| (s3); answer s4 = incentives as a share of gross revenue",
+  "B05": "item 'CET1 capital ratio (Standardized approach)'; strongest = highest ratio, desc",
+  "B10": "same question as A24; same plan",
+  "B13": "ranked by Inventory / CostOfRevenue ratio; the x365 constant is dropped (order unchanged)",
+  "B14": "answer s1 = rank by operating income (winner and gap); s2 ranks both operating margins",
+  "B20": "cannot: U.S. Bancorp is not listed"
+ }
+}

@@ -1,0 +1,18 @@
+{
+ "model": "groq:openai/gpt-oss-120b",
+ "system": "You say how an SEC filing would label a financial item. Given an item phrase from a question\nand the company, list up to 4 other labels the company's annual or quarterly report might print for the\nsame item: its own term for it, a synonym, an abbreviation spelled out or the reverse. Never a number.\nAnswer as JSON: {\"labels\": [\"...\", \"...\"]}",
+ "user": "Company: Morgan Stanley (MS)\nItem: client assets overseen by Wealth Management",
+ "answer": {
+  "labels": [
+   "Client Assets",
+   "Assets Under Management (AUM)",
+   "Wealth Management Client Assets",
+   "Client Assets Under Management"
+  ]
+ },
+ "seconds": 1.04,
+ "usage": {
+  "in": 196,
+  "out": 204
+ }
+}

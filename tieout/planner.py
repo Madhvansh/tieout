@@ -21,14 +21,16 @@ from __future__ import annotations
 
 import json
 import math
+import pathlib
 import re
 from collections import Counter
 from typing import Optional
 
 from .llm import ask_json
-from .plan import metric_defs, validate, vocabulary
+from .plan import metric_defs, normalize, validate, vocabulary
 
-PROMPT_VERSION = "p11"
+ROOT = pathlib.Path(__file__).resolve().parents[1]
+PROMPT_VERSION = "p12"
 N_EXAMPLES = 6
 
 RULES = """Translate a question about US public companies into a query plan over a knowledge graph of their
@@ -83,6 +85,8 @@ RULES
 11. General knowledge may only say WHICH listed company is meant (a brand, "Google's parent").
 12. {"steps":[],"answer":null,"cannot":"<why>"} when a company is not listed, or for what filings do not
     print (stock prices, market share, forecasts, ratings) or leave to the proxy (audit fees, pay).
+    Never answer cannot because of the year (the filings run to fiscal 2026, whatever today's date
+    seems to be) or because a figure is narrower than a concept (that is an item).
 13. If the question also asks why a figure changed, plan the figure (restated explains why).
 """
 
@@ -250,12 +254,33 @@ def system_prompt(graph, question: str = "") -> str:
     return "\n\n".join(parts)
 
 
+LOCAL_PLANNER = "tieout-planner"                  # the fine-tuned model's name in Ollama (finetune/README)
+
+
+def is_local_planner(model: Optional[str]) -> bool:
+    return bool(model) and model.split(":", 1)[-1].startswith(LOCAL_PLANNER)
+
+
+def local_prompt() -> str:
+    """The short prompt the fine-tuned planner was trained with: task, operations and vocabulary only."""
+    path = ROOT / "finetune" / "system_prompt.v2.txt"
+    return path.read_text(encoding="utf-8").strip()
+
+
 def plan_question(question: str, graph, model: Optional[str] = None, offline: bool = False,
                   feedback: Optional[dict] = None) -> dict:
     """Return {"plan": ..., "errors": [...], "attempts": n}.
 
     `feedback` = {"plan": earlier plan, "problem": what went wrong} asks for a repaired plan.
+    The fine-tuned local planner was trained on question and plan pairs only, so it gets its
+    short prompt and the bare question, and is not asked for repairs it was never taught.
     """
+    if is_local_planner(model):
+        if feedback:
+            return {"plan": feedback["plan"], "errors": [], "attempts": 0}
+        plan = _as_plan(ask_json(local_prompt(), question, model=model, tag=f"plan_{LOCAL_PLANNER}", offline=offline))
+        errs = [] if (plan.get("cannot") or not plan.get("steps")) else validate(plan, graph)
+        return {"plan": plan, "errors": errs, "attempts": 1}
     system = system_prompt(graph, question)
     if feedback:
         user = (f"Q: {question}\nAn earlier plan for this question could not be used.\n"
@@ -284,4 +309,4 @@ def _as_plan(obj) -> dict:
         obj = obj["plan"]
     if isinstance(obj, list):
         obj = {"steps": obj, "answer": obj[-1].get("id") if obj and isinstance(obj[-1], dict) else None}
-    return obj if isinstance(obj, dict) else {"steps": [], "answer": None, "cannot": "planner returned no plan"}
+    return normalize(obj) if isinstance(obj, dict) else {"steps": [], "answer": None, "cannot": "planner returned no plan"}

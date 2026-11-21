@@ -48,11 +48,22 @@ TIMELESS = "*"                                    # period id of a figure whose 
 MAX_CANDIDATES = 18
 STOP = {"the", "of", "and", "in", "for", "to", "a", "an", "by", "its", "total", "net", "from", "on", "at", "s",
         "was", "what", "how", "much", "many", "did", "does", "is", "were", "had", "have", "with", "that", "this"}
+SOFT = {"number", "count", "amount", "figure", "level", "value", "reported", "full", "fiscal", "year", "company",
+        "overall", "consolidated", "all"}   # words a question uses but a filing's label rarely repeats
+COUNTED = re.compile(r"\b(number|how many|count|stores?|warehouses?|restaurants?|branch(es)?|locations?|employees|"
+                     r"members?|customers?|subscribers?|vehicles?|units?|deliveries|people|headcount|clubs?|"
+                     r"supercenters?|accounts?|users?)\b", re.I)
+MONEY = re.compile(r"\b(revenues?|sales|income|expenses?|costs?|assets|liabilit(y|ies)|fees?|dollars?|cash|"
+                   r"earnings|profit|loss|spend(ing)?|expenditures?|capex|debt|backlog|obligations?|inflows?|"
+                   r"outflows?|money|arr|value)\b|\$", re.I)
+RATED = re.compile(r"\b(ratio|percent(age)?|margin|rate|share of|yield)\b|%", re.I)
+_ACRONYM = re.compile(r"\b[A-Z][A-Z&]{1,5}s?\b")
 
 SYSTEM = """You match a phrase from a question to one place in a company's SEC filing.
 You are shown numbered candidates. A ROW is a line of a table: its printed label, the section heading
 above it, the table's title, the note it sits in, its column headers and its role in the table's
-arithmetic. A SENTENCE is a statement from the text with every number replaced by a slot such as <n1>.
+arithmetic. A SENTENCE is a statement from the text with every figure replaced by a slot tagged with its unit,
+such as <n1 count> or <n2 USD>; dates and years are shown because they say which period a slot is.
 You are never shown values. Pick the one candidate that reports the ITEM itself for the company (not a
 component of it, not a percentage of it unless the item is a percentage).
 The question is given only as context. It may need several figures, other periods or arithmetic; those
@@ -60,7 +71,8 @@ are handled elsewhere and are not your concern. A candidate that reports the ite
 even though it does not answer the whole question. Rows marked "columns: periods" hold every period
 the filing prints; the period is chosen later.
 For a ROW whose columns are not periods, also give the number of the column that holds the item.
-For a SENTENCE, give the slot that holds the item's figure.
+For a SENTENCE, give the slot that holds the item's figure for the period asked (a count for "number of",
+an amount for revenue or spending, a percentage only when a percentage is asked).
 Answer null only if no candidate reports the item.
 Answer as JSON: {"pick": <candidate number or null>, "column": <column number or null>,
 "slot": "<slot or null>", "reason": "<one short sentence>"}"""
@@ -108,15 +120,22 @@ def store() -> Store:
 
 # ------------------------------------------------------------------ wording
 
+_SUFFIXES = ("ations", "ation", "ating", "ated", "ings", "ing", "ies", "es", "ed", "ate", "s")
+
+
+def stem(w: str) -> str:
+    """A light stem so that operated, operating and operations meet, and stores meets store."""
+    if w.isdigit() or len(w) <= 4:
+        return w
+    for suf in _SUFFIXES:
+        if w.endswith(suf) and len(w) - len(suf) >= 4 and not w.endswith("ss"):
+            w = w[:-len(suf)]
+            break
+    return w[:-1] if len(w) > 4 and w.endswith("e") else w
+
+
 def tokens(text: str) -> list:
-    out = []
-    for w in re.findall(r"[a-z0-9&]+", norm_label(text)):
-        if w in STOP:
-            continue
-        if len(w) > 3 and w.endswith("s") and not w.endswith("ss"):
-            w = w[:-1]                              # stores / store
-        out.append(w)
-    return out
+    return [stem(w) for w in re.findall(r"[a-z0-9&]+", norm_label(text)) if w not in STOP]
 
 
 def _phrase_key(ticker: str, phrase: str) -> tuple:
@@ -127,51 +146,189 @@ def _slug(text: str, n: int = 48) -> str:
     return re.sub(r"[^a-z0-9]+", "-", norm_label(text)).strip("-")[:n]
 
 
+def expected_unit(phrase: str) -> Optional[str]:
+    """The unit a phrase asks for, when its words make that plain: "count", "USD" or "percent"."""
+    if RATED.search(phrase):
+        return "percent"
+    if COUNTED.search(phrase) and not MONEY.search(phrase):
+        return "count"
+    if MONEY.search(phrase):
+        return "USD"
+    return None
+
+
+def _unit_fit(unit: str, want_unit: Optional[str]) -> float:
+    """A bonus for a candidate in the unit the phrase asks for, a penalty for one plainly in another."""
+    if not want_unit or not unit:
+        return 0.0
+    same = {"percent": {"percent", "ratio"}, "count": {"count"}, "USD": {"USD"}}[want_unit]
+    if unit in same:
+        return 1.5
+    if unit in ("number", "year", "date") or (unit == "shares" and want_unit == "count"):
+        return 0.5 if want_unit == "count" and unit in ("number", "shares") else 0.0
+    return -3.0 if {unit, want_unit} & {"percent", "ratio"} or want_unit == "count" else -1.0
+
+
+def _abbreviated(words: list, acronyms: set) -> set:
+    """Words of `words` that an acronym stands for: "annualized recurring revenue" for ARR."""
+    out: set = set()
+    for i in range(len(words)):
+        for n in range(2, 6):
+            run = words[i:i + n]
+            if len(run) == n and "".join(w[0] for w in run) in acronyms:
+                out.update(run)
+    return out
+
+
+def _words_in_order(text: str) -> list:
+    return re.findall(r"[a-z0-9&]+", norm_label(text))
+
+
+def _hits(want: set, phrase: str, text: str, text_tokens: set) -> set:
+    """The phrase's words a candidate's text covers, counting acronyms either way (ARR, RPO, CET1)."""
+    hit = want & text_tokens
+    text_acr = {a.rstrip("s").lower() for a in _ACRONYM.findall(text)}
+    hit |= want & {stem(w) for w in _abbreviated(_words_in_order(phrase), text_acr)}
+    phrase_acr = {a.rstrip("s").lower() for a in _ACRONYM.findall(phrase)}
+    if phrase_acr and phrase_acr & {"".join(w[0] for w in run) for run in _runs(_words_in_order(text))}:
+        hit |= want & phrase_acr
+    return hit
+
+
+def _runs(words: list) -> list:
+    return [words[i:i + n] for i in range(len(words)) for n in range(2, 6) if i + n <= len(words)]
+
+
+_PID = re.compile(r"^FY(\d{4})(@end)?$")
+
+
+def _inferred_pid(row: dict, j: int) -> Optional[str]:
+    """The period of cell j when its header was not read but its neighbours say it.
+
+    Cells [?, FY2025, FY2024] with a USD row are three years in falling order, so the first is
+    FY2026. Only a plain yearly run of at least two printed periods is extended, by one step at
+    either end, never past the filing's own fiscal year.
+    """
+    cells = row["cells"]
+    if cells[j].get("pid") or not isinstance(cells[j].get("value"), (int, float)):
+        return None
+    known = [(k, _PID.match(c.get("pid") or "")) for k, c in enumerate(cells)]
+    known = [(k, int(m.group(1)), m.group(2) or "") for k, m in known if m]
+    if len(known) < 2:
+        return None
+    steps = {(b[1] - a[1]) / (b[0] - a[0]) for a, b in zip(known, known[1:])}
+    suffixes = {s for _, _, s in known}
+    if len(steps) != 1 or len(suffixes) != 1 or abs(next(iter(steps))) != 1:
+        return None
+    step, suffix = next(iter(steps)), next(iter(suffixes))
+    first, last = known[0], known[-1]
+    if j == first[0] - 1:
+        year = first[1] - int(step)
+    elif j == last[0] + 1:
+        year = last[1] + int(step)
+    else:
+        return None
+    m = re.search(r"_FY(\d{4})", str(row.get("doc") or ""))   # doc ids carry the filing's fiscal year
+    limit = int(m.group(1)) if m else 9999
+    return f"FY{year}{suffix}" if year <= limit else None
+
+
+def _cell_pid(row: dict, j: int) -> Optional[str]:
+    return row["cells"][j].get("pid") or _inferred_pid(row, j)
+
+
 def candidates(st: Store, g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str) -> list:
     """Rows and sentences of this company whose wording overlaps the phrase, best first.
 
-    `wanted` are the period ids the question asks for; a row that prints one of them, or a
-    filing of the asked fiscal year, is preferred. Wording only: no value is consulted.
+    `wanted` are the period ids the question asks for. A row that prints periods but none of
+    those cannot answer and is left out; a filing of the asked fiscal year is preferred. Words a
+    question uses but labels rarely print ("number of", "total") are not required, acronyms
+    match their words either way, and a candidate in the unit the phrase plainly asks for (a
+    count, an amount, a percentage) is preferred. Wording and units only: no value is consulted.
     """
     want = set(tokens(phrase))
+    core = (want - {stem(w) for w in SOFT}) or want
     if not want:
         return []
+    want_unit = expected_unit(phrase)
     scored = []
     for r in st.rows_by_ticker.get(ticker, []):
+        if any(c.get("pid") for c in r["cells"]) and not any(c.get("pid") in wanted for c in r["cells"]) \
+                and not any(_inferred_pid(r, j) in wanted for j in range(len(r["cells"]))):
+            continue                                  # prints other periods only
         label = set(tokens(r["label"]))
-        context = set(tokens(" ".join((r["section"], r["title"], r.get("context", ""),
-                                       " ".join(c.get("col", "") for c in r["cells"])))))
-        hit_label, hit_context = len(want & label), len(want & (context - label))
-        if hit_label == 0 and hit_context < 2:
+        ctx_text = " ".join((r["section"], r["title"], r.get("context", ""), " ".join(c.get("col", "") for c in r["cells"])))
+        context = set(tokens(ctx_text))
+        hit_label = _hits(core, phrase, r["label"], label)
+        hit_context = _hits(core, phrase, ctx_text, context) - hit_label
+        if not hit_label and len(hit_context) < min(2, len(core)):
             continue
-        has_period = any(c.get("pid") in wanted for c in r["cells"])
-        score = (3.0 * hit_label + 1.0 * hit_context - 0.15 * len(label - want)
-                 + (1.5 if has_period else 0.0) + (0.5 if r["verified"] else 0.0)
+        covered = len(hit_label | hit_context) == len(core)
+        score = (3.0 * len(hit_label) + 1.0 * len(hit_context) - 0.15 * len(label - want)
+                 + (1.5 if any(c.get("pid") in wanted for c in r["cells"]) else 0.0) + (0.5 if r["verified"] else 0.0)
                  + (0.5 if r.get("anchor") or r.get("ties_to") else 0.0)
                  + (0.75 if g.filings[r["doc"]]["fiscal_year"] == fiscal_year else 0.0)
-                 + 2.0 * (len(want & (label | context)) == len(want)))
-        scored.append((score, "row", r))
+                 + 2.0 * covered + _unit_fit(r["unit"], want_unit))
+        scored.append((score, "row", r, covered))
     for m in st.mentions_by_ticker.get(ticker, []):
         words = set(tokens(m["masked"]))
-        hit = len(want & words)
-        if hit < max(2, (len(want) + 1) // 2):
+        hit = _hits(core, phrase, m["masked"], words)
+        if len(hit) < max(1, -(-3 * len(core) // 5)):   # at least three fifths of the core words
             continue
-        score = (2.0 * hit - 0.03 * len(words - want) + (0.5 if m.get("ties") else 0.0)
+        units = {n.get("unit") for n in m["numbers"]}
+        fit = max((_unit_fit(u, want_unit) for u in units), default=0.0)
+        score = (2.0 * len(hit) - 0.03 * len(words - want) + (0.5 if m.get("ties") else 0.0)
                  + (0.75 if g.filings[m["doc"]]["fiscal_year"] == fiscal_year else 0.0)
-                 + 2.0 * (hit == len(want)))
-        scored.append((score, "sentence", m))
+                 + 2.0 * (len(hit) == len(core)) + fit)
+        scored.append((score, "sentence", m, len(hit) == len(core)))
     scored.sort(key=lambda x: -x[0])
     seen, out = set(), []
-    for _score, kind, ref in scored:                 # the same row reprinted in an older filing adds nothing
+    for score, kind, ref, covered in scored:         # the same row reprinted in an older filing adds nothing
         sig = (kind, norm_label(ref.get("label") or ref.get("masked", "")), norm_label(ref.get("section", "")),
                g.filings[ref["doc"]]["fiscal_year"] if kind == "sentence" else "")
         if sig in seen:
             continue
         seen.add(sig)
-        out.append({"kind": kind, "ref": ref})
+        out.append({"kind": kind, "ref": ref, "score": score, "covered": covered})
         if len(out) == MAX_CANDIDATES:
             break
     return out
+
+
+SYSTEM_LABELS = """You say how an SEC filing would label a financial item. Given an item phrase from a question
+and the company, list up to 4 other labels the company's annual or quarterly report might print for the
+same item: its own term for it, a synonym, an abbreviation spelled out or the reverse. Never a number.
+Answer as JSON: {"labels": ["...", "..."]}"""
+
+
+def other_labels(g: Graph, ticker: str, phrase: str, model: Optional[str] = None, offline: bool = False) -> list:
+    """Other wordings a filing may print for the phrase ("net new money" -> "net inflows"). One cached call."""
+    user = f"Company: {g.companies[ticker]['name']} ({ticker})\nItem: {phrase}"
+    try:
+        ans = ask_json(SYSTEM_LABELS, user, model=link_model(model), tag="labels", offline=offline)
+    except DailyLimit:
+        raise
+    except Exception:  # noqa: BLE001 - no alternatives is a fine answer
+        return []
+    labels = ans.get("labels") if isinstance(ans, dict) else None
+    if not isinstance(labels, list):
+        return []
+    return [x for x in labels if isinstance(x, str) and x.strip() and not re.search(r"\d{3}", x)][:4]
+
+
+def widened(st: Store, g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str,
+            model: Optional[str] = None, offline: bool = False) -> list:
+    """Candidates for the phrase; when none of them carries all its words, also for the other
+    labels a filing might use, merged best first."""
+    cands = candidates(st, g, ticker, phrase, wanted, fiscal_year)
+    if any(c["covered"] for c in cands[:5]):
+        return cands
+    best: dict = {c["ref"]["id"]: c for c in cands}
+    for label in other_labels(g, ticker, phrase, model, offline):
+        for c in candidates(st, g, ticker, label, wanted, fiscal_year):
+            if c["ref"]["id"] not in best or best[c["ref"]["id"]]["score"] < c["score"]:
+                best[c["ref"]["id"]] = c
+    return sorted(best.values(), key=lambda c: -c["score"])[:MAX_CANDIDATES]
 
 
 def _columns(row: dict) -> list:
@@ -183,12 +340,23 @@ def _show(i: int, cand: dict, g: Graph) -> str:
     ref = cand["ref"]
     filing = f"{g.filings[ref['doc']]['form']} {g.filings[ref['doc']]['fiscal_year']}"
     if cand["kind"] == "sentence":
-        return f"{i}: SENTENCE ({filing}, page {ref['page']}): {ref['masked'][:320]}"
+        return f"{i}: SENTENCE ({filing}, page {ref['page']}): {shown_sentence(ref)[:360]}"
     dated = any(c.get("pid") for c in ref["cells"])
     cols = "periods" if dated else "; ".join(f"[{j}] {h[:40]}" for j, h in enumerate(_columns(ref)))
     return (f"{i}: ROW ({filing}, page {ref['page']}): label '{ref['label'][:80]}' | section '{ref['section'][:50]}' | "
             f"table '{ref['title'][:90]}' | note '{ref.get('context', '')[:50]}' | columns: {cols} | "
             f"role {ref['role']} | unit {ref['unit']}")
+
+
+def shown_sentence(m: dict) -> str:
+    """The sentence as the linker sees it: dates and years printed (they name periods, not
+    figures), every other number a slot tagged with its unit, such as <n1 count> or <n2 USD>."""
+    text = m["masked"]
+    for n in sorted(m["numbers"], key=lambda n: -len(n["slot"])):    # <n10> before <n1>
+        inner = n["slot"].strip("<>")
+        shown = n["text"] if n.get("unit") in ("date", "year") else f"<{inner} {n.get('unit') or 'number'}>"
+        text = text.replace(n["slot"], shown)
+    return text
 
 
 # ------------------------------------------------------------------ the gate
@@ -235,11 +403,14 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
     entry = {"kind": "item", "ticker": ticker, "phrase": phrase, "taught_by": question_id, "question": question,
              "ts": time.strftime("%Y-%m-%dT%H:%M:%S"), "state": "rejected", "item": None, "label": None,
              "evidence": [], "objections": []}
-    cands = candidates(st, g, ticker, phrase, wanted, fiscal_year)
+    cands = widened(st, g, ticker, phrase, wanted, fiscal_year, model, offline)
     if not cands:
         entry["objections"] = ["nothing in the company's filings matches the wording"]
         return entry
-    user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nItem asked for: {phrase}\n"
+    ends = sorted({f["period_end"] for f in g.filings.values()
+                   if f["ticker"] == ticker and f["fiscal_year"] == fiscal_year and f.get("period_end")})
+    period = fiscal_year + (f" (fiscal year ending {ends[-1]})" if ends else "")
+    user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nItem asked for: {phrase}\nPeriod asked: {period}\n"
             f"Question: {question}\n\nCandidates:\n" + "\n".join(_show(i, c, g) for i, c in enumerate(cands)))
     try:
         ans = ask_json(SYSTEM, user, model=link_model(model), tag="link", offline=offline)
@@ -256,9 +427,14 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
     cand = cands[pick]
     ref = cand["ref"]
     if cand["kind"] == "sentence":
-        slot = str(ans.get("slot") or (ref["numbers"][0]["slot"] if len(ref["numbers"]) == 1 else "")).strip("<>")
+        said = str(ans.get("slot") or (ref["numbers"][0]["slot"] if len(ref["numbers"]) == 1 else ""))
+        slot = (re.search(r"n\d+", said) or re.search(r".*", "")).group(0)      # "<n1 count>" or "n1" -> "n1"
         if slot not in {n["slot"].strip("<>") for n in ref["numbers"]}:
             entry["objections"] = ["proposer named no number slot of the sentence"]
+            return entry
+        unit = next(n.get("unit") for n in ref["numbers"] if n["slot"].strip("<>") == slot)
+        if _unit_fit(unit, expected_unit(phrase)) < 0:
+            entry["objections"] = [f"the number picked is in {unit}, the item asks for {expected_unit(phrase)}"]
             return entry
         entry.update(kind="mention", item=f"said:{ref['id']}:{slot}", ref_id=ref["id"], slot=slot,
                      label=ref["masked"][:160], page=ref["page"], doc=ref["doc"])
@@ -321,8 +497,8 @@ def apply_link(g: Graph, entry: dict) -> int:
                     if c.get("col", "") != entry["column"] or not same_row:
                         continue
                     pid = TIMELESS
-                elif c.get("pid"):
-                    pid = c["pid"]
+                elif _cell_pid(row, j):
+                    pid = _cell_pid(row, j)
                 else:
                     continue
                 rid = c.get("rid") or f"{row['id']}:c{j}"   # a primary-statement cell is already a reading
@@ -354,8 +530,9 @@ def breakdown(g: Graph, ticker: str, phrase: str) -> Optional[list]:
 
 
 def _line(row: dict) -> dict:
-    cells = {c["pid"]: {"id": c.get("rid") or f"{row['id']}:c{j}", "value": c["value"], "text": c["text"], "ok": c.get("ok")}
-             for j, c in enumerate(row["cells"]) if c.get("pid")}
+    cells = {_cell_pid(row, j): {"id": c.get("rid") or f"{row['id']}:c{j}", "value": c["value"], "text": c["text"],
+                                 "ok": c.get("ok")}
+             for j, c in enumerate(row["cells"]) if _cell_pid(row, j)}
     return {"ticker": row["ticker"], "doc": row["doc"], "page": row["page"], "label": row["label"],
             "unit": row["unit"], "cells": cells}
 

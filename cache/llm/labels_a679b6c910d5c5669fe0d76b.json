@@ -1,0 +1,18 @@
+{
+ "model": "groq:openai/gpt-oss-120b",
+ "system": "You say how an SEC filing would label a financial item. Given an item phrase from a question\nand the company, list up to 4 other labels the company's annual or quarterly report might print for the\nsame item: its own term for it, a synonym, an abbreviation spelled out or the reverse. Never a number.\nAnswer as JSON: {\"labels\": [\"...\", \"...\"]}",
+ "user": "Company: Target Corp (TGT)\nItem: number of stores by state",
+ "answer": {
+  "labels": [
+   "Store Count by State",
+   "Number of Retail Stores by State",
+   "Store Locations by State",
+   "Stores per State"
+  ]
+ },
+ "seconds": 1.11,
+ "usage": {
+  "in": 195,
+  "out": 157
+ }
+}

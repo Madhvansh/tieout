@@ -140,6 +140,10 @@ def _groq(name: str, system: str, user: str, schema: Optional[dict]) -> str:
                           headers={"Authorization": f"Bearer {os.environ['GROQ_API_KEY']}"}, json=body, timeout=120)
         if r.status_code == 429 and "per day" in r.text:
             raise DailyLimit(f"groq {name}: daily quota spent")
+        if r.status_code == 400 and "failed_generation" in r.text:
+            # JSON mode rejected the reply (often a stray character); the reply itself is returned,
+            # and _parse keeps it only if it holds a JSON object
+            return r.json().get("error", {}).get("failed_generation") or ""
         if r.status_code in (429, 500, 503):
             wait = r.headers.get("retry-after")     # free tier: tokens per minute; the server says how long
             time.sleep(min(90.0, float(wait) + 1.0) if wait and wait.replace(".", "", 1).isdigit()

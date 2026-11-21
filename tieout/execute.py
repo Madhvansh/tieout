@@ -69,6 +69,15 @@ class PlanTypeError(Exception):
     """A step asked for something its inputs cannot give (a company where a number is needed, ...)."""
 
 
+class Abstained(Exception):
+    """A step used the result of an earlier step that abstained. The earlier abstention, with the
+    facts it found missing, becomes the answer, so the learning loop can try to close those gaps."""
+
+    def __init__(self, result: "Result"):
+        super().__init__("an earlier step abstained")
+        self.result = result
+
+
 def abstain(note: str, leaves: Optional[list] = None, missing: Optional[list] = None) -> Result:
     return Result("abstain", leaves=leaves or [], notes=[note], missing=missing or [])
 
@@ -104,6 +113,10 @@ class Executor:
                 env[step["id"]] = getattr(self, "_op_" + step["op"])(step, env)
         except PlanTypeError as e:
             return abstain(f"type error: {e}")
+        except Abstained as e:
+            r = e.result
+            return Result("abstain", leaves=list(r.leaves), notes=list(r.notes), missing=list(r.missing),
+                          extra=dict(r.extra))
         except (KeyError, TypeError, ValueError, IndexError, ZeroDivisionError) as e:
             # a plan that passed validation but asks for something its steps cannot give
             return abstain(f"plan could not run: {type(e).__name__}: {str(e)[:120]}")
@@ -319,6 +332,8 @@ class Executor:
     def _company(self, ref, env: dict) -> str:
         if isinstance(ref, str) and ref.startswith("$"):
             r = env[ref[1:]]
+            if r.kind == "abstain":
+                raise Abstained(r)
             if r.kind != "companies" or not r.value:
                 raise PlanTypeError(f"{ref} is not a company")
             return r.value[0][0]
@@ -329,6 +344,8 @@ class Executor:
         if not (isinstance(ref, str) and ref.startswith("$")):
             return None
         r = env[ref[1:]]
+        if r.kind == "abstain":
+            raise Abstained(r)
         if r.kind != "lines" or not r.value:
             return None
         top = r.value[0][0]
@@ -343,6 +360,8 @@ class Executor:
         if isinstance(over, list):
             return "companies", list(over), []
         r = env[over[1:]]
+        if r.kind == "abstain":
+            raise Abstained(r)
         if r.kind == "companies":
             return "companies", [t for t, _ in r.value], list(r.leaves)
         if r.kind == "lines":
@@ -511,6 +530,8 @@ class Executor:
 
     def _op_count(self, s: dict, env: dict) -> Result:
         r = env[s["of"][1:]]
+        if r.kind == "abstain":
+            raise Abstained(r)
         if r.kind not in ("companies", "lines"):
             raise PlanTypeError(f"{s['of']} is not a set")
         return Result("number", len(r.value), "count", list(r.leaves), list(r.notes),

@@ -1,0 +1,16 @@
+{
+ "model": "groq:openai/gpt-oss-120b",
+ "system": "You match a phrase from a question to one place in a company's SEC filing.\nYou are shown numbered candidates. A ROW is a line of a table: its printed label, the section heading\nabove it, the table's title, the note it sits in, its column headers and its role in the table's\narithmetic. A SENTENCE is a statement from the text with every number replaced by a slot such as <n1>.\nYou are never shown values. Pick the one candidate that reports the ITEM itself for the company (not a\ncomponent of it, not a percentage of it unless the item is a percentage).\nThe question is given only as context. It may need several figures, other periods or arithmetic; those\nare handled elsewhere and are not your concern. A candidate that reports the item is the right pick\neven though it does not answer the whole question. Rows marked \"columns: periods\" hold every period\nthe filing prints; the period is chosen later.\nFor a ROW whose columns are not periods, also give the number of the column that holds the item.\nFor a SENTENCE, give the slot that holds the item's figure.\nAnswer null only if no candidate reports the item.\nAnswer as JSON: {\"pick\": <candidate number or null>, \"column\": <column number or null>,\n\"slot\": \"<slot or null>\", \"reason\": \"<one short sentence>\"}",
+ "user": "Company: BlackRock Inc. (BLK)\nItem asked for: total net inflows\nQuestion: How much net new money did BlackRock take in during 2025 across all of its products?\n\nCandidates:\n0: ROW (10-K FY2025, page 48): label 'Total net inflows (outflows)' | section 'Net inflows (outflows)' | table 'The component changes in BlackRock\u2019s AUM for 2025 and 2024.' | note 'Item 7. Management\u2019s Discussion and Analysis of Fi' | columns: periods | role total | unit USD",
+ "answer": {
+  "pick": 0,
+  "column": 1,
+  "slot": null,
+  "reason": "Row reports total net inflows (the item) for 2025"
+ },
+ "seconds": 1.33,
+ "usage": {
+  "in": 508,
+  "out": 295
+ }
+}

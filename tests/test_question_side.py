@@ -74,3 +74,22 @@ def test_which_of_two_answered_by_one_difference_is_a_misfit():
     res = Result("number", 1.0, "USD")
     assert shape_misfit("Which earned more operating income in 2025, Coca-Cola or PepsiCo, and by how much?", plan, res)
     assert shape_misfit("How much more operating income did PepsiCo earn than Coca-Cola in 2025?", plan, res) == ""
+
+
+def test_normalize_fixes_loose_measures_without_changing_the_question():
+    from tieout.plan import normalize
+    plan = _plan({"op": "filter", "over": ["KO", "PEP"], "where": {"by": {"delta": "net_income"}, "period": {"fy": 2025}, "lt": 0}},
+                 {"op": "count", "of": "$s1"})
+    fixed = normalize(plan)
+    assert fixed["steps"][0]["where"]["by"] == {"delta": {"concept": "NetIncome"}}
+    assert validate(fixed, G) == []
+    plan = _plan({"op": "rank", "over": ["WMT", "TGT"], "by": {"metric": "inventory"}, "period": {"fy": 2025}, "k": 2})
+    assert normalize(plan)["steps"][0]["by"] == {"concept": "Inventory"}
+
+
+def test_normalize_gives_a_line_read_the_period_of_the_step_it_refers_to():
+    from tieout.plan import normalize
+    plan = _plan({"op": "members", "company": "CRM", "of": "revenue by offering", "period": {"fy": 2026}},
+                 {"op": "rank", "over": "$s1", "by": {"value": True}, "period": {"fy": 2026}, "k": 1},
+                 {"op": "get", "company": "$s2", "item": "revenue"})
+    assert normalize(plan)["steps"][2]["period"] == {"fy": 2026}
