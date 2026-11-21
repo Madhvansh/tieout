@@ -15,13 +15,16 @@ Measures (what can be read for one company and one period)
     {"growth": measure}               percentage change into the period from the year before
     {"delta": measure}                the same change as an amount
     {"ratio": [measure, measure]}     one measure divided by another, same period
+    {"value": true}                   the printed value of a line (inside rank, filter, agg over lines)
 
 Operations
-    get       one measure for one company and period
+    get       one measure for one company and period; "as": "first_reported" reads the
+              figure as its first filing printed it, before any later revision
     metric    shorthand for get with a metric
-    calc      arithmetic over earlier steps, e.g. "s1 / s2"
+    calc      arithmetic over earlier steps, e.g. "s1 / s2", "abs(s1) / s2"
     change    growth of a measure between two named periods (pct or abs)
-    rank      order a set by a measure, keep the top k
+    rank      order a set by a measure, keep the top k; over two named companies the
+              answer also carries the gap between them
     filter    keep the members of a set that meet a condition
     agg       sum, average, median, minimum or maximum of a measure over a set
     count     size of a set
@@ -31,7 +34,11 @@ Operations
     restated  first-reported against latest-reported value, with the structural reason
 
 Sets
-    "all" | {"cluster": name} | [tickers] | "$s1" (what an earlier step kept)
+    "all" | {"cluster": name} | [tickers] | "$s1" (what an earlier step kept: companies or lines)
+
+References
+    "company": "$s1" names the top member of an earlier rank or filter step: a company, or,
+    when that step ranked the lines of a members step, that line (get then reads its value)
 
 Periods
     {"fy": 2025}                      fiscal year as that company labels it
@@ -162,8 +169,11 @@ def validate(plan: dict, graph) -> list:
         if isinstance(over, list):
             errs.extend(f"{sid}: unknown company {t}" for t in over if t not in graph.companies)
         measure = step_measure(s)
-        if op in ("get", "metric", "change", "rank", "agg", "series", "restated"):
+        line_ref = op == "get" and measure is None and isinstance(company, str) and company.startswith("$")
+        if op in ("get", "metric", "change", "rank", "agg", "series", "restated") and not line_ref:
             errs.extend(measure_errors(measure, sid))
+        if s.get("as") not in (None, "first_reported", "latest"):
+            errs.append(f"{sid}: \"as\" is \"first_reported\" or \"latest\"")
         if op in ("get", "metric", "restated", "members") and not (company and s.get("period")):
             errs.append(f"{sid}: {op} needs company and period")
         if op == "change" and not (company and s.get("from") and s.get("to")):

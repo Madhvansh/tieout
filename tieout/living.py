@@ -34,7 +34,7 @@ from typing import Optional
 
 from .concepts import Binding, concept_defs, norm_label
 from .graph import Fact, Graph
-from .llm import ask_json
+from .llm import DailyLimit, ask_json, link_model
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 LEARNED = ROOT / "semantics" / "learned.jsonl"
@@ -218,7 +218,9 @@ def learn(g: Graph, ticker: str, concept: str, question_id: str = "", question: 
             f"Concept: {concept}: {SAYS.get(concept, '')}\n\nRows (number: label (section) <role>):\n"
             + describe(rows, bound))
     try:
-        ans = ask_json(SYSTEM, user, schema=None, model=model, tag="bind", offline=offline)
+        ans = ask_json(SYSTEM, user, schema=None, model=link_model(model), tag="bind", offline=offline)
+    except DailyLimit:
+        raise
     except Exception as e:  # noqa: BLE001 - a failed proposal is recorded, not fatal
         entry["objections"] = [f"proposer failed: {type(e).__name__}"]
         return entry

@@ -8,8 +8,10 @@ is reproducible and can be replayed offline with no key at all.
 Select with TIEOUT_LLM, for example
     TIEOUT_LLM=gemini:gemini-3.5-flash-lite
     TIEOUT_LLM=groq:openai/gpt-oss-120b
-    TIEOUT_LLM=ollama:phi4-mini
+    TIEOUT_LLM=groq:openai/gpt-oss-120b@low      (reasoning effort for models that reason)
+    TIEOUT_LLM=ollama:tieout-planner
 Keys are read from the environment or from a .env file in the repo root.
+Token counts of every live call are kept with its cached answer, for the cost report.
 """
 from __future__ import annotations
 
@@ -24,8 +26,13 @@ import requests
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 CACHE = ROOT / "cache" / "llm"
-CALLS = {"live": 0, "cached": 0, "seconds": 0.0}
+CALLS = {"live": 0, "cached": 0, "seconds": 0.0, "tokens_in": 0, "tokens_out": 0}
 REPLAY_MODEL = "gemini:gemini-3.5-flash-lite"      # the model the cached benchmark plans were written by
+_USAGE: dict = {}                                  # token counts of the last live call
+
+
+class DailyLimit(RuntimeError):
+    """The provider's daily quota is spent. A run must stop here, not record abstentions."""
 
 
 def load_env() -> None:
@@ -37,6 +44,13 @@ def load_env() -> None:
         if line and not line.startswith("#") and "=" in line:
             k, v = line.split("=", 1)
             os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
+
+
+def link_model(model: Optional[str] = None) -> Optional[str]:
+    """The model the linker uses: TIEOUT_LINK_LLM if set (it then draws on a separate quota),
+    else the planner's model."""
+    load_env()
+    return os.environ.get("TIEOUT_LINK_LLM") or model
 
 
 def default_model() -> str:
@@ -66,13 +80,17 @@ def ask_json(system: str, user: str, schema: Optional[dict] = None, model: Optio
         raise RuntimeError("no cached answer and offline mode is on")
     provider, name = model.split(":", 1)
     t0 = time.time()
+    _USAGE.clear()
     text = {"gemini": _gemini, "groq": _groq, "ollama": _ollama}[provider](name, system, user, schema)
     CALLS["live"] += 1
     CALLS["seconds"] += time.time() - t0
+    CALLS["tokens_in"] += _USAGE.get("in", 0)
+    CALLS["tokens_out"] += _USAGE.get("out", 0)
     answer = _parse(text)
     CACHE.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps({"model": model, "system": system, "user": user, "answer": answer,
-                                "seconds": round(time.time() - t0, 2)}, indent=1), encoding="utf-8")
+                                "seconds": round(time.time() - t0, 2), "usage": dict(_USAGE)}, indent=1),
+                    encoding="utf-8")
     return answer
 
 
@@ -97,33 +115,50 @@ def _gemini(name: str, system: str, user: str, schema: Optional[dict]) -> str:
     for attempt in range(6):
         r = requests.post(f"https://generativelanguage.googleapis.com/v1beta/models/{name}:generateContent",
                           headers={"x-goog-api-key": os.environ["GEMINI_API_KEY"]}, json=body, timeout=120)
+        if r.status_code == 429 and "PerDay" in r.text:
+            raise DailyLimit(f"gemini {name}: daily quota spent")
         if r.status_code in (429, 500, 503):
             time.sleep(8 * (attempt + 1))          # free tier: wait out the per-minute limit
             continue
         r.raise_for_status()
+        meta = r.json().get("usageMetadata", {})
+        _USAGE.update({"in": meta.get("promptTokenCount", 0),
+                       "out": meta.get("candidatesTokenCount", 0) + meta.get("thoughtsTokenCount", 0)})
         return r.json()["candidates"][0]["content"]["parts"][0]["text"]
     r.raise_for_status()
     return ""
 
 
 def _groq(name: str, system: str, user: str, schema: Optional[dict]) -> str:
+    name, _, effort = name.partition("@")         # "openai/gpt-oss-120b@low" sets the reasoning effort
     body = {"model": name, "temperature": 0, "response_format": {"type": "json_object"},
             "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}]}
-    for attempt in range(6):
+    if effort:
+        body["reasoning_effort"] = effort
+    for attempt in range(8):
         r = requests.post("https://api.groq.com/openai/v1/chat/completions",
                           headers={"Authorization": f"Bearer {os.environ['GROQ_API_KEY']}"}, json=body, timeout=120)
+        if r.status_code == 429 and "per day" in r.text:
+            raise DailyLimit(f"groq {name}: daily quota spent")
         if r.status_code in (429, 500, 503):
-            time.sleep(8 * (attempt + 1))
+            wait = r.headers.get("retry-after")     # free tier: tokens per minute; the server says how long
+            time.sleep(min(90.0, float(wait) + 1.0) if wait and wait.replace(".", "", 1).isdigit()
+                       else 8 * (attempt + 1))
             continue
         r.raise_for_status()
+        usage = r.json().get("usage", {})
+        _USAGE.update({"in": usage.get("prompt_tokens", 0), "out": usage.get("completion_tokens", 0)})
         return r.json()["choices"][0]["message"]["content"]
     r.raise_for_status()
     return ""
 
 
 def _ollama(name: str, system: str, user: str, schema: Optional[dict]) -> str:
-    body = {"model": name, "stream": False, "format": schema or "json", "options": {"temperature": 0, "num_ctx": 8192},
+    # CPU by default (num_gpu 0): the planner is small enough, and laptops should not need a GPU
+    options = {"temperature": 0, "num_ctx": 8192, "num_gpu": int(os.environ.get("OLLAMA_NUM_GPU", "0"))}
+    body = {"model": name, "stream": False, "format": schema or "json", "options": options,
             "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}]}
     r = requests.post(os.environ.get("OLLAMA_HOST", "http://localhost:11434") + "/api/chat", json=body, timeout=600)
     r.raise_for_status()
+    _USAGE.update({"in": r.json().get("prompt_eval_count", 0), "out": r.json().get("eval_count", 0)})
     return r.json()["message"]["content"]

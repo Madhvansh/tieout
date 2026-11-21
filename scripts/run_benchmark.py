@@ -8,6 +8,11 @@
   python scripts/run_benchmark.py --strict              # answer only from verified leaves
   python scripts/run_benchmark.py --noise 0.05          # rebuild the graph with 5% of statement cells damaged
   python scripts/run_benchmark.py --offline             # replay from the cache only; no LLM call is made
+  python scripts/run_benchmark.py --ids A01,A06          # only these questions
+  python scripts/run_benchmark.py --no-repair            # no second planner call after an executor failure
+
+If a provider's daily quota runs out, the run stops, the questions answered so far are saved
+with "complete": false, and a later rerun replays them from the cache at no cost.
 
 Results go to results/<name>.json; a summary table is printed.
 """
@@ -25,7 +30,7 @@ from tieout.execute import Executor
 from tieout.graph import Graph, build
 from tieout.link import load_links
 from tieout.living import load_learned
-from tieout.llm import CALLS
+from tieout.llm import CALLS, DailyLimit
 
 logging.getLogger("pdfminer").setLevel(logging.ERROR)
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -75,9 +80,14 @@ def main():
     ap.add_argument("--no-learning", action="store_true")
     ap.add_argument("--model", default=None)
     ap.add_argument("--name", default=None)
+    ap.add_argument("--ids", default=None, help="comma-separated question ids to run")
+    ap.add_argument("--no-repair", action="store_true")
     a = ap.parse_args()
 
     questions = load_benchmark(pathlib.Path(a.bench))
+    if a.ids:
+        keep = set(a.ids.split(","))
+        questions = [q for q in questions if q["id"] in keep]
     if a.noise > 0:
         g = build(verbose=False, learned=a.ablate != "living", corrupt=(a.noise, a.seed))
     else:
@@ -96,13 +106,21 @@ def main():
     def run(q):
         return answer(q["question"], g, model=a.model, question_id=q["id"], offline=a.offline,
                       plan=oracle.get(q["id"]) if a.oracle else None, executor=ex,
-                      allow_learning=not (a.no_learning or a.ablate == "living" or a.noise > 0), persist=False)
+                      allow_learning=not (a.no_learning or a.ablate == "living" or a.noise > 0), persist=False,
+                      repair=not a.no_repair)
 
     name = a.name or "_".join(x for x in ["tieout", "oracle" if a.oracle else "", f"no-{a.ablate}" if a.ablate else "",
                                           "strict" if a.strict else "", f"noise{a.noise}" if a.noise else ""] if x)
-    rows = run_graph_system(questions, g, run, label=name)
-    table = score(rows)
-    out = {"name": name, "args": vars(a), "score": table, "rows": rows,
+    rows, complete = [], True
+    for q in questions:
+        try:
+            rows += run_graph_system([q], g, run, label=name)
+        except DailyLimit as e:
+            print(f"STOPPED at {q['id']}: {e}. Rerun later; answered questions replay from the cache.")
+            complete = False
+            break
+    table = score(rows) if rows else {}
+    out = {"name": name, "args": vars(a), "complete": complete, "score": table, "rows": rows,
            "llm": dict(CALLS), "graph": g.stats()}
     (ROOT / "results").mkdir(exist_ok=True)
     (ROOT / "results" / f"{name}.json").write_text(json.dumps(out, indent=1, default=str), encoding="utf-8")

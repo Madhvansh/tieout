@@ -1,146 +1,284 @@
 """Question to plan.
 
-The planner is the only place a language model touches a question. It is
-given the graph's vocabulary (companies, concepts, metrics, attributes,
-operations) and writes a plan in that vocabulary. It is not given any data,
-so it has nothing to copy a number from. The plan is validated before it
-runs; a plan that fails validation is sent back once with the errors.
+The planner is the only place a language model reads a question. It is given
+the graph's vocabulary (companies, concepts, metrics, attributes, operations)
+and writes a plan in that vocabulary. It is given no data, so it has nothing
+to copy a number from.
 
-Plans are cached by content hash (see llm.py), so the benchmark can be
-re-run offline and gives the same result every time.
+The prompt is the plan language (RULES), the vocabulary, and a few worked
+examples. The examples come from a fixed pool written from the language, one
+or more per operation; the ones whose wording is closest to the question are
+shown, so the prompt stays short enough for free-tier rate limits.
+
+Two chances to repair: a plan the validator rejects is sent back once with the
+errors, and `ask.answer` sends a plan back once more when the executor cannot
+run it (with the executor's reason). A repair never sees a value from the graph.
+
+Every call is cached by content hash (see llm.py), so a run can be replayed
+offline and gives the same result every time.
 """
 from __future__ import annotations
 
 import json
+import math
+import re
+from collections import Counter
 from typing import Optional
 
 from .llm import ask_json
 from .plan import validate, vocabulary
 
-PROMPT_VERSION = "p8"
+PROMPT_VERSION = "p9"
+N_EXAMPLES = 8
 
-RULES = """You translate a question about US public companies into a query plan over a knowledge graph
-of facts taken from their SEC filings. Output JSON only: {"steps": [...], "answer": "<step id>"}.
+RULES = """You translate a question about US public companies into a query plan over a knowledge graph built
+from their SEC filings. Output JSON only: {"steps": [...], "answer": "<id of the step that answers>"}.
+You never write a figure from your own knowledge: figures come only from steps that read the graph.
+The only numbers you write are thresholds stated in the question.
 
-You never state a number yourself. Numbers come only from steps that read the graph.
+STEPS (each has "id": "s1", "s2", ... and "op")
+get      {"op":"get","company":T,"concept":C,"period":P}  one figure. In place of "concept" use "metric":M,
+         "item":"words" or "by":MEASURE. Add "as":"first_reported" for the figure as first printed.
+calc     {"op":"calc","expr":"s1 / s2"}  + - * / ( ) and abs() over earlier steps
+change   {"op":"change","company":T,"concept":C,"from":P,"to":P,"mode":"pct"|"abs"}
+rank     {"op":"rank","over":SET,"by":MEASURE,"period":P,"order":"desc"|"asc","k":N}
+filter   {"op":"filter","over":SET,"where":{"by":MEASURE,"period":P,"gt"|"lt"|"ge"|"le":X}}
+         or {"op":"filter","over":SET,"where":{"attr":A,"eq":"text"}}
+count    {"op":"count","of":"$s1"}  how many an earlier filter or rank kept (and which)
+agg      {"op":"agg","over":SET,"by":MEASURE,"period":P,"fn":"sum"|"avg"|"median"|"min"|"max"}
+members  {"op":"members","company":T,"of":"words naming the breakdown","period":P}  the lines that add
+         up to a total: segments, products, regions, businesses
+series   {"op":"series","company":T,"by":MEASURE,"last":N}  add "pick":"max"|"min" for the peak year
+attr     {"op":"attr","company":T,"attr":A}  a text fact (auditor, state of incorporation, CEO ...)
+restated {"op":"restated","company":T,"concept":C or "item":"words","period":P}  the figure as first
+         reported against the latest report, and why it changed
 
-OPERATIONS (each step has "id" like "s1" and "op")
-- get      {"op":"get","company":T,"concept":C,"period":P}             one reported fact
-- metric   {"op":"metric","company":T,"metric":M,"period":P}           a derived metric
-- calc     {"op":"calc","expr":"s1 - s2"}                              arithmetic on earlier steps: + - * / ( )
-- change   {"op":"change","company":T,"concept":C or "metric":M,"from":P,"to":P,"mode":"pct"|"abs"}
-- rank     {"op":"rank","over":SET,"by":{"concept":C} or {"metric":M} or {"attr":A},"period":P,"order":"desc"|"asc","k":N}
-- filter   {"op":"filter","over":SET,"where":{"attr":A,"eq":"value"}}
-           or "where":{"by":{"concept":C} or {"metric":M},"period":P,"gt"|"lt"|"ge"|"le": number}
-- attr     {"op":"attr","company":T,"attr":A}                          a text fact (auditor, state, employees ...)
-- count    {"op":"count","of":"$s1"}                                   how many companies a filter or rank kept
-- restated {"op":"restated","company":T,"concept":C,"period":P}        latest-reported minus first-reported value
-
-T is a ticker from the list, or "$s1" meaning the top company of an earlier rank or filter step.
-SET is "all", {"cluster": name}, a list of tickers, or "$s1" (the companies an earlier step kept).
-P is {"fy": 2025} (the fiscal year as that company labels it), {"fy": "latest"}, {"fy": "prior"},
-  {"fy": 2025, "q": 3} for a fiscal quarter, or {"fy": 2025, "q": 3, "ytd": true} for year to date.
+MEASURE {"concept":C} | {"metric":M} | {"item":"words"} | {"attr":"employees"|"shares_outstanding"}
+        | {"growth":MEASURE} percent change from the year before | {"delta":MEASURE} that change as an
+        amount | {"ratio":[MEASURE,MEASURE]} | {"value":true} a line's own figure (over lines)
+T       a ticker, or "$sN": the top member of step sN (a company, or a line when sN ranked lines)
+SET     "all" | {"cluster":name} | [tickers] | "$sN" (the companies or lines step sN kept)
+P       {"fy":2025} | {"fy":2025,"q":3} | {"fy":2025,"q":3,"ytd":true} | {"fy":"latest"} | {"fy":"prior"}
 
 RULES
-1. Use only the tickers, concepts, metrics and attributes listed below. A line item a filing prints in
-   a table but that is not a listed concept (revenue of a segment, a product line or a region, a specific
-   expense or balance) is asked for with "item" in place of "concept":
-   {"op":"get","company":T,"item":"iPhone net sales","period":P}. Write the item the way a filing
-   would label it, with the segment or product name. "item" also works in change and restated.
-   If the question needs something a filing would not print as a number in a table (unit volumes it does
-   not disclose, market share, forecasts, prices), output
-   {"steps": [], "answer": null, "cannot": "<what is missing>"}.
-2. A ratio, margin, growth rate or difference is never a `get`: use metric, change or calc.
-3. "Which company has the highest/lowest ..." is a rank with k = 1. "Top three" is k = 3.
-4. "How many companies ..." is a filter followed by count.
-5. A question that hops (find a company, then ask something about it) uses "$sN" as the company.
-6. If no year is given use {"fy": "latest"}. "Fiscal 2025", "FY2025" and "in 2025" all mean {"fy": 2025}.
-7. Amounts in the question (thresholds) are written in full units: 10 billion dollars is 10000000000.
-   Percent thresholds are fractions: 20 percent is 0.2.
-8. "How much more/less was A's X than B's" asks for an amount: get each value and finish with calc.
-   "Which of A or B had the higher X" (with or without "and by how much") asks for a company:
-   rank over the two tickers with k = 2, so the answer names the winner and shows both values.
-9. Balance-sheet items use the same {"fy": N}: the graph takes the value at the end of that fiscal year.
-10. You may use general knowledge to work out WHICH listed company a question means (a brand it owns, a
-    product, a nickname, "Google's parent"). You may not use general knowledge for any figure or fact.
-11. Choose the closest listed concept even when the question words it differently (for example
-    "depreciation, amortization and other" is DepreciationAmortization; "bottom line" is NetIncome).
-    Use "cannot" only when nothing listed is close.
-13. A question may ask for a figure and also for a reason ("... and why did it change?"). The graph holds
-    facts, not reasons: plan the factual part (for a changed figure, the restated operation) and do not
-    answer "cannot" because of the "why".
-14. To order companies by headcount or share count use an attribute in "by": {"attr": "employees"}.
-    "How many companies ... and which are they" ends on the count step.
-12. Use a metric only when the question asks for exactly what the metric means. When the question
-    names the line items itself ("dividends as a share of earnings", "R&D relative to gross profit"),
-    get each item and combine them with calc. "Cash dividends" alone is DividendsPaid, never the
-    dividends-plus-buybacks metric.
+1. Concept or item. A concept is a company-wide line of the income statement, balance sheet or cash
+   flow statement. Anything narrower or outside them is an "item": a segment, product, region or
+   business; a count (stores, warehouses, members, vehicles delivered, employees in a region); ARR,
+   backlog, remaining performance obligation, assets under management, client assets, net new money,
+   capital ratios, deliveries. Write an item as the filing would label it, naming the segment or
+   product: {"item":"Greater China net sales"}, {"item":"number of stores in Texas"}. If the question
+   names a narrower line than a concept means (net sales without membership fees, one class of shares),
+   use the item.
+2. Periods. Copy the fiscal year the question names: "fiscal 2025", "FY25", "2025" all mean {"fy":2025}.
+   A balance or count "at the end of fiscal 2025" is {"fy":2025}. No year means {"fy":"latest"}; "the
+   year before" that is {"fy":"prior"}. A quarter is {"fy":Y,"q":Q} where Y is the fiscal year the
+   quarter belongs to. "Nine months" or "year to date" adds "ytd":true.
+3. A ratio, share, margin, per-unit figure, growth or difference is computed, never read: use a metric
+   only when it means exactly what is asked; otherwise get the parts and calc, or use a growth, delta
+   or ratio measure. "Per store", "per member", "per vehicle" divide by an item count.
+4. "Which company has the highest X" is rank with k=1. "Rank A, B and C" keeps them all (k = how many).
+5. "Which of A or B had more X (and by how much)" is rank over [A,B] with k=2: the answer shows both
+   values, the winner and the gap. Do the same when the two values are growth rates or ratios.
+6. "How many companies ..." is filter then count; count also names them.
+7. A hop (find a company or a line, then ask about it) refers to the earlier step with "$sN".
+8. "Which segment / product / region / business ..." is members, then rank or filter over "$sN" by
+   {"value":true} or {"growth":{"value":true}}. To give the chosen line's figure, add a get with
+   "company":"$sN" and the period.
+9. Thresholds are in full units: $10 billion is 10000000000; 20 percent is 0.2.
+10. The size of a loss or a gap ("how large", "how big", "by how much") uses abs() in calc.
+11. General knowledge may only tell you WHICH listed company is meant (a brand it owns, "Google's
+    parent"), never a figure.
+12. Output {"steps":[],"answer":null,"cannot":"<why>"} when the question needs a company that is not
+    listed, or something annual and quarterly reports do not print (stock prices, market share,
+    forecasts, ratings), or something a 10-K leaves to the proxy statement (audit fees, executive pay).
+13. A question that also asks why a figure changed is planned for the figure (restated explains why).
 """
 
+# The example pool: one or more per operation and shape, written from the language above.
+# None is a benchmark question; companies and wording were chosen to differ from them.
 EXAMPLES = [
-    ("What was Apple's total revenue in fiscal 2026?",
-     {"steps": [{"id": "s1", "op": "get", "company": "AAPL", "concept": "Revenue", "period": {"fy": 2026}}], "answer": "s1"}),
-    ("What was Amazon's gross margin in 2025?",
-     {"steps": [{"id": "s1", "op": "metric", "company": "AMZN", "metric": "gross_margin", "period": {"fy": 2025}}], "answer": "s1"}),
-    ("By what percentage did Nvidia's revenue grow in its most recent fiscal year?",
-     {"steps": [{"id": "s1", "op": "change", "company": "NVDA", "concept": "Revenue", "from": {"fy": "prior"}, "to": {"fy": "latest"}, "mode": "pct"}], "answer": "s1"}),
-    ("How much larger were JPMorgan's total assets than Bank of America's at the end of 2025?",
-     {"steps": [{"id": "s1", "op": "get", "company": "JPM", "concept": "TotalAssets", "period": {"fy": 2025}},
-                {"id": "s2", "op": "get", "company": "BAC", "concept": "TotalAssets", "period": {"fy": 2025}},
+    ("What were Caterpillar's total sales and revenues in 2025?",
+     {"steps": [{"id": "s1", "op": "get", "company": "CAT", "concept": "Revenue", "period": {"fy": 2025}}], "answer": "s1"}),
+    ("What was Oracle's operating margin in fiscal 2025?",
+     {"steps": [{"id": "s1", "op": "metric", "company": "ORCL", "metric": "operating_margin", "period": {"fy": 2025}}], "answer": "s1"}),
+    ("How much net income did Pfizer earn in the third quarter of 2025?",
+     {"steps": [{"id": "s1", "op": "get", "company": "PFE", "concept": "NetIncome", "period": {"fy": 2025, "q": 3}}], "answer": "s1"}),
+    ("What was Nike's revenue in the fourth quarter of fiscal 2025?",
+     {"steps": [{"id": "s1", "op": "get", "company": "NKE", "concept": "Revenue", "period": {"fy": 2025, "q": 4}}], "answer": "s1"}),
+    ("How much cash did Target generate from operations in the first nine months of fiscal 2025?",
+     {"steps": [{"id": "s1", "op": "get", "company": "TGT", "concept": "OperatingCashFlow", "period": {"fy": 2025, "q": 3, "ytd": True}}], "answer": "s1"}),
+    ("How much revenue did Microsoft's More Personal Computing segment bring in for fiscal 2025?",
+     {"steps": [{"id": "s1", "op": "get", "company": "MSFT", "item": "More Personal Computing revenue", "period": {"fy": 2025}}], "answer": "s1"}),
+    ("How many restaurants did McDonald's operate in France at the end of 2025?",
+     {"steps": [{"id": "s1", "op": "get", "company": "MCD", "item": "number of restaurants in France", "period": {"fy": 2025}}], "answer": "s1"}),
+    ("What order backlog did Caterpillar report at the end of 2025?",
+     {"steps": [{"id": "s1", "op": "get", "company": "CAT", "item": "order backlog", "period": {"fy": 2025}}], "answer": "s1"}),
+    ("As first reported in its fiscal 2025 annual report, what was Nike's inventory at the end of fiscal 2025?",
+     {"steps": [{"id": "s1", "op": "get", "company": "NKE", "concept": "Inventory", "period": {"fy": 2025}, "as": "first_reported"}], "answer": "s1"}),
+    ("How much more did Microsoft spend on research and development than Apple in fiscal 2025?",
+     {"steps": [{"id": "s1", "op": "get", "company": "MSFT", "concept": "ResearchAndDevelopment", "period": {"fy": 2025}},
+                {"id": "s2", "op": "get", "company": "AAPL", "concept": "ResearchAndDevelopment", "period": {"fy": 2025}},
                 {"id": "s3", "op": "calc", "expr": "s1 - s2"}], "answer": "s3"}),
-    ("Which was more profitable in fiscal 2025, Visa or Mastercard, and by how much?",
-     {"steps": [{"id": "s1", "op": "rank", "over": ["V", "MA"], "by": {"concept": "NetIncome"}, "period": {"fy": 2025}, "order": "desc", "k": 2}], "answer": "s1"}),
-    ("Which bank or financial company had the highest net income in fiscal 2025?",
-     {"steps": [{"id": "s1", "op": "rank", "over": {"cluster": "banks_finance"}, "by": {"concept": "NetIncome"}, "period": {"fy": 2025}, "order": "desc", "k": 1}], "answer": "s1"}),
-    ("Who audits the company with the largest research and development spending among the big tech companies?",
-     {"steps": [{"id": "s1", "op": "rank", "over": {"cluster": "big_tech"}, "by": {"concept": "ResearchAndDevelopment"}, "period": {"fy": "latest"}, "order": "desc", "k": 1},
-                {"id": "s2", "op": "attr", "company": "$s1", "attr": "auditor"}], "answer": "s2"}),
-    ("How many of the companies audited by Deloitte had an operating margin above 20 percent in their latest fiscal year?",
-     {"steps": [{"id": "s1", "op": "filter", "over": "all", "where": {"attr": "auditor", "eq": "Deloitte"}},
-                {"id": "s2", "op": "filter", "over": "$s1", "where": {"by": {"metric": "operating_margin"}, "period": {"fy": "latest"}, "gt": 0.2}},
-                {"id": "s3", "op": "count", "of": "$s2"}], "answer": "s3"}),
-    ("What was Alphabet's revenue in the fourth quarter of 2025?",
-     {"steps": [{"id": "s1", "op": "get", "company": "GOOGL", "concept": "Revenue", "period": {"fy": 2025, "q": 4}}], "answer": "s1"}),
-    ("Did Coca-Cola restate its 2024 operating income in the following year's filing, and by how much?",
-     {"steps": [{"id": "s1", "op": "restated", "company": "KO", "concept": "OperatingIncome", "period": {"fy": 2024}}], "answer": "s1"}),
-    ("What is Apple's revenue per employee for fiscal 2026?",
-     {"steps": [{"id": "s1", "op": "get", "company": "AAPL", "concept": "Revenue", "period": {"fy": 2026}},
+    ("What share of Alphabet's 2025 revenue came from YouTube ads?",
+     {"steps": [{"id": "s1", "op": "get", "company": "GOOGL", "item": "YouTube ads revenue", "period": {"fy": 2025}},
+                {"id": "s2", "op": "get", "company": "GOOGL", "concept": "Revenue", "period": {"fy": 2025}},
+                {"id": "s3", "op": "calc", "expr": "s1 / s2"}], "answer": "s3"}),
+    ("What was Apple's net income per employee in fiscal 2025?",
+     {"steps": [{"id": "s1", "op": "get", "company": "AAPL", "concept": "NetIncome", "period": {"fy": 2025}},
                 {"id": "s2", "op": "attr", "company": "AAPL", "attr": "employees"},
                 {"id": "s3", "op": "calc", "expr": "s1 / s2"}], "answer": "s3"}),
-    ("How much revenue did Google Cloud bring in during 2025?",
-     {"steps": [{"id": "s1", "op": "get", "company": "GOOGL", "item": "Google Cloud revenue", "period": {"fy": 2025}}], "answer": "s1"}),
-    ("Which employs more people, Visa or Mastercard, and by roughly how many?",
-     {"steps": [{"id": "s1", "op": "rank", "over": ["V", "MA"], "by": {"attr": "employees"}, "period": {"fy": "latest"}, "order": "desc", "k": 2}], "answer": "s1"}),
-    ("Did Nike revise its fiscal 2025 inventory figure in the next annual report, and if so why?",
-     {"steps": [{"id": "s1", "op": "restated", "company": "NKE", "concept": "Inventory", "period": {"fy": 2025}}], "answer": "s1"}),
-    ("What was Tesla's headcount of robots in 2025?",
-     {"steps": [], "answer": None, "cannot": "no concept or attribute for a count of robots"}),
+    ("Dividing Visa's fiscal 2025 net revenue by the number of processed transactions, how much did it earn per transaction?",
+     {"steps": [{"id": "s1", "op": "get", "company": "V", "concept": "Revenue", "period": {"fy": 2025}},
+                {"id": "s2", "op": "get", "company": "V", "item": "processed transactions", "period": {"fy": 2025}},
+                {"id": "s3", "op": "calc", "expr": "s1 / s2"}], "answer": "s3"}),
+    ("Combined, how much did Apple's Mac and iPad product lines sell in fiscal 2025?",
+     {"steps": [{"id": "s1", "op": "get", "company": "AAPL", "item": "Mac net sales", "period": {"fy": 2025}},
+                {"id": "s2", "op": "get", "company": "AAPL", "item": "iPad net sales", "period": {"fy": 2025}},
+                {"id": "s3", "op": "calc", "expr": "s1 + s2"}], "answer": "s3"}),
+    ("How big was Alphabet's Other Bets operating loss relative to its total operating income in 2025?",
+     {"steps": [{"id": "s1", "op": "get", "company": "GOOGL", "item": "Other Bets operating income (loss)", "period": {"fy": 2025}},
+                {"id": "s2", "op": "get", "company": "GOOGL", "concept": "OperatingIncome", "period": {"fy": 2025}},
+                {"id": "s3", "op": "calc", "expr": "abs(s1) / s2"}], "answer": "s3"}),
+    ("By what percentage did Costco's net income grow in fiscal 2025?",
+     {"steps": [{"id": "s1", "op": "change", "company": "COST", "concept": "NetIncome", "from": {"fy": 2024}, "to": {"fy": 2025}, "mode": "pct"}], "answer": "s1"}),
+    ("By how much did Home Depot's operating income change from fiscal 2023 to fiscal 2024?",
+     {"steps": [{"id": "s1", "op": "change", "company": "HD", "concept": "OperatingIncome", "from": {"fy": 2023}, "to": {"fy": 2024}, "mode": "abs"}], "answer": "s1"}),
+    ("How fast did AWS revenue grow in Amazon's latest fiscal year?",
+     {"steps": [{"id": "s1", "op": "change", "company": "AMZN", "item": "AWS net sales", "from": {"fy": "prior"}, "to": {"fy": "latest"}, "mode": "pct"}], "answer": "s1"}),
+    ("Which health care company had the highest net margin in 2025?",
+     {"steps": [{"id": "s1", "op": "rank", "over": {"cluster": "health"}, "by": {"metric": "net_margin"}, "period": {"fy": 2025}, "order": "desc", "k": 1}], "answer": "s1"}),
+    ("Which three companies in the set had the lowest effective tax rate in their latest fiscal year?",
+     {"steps": [{"id": "s1", "op": "rank", "over": "all", "by": {"metric": "effective_tax_rate"}, "period": {"fy": "latest"}, "order": "asc", "k": 3}], "answer": "s1"}),
+    ("Rank Visa, Mastercard and American Express by number of employees, largest first.",
+     {"steps": [{"id": "s1", "op": "rank", "over": ["V", "MA", "AXP"], "by": {"attr": "employees"}, "period": {"fy": "latest"}, "order": "desc", "k": 3}], "answer": "s1"}),
+    ("Rank Home Depot, Target and Walmart by the number of stores at the end of each one's latest fiscal year, most first.",
+     {"steps": [{"id": "s1", "op": "rank", "over": ["HD", "TGT", "WMT"], "by": {"item": "total number of stores"}, "period": {"fy": "latest"}, "order": "desc", "k": 3}], "answer": "s1"}),
+    ("Who held more cash at the end of 2025, Meta or Alphabet, and by how much?",
+     {"steps": [{"id": "s1", "op": "rank", "over": ["META", "GOOGL"], "by": {"concept": "Cash"}, "period": {"fy": 2025}, "order": "desc", "k": 2}], "answer": "s1"}),
+    ("Which grew revenue faster in fiscal 2025, Microsoft or Oracle, and by how many percentage points?",
+     {"steps": [{"id": "s1", "op": "rank", "over": ["MSFT", "ORCL"], "by": {"growth": {"concept": "Revenue"}}, "period": {"fy": 2025}, "order": "desc", "k": 2}], "answer": "s1"}),
+    ("Which bank ran leaner in 2025, Citigroup or Wells Fargo, measured as noninterest expense over total revenue?",
+     {"steps": [{"id": "s1", "op": "rank", "over": ["C", "WFC"], "by": {"ratio": [{"concept": "NoninterestExpense"}, {"concept": "Revenue"}]}, "period": {"fy": 2025}, "order": "asc", "k": 2}], "answer": "s1"}),
+    ("Who audits the consumer company with the largest inventory at the end of its latest fiscal year?",
+     {"steps": [{"id": "s1", "op": "rank", "over": {"cluster": "consumer_retail"}, "by": {"concept": "Inventory"}, "period": {"fy": "latest"}, "order": "desc", "k": 1},
+                {"id": "s2", "op": "attr", "company": "$s1", "attr": "auditor"}], "answer": "s2"}),
+    ("What was the effective tax rate of the bank with the most deposits at the end of 2025?",
+     {"steps": [{"id": "s1", "op": "rank", "over": {"cluster": "banks_finance"}, "by": {"concept": "Deposits"}, "period": {"fy": 2025}, "order": "desc", "k": 1},
+                {"id": "s2", "op": "metric", "company": "$s1", "metric": "effective_tax_rate", "period": {"fy": 2025}}], "answer": "s2"}),
+    ("How many of the big tech companies had an operating margin above 30 percent in their latest fiscal year, and which?",
+     {"steps": [{"id": "s1", "op": "filter", "over": {"cluster": "big_tech"}, "where": {"by": {"metric": "operating_margin"}, "period": {"fy": "latest"}, "gt": 0.3}},
+                {"id": "s2", "op": "count", "of": "$s1"}], "answer": "s2"}),
+    ("Which of Ford, General Motors and Tesla earned less net income in 2025 than in 2024?",
+     {"steps": [{"id": "s1", "op": "filter", "over": ["F", "GM", "TSLA"], "where": {"by": {"delta": {"concept": "NetIncome"}}, "period": {"fy": 2025}, "lt": 0}}], "answer": "s1"}),
+    ("Among the companies audited by KPMG, which had the highest revenue in its latest fiscal year?",
+     {"steps": [{"id": "s1", "op": "filter", "over": "all", "where": {"attr": "auditor", "eq": "KPMG"}},
+                {"id": "s2", "op": "rank", "over": "$s1", "by": {"concept": "Revenue"}, "period": {"fy": "latest"}, "order": "desc", "k": 1}], "answer": "s2"}),
+    ("What was the combined 2025 net income of JPMorgan, Bank of America and Citigroup?",
+     {"steps": [{"id": "s1", "op": "agg", "over": ["JPM", "BAC", "C"], "by": {"concept": "NetIncome"}, "period": {"fy": 2025}, "fn": "sum"}], "answer": "s1"}),
+    ("What was the average gross margin of the consumer companies in their latest fiscal year?",
+     {"steps": [{"id": "s1", "op": "agg", "over": {"cluster": "consumer_retail"}, "by": {"metric": "gross_margin"}, "period": {"fy": "latest"}, "fn": "avg"}], "answer": "s1"}),
+    ("In which of the last three fiscal years did Merck's net income peak?",
+     {"steps": [{"id": "s1", "op": "series", "company": "MRK", "by": {"concept": "NetIncome"}, "last": 3, "pick": "max"}], "answer": "s1"}),
+    ("Which of Alphabet's segments had the highest operating income in 2025?",
+     {"steps": [{"id": "s1", "op": "members", "company": "GOOGL", "of": "operating income by segment", "period": {"fy": 2025}},
+                {"id": "s2", "op": "rank", "over": "$s1", "by": {"value": True}, "period": {"fy": 2025}, "order": "desc", "k": 1}], "answer": "s2"}),
+    ("Which of Ford's segments lost money before interest and taxes in 2025?",
+     {"steps": [{"id": "s1", "op": "members", "company": "F", "of": "EBIT by segment", "period": {"fy": 2025}},
+                {"id": "s2", "op": "filter", "over": "$s1", "where": {"by": {"value": True}, "period": {"fy": 2025}, "lt": 0}}], "answer": "s2"}),
+    ("Which of Microsoft's product and service lines grew revenue fastest in fiscal 2025, and how much revenue did it bring in?",
+     {"steps": [{"id": "s1", "op": "members", "company": "MSFT", "of": "revenue by product and service", "period": {"fy": 2025}},
+                {"id": "s2", "op": "rank", "over": "$s1", "by": {"growth": {"value": True}}, "period": {"fy": 2025}, "order": "desc", "k": 1},
+                {"id": "s3", "op": "get", "company": "$s2", "period": {"fy": 2025}}], "answer": "s3"}),
+    ("Did Pfizer's 2025 annual report change the 2024 revenue it first reported, and why?",
+     {"steps": [{"id": "s1", "op": "restated", "company": "PFE", "concept": "Revenue", "period": {"fy": 2024}}], "answer": "s1"}),
+    ("Did Walmart's latest annual report revise the prior year's accrued liabilities balance?",
+     {"steps": [{"id": "s1", "op": "restated", "company": "WMT", "item": "Accrued liabilities", "period": {"fy": "prior"}}], "answer": "s1"}),
+    ("In which state is Chevron incorporated?",
+     {"steps": [{"id": "s1", "op": "attr", "company": "CVX", "attr": "state_of_incorporation"}], "answer": "s1"}),
+    ("Which firm audits the company that makes Gillette razors?",
+     {"steps": [{"id": "s1", "op": "attr", "company": "PG", "attr": "auditor"}], "answer": "s1"}),
+    ("What was Boeing's operating cash flow in 2025?",
+     {"steps": [], "answer": None, "cannot": "Boeing is not among the listed companies"}),
+    ("How much did Microsoft pay its chief executive in fiscal 2025?",
+     {"steps": [], "answer": None, "cannot": "executive pay is reported in the proxy statement, not the annual report"}),
+    ("What is Tesla's share price today?",
+     {"steps": [], "answer": None, "cannot": "the graph holds filing facts, not market prices"}),
 ]
 
+_WORD = re.compile(r"[a-z&%]+")                  # letters only: years and figures say nothing about shape
+_STOP = {"the", "of", "and", "in", "for", "to", "a", "an", "by", "its", "it", "what", "was", "were", "did", "does",
+         "is", "how", "much", "which", "who", "at", "on", "that", "this", "with", "from", "as", "be", "or",
+         "fiscal", "fy", "year", "company", "companies", "s", "inc", "corp", "co", "group", "report", "reported"}
 
-def system_prompt(graph) -> str:
+
+def _words(text: str, ignore: frozenset = frozenset()) -> list:
+    return [w for w in _WORD.findall(text.lower()) if w not in _STOP and w not in ignore]
+
+
+def pick_examples(question: str, n: int = N_EXAMPLES, ignore: frozenset = frozenset()) -> list:
+    """The n pool examples whose wording is closest to the question in shape.
+
+    Company names, years and filler are ignored, so "how many stores ... at the end of" finds the
+    store-count example whatever the company; rarer shared words count more.
+    """
+    words = [set(_words(q, ignore)) for q, _ in EXAMPLES]
+    df = Counter(w for ws in words for w in ws)
+    want = set(_words(question, ignore))
+    scored = [(sum(math.log((1 + len(EXAMPLES)) / (1 + df[w])) for w in want & ws), i) for i, ws in enumerate(words)]
+    chosen = sorted(i for _, i in sorted(scored, key=lambda x: (-x[0], x[1]))[:n])
+    return [EXAMPLES[i] for i in chosen]
+
+
+def _name_words(companies: dict) -> frozenset:
+    """Words of company names and tickers: they identify a company, not the shape of a question."""
+    return frozenset(w for t, name in companies.items() for w in _WORD.findall(f"{t} {name}".lower()))
+
+
+def system_prompt(graph, question: str = "") -> str:
     v = vocabulary(graph)
-    parts = [RULES, "COMPANIES (ticker: name)\n" + "\n".join(f"{t}: {n}" for t, n in v["companies"].items()),
-             "CLUSTERS: " + ", ".join(v["clusters"]),
-             "CONCEPTS (name: meaning)\n" + "\n".join(f"{c}: {d}" for c, d in v["concepts"].items()),
-             "METRICS (name: meaning)\n" + "\n".join(f"{m}: {d}" for m, d in v["metrics"].items()),
-             "ATTRIBUTES: " + ", ".join(v["attributes"]),
-             "EXAMPLES\n" + "\n".join(f"Q: {q}\nA: {json.dumps(p, separators=(',', ':'))}" for q, p in EXAMPLES)]
+    shots = pick_examples(question, ignore=_name_words(v["companies"])) if question else EXAMPLES
+    parts = [RULES,
+             "COMPANIES " + "; ".join(f"{t}: {n}" for t, n in v["companies"].items()),
+             "CLUSTERS " + ", ".join(v["clusters"]),
+             "CONCEPTS\n" + "\n".join(f"{c}: {d}" for c, d in v["concepts"].items()),
+             "METRICS\n" + "\n".join(f"{m}: {d}" for m, d in v["metrics"].items()),
+             "ATTRIBUTES " + ", ".join(v["attributes"]),
+             "EXAMPLES\n" + "\n".join(f"Q: {q}\nA: {json.dumps(p, separators=(',', ':'))}" for q, p in shots)]
     return "\n\n".join(parts)
 
 
-def plan_question(question: str, graph, model: Optional[str] = None, offline: bool = False) -> dict:
-    """Return {"plan": ..., "errors": [...], "attempts": n}."""
-    system = system_prompt(graph)
-    user = f"Q: {question}\nA:"
-    plan = ask_json(system, user, model=model, tag=f"plan_{PROMPT_VERSION}", offline=offline)
+def plan_question(question: str, graph, model: Optional[str] = None, offline: bool = False,
+                  feedback: Optional[dict] = None) -> dict:
+    """Return {"plan": ..., "errors": [...], "attempts": n}.
+
+    `feedback` = {"plan": earlier plan, "problem": what went wrong} asks for a repaired plan.
+    """
+    system = system_prompt(graph, question)
+    if feedback:
+        user = (f"Q: {question}\nAn earlier plan for this question could not be used.\n"
+                f"Plan: {json.dumps(feedback['plan'], separators=(',', ':'))}\nProblem: {feedback['problem']}\n"
+                "Write a corrected plan for the question. Change only what the problem points at; if the "
+                "question cannot be planned with the listed vocabulary, answer cannot.\nA:")
+        tag = f"plan_{PROMPT_VERSION}fix"
+    else:
+        user, tag = f"Q: {question}\nA:", f"plan_{PROMPT_VERSION}"
+    plan = _as_plan(ask_json(system, user, model=model, tag=tag, offline=offline))
     if plan.get("cannot") or not plan.get("steps"):
         return {"plan": plan, "errors": [], "attempts": 1}
     errs = validate(plan, graph)
     if not errs:
         return {"plan": plan, "errors": [], "attempts": 1}
-    retry = (f"Q: {question}\nYour previous plan was rejected by the validator:\n"
-             + "\n".join("- " + e for e in errs) + f"\nPrevious plan: {json.dumps(plan)}\nWrite a corrected plan.\nA:")
-    plan2 = ask_json(system, retry, model=model, tag=f"plan_{PROMPT_VERSION}r", offline=offline)
+    retry = (f"Q: {question}\nYour plan was rejected by the validator:\n" + "\n".join("- " + e for e in errs)
+             + f"\nRejected plan: {json.dumps(plan, separators=(',', ':'))}\nWrite a corrected plan.\nA:")
+    plan2 = _as_plan(ask_json(system, retry, model=model, tag=f"{tag}r", offline=offline))
     errs2 = [] if (plan2.get("cannot") or not plan2.get("steps")) else validate(plan2, graph)
     return {"plan": plan2, "errors": errs2, "attempts": 2}
+
+
+def _as_plan(obj) -> dict:
+    """Some models wrap the plan ({"plan": {...}}) or return a bare list of steps; unwrap both."""
+    if isinstance(obj, dict) and "steps" not in obj and isinstance(obj.get("plan"), dict):
+        obj = obj["plan"]
+    if isinstance(obj, list):
+        obj = {"steps": obj, "answer": obj[-1].get("id") if obj and isinstance(obj[-1], dict) else None}
+    return obj if isinstance(obj, dict) else {"steps": [], "answer": None, "cannot": "planner returned no plan"}

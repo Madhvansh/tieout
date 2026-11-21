@@ -7,6 +7,11 @@ Accuracy     correct answers / questions.
                text         same after normalisation (case, punctuation, "LLP")
                company      the same company; for a ranked list, the same companies in the same order
                unanswerable correct only if the system abstains
+               comparison   "which of A or B ..., and by how much" is answered with both values, the
+                            winner and the gap. Against a company gold the winner must match; against
+                            a numeric gold the gap or the winner's value must match. (Added 21 Nov
+                            before the first round-2 run: two blind authors recorded different halves
+                            of such two-part questions.)
 
 Retrieved    every fact the system read to produce its answer: for the graph system, every
 facts        leaf of the proof tree, including every company scanned for a ranking. Nothing
@@ -82,11 +87,15 @@ def is_correct(q: dict, pred: dict, companies: dict) -> bool:
         name, value = pred["value"][0]
         pred = {"kind": "number", "value": value} if isinstance(gold, (int, float)) else {"kind": "text", "value": name}
     if isinstance(gold, (int, float)) and not isinstance(gold, bool):
+        alt = pred.get("extra") or {}
+        if pred["kind"] == "companies" and alt.get("gap") is not None and pred["value"]:
+            winner = pred["value"][0][1]
+            return any(isinstance(v, (int, float)) and is_correct(q, {"kind": "number", "value": v}, companies)
+                       for v in (alt["gap"], winner))
         if pred["kind"] != "number":
             return False
         tol = q.get("tolerance", 0.005) or 0.0
         v = pred["value"]
-        alt = pred.get("extra") or {}
         if alt.get("first") is not None and v == 0 and gold != 0:
             v = alt["latest"]                         # "not restated, both filings print X": X is the answer
         if abs(gold) < 1e-12:
@@ -217,5 +226,6 @@ def run_graph_system(questions: list, g, answer_fn: Callable, label: str = "tieo
             "plan": out.get("plan"), "notes": list(dict.fromkeys(res.notes))[:6],
             "learned": [{k: e.get(k) for k in ("ticker", "concept", "state", "label")} for e in out.get("learned", [])],
             "seconds": round(out.get("seconds", 0.0), 2), "system": label, "tags": q.get("tags", []),
+            "repaired": out.get("repaired", False), "plan_errors": out.get("plan_errors", []),
         })
     return rows

@@ -6,6 +6,8 @@
                     a shared concept with no row bound at this company   (living.learn)
                     a line item or a figure stated in a sentence         (link.learn_link)
                     the parts of a total                                 (link.learn_breakdown)
+             -> if the plan still cannot run, the planner sees its plan and the executor's
+                reason once (figures masked) and may repair it; the repair is kept only if it runs
              -> answer with its proof leaves, or an abstention that names what is missing
 
 Learning never changes a number. It only records which printed row or sentence
@@ -14,6 +16,7 @@ question that taught it.
 """
 from __future__ import annotations
 
+import re
 import time
 from typing import Optional
 
@@ -22,27 +25,56 @@ from .execute import Executor, Result, abstain, render
 from .graph import Graph
 from .link import learn_breakdown, learn_link, save_link
 from .living import learn, save_entry
+from .llm import DailyLimit
 from .planner import plan_question
 
 LEARNING_ROUNDS = 3                               # a ranking can surface several gaps; a few rounds settle them
+_FIGURE = re.compile(r"\$?-?\(?\d[\d,]*\.?\d*\)?%?")
 
 
 def answer(question: str, g: Graph, model: Optional[str] = None, allow_learning: bool = True,
            question_id: str = "", offline: bool = False, plan: Optional[dict] = None,
-           executor: Optional[Executor] = None, persist: bool = True) -> dict:
-    """Return {"answer", "result", "plan", "learned", "seconds", "plan_errors"}."""
+           executor: Optional[Executor] = None, persist: bool = True, repair: bool = True) -> dict:
+    """Return {"answer", "result", "plan", "learned", "seconds", "plan_errors", "repaired"}."""
     t0 = time.time()
     ex = executor or Executor(g)
     errors: list = []
+    planned_here = plan is None
     if plan is None:
-        try:
-            planned = plan_question(question, g, model=model, offline=offline)
-            plan, errors = planned["plan"], planned["errors"]
-        except Exception as e:  # noqa: BLE001 - a model that returns no usable plan must not crash an answer
-            plan = {"steps": [], "answer": None, "cannot": f"planner failed ({type(e).__name__}: {str(e)[:80]})"}
+        plan, errors = _plan(question, g, model, offline)
+    learn_args = dict(allow_learning=allow_learning, question=question, question_id=question_id, model=model,
+                      offline=offline, persist=persist)
+    res, learned = _execute(plan, g, ex, **learn_args)
+    repaired = False
+    if planned_here and repair and _repairable(res, plan):
+        problem = _problem(res, plan, errors)
+        fixed, errs2 = _plan(question, g, model, offline, feedback={"plan": plan, "problem": problem})
+        if fixed.get("steps") and not errs2 and fixed != plan:
+            res2, learned2 = _execute(fixed, g, ex, **learn_args)
+            learned += learned2
+            if res2.ok:
+                res, plan, errors, repaired = res2, fixed, [], True
+    out = _package(res, plan, learned, t0, errors)
+    out["repaired"] = repaired
+    return out
+
+
+def _plan(question: str, g: Graph, model, offline: bool, feedback: Optional[dict] = None) -> tuple:
+    """(plan, validation errors left). A model that returns no usable plan must not crash an answer."""
+    try:
+        planned = plan_question(question, g, model=model, offline=offline, feedback=feedback)
+        return planned["plan"], planned["errors"]
+    except DailyLimit:
+        raise                                     # a spent quota stops the run; it is not an answer
+    except Exception as e:  # noqa: BLE001
+        return {"steps": [], "answer": None, "cannot": f"planner failed ({type(e).__name__}: {str(e)[:80]})"}, []
+
+
+def _execute(plan: dict, g: Graph, ex: Executor, allow_learning: bool, question: str, question_id: str,
+             model, offline: bool, persist: bool) -> tuple:
+    """Run a plan, closing the gaps it reports by learning, a few rounds at most. Returns (result, learned)."""
     if plan.get("cannot") or not plan.get("steps"):
-        res = abstain("planner: " + str(plan.get("cannot", "question is outside the graph's vocabulary")))
-        return _package(res, plan, [], t0, errors)
+        return abstain("planner: " + str(plan.get("cannot", "question is outside the graph's vocabulary"))), []
     res = ex.run(plan)
     learned: list = []
     tried: set = set()
@@ -58,7 +90,23 @@ def answer(question: str, g: Graph, model: Optional[str] = None, allow_learning:
                 if persist:
                     (save_link if entry.get("kind") in ("item", "mention", "breakdown") else save_entry)(entry)
         res = ex.run(plan)
-    return _package(res, plan, learned, t0, errors)
+    return res, learned
+
+
+def _repairable(res: Result, plan: dict) -> bool:
+    """Worth one repair: the plan ran into a wall that a different plan might not hit.
+
+    A deliberate "cannot" and a fact the company is recorded as not reporting are answers, not walls.
+    """
+    if res.ok or plan.get("cannot") or not plan.get("steps"):
+        return False
+    return not res.extra.get("not_reported")
+
+
+def _problem(res: Result, plan: dict, errors: list) -> str:
+    """What went wrong, in words, with every figure masked so the planner never sees a value."""
+    text = "; ".join(errors + res.notes) or "the plan returned nothing"
+    return _FIGURE.sub(lambda m: m.group(0) if re.fullmatch(r"(19|20)\d\d", m.group(0)) else "<n>", text)[:600]
 
 
 def _hashable(missing: tuple) -> tuple:

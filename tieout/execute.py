@@ -321,6 +321,16 @@ class Executor:
             return r.value[0][0]
         return ref
 
+    def _top_line(self, ref, env: dict) -> Optional[dict]:
+        """The line an earlier rank or filter over lines put first, or None if `ref` holds no lines."""
+        if not (isinstance(ref, str) and ref.startswith("$")):
+            return None
+        r = env[ref[1:]]
+        if r.kind != "lines" or not r.value:
+            return None
+        top = r.value[0][0]
+        return next((ln for ln in r.extra.get("lines", []) if ln["label"] == top), None)
+
     def _members(self, over, env: dict) -> tuple:
         """(kind, members, leaves already read). Companies are tickers; lines come from a members step."""
         if over in (None, "all"):
@@ -380,6 +390,15 @@ class Executor:
     # ---------------------------------------------------------------- ops
 
     def _op_get(self, s: dict, env: dict) -> Result:
+        line = self._top_line(s["company"], env)
+        if line is not None:                          # "$sN" holds lines: read the top line itself
+            r = self._line_measure(line, _on_value(step_measure(s)), s["period"])
+            prior = env[s["company"][1:]]
+            r.leaves, r.notes = list(prior.leaves) + r.leaves, list(prior.notes) + r.notes
+            if r.ok:
+                r.tree = {"op": "read", "what": f"{line['ticker']} '{line['label']}'", "value": r.value}
+                r.notes.append(f"the line is '{line['label']}'")
+            return r
         return self.measure(self._company(s["company"], env), step_measure(s), s["period"],
                             first=s.get("as") == "first_reported")
 
@@ -443,10 +462,12 @@ class Executor:
         rows.sort(key=lambda row: row[1], reverse=s.get("order", "desc") == "desc")
         top = rows[:int(s.get("k", 1))]
         notes = _coverage_notes(len(rows), skipped, absent)
+        extra = {"ranked": len(rows), "lines": [ln for ln in self._members(s.get("over"), env)[1]
+                                                if kind == "lines" and ln["label"] in {n for n, _, _ in top}]}
+        if len(top) >= 2:                             # "which of the two, and by how much": the gap is part of the answer
+            extra["gap"] = abs(top[0][1] - top[1][1])
         return Result("companies" if kind == "companies" else "lines", [(name, v) for name, v, _ in top], top[0][2],
-                      leaves, notes, {"op": "rank", "what": f"{_name(m)} over {len(rows)}", "value": top}, missing,
-                      {"ranked": len(rows), "lines": [ln for ln in self._members(s.get("over"), env)[1]
-                                                       if kind == "lines" and ln["label"] in {n for n, _, _ in top}]})
+                      leaves, notes, {"op": "rank", "what": f"{_name(m)} over {len(rows)}", "value": top}, missing, extra)
 
     def _op_filter(self, s: dict, env: dict) -> Result:
         w = s["where"]
@@ -459,7 +480,8 @@ class Executor:
                 if r.ok and _norm(r.value) == _norm(w["eq"]):
                     keep.append((t, r.value))
             return Result("companies", keep, "", leaves, [], {"op": "filter", "what": str(w), "value": keep})
-        kind, rows, leaves, skipped, absent, missing = self._each(s, env, w["by"], w.get("period") or s.get("period") or {})
+        spec = w.get("period") or s.get("period") or self._set_period(s.get("over"), env) or {}
+        kind, rows, leaves, skipped, absent, missing = self._each(s, env, w["by"], spec)
         test = next(k for k in COMPARATORS if k in w)
         passes = {"gt": lambda v: v > w["gt"], "lt": lambda v: v < w["lt"],
                   "ge": lambda v: v >= w["ge"], "le": lambda v: v <= w["le"]}[test]
@@ -527,7 +549,13 @@ class Executor:
         if not rows:
             return abstain(f"the parts of '{s['of']}' have no values for {self._pid(ticker, s['period'], 'flow')}", leaves)
         return Result("lines", rows, lines[0]["unit"], leaves, [], {"op": "members", "what": s["of"], "value": rows},
-                      extra={"lines": lines})
+                      extra={"lines": lines, "period": s["period"]})
+
+    def _set_period(self, over, env: dict) -> Optional[dict]:
+        """The period of the members step a set of lines came from (a filter over lines may omit it)."""
+        if isinstance(over, str) and over.startswith("$") and over[1:] in env:
+            return env[over[1:]].extra.get("period")
+        return None
 
     def _op_attr(self, s: dict, env: dict) -> Result:
         ref = s["company"]
@@ -590,6 +618,16 @@ def _coverage_notes(ranked: int, skipped: list, absent: list) -> list:
     if skipped:
         notes.append(f"covered {ranked} of {ranked + len(skipped)}; no fact found for: {', '.join(skipped)}")
     return notes
+
+
+def _on_value(m: Optional[dict]) -> dict:
+    """The same measure taken on a line's printed value: growth of revenue becomes growth of the value."""
+    if not m:
+        return {"value": True}
+    for wrap in ("growth", "delta"):
+        if wrap in m:
+            return {wrap: _on_value(m[wrap])}
+    return {"value": True}
 
 
 def _name(m: dict) -> str:

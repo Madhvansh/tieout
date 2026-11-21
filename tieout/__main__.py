@@ -4,6 +4,7 @@
     python -m tieout stats               what the shipped graph holds
     python -m tieout concepts            which companies each concept is bound for
     python -m tieout ask "question"      answer one question, with plan, sources and notes
+    python -m tieout language            the plan language: rules, vocabulary, worked examples
 """
 from __future__ import annotations
 
@@ -52,6 +53,10 @@ def main() -> int:
             print(f"  the filing says ({quote['doc']} page {quote['page']}): {quote['sentence'][:300]}")
         for e in out["learned"]:
             print(f"  learned: {e['ticker']} {e.get('concept') or e.get('phrase')} -> {e['state']} ({e.get('label')})")
+    elif cmd == "language":
+        from .graph import Graph
+        from .planner import system_prompt
+        print(system_prompt(Graph.load()))
     elif cmd == "concepts":
         from .graph import Graph
         g = Graph.load()

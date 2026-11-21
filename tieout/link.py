@@ -38,7 +38,7 @@ from typing import Optional
 
 from .concepts import norm_label
 from .graph import Fact, Graph, Reading
-from .llm import ask_json
+from .llm import DailyLimit, ask_json, link_model
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 LEARNED = ROOT / "semantics" / "learned.jsonl"
@@ -242,7 +242,9 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
     user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nItem asked for: {phrase}\n"
             f"Question: {question}\n\nCandidates:\n" + "\n".join(_show(i, c, g) for i, c in enumerate(cands)))
     try:
-        ans = ask_json(SYSTEM, user, model=model, tag="link", offline=offline)
+        ans = ask_json(SYSTEM, user, model=link_model(model), tag="link", offline=offline)
+    except DailyLimit:
+        raise
     except Exception as e:  # noqa: BLE001 - a failed proposal is recorded, not fatal
         entry["objections"] = [f"proposer failed: {type(e).__name__}"]
         return entry
@@ -390,7 +392,9 @@ def learn_breakdown(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year
     user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nBreakdown asked for: {phrase}\n"
             f"Question: {question}\n\nCandidates:\n" + "\n".join(lines))
     try:
-        ans = ask_json(SYSTEM_BREAKDOWN, user, model=model, tag="breakdown", offline=offline)
+        ans = ask_json(SYSTEM_BREAKDOWN, user, model=link_model(model), tag="breakdown", offline=offline)
+    except DailyLimit:
+        raise
     except Exception as e:  # noqa: BLE001
         entry["objections"] = [f"proposer failed: {type(e).__name__}"]
         return entry
