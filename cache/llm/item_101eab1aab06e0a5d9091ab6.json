@@ -1,0 +1,10 @@
+{
+ "model": "gemini:gemini-3.5-flash-lite",
+ "system": "You match a phrase from a question to one row of a table in a company's SEC filing.\nYou are shown candidate rows: the printed row label, the section heading above it, the table's title,\nthe note it sits in, and the row's role in the table's arithmetic. You are never shown values.\nPick the single row that reports the item for the company (not a sub-component of it, not a\npercentage, not a per-share figure), or answer null if none of the rows reports it.\nAnswer as JSON: {\"row\": <candidate number or null>, \"reason\": \"<one short sentence>\"}",
+ "user": "Company: Costco Wholesale Corp (COST)\nItem asked for: Paid members\nQuestion: Dividing fiscal 2026 membership fee revenue by year-end paid members, what did Costco earn per paid member?\n\nCandidate rows:\n0: label 'Paid members' | section '' | table 'Membership at the end of 2026, 2025, and 2024 was made up of the following' | note 'Item 5. Market for Registrant\u2019s Common Equity, Rel' | role operand | unit USD\n1: label 'Accrued member rewards' | section 'CURRENT LIABILITIES' | table 'CONSOLIDATED BALANCE SHEETS' | note 'primary financial statement' | role operand | unit USD\n2: label 'Additional paid-in capital' | section 'EQUITY' | table 'CONSOLIDATED BALANCE SHEETS' | note 'primary financial statement' | role operand | unit USD\n3: label 'Cash paid for amounts included in Operating cash flows operating' | section '' | table 'Supplemental cash flow information related to leases were as follows' | note 'Item 5. Market for Registrant\u2019s Common Equity, Rel' | role loose | unit USD",
+ "answer": {
+  "row": 0,
+  "reason": "Candidate 0 explicitly reports the number of paid members."
+ },
+ "seconds": 1.12
+}

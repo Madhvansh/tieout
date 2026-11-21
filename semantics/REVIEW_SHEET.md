@@ -1,0 +1,370 @@
+# Binding review sheet
+
+Each line is a binding the living layer proposed from a question. The structural gate judged it;
+a person has the last word. Mark each `approve` or `reject` (with a reason) in
+`semantics/review_decisions.yaml`. A rejected binding is removed and the count is reported.
+
+## A. Admitted by the gate, but the SEC audit disagrees (look at these first)
+
+- [ ] F NetIncome: printed as "Net income/(loss) attributable to Ford Motor Company"
+  - latest value: FY2025: (8,182) (page 115 of F_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: recovered formula derives it from 'Net income/(loss)', which reappears on the cash-flow statement
+  - for: role agrees with other companies (total)
+- [ ] GM Goodwill: printed as "Goodwill and intangible assets, net (Note"
+  - latest value: FY2025@end: 4,366 (page 58 of GM_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+
+## B. Admitted by the gate
+
+- [ ] C NetIncome: printed as "Citigroup’s net income"
+  - latest value: FY2025: 14,306 (page 146 of C_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: same values reappear on the cash-flow statement
+  - for: role agrees with other companies (total)
+- [ ] GM NetIncome: printed as "Net income (loss) attributable to stockholders"
+  - latest value: FY2025: 2,697 (page 57 of GM_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: recovered formula derives it from 'Net income (loss)', which reappears on the cash-flow statement
+  - for: role agrees with other companies (total)
+- [ ] WFC NetIncome: printed as "Wells Fargo net income"
+  - latest value: FY2025: 21,338 (page 91 of WFC_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: recovered formula derives it from 'Net income before noncontrolling interes', which reappears on the cash-flow statement
+  - for: role agrees with other companies (total)
+- [ ] GM Revenue: printed as "Total net sales and revenue (Note"
+  - latest value: FY2025: 185,019 (page 57 of GM_FY2025_10K)
+  - for: value sits inside a passing check
+- [ ] BAC TotalAssets: printed as "Total assets"
+  - latest value: FY2025@end: 3,411,738 (page 94 of BAC_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (total)
+- [ ] C TotalAssets: printed as "Total assets"
+  - latest value: FY2025@end: 2,657,202 (page 148 of C_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (total)
+- [ ] V TotalAssets: printed as "Total assets"
+  - latest value: FY2026@end: 94,360 (page 59 of V_FY2026_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (total)
+- [ ] JPM OperatingCashFlow: printed as "Net cash (used in)/provided by operating activities"
+  - latest value: FY2025: (147,782) (page 171 of JPM_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: is the total of a recovered formula
+  - for: role agrees with other companies (total)
+- [ ] NKE OperatingCashFlow: printed as "Cash provided (used) by operations"
+  - latest value: FY2026: 2,868 (page 61 of NKE_FY2026_10K)
+  - for: value sits inside a passing check
+  - for: is the total of a recovered formula
+  - for: role agrees with other companies (total)
+- [ ] PG OperatingCashFlow: printed as "TOTAL OPERATING ACTIVITIES"
+  - latest value: FY2026: 19,556 (page 42 of PG_FY2026_10K)
+  - for: value sits inside a passing check
+  - for: is the total of a recovered formula
+  - for: role agrees with other companies (total)
+- [ ] NKE Cash: printed as "Cash and equivalents"
+  - latest value: FY2026@end: 7,563 (page 60 of NKE_FY2026_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] AMD PretaxIncome: printed as "Income from continuing operations before income taxes and equity income"
+  - latest value: FY2025: 4,140 (page 61 of AMD_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (total)
+- [ ] AXP PretaxIncome: printed as "Pretax income"
+  - latest value: FY2025: 13,795 (page 95 of AXP_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (total)
+- [ ] F PretaxIncome: printed as "Income/(Loss) before income taxes"
+  - latest value: FY2025: (11,830) (page 115 of F_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (total)
+- [ ] GS PretaxIncome: printed as "Pre-tax earnings"
+  - latest value: FY2025: 21,852 (page 141 of GS_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (total)
+- [ ] PFE PretaxIncome: printed as "Income from continuing operations before provision/(benefit) for taxes on income"
+  - latest value: FY2025: 7,520 (page 58 of PFE_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (total)
+- [ ] F IncomeTax: printed as "Provision for/(Benefit from) income taxes (Note"
+  - latest value: FY2025: (3,668) (page 115 of F_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] PFE IncomeTax: printed as "Provision/(benefit) for taxes on income"
+  - latest value: FY2025: (266) (page 58 of PFE_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] F OperatingIncome: printed as "Operating income/(loss)"
+  - latest value: FY2025: (9,169) (page 115 of F_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (total)
+- [ ] UNH OperatingIncome: printed as "Earnings from operations ........................................................................................."
+  - latest value: FY2025: 18,964 (page 44 of UNH_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (total)
+- [ ] COST CostOfRevenue: printed as "Merchandise costs"
+  - latest value: FY2026: 264,279 (page 38 of COST_FY2026_10K)
+  - for: value sits inside a passing check
+- [ ] JNJ InvestingCashFlow: printed as "Net cash (used by)/from investing activities"
+  - latest value: FY2025: (23,588) (page 53 of JNJ_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: is the total of a recovered formula
+  - for: role agrees with other companies (total)
+- [ ] MSFT InvestingCashFlow: printed as "Net cash used in investing"
+  - latest value: FY2026: (139,500) (page 53 of MSFT_FY2026_10K)
+  - for: value sits inside a passing check
+  - for: is the total of a recovered formula
+  - for: role agrees with other companies (total)
+- [ ] MSFT FinancingCashFlow: printed as "Net cash used in financing"
+  - latest value: FY2026: (52,546) (page 53 of MSFT_FY2026_10K)
+  - for: value sits inside a passing check
+  - for: is the total of a recovered formula
+  - for: role agrees with other companies (total)
+- [ ] PG FinancingCashFlow: printed as "TOTAL FINANCING ACTIVITIES"
+  - latest value: FY2026: (14,460) (page 42 of PG_FY2026_10K)
+  - for: value sits inside a passing check
+  - for: is the total of a recovered formula
+  - for: role agrees with other companies (total)
+- [ ] AXP CapitalExpenditures: printed as "Purchase of premises and equipment, net of sales: 2025, $1; 2024, $6; 2023, $2"
+  - latest value: FY2025: (2,425) (page 98 of AXP_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] MS CapitalExpenditures: printed as "Other assets—Premises, equipment and software"
+  - latest value: FY2025: (2,898) (page 83 of MS_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] NVDA CapitalExpenditures: printed as "Purchases related to property and equipment and intangible assets"
+  - latest value: FY2026: (6,042) (page 143 of NVDA_FY2026_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] F DepreciationAmortization: printed as "Depreciation and tooling amortization (Note 12 and Note"
+  - latest value: FY2025: 7,834 (page 117 of F_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] GOOGL DepreciationAmortization: printed as "Depreciation of property and equipment"
+  - latest value: FY2025: 21,136 (page 53 of GOOGL_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] XOM DepreciationAmortization: printed as "Depreciation and depletion (includes impairments) 9"
+  - latest value: FY2025: 25,993 (page 76 of XOM_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] BLK DividendsPaid: printed as "Dividends/Subco distributions paid"
+  - latest value: FY2025: (3,347) (page 83 of BLK_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] COST DividendsPaid: printed as "Cash dividend payments"
+  - latest value: FY2026: (2,458) (page 42 of COST_FY2026_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] CVX DividendsPaid: printed as "Cash dividends - common stock"
+  - latest value: FY2025: (12,751) (page 69 of CVX_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] F DividendsPaid: printed as "Cash payments for dividends and dividend equivalents"
+  - latest value: FY2025: (2,989) (page 117 of F_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] GOOGL DividendsPaid: printed as "Dividend payments"
+  - latest value: FY2025: (10,049) (page 53 of GOOGL_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] GS DividendsPaid: printed as "Dividends and dividend equivalents paid on common stock, preferred stock and share-based awards"
+  - latest value: FY2025: (5,277) (page 144 of GS_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] NKE DividendsPaid: printed as "Dividends — common and preferred"
+  - latest value: FY2026: (2,407) (page 61 of NKE_FY2026_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] XOM DividendsPaid: printed as "Cash dividends to ExxonMobil shareholders"
+  - latest value: FY2025: (17,231) (page 76 of XOM_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] AXP ShareRepurchases: printed as "Repurchase of American Express common shares and other"
+  - latest value: FY2025: (5,814) (page 98 of AXP_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] BLK ShareRepurchases: printed as "Shares/Subco Units repurchased"
+  - latest value: FY2025: (1,951) (page 83 of BLK_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] CAT ShareRepurchases: printed as "Payments to purchase common stock"
+  - latest value: FY2025: (5,190) (page 66 of CAT_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] CVX ShareRepurchases: printed as "Net sales (purchases) of treasury shares"
+  - latest value: FY2025: (11,855) (page 69 of CVX_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] GM ShareRepurchases: printed as "Payments to purchase common stock (Note"
+  - latest value: FY2025: (6,012) (page 59 of GM_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] JPM ShareRepurchases: printed as "Treasury stock repurchased"
+  - latest value: FY2025: (31,591) (page 171 of JPM_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] NVDA ShareRepurchases: printed as "Payments related to repurchases of common stock"
+  - latest value: FY2026: (40,086) (page 143 of NVDA_FY2026_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] PG ShareRepurchases: printed as "Treasury stock purchases"
+  - latest value: FY2026: (5,028) (page 42 of PG_FY2026_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] WFC ShareRepurchases: printed as "Repurchased"
+  - latest value: FY2025: (17,516) (page 95 of WFC_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] WMT ShareRepurchases: printed as "Purchase of Company stock"
+  - latest value: FY2026: (8,088) (page 56 of WMT_FY2026_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] XOM ShareRepurchases: printed as "Common stock acquired"
+  - latest value: FY2025: (20,273) (page 76 of XOM_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] ADBE LongTermDebt: printed as "Debt"
+  - latest value: FY2025@end: 6,210 (page 47 of ADBE_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] BAC LongTermDebt: printed as "Long-term debt (includes and"
+  - latest value: FY2025@end: 317,816 (page 94 of BAC_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] CRM LongTermDebt: printed as "Noncurrent debt"
+  - latest value: FY2026@end: 10,439 (page 66 of CRM_FY2026_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] CVX LongTermDebt: printed as "Long-term debt1"
+  - latest value: FY2025@end: 39,781 (page 68 of CVX_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] GS LongTermDebt: printed as "Unsecured long-term borrowings (includes $112,683 and $89,189 at fair value)"
+  - latest value: FY2025@end: 285,500 (page 142 of GS_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] MS LongTermDebt: printed as "Borrowings (includes $132,479 and $103,332 at fair value)"
+  - latest value: FY2025@end: 348,935 (page 81 of MS_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] ORCL LongTermDebt: printed as "Notes payable and other borrowings, non-current......................................................................"
+  - latest value: FY2026@end: 122,342 (page 66 of ORCL_FY2026_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] PEP LongTermDebt: printed as "Long-Term Debt Obligations"
+  - latest value: FY2025@end: 42,321 (page 64 of PEP_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] TGT LongTermDebt: printed as "Long-term debt and other borrowings"
+  - latest value: FY2025@end: 14,326 (page 53 of TGT_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] TSLA LongTermDebt: printed as "Debt and finance leases, net of current portion"
+  - latest value: FY2025@end: 6,736 (page 52 of TSLA_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] CVX TotalLiabilities: printed as "Total Liabilities2"
+  - latest value: FY2025@end: 131,836 (page 68 of CVX_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: is the total of a recovered formula
+  - for: role agrees with other companies (total)
+- [ ] BAC StockBasedCompensation: printed as "Amortization of stock-based compensation"
+  - latest value: FY2025: 4,001 (page 96 of BAC_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] F StockBasedCompensation: printed as "Stock compensation (Note"
+  - latest value: FY2025: 510 (page 117 of F_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] JNJ StockBasedCompensation: printed as "Stock based compensation"
+  - latest value: FY2025: 1,354 (page 53 of JNJ_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] MS NetInterestIncome: printed as "Net interest"
+  - latest value: FY2025: 10,046 (page 80 of MS_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (total)
+- [ ] C ProvisionForCreditLosses: printed as "Total provisions for credit losses and for benefits and claims"
+  - latest value: FY2025: 10,265 (page 146 of C_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role differs from other companies (total here), accepted because the value is verified
+- [ ] AXP NoninterestExpense: printed as "Total expenses"
+  - latest value: FY2025: 53,178 (page 95 of AXP_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (total)
+- [ ] BLK NoninterestExpense: printed as "Total expense"
+  - latest value: FY2025: 17,171 (page 80 of BLK_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (total)
+- [ ] C NoninterestExpense: printed as "Total operating expenses"
+  - latest value: FY2025: 55,132 (page 146 of C_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (total)
+- [ ] GS NoninterestExpense: printed as "Total operating expenses"
+  - latest value: FY2025: 37,544 (page 141 of GS_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (total)
+- [ ] MA NoninterestExpense: printed as "Total operating expenses"
+  - latest value: FY2025: 13,894 (page 69 of MA_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (total)
+- [ ] V NoninterestExpense: printed as "Total operating expenses"
+  - latest value: FY2026: 17,793 (page 60 of V_FY2026_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (total)
+- [ ] AMZN ResearchAndDevelopment: printed as "Technology and infrastructure"
+  - latest value: FY2025: 108,521 (page 37 of AMZN_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] F SellingGeneralAdmin: printed as "Selling, administrative, and other expenses"
+  - latest value: FY2025: 10,849 (page 115 of F_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] GM SellingGeneralAdmin: printed as "Automotive and other selling, general, and administrative expense"
+  - latest value: FY2025: 8,687 (page 57 of GM_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] NKE SellingGeneralAdmin: printed as "Total selling and administrative expense"
+  - latest value: FY2026: 16,114 (page 58 of NKE_FY2026_10K)
+  - for: value sits inside a passing check
+  - for: role differs from other companies (total here), accepted because the value is verified
+- [ ] NVDA SellingGeneralAdmin: printed as "Sales, general and administrative"
+  - latest value: FY2026: 4,579 (page 139 of NVDA_FY2026_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] TGT SellingGeneralAdmin: printed as "Selling, general, and administrative expenses"
+  - latest value: FY2025: 21,535 (page 51 of TGT_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+- [ ] MRK Inventory: printed as "Inventories (excludes inventories of $5,681 in 2025 and $4,193 in 2024 classified in Other assets - see Note"
+  - latest value: FY2025@end: 6,658 (page 80 of MRK_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (line item)
+
+## C. Held by the gate (not served until approved)
+
+- [ ] CVX NetIncome: printed as "Net Income (Loss) Attributable to Chevron Corporation"
+  - latest value: FY2025: 12,299 (page 66 of CVX_FY2025_10K)
+  - for: value sits inside a passing check
+  - for: role agrees with other companies (total)
+  - against: values neither reappear on the cash-flow statement nor derive from a row that does
+- [ ] NKE TotalEquity: printed as "Total shareholders' equity"
+  - latest value: FY2026@end: 14,865 (page 60 of NKE_FY2026_10K)
+  - against: value is not covered by any check
+  - against: concept must be a total of a recovered formula; this row is not
+  - against: in other companies this concept is the total of a formula; here it is not
+- [ ] NKE TotalLiabilitiesAndEquity: printed as "TOTAL LIABILITIES AND SHAREHOLDERS' EQUITY"
+  - latest value: FY2026@end: 38,410 (page 60 of NKE_FY2026_10K)
+  - for: value sits inside a passing check
+  - against: in other companies this concept is the total of a formula; here it is not
+- [ ] JNJ DividendsPaid: printed as "Dividends to shareholders"
+  - latest value: FY2025: (12,381) (page 53 of JNJ_FY2025_10K)
+  - for: role agrees with other companies (line item)
+  - against: value is not covered by any check
+- [ ] JNJ ShareRepurchases: printed as "Repurchase of common stock"
+  - latest value: FY2025: (5,953) (page 53 of JNJ_FY2025_10K)
+  - for: role agrees with other companies (line item)
+  - against: value is not covered by any check

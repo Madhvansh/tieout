@@ -1,0 +1,30 @@
+{"id": "C01", "type": "single_fact", "question": "What was Apple's top line for fiscal 2026?"}
+{"id": "C03", "type": "single_fact", "question": "What net income did Costco report for fiscal 2026?"}
+{"id": "C04", "type": "single_fact", "question": "How much cash did Cisco generate from operations in fiscal 2026?"}
+{"id": "C07", "type": "single_fact", "question": "What did Procter & Gamble pay out in dividends in fiscal 2026?"}
+{"id": "C08", "type": "single_fact", "question": "How much did Home Depot spend on capital expenditures in fiscal 2025?"}
+{"id": "C09", "type": "single_fact", "question": "What was Tesla's total revenue for 2025?"}
+{"id": "C11", "type": "single_fact", "question": "In which state is Nike incorporated?"}
+{"id": "C12", "type": "single_fact", "question": "Which firm audits UnitedHealth Group?"}
+{"id": "C14", "type": "single_fact", "question": "How many Class A shares did Facebook's parent have outstanding per the cover of its 2025 annual report?"}
+{"id": "C15", "type": "single_fact", "question": "What revenue did Microsoft's Intelligent Cloud segment bring in for fiscal 2026?"}
+{"id": "C17", "type": "multi_hop", "question": "What were Apple's net sales in its fourth fiscal quarter of 2026?"}
+{"id": "C19", "type": "multi_hop", "question": "How much revenue did Coca-Cola bring in during the fourth quarter of 2025?"}
+{"id": "C20", "type": "multi_hop", "question": "What was Microsoft's operating margin in fiscal 2026?"}
+{"id": "C21", "type": "multi_hop", "question": "By what percentage did Nvidia grow revenue in fiscal 2026 over fiscal 2025?"}
+{"id": "C24", "type": "multi_hop", "question": "What share of its 2025 revenue did Meta spend on research and development?"}
+{"id": "C25", "type": "multi_hop", "question": "What was Pfizer's R&D spend as a percentage of total revenues in 2025?"}
+{"id": "C27", "type": "multi_hop", "question": "Dividing fiscal 2026 membership fee revenue by year-end paid members, what did Costco earn per paid member?"}
+{"id": "C29", "type": "multi_hop", "question": "What was Mastercard's net profit margin in 2025?"}
+{"id": "C31", "type": "multi_hop", "question": "What share of Amazon's 2025 operating income came from AWS?"}
+{"id": "C32", "type": "multi_hop", "question": "What was Netflix's operating margin in 2025?"}
+{"id": "C34", "type": "cross_filing", "question": "Rank JPMorgan, Bank of America, Citigroup and Wells Fargo by deposits at the end of 2025, largest first."}
+{"id": "C35", "type": "cross_filing", "question": "Rank the six big banks in the set (JPMorgan, Bank of America, Citi, Wells Fargo, Goldman Sachs, Morgan Stanley) by 2025 net income attributable to the company."}
+{"id": "C36", "type": "cross_filing", "question": "Which carmaker had the larger workforce at the end of 2025, Ford or GM, and by roughly how many people?"}
+{"id": "C37", "type": "cross_filing", "question": "Among Merck, J&J and Pfizer, who spent the most on R&D in 2025? Rank all three."}
+{"id": "C40", "type": "cross_filing", "question": "Comparing each network's latest annual report in the set, did Visa or Mastercard earn more, and by how much?"}
+{"id": "C42", "type": "cross_filing", "question": "How many of the 39 readable companies in the set ended their latest fiscal year with more than $1 trillion of total assets, and which are they?"}
+{"id": "C44", "type": "cross_filing", "question": "What 2024 net income did Bank of America originally report, what does its 2025 annual report now show for 2024, and why the difference?"}
+{"id": "C45", "type": "cross_filing", "question": "Apple's September 2025 balance sheet appears in both of its last two annual reports. Did the 'other non-current assets' figure for that date change, and if so by how much and why?"}
+{"id": "C46", "type": "cross_filing", "question": "Did Coca-Cola's latest 10-K change the year-end 2024 balance for prepaid expenses and other current assets versus what it first reported?"}
+{"id": "C48", "type": "cross_filing", "question": "How did Intel's 2025 revenue compare with AMD's?"}

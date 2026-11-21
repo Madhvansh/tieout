@@ -1,0 +1,10 @@
+{
+ "model": "gemini:gemini-3.5-flash-lite",
+ "system": "You match a phrase from a question to one row of a table in a company's SEC filing.\nYou are shown candidate rows: the printed row label, the section heading above it, the table's title,\nthe note it sits in, and the row's role in the table's arithmetic. You are never shown values.\nPick the single row that reports the item for the company (not a sub-component of it, not a\npercentage, not a per-share figure), or answer null if none of the rows reports it.\nAnswer as JSON: {\"row\": <candidate number or null>, \"reason\": \"<one short sentence>\"}",
+ "user": "Company: Costco Wholesale Corp (COST)\nItem asked for: Membership fees\nQuestion: Dividing fiscal 2026 membership fee revenue by year-end paid members, what did Costco earn per paid member?\n\nCandidate rows:\n0: label 'Membership fees' | section 'REVENUE' | table 'CONSOLIDATED STATEMENTS OF INCOME' | note 'primary financial statement' | role operand | unit USD\n1: label 'Deferred membership fees' | section 'CURRENT LIABILITIES' | table 'CONSOLIDATED BALANCE SHEETS' | note 'primary financial statement' | role operand | unit USD\n2: label 'Deferred income/membership fees' | section 'Deferred tax assets' | table 'The components of the deferred tax assets (liabilities) are as follows' | note 'Item 5. Market for Registrant\u2019s Common Equity, Rel' | role operand | unit USD",
+ "answer": {
+  "row": 0,
+  "reason": "Membership fees row directly reports the membership fee revenue needed for the calculation."
+ },
+ "seconds": 1.29
+}
