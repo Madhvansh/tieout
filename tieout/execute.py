@@ -670,9 +670,9 @@ class Executor:
         """How the figure changed, read off the two filings' statements (see restate.py)."""
         try:
             from .restate import diagnose
-        except ImportError:
+            d = diagnose(self.g, ticker, leaf.period, label=leaf.label)
+        except Exception:  # noqa: BLE001 - the restated number stands without its explanation
             return None
-        d = diagnose(self.g, ticker, leaf.period, label=leaf.label)
         if not d or d.get("kind") in (None, "unchanged", "single_filing"):
             return None
         cited = []
