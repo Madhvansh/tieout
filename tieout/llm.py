@@ -25,6 +25,7 @@ import requests
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 CACHE = ROOT / "cache" / "llm"
 CALLS = {"live": 0, "cached": 0, "seconds": 0.0}
+REPLAY_MODEL = "gemini:gemini-3.5-flash-lite"      # the model the cached benchmark plans were written by
 
 
 def load_env() -> None:
@@ -46,13 +47,15 @@ def default_model() -> str:
         return "gemini:gemini-3.5-flash-lite"
     if os.environ.get("GROQ_API_KEY"):
         return "groq:openai/gpt-oss-120b"
-    return "ollama:phi4-mini"
+    return "ollama:qwen3.5:4b"
 
 
 def ask_json(system: str, user: str, schema: Optional[dict] = None, model: Optional[str] = None,
              tag: str = "", offline: bool = False) -> dict:
     """Return the model's JSON answer. Cached by content; `offline` forbids live calls."""
-    model = model or default_model()
+    # An offline replay must find the cached answers whatever keys this machine has, so it
+    # always asks for the model the shipped cache was recorded with.
+    model = model or (os.environ.get("TIEOUT_LLM") or REPLAY_MODEL if offline else default_model())
     key = hashlib.sha256(json.dumps([model, system, user, schema], sort_keys=True).encode()).hexdigest()
     path = CACHE / f"{tag + '_' if tag else ''}{key[:24]}.json"
     if path.exists():

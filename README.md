@@ -41,6 +41,7 @@ Precision and recall are macro averages over questions; pooled over facts they a
 | Living layer off | 20 |
 | Verified-only answering | 24 |
 | TieOut v1.1, after fixing four causes the first run exposed (not held-out) | 27 |
+| TieOut v1.1 with a local 4B model as planner, no API key (`qwen3.5:4b` through Ollama) | 19 |
 
 TieOut minus baseline: +14 questions, paired bootstrap 95% interval +9 to +19 of 30.
 
@@ -95,7 +96,14 @@ python scripts/teach.py           # teaching run for the living layer (LLM)
 
 Other experiments: `scripts/run_baseline.py`, `run_faults.py`, `run_noise.py`, `run_audit.py` (needs `SEC_USER_AGENT`). Ablations are flags of `run_benchmark.py` (`--ablate concepts|derivations|living`, `--strict`, `--oracle benchmark/oracle_plans.json`).
 
-To reproduce the frozen 24/30 exactly, check out the tag `frozen-before-benchmark` and run `python scripts/run_benchmark.py --offline`. The current head is v1.1.
+The current head is v1.1 and replays to 27/30. To reproduce the frozen first run (24/30), check out the commit that holds the frozen code together with the plans cached during that run:
+
+```
+git checkout e171a02
+TIEOUT_LLM=gemini:gemini-3.5-flash-lite python scripts/run_benchmark.py --offline
+```
+
+The tag `frozen-before-benchmark` marks the code as it stood before the benchmark was first run.
 
 ## The benchmark and how it was prepared
 
