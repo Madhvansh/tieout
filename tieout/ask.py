@@ -101,6 +101,8 @@ _HOW_MANY = re.compile(r"(?<!by )(?<!by roughly )(?<!by about )(?<!by approximat
 _SHARE = re.compile(r"\b(what|which) (share|fraction|percentage|proportion|portion)\b|\bas a (share|percentage|fraction)\b"
                     r"|\bmargin\b|\bratio\b|\bpercent of\b|\bslice of\b", re.I)
 _EITHER = re.compile(r"\b(which|who)\b[^?]*\bor\b", re.I)
+_QUARTER = re.compile(r"\b(first|second|third|fourth|1st|2nd|3rd|4th)\s+(fiscal\s+)?quarter\b|\bQ[1-4]\b", re.I)
+_SO_FAR = re.compile(r"\b(nine|six|three)\s+months\b|\byear[- ]to[- ]date\b|\bfirst (half|nine months)\b", re.I)
 
 
 def shape_misfit(question: str, plan: dict, res: Result) -> str:
@@ -119,6 +121,15 @@ def shape_misfit(question: str, plan: dict, res: Result) -> str:
         return "the question does not ask how many: the answer is not a count; end on the step that answers it"
     if _SHARE.search(question) and res.kind == "number" and res.unit == "USD":
         return "the question asks for a share, margin or ratio, but the plan returns an amount in dollars"
+    periods = [p for s in plan["steps"] for p in (s.get("period"), s.get("from"), s.get("to"),
+                                                   (s.get("where") or {}).get("period")) if isinstance(p, dict)]
+    quarter, so_far = _QUARTER.search(question), _SO_FAR.search(question)
+    if quarter and not so_far and not any(p.get("q") for p in periods):
+        return "the question asks for one quarter: give the period as {\"fy\": Y, \"q\": Q}"
+    if quarter and not so_far and any(p.get("ytd") for p in periods):
+        return "the question asks for one quarter, not the year to date: drop \"ytd\""
+    if so_far and not any(p.get("ytd") or p.get("q") for p in periods):
+        return "the question asks for a part of the year (nine or six months): use {\"fy\": Y, \"q\": Q, \"ytd\": true}"
     named = [s for s in plan["steps"] if s.get("op") in ("get", "change", "metric")]
     if (_EITHER.search(question) and last.get("op") == "calc" and len({s.get("company") for s in named}) == 2
             and not re.search(r"\bhow much (more|less|higher|lower|larger|smaller)\b", question, re.I)):

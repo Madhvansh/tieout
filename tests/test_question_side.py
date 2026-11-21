@@ -93,3 +93,14 @@ def test_normalize_gives_a_line_read_the_period_of_the_step_it_refers_to():
                  {"op": "rank", "over": "$s1", "by": {"value": True}, "period": {"fy": 2026}, "k": 1},
                  {"op": "get", "company": "$s2", "item": "revenue"})
     assert normalize(plan)["steps"][2]["period"] == {"fy": 2026}
+
+
+def test_a_quarter_answered_with_the_year_or_the_year_to_date_is_a_misfit():
+    res = Result("number", 1.0, "USD")
+    year = _plan({"op": "get", "company": "JNJ", "concept": "Revenue", "period": {"fy": 2025}})
+    ytd = _plan({"op": "get", "company": "KO", "concept": "OperatingIncome", "period": {"fy": 2025, "q": 3, "ytd": True}})
+    q3 = _plan({"op": "get", "company": "KO", "concept": "OperatingIncome", "period": {"fy": 2025, "q": 3}})
+    assert shape_misfit("What were Johnson & Johnson's sales in the fourth quarter of fiscal 2025?", year, res)
+    assert shape_misfit("What operating income did Coca-Cola report for the third quarter of 2025?", ytd, res)
+    assert shape_misfit("What operating income did Coca-Cola report for the third quarter of 2025?", q3, res) == ""
+    assert shape_misfit("How much cash did Target generate in the first nine months of fiscal 2025?", year, res)
