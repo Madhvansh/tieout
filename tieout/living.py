@@ -39,6 +39,7 @@ from .llm import ask_json
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 LEARNED = ROOT / "semantics" / "learned.jsonl"
 REVIEW = ROOT / "semantics" / "review_queue.jsonl"
+DECISIONS = ROOT / "semantics" / "review_decisions.yaml"
 
 SYSTEM = """You map one financial concept to one row of a company's financial statement.
 You are shown the printed row labels of the statement with their section headings and structural
@@ -273,14 +274,42 @@ def save_entry(entry: dict) -> None:
         f.write(json.dumps(entry) + "\n")
 
 
+def review_decisions() -> dict:
+    """The reviewer's rulings from semantics/review_decisions.yaml:
+    {"rejected": {(ticker, concept)}, "approved": {(ticker, concept)}}."""
+    import yaml
+    out = {"rejected": set(), "approved": set()}
+    if DECISIONS.exists():
+        raw = yaml.safe_load(DECISIONS.read_text(encoding="utf-8")) or {}
+        out["rejected"] = {(d["ticker"], d["concept"]) for d in raw.get("rejected") or []}
+        out["approved"] = {(d["ticker"], d["concept"]) for d in raw.get("approved_from_queue") or []}
+    return out
+
+
 def load_learned(g: Graph, path: pathlib.Path = LEARNED) -> int:
-    """Re-apply everything learned so far to a freshly built graph."""
+    """Re-apply everything learned so far to a freshly built graph.
+
+    A person has the last word: a binding the reviewer rejected is skipped, and a binding
+    the gate held is applied if the reviewer approved it.
+    """
     if not path.exists():
         return 0
+    ruling = review_decisions()
     n = 0
-    for line in path.read_text(encoding="utf-8").splitlines():
+    lines = path.read_text(encoding="utf-8").splitlines()
+    if ruling["approved"] and REVIEW.exists():
+        for line in REVIEW.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                e = json.loads(line)
+                if (e.get("ticker"), e.get("concept")) in ruling["approved"] and e.get("label"):
+                    e["state"] = "active"
+                    e.setdefault("evidence", []).append("approved by the human reviewer")
+                    lines.append(json.dumps(e))
+    for line in lines:
         if line.strip():
             e = json.loads(line)
+            if (e.get("ticker"), e.get("concept")) in ruling["rejected"]:
+                continue                                 # rejected by the human reviewer
             if e.get("kind") == "item":
                 continue                                 # line items are re-applied by items.load_items
             if e.get("state") == "active" and e.get("label"):

@@ -1,0 +1,14 @@
+# Human review of the bindings the living layer proposed (see semantics/REVIEW_SHEET.md).
+# The structural gate judges structure; a person judges meaning and has the last word.
+#
+# reviewer:
+# date:
+#
+# rejected: a binding the gate admitted that should not be served.
+#   - {ticker: GM, concept: Goodwill, reason: "the row is goodwill plus intangible assets"}
+# approved_from_queue: a binding the gate held that is right after all.
+#   - {ticker: CVX, concept: NetIncome, reason: "attributable net income; the cash-flow statement starts from the consolidated figure"}
+
+rejected: []
+
+approved_from_queue: []
