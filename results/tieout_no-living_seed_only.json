@@ -1,67 +1,35 @@
 {
- "name": "replay_nokey",
+ "name": "frozen_living_fully_off",
  "args": {
-  "bench": "C:\\Users\\Administrator\\Downloads\\DSA TRACKER\\Genloop\\takehome\\repo\\benchmark\\questions.jsonl",
+  "bench": "C:\\Users\\Administrator\\AppData\\Local\\Temp\\claude\\604509cd49e534d3\\17525066-1a42-47de-b0a0-8f52d8d54526\\scratchpad\\frozen2\\benchmark\\questions.jsonl",
   "oracle": null,
-  "ablate": null,
+  "ablate": "living",
   "strict": false,
   "noise": 0.0,
   "seed": 1,
   "offline": true,
   "no_learning": false,
   "model": null,
-  "name": "replay_nokey"
+  "name": "frozen_living_fully_off"
  },
  "score": {
   "overall": {
    "n": 30,
-   "correct": 27,
-   "accuracy": 0.9,
+   "correct": 19,
+   "accuracy": 0.6333333333333333,
    "accuracy_ci95": [
-    0.7438,
-    0.9654
+    0.4551,
+    0.7813
    ],
    "precision_macro": 0.9666666666666667,
-   "recall_macro": 0.8640583554376657,
-   "precision_micro": 0.9885057471264368,
-   "recall_micro": 0.9052631578947369,
-   "page_exact_share": 0.9651162790697675,
-   "abstained": 4,
-   "answered_accuracy": 0.9615384615384616
+   "recall_macro": 0.6686560565870912,
+   "precision_micro": 0.9863013698630136,
+   "recall_micro": 0.7578947368421053,
+   "page_exact_share": 1.0,
+   "abstained": 9,
+   "answered_accuracy": 0.8095238095238095
   },
   "single_fact": {
-   "n": 10,
-   "correct": 9,
-   "accuracy": 0.9,
-   "accuracy_ci95": [
-    0.5958,
-    0.9821
-   ],
-   "precision_macro": 0.9,
-   "recall_macro": 0.9,
-   "precision_micro": 0.9,
-   "recall_micro": 0.9,
-   "page_exact_share": 0.8888888888888888,
-   "abstained": 0,
-   "answered_accuracy": 0.9
-  },
-  "multi_hop": {
-   "n": 10,
-   "correct": 10,
-   "accuracy": 1.0,
-   "accuracy_ci95": [
-    0.7225,
-    1.0
-   ],
-   "precision_macro": 1.0,
-   "recall_macro": 1.0,
-   "precision_micro": 1.0,
-   "recall_micro": 1.0,
-   "page_exact_share": 0.9444444444444444,
-   "abstained": 1,
-   "answered_accuracy": 1.0
-  },
-  "cross_filing": {
    "n": 10,
    "correct": 8,
    "accuracy": 0.8,
@@ -70,12 +38,44 @@
     0.9433
    ],
    "precision_macro": 1.0,
-   "recall_macro": 0.7057692307692307,
+   "recall_macro": 0.8,
    "precision_micro": 1.0,
-   "recall_micro": 0.8805970149253731,
-   "page_exact_share": 0.9830508474576272,
+   "recall_micro": 0.8,
+   "page_exact_share": 1.0,
+   "abstained": 2,
+   "answered_accuracy": 1.0
+  },
+  "multi_hop": {
+   "n": 10,
+   "correct": 8,
+   "accuracy": 0.8,
+   "accuracy_ci95": [
+    0.4902,
+    0.9433
+   ],
+   "precision_macro": 1.0,
+   "recall_macro": 0.7777777777777778,
+   "precision_micro": 1.0,
+   "recall_micro": 0.7777777777777778,
+   "page_exact_share": 1.0,
    "abstained": 3,
    "answered_accuracy": 1.0
+  },
+  "cross_filing": {
+   "n": 10,
+   "correct": 3,
+   "accuracy": 0.3,
+   "accuracy_ci95": [
+    0.1078,
+    0.6032
+   ],
+   "precision_macro": 0.9,
+   "recall_macro": 0.43910256410256404,
+   "precision_micro": 0.9803921568627451,
+   "recall_micro": 0.746268656716418,
+   "page_exact_share": 1.0,
+   "abstained": 4,
+   "answered_accuracy": 0.3333333333333333
   }
  },
  "rows": [
@@ -112,8 +112,8 @@
     "AAPL FY2026 ends 2026-09-26"
    ],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.02,
+   "system": "frozen_living_fully_off",
    "tags": [
     "fiscal_year_trap"
    ]
@@ -151,8 +151,8 @@
     "COST FY2026 ends 2026-08-30"
    ],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.02,
+   "system": "frozen_living_fully_off",
    "tags": [
     "fiscal_year_trap"
    ]
@@ -190,8 +190,8 @@
     "CSCO FY2026 ends 2026-07-25"
    ],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.01,
+   "system": "frozen_living_fully_off",
    "tags": [
     "fiscal_year_trap"
    ]
@@ -229,8 +229,8 @@
     "PG FY2026 ends 2026-06-30"
    ],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.02,
+   "system": "frozen_living_fully_off",
    "tags": [
     "fiscal_year_trap"
    ]
@@ -268,8 +268,8 @@
     "HD FY2025 ends 2026-02-01"
    ],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.02,
+   "system": "frozen_living_fully_off",
    "tags": [
     "fiscal_year_trap"
    ]
@@ -307,8 +307,8 @@
     "TSLA FY2025 ends 2025-12-31"
    ],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.01,
+   "system": "frozen_living_fully_off",
    "tags": []
   },
   {
@@ -339,8 +339,8 @@
    },
    "notes": [],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.02,
+   "system": "frozen_living_fully_off",
    "tags": [
     "text_fact"
    ]
@@ -373,8 +373,8 @@
    },
    "notes": [],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.01,
+   "system": "frozen_living_fully_off",
    "tags": [
     "text_fact"
    ]
@@ -384,31 +384,27 @@
    "type": "single_fact",
    "question": "How many Class A shares did Facebook's parent have outstanding per the cover of its 2025 annual report?",
    "gold": "2,187,177,748 Class A shares (as of January 23, 2026)",
-   "answer": "342,377,716 shares",
+   "answer": "ABSTAIN: planner: no attribute for Class A shares outstanding on the cover of the annual report",
    "correct": false,
-   "abstained": false,
+   "abstained": true,
    "match": {
-    "retrieved": 1,
+    "retrieved": 0,
     "matched_retrieved": 0,
     "gold": 1,
     "matched_gold": 0,
     "page_exact": 0
    },
    "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "attr",
-      "company": "META",
-      "attr": "shares_outstanding"
-     }
-    ],
-    "answer": "s1"
+    "steps": [],
+    "answer": null,
+    "cannot": "no attribute for Class A shares outstanding on the cover of the annual report"
    },
-   "notes": [],
+   "notes": [
+    "planner: no attribute for Class A shares outstanding on the cover of the annual report"
+   ],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.02,
+   "system": "frozen_living_fully_off",
    "tags": [
     "text_fact"
    ]
@@ -418,14 +414,14 @@
    "type": "single_fact",
    "question": "What revenue did Microsoft's Intelligent Cloud segment bring in for fiscal 2026?",
    "gold": "$137,791 million",
-   "answer": "$137.791 billion",
-   "correct": true,
-   "abstained": false,
+   "answer": "ABSTAIN: no binding yet for 'Intelligent Cloud revenue' at MSFT",
+   "correct": false,
+   "abstained": true,
    "match": {
-    "retrieved": 1,
-    "matched_retrieved": 1,
+    "retrieved": 0,
+    "matched_retrieved": 0,
     "gold": 1,
-    "matched_gold": 1,
+    "matched_gold": 0,
     "page_exact": 0
    },
    "plan": {
@@ -443,18 +439,11 @@
     "answer": "s1"
    },
    "notes": [
-    "MSFT FY2026 ends 2026-06-30"
+    "no binding yet for 'Intelligent Cloud revenue' at MSFT"
    ],
-   "learned": [
-    {
-     "ticker": "MSFT",
-     "concept": null,
-     "state": "active",
-     "label": "Revenue"
-    }
-   ],
-   "seconds": 0.95,
-   "system": "replay_nokey",
+   "learned": [],
+   "seconds": 0.02,
+   "system": "frozen_living_fully_off",
    "tags": [
     "segment_vs_consolidated",
     "fiscal_year_trap"
@@ -496,8 +485,8 @@
     "AAPL Revenue Q4 is not printed; derived as full year minus nine months"
    ],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.01,
+   "system": "frozen_living_fully_off",
    "tags": [
     "quarter_derived",
     "fiscal_year_trap",
@@ -540,8 +529,8 @@
     "KO Revenue Q4 is not printed; derived as full year minus nine months"
    ],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.01,
+   "system": "frozen_living_fully_off",
    "tags": [
     "quarter_derived",
     "derived_metric"
@@ -580,8 +569,8 @@
     "MSFT FY2026 ends 2026-06-30"
    ],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.02,
+   "system": "frozen_living_fully_off",
    "tags": [
     "derived_metric",
     "fiscal_year_trap"
@@ -625,8 +614,8 @@
     "NVDA FY2026 ends 2026-01-25"
    ],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.01,
+   "system": "frozen_living_fully_off",
    "tags": [
     "derived_metric",
     "fiscal_year_trap"
@@ -665,8 +654,8 @@
     "META FY2025 ends 2025-12-31"
    ],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.02,
+   "system": "frozen_living_fully_off",
    "tags": [
     "derived_metric"
    ]
@@ -704,8 +693,8 @@
     "PFE FY2025 ends 2025-12-31"
    ],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.01,
+   "system": "frozen_living_fully_off",
    "tags": [
     "derived_metric"
    ]
@@ -715,15 +704,15 @@
    "type": "multi_hop",
    "question": "Dividing fiscal 2026 membership fee revenue by year-end paid members, what did Costco earn per paid member?",
    "gold": "About $70.24 per paid member",
-   "answer": "70.24x",
-   "correct": true,
-   "abstained": false,
+   "answer": "ABSTAIN: no binding yet for 'membership fee revenue' at COST",
+   "correct": false,
+   "abstained": true,
    "match": {
-    "retrieved": 2,
-    "matched_retrieved": 2,
+    "retrieved": 0,
+    "matched_retrieved": 0,
     "gold": 2,
-    "matched_gold": 2,
-    "page_exact": 2
+    "matched_gold": 0,
+    "page_exact": 0
    },
    "plan": {
     "steps": [
@@ -740,7 +729,7 @@
       "id": "s2",
       "op": "get",
       "company": "COST",
-      "item": "year-end paid members",
+      "item": "paid members",
       "period": {
        "fy": 2026
       }
@@ -754,24 +743,11 @@
     "answer": "s3"
    },
    "notes": [
-    "COST FY2026 ends 2026-08-30"
+    "no binding yet for 'membership fee revenue' at COST"
    ],
-   "learned": [
-    {
-     "ticker": "COST",
-     "concept": null,
-     "state": "active",
-     "label": "Membership fees"
-    },
-    {
-     "ticker": "COST",
-     "concept": null,
-     "state": "active",
-     "label": "Paid members"
-    }
-   ],
-   "seconds": 0.04,
-   "system": "replay_nokey",
+   "learned": [],
+   "seconds": 0.01,
+   "system": "frozen_living_fully_off",
    "tags": [
     "scale_trap",
     "derived_metric",
@@ -811,8 +787,8 @@
     "MA FY2025 ends 2025-12-31"
    ],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.02,
+   "system": "frozen_living_fully_off",
    "tags": [
     "derived_metric",
     "bank"
@@ -823,29 +799,20 @@
    "type": "multi_hop",
    "question": "What share of Amazon's 2025 operating income came from AWS?",
    "gold": "57.03%",
-   "answer": "57.03%",
-   "correct": true,
-   "abstained": false,
+   "answer": "ABSTAIN: no binding yet for 'AWS operating income' at AMZN",
+   "correct": false,
+   "abstained": true,
    "match": {
-    "retrieved": 2,
-    "matched_retrieved": 2,
+    "retrieved": 0,
+    "matched_retrieved": 0,
     "gold": 2,
-    "matched_gold": 2,
-    "page_exact": 1
+    "matched_gold": 0,
+    "page_exact": 0
    },
    "plan": {
     "steps": [
      {
       "id": "s1",
-      "op": "get",
-      "company": "AMZN",
-      "item": "AWS operating income",
-      "period": {
-       "fy": 2025
-      }
-     },
-     {
-      "id": "s2",
       "op": "get",
       "company": "AMZN",
       "concept": "OperatingIncome",
@@ -854,26 +821,28 @@
       }
      },
      {
+      "id": "s2",
+      "op": "get",
+      "company": "AMZN",
+      "item": "AWS operating income",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
       "id": "s3",
       "op": "calc",
-      "expr": "s1 / s2"
+      "expr": "s2 / s1"
      }
     ],
     "answer": "s3"
    },
    "notes": [
-    "AMZN FY2025 ends 2025-12-31"
+    "no binding yet for 'AWS operating income' at AMZN"
    ],
-   "learned": [
-    {
-     "ticker": "AMZN",
-     "concept": null,
-     "state": "active",
-     "label": "Operating income"
-    }
-   ],
-   "seconds": 0.02,
-   "system": "replay_nokey",
+   "learned": [],
+   "seconds": 0.01,
+   "system": "frozen_living_fully_off",
    "tags": [
     "segment_vs_consolidated",
     "derived_metric"
@@ -884,7 +853,7 @@
    "type": "multi_hop",
    "question": "What was Netflix's operating margin in 2025?",
    "gold": "Not answerable: Netflix is not one of the companies in this filing set.",
-   "answer": "ABSTAIN: planner: Netflix is not among the supported companies",
+   "answer": "ABSTAIN: planner: Netflix is not a covered company in the knowledge graph",
    "correct": true,
    "abstained": true,
    "match": {
@@ -897,14 +866,14 @@
    "plan": {
     "steps": [],
     "answer": null,
-    "cannot": "Netflix is not among the supported companies"
+    "cannot": "Netflix is not a covered company in the knowledge graph"
    },
    "notes": [
-    "planner: Netflix is not among the supported companies"
+    "planner: Netflix is not a covered company in the knowledge graph"
    ],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.01,
+   "system": "frozen_living_fully_off",
    "tags": [
     "unanswerable"
    ]
@@ -914,9 +883,9 @@
    "type": "cross_filing",
    "question": "Rank JPMorgan, Bank of America, Citigroup and Wells Fargo by deposits at the end of 2025, largest first.",
    "gold": "JPMorgan ($2,559,320M) > Bank of America ($2,018,729M) > Wells Fargo ($1,426,207M) > Citigroup ($1,403,573M)",
-   "answer": "ABSTAIN: cannot rank the named companies: no fact for C",
+   "answer": "JPM ($2,559.320 billion), BAC ($2,018.729 billion), WFC ($1,426.207 billion)",
    "correct": false,
-   "abstained": true,
+   "abstained": false,
    "match": {
     "retrieved": 3,
     "matched_retrieved": 3,
@@ -948,18 +917,11 @@
     "answer": "s1"
    },
    "notes": [
-    "cannot rank the named companies: no fact for C"
+    "ranked 3 of 4 companies; no fact for: C"
    ],
-   "learned": [
-    {
-     "ticker": "C",
-     "concept": "Deposits",
-     "state": "rejected",
-     "label": null
-    }
-   ],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "learned": [],
+   "seconds": 0.01,
+   "system": "frozen_living_fully_off",
    "tags": [
     "ranking",
     "bank"
@@ -970,15 +932,15 @@
    "type": "cross_filing",
    "question": "Rank the six big banks in the set (JPMorgan, Bank of America, Citi, Wells Fargo, Goldman Sachs, Morgan Stanley) by 2025 net income attributable to the company.",
    "gold": "JPMorgan (57,048) > Bank of America (30,509) > Wells Fargo (21,338) > Goldman Sachs (17,176) > Morgan Stanley (16,861) > Citigroup (14,306), $ millions",
-   "answer": "JPM ($57.048 billion), BAC ($30.509 billion), WFC ($21.338 billion), GS ($17.176 billion), MS ($16.861 billion), C ($14.306 billion)",
-   "correct": true,
+   "answer": "JPM ($57.048 billion), BAC ($30.509 billion), GS ($17.176 billion), MS ($16.861 billion)",
+   "correct": false,
    "abstained": false,
    "match": {
-    "retrieved": 6,
-    "matched_retrieved": 6,
+    "retrieved": 4,
+    "matched_retrieved": 4,
     "gold": 6,
-    "matched_gold": 6,
-    "page_exact": 6
+    "matched_gold": 4,
+    "page_exact": 4
    },
    "plan": {
     "steps": [
@@ -1005,10 +967,12 @@
     ],
     "answer": "s1"
    },
-   "notes": [],
+   "notes": [
+    "ranked 4 of 6 companies; no fact for: C, WFC"
+   ],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.02,
+   "system": "frozen_living_fully_off",
    "tags": [
     "ranking",
     "bank"
@@ -1019,27 +983,39 @@
    "type": "cross_filing",
    "question": "Which carmaker had the larger workforce at the end of 2025, Ford or GM, and by roughly how many people?",
    "gold": "Ford, about 169,000 vs about 155,000 (14,000 more)",
-   "answer": "ABSTAIN: cannot rank the named companies: no fact for GM",
+   "answer": "GM ($2.697 billion)",
    "correct": false,
-   "abstained": true,
+   "abstained": false,
    "match": {
     "retrieved": 1,
-    "matched_retrieved": 1,
+    "matched_retrieved": 0,
     "gold": 2,
-    "matched_gold": 1,
+    "matched_gold": 0,
     "page_exact": 0
    },
    "plan": {
     "steps": [
      {
       "id": "s1",
+      "op": "attr",
+      "company": "F",
+      "attr": "employees"
+     },
+     {
+      "id": "s2",
+      "op": "attr",
+      "company": "GM",
+      "attr": "employees"
+     },
+     {
+      "id": "s3",
       "op": "rank",
       "over": [
        "F",
        "GM"
       ],
       "by": {
-       "attr": "employees"
+       "concept": "NetIncome"
       },
       "period": {
        "fy": 2025
@@ -1048,31 +1024,19 @@
       "k": 2
      },
      {
-      "id": "s2",
-      "op": "attr",
-      "company": "F",
-      "attr": "employees"
-     },
-     {
-      "id": "s3",
-      "op": "attr",
-      "company": "GM",
-      "attr": "employees"
-     },
-     {
       "id": "s4",
       "op": "calc",
-      "expr": "s2 - s3"
+      "expr": "s1 - s2"
      }
     ],
-    "answer": "s1"
+    "answer": "s3"
    },
    "notes": [
-    "cannot rank the named companies: no fact for GM"
+    "ranked 1 of 2 companies; no fact for: F"
    ],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.01,
+   "system": "frozen_living_fully_off",
    "tags": [
     "scale_trap"
    ]
@@ -1116,8 +1080,8 @@
    },
    "notes": [],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.02,
+   "system": "frozen_living_fully_off",
    "tags": [
     "ranking"
    ]
@@ -1160,8 +1124,8 @@
    },
    "notes": [],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.02,
+   "system": "frozen_living_fully_off",
    "tags": [
     "fiscal_year_trap",
     "bank",
@@ -1173,8 +1137,8 @@
    "type": "cross_filing",
    "question": "How many of the 39 readable companies in the set ended their latest fiscal year with more than $1 trillion of total assets, and which are they?",
    "gold": "Six: JPMorgan, Bank of America, Citigroup, Wells Fargo, Goldman Sachs and Morgan Stanley",
-   "answer": "6 count",
-   "correct": true,
+   "answer": "BAC (3,411,738,000,000), C (2,657,202,000,000), GS (1,809,320,000,000), JPM (4,424,900,000,000), MS (1,420,270,000,000), WFC (2,148,631,000,000)",
+   "correct": false,
    "abstained": false,
    "match": {
     "retrieved": 38,
@@ -1205,12 +1169,12 @@
       "of": "$s1"
      }
     ],
-    "answer": "s2"
+    "answer": "s1"
    },
    "notes": [],
    "learned": [],
-   "seconds": 0.01,
-   "system": "replay_nokey",
+   "seconds": 0.03,
+   "system": "frozen_living_fully_off",
    "tags": [
     "ranking",
     "bank"
@@ -1221,38 +1185,27 @@
    "type": "cross_filing",
    "question": "What 2024 net income did Bank of America originally report, what does its 2025 annual report now show for 2024, and why the difference?",
    "gold": "Originally $27,132 million; the 2025 10-K shows $26,973 million, $159 million lower, because BofA changed its accounting for tax-related equity investments (proportional amortization) and applied it retrospectively.",
-   "answer": "Restated by $-159.0 million: first reported $27.132 billion (BAC_FY2024_10K), latest $26.973 billion (BAC_FY2025_10K)",
-   "correct": true,
-   "abstained": false,
+   "answer": "ABSTAIN: planner: reason for the difference is not a graph fact",
+   "correct": false,
+   "abstained": true,
    "match": {
-    "retrieved": 2,
-    "matched_retrieved": 2,
+    "retrieved": 0,
+    "matched_retrieved": 0,
     "gold": 3,
-    "matched_gold": 2,
-    "page_exact": 2
+    "matched_gold": 0,
+    "page_exact": 0
    },
    "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "restated",
-      "company": "BAC",
-      "concept": "NetIncome",
-      "period": {
-       "fy": 2024
-      }
-     }
-    ],
-    "answer": "s1"
+    "steps": [],
+    "answer": null,
+    "cannot": "reason for the difference is not a graph fact"
    },
    "notes": [
-    "BAC FY2024 ends 2024-12-31",
-    "BAC NetIncome FY2024 was restated; first-reported value used",
-    "BAC NetIncome FY2024 was restated; latest-reported value used"
+    "planner: reason for the difference is not a graph fact"
    ],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.02,
+   "system": "frozen_living_fully_off",
    "tags": [
     "restated",
     "bank"
@@ -1263,45 +1216,27 @@
    "type": "cross_filing",
    "question": "Apple's September 2025 balance sheet appears in both of its last two annual reports. Did the 'other non-current assets' figure for that date change, and if so by how much and why?",
    "gold": "Yes. It fell from $83,727 million to $72,634 million (down $11,093 million) because intangible assets, net ($11,093 million) are now shown on their own line; total assets are unchanged at $359,241 million.",
-   "answer": "Restated by $-11.093 billion: first reported $83.727 billion (AAPL_FY2025_10K), latest $72.634 billion (AAPL_FY2026_10K)",
-   "correct": true,
-   "abstained": false,
+   "answer": "ABSTAIN: planner: reason why a figure changed is not available from SEC fact data",
+   "correct": false,
+   "abstained": true,
    "match": {
-    "retrieved": 2,
-    "matched_retrieved": 2,
+    "retrieved": 0,
+    "matched_retrieved": 0,
     "gold": 4,
-    "matched_gold": 2,
-    "page_exact": 2
+    "matched_gold": 0,
+    "page_exact": 0
    },
    "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "restated",
-      "company": "AAPL",
-      "item": "other non-current assets",
-      "period": {
-       "fy": 2025
-      }
-     }
-    ],
-    "answer": "s1"
+    "steps": [],
+    "answer": null,
+    "cannot": "reason why a figure changed is not available from SEC fact data"
    },
    "notes": [
-    "AAPL FY2025@end ends 2025-09-27",
-    "AAPL item:other-non-current-assets@non-current-assets FY2025@end was restated; first-reported value used",
-    "AAPL item:other-non-current-assets@non-current-assets FY2025@end was restated; latest-reported value used"
+    "planner: reason why a figure changed is not available from SEC fact data"
    ],
-   "learned": [
-    {
-     "ticker": "AAPL",
-     "concept": null,
-     "state": "active",
-     "label": "Other non-current assets"
-    }
-   ],
+   "learned": [],
    "seconds": 0.02,
-   "system": "replay_nokey",
+   "system": "frozen_living_fully_off",
    "tags": [
     "restated",
     "fiscal_year_trap"
@@ -1312,15 +1247,15 @@
    "type": "cross_filing",
    "question": "Did Coca-Cola's latest 10-K change the year-end 2024 balance for prepaid expenses and other current assets versus what it first reported?",
    "gold": "Yes. It went from $3,129 million to $2,998 million (down $131 million); the $131 million now appears as a separate Assets held for sale line. Total current assets stay $25,997 million.",
-   "answer": "Restated by $-131.0 million: first reported $3.129 billion (KO_FY2024_10K), latest $2.998 billion (KO_FY2025_10K)",
-   "correct": true,
-   "abstained": false,
+   "answer": "ABSTAIN: no binding yet for 'prepaid expenses and other current assets' at KO; no binding yet for 'prepaid expenses and other current assets' at KO",
+   "correct": false,
+   "abstained": true,
    "match": {
-    "retrieved": 2,
-    "matched_retrieved": 2,
+    "retrieved": 0,
+    "matched_retrieved": 0,
     "gold": 3,
-    "matched_gold": 2,
-    "page_exact": 2
+    "matched_gold": 0,
+    "page_exact": 0
    },
    "plan": {
     "steps": [
@@ -1337,20 +1272,11 @@
     "answer": "s1"
    },
    "notes": [
-    "KO FY2024@end ends 2024-12-31",
-    "KO item:prepaid-expenses-and-other-current-assets@current-assets FY2024@end was restated; first-reported value used",
-    "KO item:prepaid-expenses-and-other-current-assets@current-assets FY2024@end was restated; latest-reported value used"
+    "no binding yet for 'prepaid expenses and other current assets' at KO"
    ],
-   "learned": [
-    {
-     "ticker": "KO",
-     "concept": null,
-     "state": "active",
-     "label": "Prepaid expenses and other current assets"
-    }
-   ],
-   "seconds": 0.04,
-   "system": "replay_nokey",
+   "learned": [],
+   "seconds": 0.02,
+   "system": "frozen_living_fully_off",
    "tags": [
     "restated"
    ]
@@ -1379,8 +1305,8 @@
     "planner: Intel is not a listed company in the knowledge graph"
    ],
    "learned": [],
-   "seconds": 0.0,
-   "system": "replay_nokey",
+   "seconds": 0.02,
+   "system": "frozen_living_fully_off",
    "tags": [
     "unanswerable"
    ]
@@ -1388,17 +1314,17 @@
  ],
  "llm": {
   "live": 0,
-  "cached": 37,
+  "cached": 30,
   "seconds": 0.0
  },
  "graph": {
   "filings": 55,
   "companies": 40,
   "tables": 161,
-  "readings": 12808,
+  "readings": 12773,
   "reading_status": {
-   "verified": 11919,
-   "unverified": 888,
+   "verified": 11882,
+   "unverified": 890,
    "failed": 1
   },
   "checks": {
@@ -1410,9 +1336,9 @@
    "CARRY:pass": 1204,
    "CARRY:restated": 32
   },
-  "facts": 3015,
-  "bindings": 1302,
-  "bindings_active": 1254,
+  "facts": 2741,
+  "bindings": 1201,
+  "bindings_active": 1153,
   "textfacts": 724
  }
 }

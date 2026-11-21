@@ -38,7 +38,7 @@ Precision and recall are macro averages over questions; pooled over facts they a
 | TieOut with hand-written plans (written blind, no gold) | 27 |
 | Shared concept layer off | 10 |
 | Derivations off | 18 |
-| Living layer off | 20 |
+| Living layer off (seed semantics only, nothing learned from questions) | 19 |
 | Verified-only answering | 24 |
 | TieOut v1.1, after fixing four causes the first run exposed (not held-out) | 27 |
 | TieOut v1.1 with a local 4B model as planner, no API key (`qwen3.5:4b` through Ollama) | 19 |
@@ -47,7 +47,7 @@ TieOut minus baseline: +14 questions, paired bootstrap 95% interval +9 to +19 of
 
 Beyond the benchmark:
 
-- **Graph.** 55 filings (40 latest 10-Ks, 10 prior-year 10-Ks, 5 third-quarter 10-Qs). 12,808 numbers from the primary statements, 93% inside a passing check; 32 figures that a later filing restated; about 44,000 more rows from other tables, parsed and checked the same way and left unbound until a question asks for them.
+- **Graph.** 55 filings (40 latest 10-Ks, 10 prior-year 10-Ks, 5 third-quarter 10-Qs). 12,808 numbers from the primary statements, 93% inside a passing check; 32 places where two filings of one company print different values for the same line and period (26 of them at Bank of America, which applied an accounting change retrospectively; one is a parse artifact); about 44,000 more rows from other tables, parsed and checked the same way and left unbound until a question asks for them.
 - **Fault injection** on 161 parsed statements: the checks catch 99% of sign flips, 99.8% of values moved to the wrong period column and 100% of single-cell scale errors, but only 27% of two neighbouring rows trading values and 2.5% of a whole table read at the wrong scale.
 - **Independent audit** against the SEC's XBRL data, which the pipeline never reads: 88% of extracted numbers confirmed by value and period. Concept bindings agreed 94.6% on the first audit; it exposed three real errors, and after fixing them 98.6% agree.
 - **One filing failed completely.** The McDonald's PDF embeds fonts with no Unicode map, so its text layer is glyph codes. The build detects this and extracts nothing rather than garbage.
@@ -121,7 +121,7 @@ Six of 30 in the frozen run. Three were the planner and three were the graph:
 - **Planner refused two answerable questions** because they also asked "why" a figure changed. The graph holds facts, not reasons, but the factual half was answerable.
 - **Planner chose the wrong step as the answer** on a "how many, and which" question: it returned the six right companies where the gold was the count.
 - **A partial ranking was returned as if complete.** Citigroup's deposits line was never bound, so a ranking of four named banks came back with three. This is the most serious failure: a confident wrong answer.
-- **A headcount was missing** (General Motors prints hourly and salaried counts, no total), and the plan language could not rank by an attribute.
+- **A headcount was missed.** General Motors prints its total headcount only inside a table, in thousands, which the rule-based text extractor does not read. The plan language also could not rank by an attribute.
 - **Share classes were ambiguous.** Asked for Meta's Class A shares, the text-fact layer returned the Class B count.
 
 Structural limits that the experiments measured are in the results PDF: the checks' two blind spots, the coverage cost of verified-only answering on a damaged graph, and one page clipped in the source PDF.

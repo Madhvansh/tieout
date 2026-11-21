@@ -1,14 +1,36 @@
-# Human review of the bindings the living layer proposed (see semantics/REVIEW_SHEET.md).
-# The structural gate judges structure; a person judges meaning and has the last word.
+# Review of the bindings the living layer proposed (see semantics/REVIEW_SHEET.md).
+# The structural gate judges structure; a reviewer judges meaning and has the last word.
 #
-# reviewer:
-# date:
+# reviewer: Claude (the AI coding agent), 21 Nov 2026, from the printed labels and the SEC audit flags.
+#           Not reviewed by a person. Each ruling carries its reason so that a person can overturn it.
 #
 # rejected: a binding the gate admitted that should not be served.
-#   - {ticker: GM, concept: Goodwill, reason: "the row is goodwill plus intangible assets"}
 # approved_from_queue: a binding the gate held that is right after all.
-#   - {ticker: CVX, concept: NetIncome, reason: "attributable net income; the cash-flow statement starts from the consolidated figure"}
 
-rejected: []
+rejected:
+  - ticker: GM
+    concept: Goodwill
+    reason: "the printed row is 'Goodwill and intangible assets, net'; the SEC feed gives goodwill alone as 1,900 against 4,366 here"
+  - ticker: AMZN
+    concept: ResearchAndDevelopment
+    reason: "the printed row is 'Technology and infrastructure', which is broader than research and development; Amazon does not print R&D on its own"
+  - ticker: MS
+    concept: LongTermDebt
+    reason: "the printed row is total 'Borrowings', which includes short-term borrowings"
 
-approved_from_queue: []
+approved_from_queue:
+  - ticker: CVX
+    concept: NetIncome
+    reason: "'Net Income (Loss) Attributable to Chevron Corporation' is the company-attributable figure; the cash-flow statement starts from the figure that includes noncontrolling interests, so the tie the gate looks for cannot hold"
+  - ticker: NKE
+    concept: TotalEquity
+    reason: "label is unambiguous ('Total shareholders' equity'); the gate held it only because no check covers the row"
+  - ticker: NKE
+    concept: TotalLiabilitiesAndEquity
+    reason: "label is unambiguous; held because the formula above it was not recovered on this page"
+  - ticker: JNJ
+    concept: DividendsPaid
+    reason: "label is unambiguous ('Dividends to shareholders'); held because no check covers the row"
+  - ticker: JNJ
+    concept: ShareRepurchases
+    reason: "label is unambiguous ('Repurchase of common stock'); held because no check covers the row"

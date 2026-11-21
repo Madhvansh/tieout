@@ -13,7 +13,6 @@ import re
 from dataclasses import dataclass, field
 from typing import Optional
 
-import pymupdf
 
 # "28," (a day inside a printed date) must not count as a value, so a comma is
 # only allowed as a thousands separator.
@@ -105,15 +104,6 @@ class Table:
 
 
 # ----------------------------------------------------------------- words/lines
-
-def page_words(page) -> list:
-    out = []
-    for x0, y0, x1, y1, text, *_ in page.get_text("words"):
-        text = text.strip()
-        if text:
-            out.append(Word(x0, y0, x1, y1, text))
-    return out
-
 
 def group_lines(words: list, tol: float = 2.5) -> list:
     """Cluster words into text lines by vertical centre."""
@@ -492,22 +482,6 @@ def _continues(above: str, below: str) -> bool:
 def _bbox(words: list) -> tuple:
     return (min(w.x0 for w in words), min(w.y0 for w in words),
             max(w.x1 for w in words), max(w.y1 for w in words))
-
-
-def page_table(pdf_path: str, page_no: int, doc_name: str = "") -> Optional[Table]:
-    """Treat one whole page (1-based) as a single table. Used for primary statements."""
-    with pymupdf.open(pdf_path) as d:
-        page = d[page_no - 1]
-        h = page.rect.height
-        words = [w for w in page_words(page) if 30 < w.yc < h - 30]
-    lines = group_lines(words)
-    title = " ".join(w.text for w in lines[0]) if lines else ""
-    for ln in lines[:6]:
-        text = " ".join(w.text for w in ln)
-        if re.search(r"CONSOLIDATED|STATEMENTS? OF|BALANCE SHEETS?", text, re.I):
-            title = text
-            break
-    return build_table(doc_name or pdf_path, page_no, lines, title)
 
 
 def show(t: Table) -> str:

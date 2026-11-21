@@ -45,11 +45,11 @@ Cross-filing & 5/10 & 0.90 & 0.54 \\
 
 \sub{Planner versus graph.} With hand-written plans, written blind: 27/30. The planner cost three questions and the graph three.
 
-\sub{Does structure change answers?} Shared concept layer off: 10/30. Derivations off: 18/30. Living layer off: 20/30.
+\sub{Does structure change answers?} Shared concept layer off: 10/30. Derivations off: 18/30. Living layer off (seed semantics only): 19/30.
 
 \sub{After the first run} I fixed four causes it exposed. The same questions then score 27/30. That number is not held-out.
 
-\sub{The graph.} 54 of 55 filings parsed. 12,808 statement numbers, each tied to a cell on a page; 93\% sit inside a passing check. 32 figures were restated by a later filing.
+\sub{The graph.} 54 of 55 filings parsed. 12,808 statement numbers, each tied to a cell on a page; 93\% sit inside a passing check. In 32 places two filings of one company print different values for the same line and period (26 at Bank of America, after an accounting change; one is a parse artifact).
 
 \sub{Fault injection} (161 statements, about 1,280 faults per type). Share caught: sign flip 99.1\%, value in the wrong period column 99.8\%, one cell at the wrong scale 100\%, digit error 87\%, dropped row 79\%, two rows swapped 27\%, whole table at the wrong scale 2.5\%.
 
@@ -68,7 +68,7 @@ Cross-filing & 5/10 & 0.90 & 0.54 \\
 \item \emph{Raw layer}: about 44,000 rows from every other table, parsed and checked the same way, left unbound.
 \end{tight}
 
-\sub{Living layer.} When a question needs a concept or a line item that has no binding, an LLM picks a row from labels and structural roles, never values. A gate made of structure admits it (the value is verified, the concept's structural rule holds, the role agrees with other companies) or holds it for a person. A teaching run of 208 plain questions admitted 81 bindings and held 5. Four more were learned during the benchmark run.
+\sub{Living layer.} When a question needs a concept or a line item that has no binding, an LLM picks a row from labels and structural roles, never values. A gate made of structure admits it (the value is verified, the concept's structural rule holds, the role agrees with other companies) or holds it for a person. A teaching run of 208 plain questions admitted 81 bindings and held 5. Five more were learned during the benchmark run, across four questions.
 
 \sub{Answering.} Question, then plan (nine operations), then validation of types and units, then a deterministic executor. The answer is a proof tree whose leaves are cells on pages. If a needed fact is missing or fails its check, the system abstains and names it. Retrieved facts are every leaf the executor read.
 
@@ -81,7 +81,7 @@ Cross-filing & 5/10 & 0.90 & 0.54 \\
 \item \sub{A partial ranking returned as complete.} Asked to rank four named banks by deposits, it ranked three: Citigroup's deposits line was never bound. Confident and wrong is the worst failure for a bank.
 \item \sub{The planner refused answerable questions.} ``What did Bank of America first report for 2024, what does it show now, and why?'' The graph holds the two figures (27,132 and 26,973), not the reason. The planner declined the whole question.
 \item \sub{Wrong answer step.} ``How many companies have over \$1 trillion of assets, and which?'' It returned the six right names where the gold was the count.
-\item \sub{Missing and ambiguous text facts.} General Motors prints no total headcount. Asked for Meta's Class A shares, the layer returned Class B.
+\item \sub{Missing and ambiguous text facts.} General Motors prints its total headcount only inside a table, in thousands, which the rule-based text extractor does not read. Asked for Meta's Class A shares, the layer returned Class B.
 \item \sub{The checks are blind to symmetric errors.} In J\&J's quarterly cash-flow statement the numbers sit a few points above their labels, so each value was attached one row up. Every sum still held. The SEC audit caught it.
 \item \sub{The gate confirms structure, not meaning.} ``Total equity'' was bound to ``Total liabilities and equity'' in 74 of 86 cases: both are totals and both say equity. Again the audit caught it, not the gate.
 \item \sub{Verified-only answering is costly on a damaged graph.} At 10\% damaged cells it kept wrong answers at 3 while ``serve everything'' rose to 5, but correct answers fell from 24 to 9.7, because one bad cell unverified its whole formula.
@@ -93,7 +93,7 @@ Cross-filing & 5/10 & 0.90 & 0.54 \\
 \begin{tight}
 \item Record ``this company does not report this concept'' as a fact, so a ranking can tell absence from ignorance.
 \item Close the blind spots: chain the scale through EPS, net income and cash ties, and add a second independent reader for row swaps.
-\item Verify column by column (done in v1.1: 14.3 correct instead of 9.7 at 10\% damage).
+\item Verify column by column. Done in v1.1, which with its other fixes keeps 14.3 of 27 correct at 10\% damage, against 9.7 of 24 before.
 \item Measure the gate against a human reviewer on the 86 proposals, and feed rejections back as rules.
 \item Extend the same graph to text: policies and risk factors as sourced spans with their own checks.
 \item Prune: measure answer accuracy against graph size as the raw layer grows.
@@ -107,7 +107,7 @@ Sources: 402,836 (``Revenues'', 10-K page 50, verified) and 289,007 (``Revenues'
 
 \sub{A binding learned from a question.} ``How fast did Wells Fargo's net income grow in 2025?'' No seed label matched. The LLM proposed the row ``Wells Fargo net income'' from the labels. The gate admitted it on three pieces of evidence: the value sits inside a passing check; the recovered formula derives it from ``Net income before noncontrolling interests'', which reappears on the cash-flow statement; its role agrees with other companies. Answer: 8.19\%, from 21,338 and 19,722 on page 91.
 
-\sub{A binding the gate held.} For Chevron's net income the LLM proposed ``Net income attributable to Chevron Corporation''. On that page the values neither reappear on the cash-flow statement nor derive from a row that does, so the binding went to the review queue instead of the graph.
+\sub{A binding the gate held.} For Chevron's net income the LLM proposed ``Net income attributable to Chevron Corporation''. On that page the values neither reappear on the cash-flow statement nor derive from a row that does, so the gate did not admit it. The row stays ``proposed'': it is served only with a note that structure did not confirm it, and it is listed for a person to review.
 
 \sub{An abstention (v1.1).} ``Rank JPMorgan, Bank of America, Citigroup and Wells Fargo by deposits.'' Answer: cannot rank the named companies; no fact for Citigroup. The frozen run returned three banks as if they were four.
 
