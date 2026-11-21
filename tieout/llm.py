@@ -55,6 +55,7 @@ def ask_json(system: str, user: str, schema: Optional[dict] = None, model: Optio
     """Return the model's JSON answer. Cached by content; `offline` forbids live calls."""
     # An offline replay must find the cached answers whatever keys this machine has, so it
     # always asks for the model the shipped cache was recorded with.
+    load_env()
     model = model or (os.environ.get("TIEOUT_LLM") or REPLAY_MODEL if offline else default_model())
     key = hashlib.sha256(json.dumps([model, system, user, schema], sort_keys=True).encode()).hexdigest()
     path = CACHE / f"{tag + '_' if tag else ''}{key[:24]}.json"

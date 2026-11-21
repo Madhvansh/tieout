@@ -23,7 +23,7 @@ from tieout.concepts import norm_label
 from tieout.eval.bench import load_benchmark, run_graph_system, score
 from tieout.execute import Executor
 from tieout.graph import Graph, build
-from tieout.items import load_items
+from tieout.link import load_links
 from tieout.living import load_learned
 from tieout.llm import CALLS
 
@@ -84,7 +84,7 @@ def main():
         g = Graph.load()
         if a.ablate != "living":
             load_learned(g)
-            load_items(g)
+            load_links(g)
     if a.ablate == "concepts":
         print("concept layer off: facts dropped =", strip_concept_layer(g))
     ex = Executor(g, use_checks=a.ablate != "checks", use_derivations=a.ablate != "derivations",

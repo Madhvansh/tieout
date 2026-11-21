@@ -5,18 +5,115 @@
   "glyph_codes": 344,
   "occurrences": 281068,
   "width": 117558,
-  "vocabulary": 163395,
+  "vocabulary": 163440,
   "arithmetic": 0,
-  "undecoded": 115,
-  "references": {
-   "UFSCXJ+Arial-BoldMT": "Helvetica-Bold",
-   "UFSCXJ+ArialUnicodeMS": "Helvetica",
-   "UFSCXJ+ArialMT": "Helvetica",
-   "UFSCXJ+TimesNewRoman": "Times-Roman",
-   "UFSCXJ+TimesNewRoman-Bold": "Times-Bold",
-   "UFSCXJ+Arial-BoldItalicMT": "Helvetica-BoldOblique",
-   "UFSCXJ+Arial-ItalicMT": "Helvetica-Oblique",
-   "UFSCXJ+TimesNewRoman-BoldItalic": "Times-BoldItalic"
+  "undecoded": 70,
+  "fonts": [
+   {
+    "font": "UFSCXJ+ArialMT",
+    "metrics": "Helvetica",
+    "codes": 90,
+    "occurrences": 248739,
+    "width": 101565,
+    "vocabulary": 147162,
+    "arithmetic": 0,
+    "undecoded": 12,
+    "undecoded_codes": 3
+   },
+   {
+    "font": "UFSCXJ+Arial-BoldMT",
+    "metrics": "Helvetica-Bold",
+    "codes": 78,
+    "occurrences": 15236,
+    "width": 10701,
+    "vocabulary": 4531,
+    "arithmetic": 0,
+    "undecoded": 4,
+    "undecoded_codes": 1
+   },
+   {
+    "font": "UFSCXJ+Arial-ItalicMT",
+    "metrics": "Helvetica-Oblique",
+    "codes": 78,
+    "occurrences": 9147,
+    "width": 4582,
+    "vocabulary": 4560,
+    "arithmetic": 0,
+    "undecoded": 5,
+    "undecoded_codes": 1
+   },
+   {
+    "font": "UFSCXJ+TimesNewRoman",
+    "metrics": "Times-Roman",
+    "codes": 4,
+    "occurrences": 5376,
+    "width": 6,
+    "vocabulary": 5370,
+    "arithmetic": 0,
+    "undecoded": 0,
+    "undecoded_codes": 0
+   },
+   {
+    "font": "UFSCXJ+Arial-BoldItalicMT",
+    "metrics": "Helvetica-BoldOblique",
+    "codes": 61,
+    "occurrences": 1550,
+    "width": 688,
+    "vocabulary": 850,
+    "arithmetic": 0,
+    "undecoded": 12,
+    "undecoded_codes": 4
+   },
+   {
+    "font": "UFSCXJ+TimesNewRoman-Bold",
+    "metrics": "Times-Bold",
+    "codes": 2,
+    "occurrences": 919,
+    "width": 0,
+    "vocabulary": 919,
+    "arithmetic": 0,
+    "undecoded": 0,
+    "undecoded_codes": 0
+   },
+   {
+    "font": "UFSCXJ+ArialMT",
+    "metrics": "Helvetica",
+    "codes": 28,
+    "occurrences": 77,
+    "width": 16,
+    "vocabulary": 45,
+    "arithmetic": 0,
+    "undecoded": 16,
+    "undecoded_codes": 8
+   },
+   {
+    "font": "UFSCXJ+ArialUnicodeMS",
+    "metrics": "Helvetica",
+    "codes": 2,
+    "occurrences": 21,
+    "width": 0,
+    "vocabulary": 0,
+    "arithmetic": 0,
+    "undecoded": 21,
+    "undecoded_codes": 2
+   },
+   {
+    "font": "UFSCXJ+TimesNewRoman-BoldItalic",
+    "metrics": "Times-BoldItalic",
+    "codes": 1,
+    "occurrences": 3,
+    "width": 0,
+    "vocabulary": 3,
+    "arithmetic": 0,
+    "undecoded": 0,
+    "undecoded_codes": 0
+   }
+  ],
+  "share": {
+   "width": 0.41825,
+   "vocabulary": 0.5815,
+   "arithmetic": 0.0,
+   "undecoded": 0.00025
   }
  }
 }

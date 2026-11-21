@@ -310,8 +310,8 @@ def load_learned(g: Graph, path: pathlib.Path = LEARNED) -> int:
             e = json.loads(line)
             if (e.get("ticker"), e.get("concept")) in ruling["rejected"]:
                 continue                                 # rejected by the human reviewer
-            if e.get("kind") == "item":
-                continue                                 # line items are re-applied by items.load_items
+            if e.get("kind") in ("item", "mention", "breakdown"):
+                continue                                 # links are re-applied by link.load_links
             if e.get("state") == "active" and e.get("label"):
                 n += apply_entry(g, e)
     return n

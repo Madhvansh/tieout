@@ -77,6 +77,10 @@ def is_correct(q: dict, pred: dict, companies: dict) -> bool:
     if pred["kind"] == "abstain":
         return False
     unit = q.get("answer_unit", "")
+    if pred["kind"] == "lines" and pred["value"]:
+        # the parts of a total (segments, products): the answer is the top line, by name or by value
+        name, value = pred["value"][0]
+        pred = {"kind": "number", "value": value} if isinstance(gold, (int, float)) else {"kind": "text", "value": name}
     if isinstance(gold, (int, float)) and not isinstance(gold, bool):
         if pred["kind"] != "number":
             return False

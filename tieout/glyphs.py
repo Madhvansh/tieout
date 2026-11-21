@@ -28,18 +28,19 @@ one program behind per-page wrappers, which pools the evidence.
 """
 from __future__ import annotations
 
+import itertools
 import math
 import re
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
-from typing import Callable, Iterable, Optional
+from typing import Callable, Optional
 
 from pdfminer.fontmetrics import FONT_METRICS
 from pdfminer.pdftypes import resolve1
 from pdfminer.psparser import PSLiteral
 
 CID = re.compile(r"^\(cid:(\d+)\)$")
-UNKNOWN = "�"
+UNKNOWN = "�"       # shown for a glyph the evidence could not settle
 TOLERANCE = 2            # width agreement, in 1/1000 em
 BIG = 10 ** 6            # width evidence always outranks vocabulary evidence
 MARGIN = 3.0             # the crib must win by this much (log2 word-frequency units)
@@ -156,7 +157,6 @@ def align(codes: list, weights: list, alpha: list, score: Callable[[int, int], f
     n, m = len(codes), len(alpha)
     ok = [[abs(codes[i] - alpha[j][1]) <= TOLERANCE and (allowed is None or alpha[j][0] in allowed[i])
            for j in range(m)] for i in range(n)]
-    NEG = float("-inf")
     fwd = [[0.0] * (m + 1) for _ in range(n + 1)]        # codes[:i] within alpha[:j]
     for i in range(1, n + 1):
         fwd[i][0] = fwd[i - 1][0]
@@ -173,9 +173,8 @@ def align(codes: list, weights: list, alpha: list, score: Callable[[int, int], f
             if ok[i][j]:
                 v = max(v, bwd[i + 1][j + 1] + weights[i] * BIG + score(i, j))
             bwd[i][j] = v
-    totals = [{j: fwd[i][j] + weights[i] * BIG + score(i, j) + bwd[i + 1][j + 1]
-               for j in range(m) if ok[i][j]} for i in range(n)]
-    return fwd[n][m], [{j: t for j, t in row.items() if t > NEG} for row in totals]
+    return fwd[n][m], [{j: fwd[i][j] + weights[i] * BIG + score(i, j) + bwd[i + 1][j + 1]
+                        for j in range(m) if ok[i][j]} for i in range(n)]
 
 
 def _width(unit: FontUnit, code: int) -> int:
@@ -197,11 +196,12 @@ def word_hits(unit: FontUnit, vocab: Counter) -> Callable[[int, str], float]:
     """Evidence for code = char from the known words it produces.
 
     A letter scores the words that contain it; a white-space character scores
-    the words it separates. Other open codes range over their candidates and
+    the words it separates. Words are cut at every code that may be white
+    space. Other open codes range over their candidates and
     the most common known reading counts. Each cipher word occurrence adds
     log2(1 + how often the crib prints that word), so "2025" outweighs "1012".
     """
-    blank = {c for c, (ch, _) in unit.decoded.items() if ch.isspace()}
+    blank = {c for c, ch in unit.candidates.items() if any(x.isspace() for x in ch)}
     by_code = defaultdict(list)
     for run, n in unit.runs.items():
         for c in set(run):
@@ -209,32 +209,20 @@ def word_hits(unit: FontUnit, vocab: Counter) -> Callable[[int, str], float]:
 
     def known(word: tuple, code: int, char: str) -> int:
         options = [[char] if c == code else sorted(unit.candidates.get(c) or {UNKNOWN}) for c in word]
-        combos = 1
-        for o in options:
-            combos *= len(o)
-        if combos > MAX_COMBOS:
+        if math.prod(len(o) for o in options) > MAX_COMBOS:
             return 0
-        return max(vocab.get("".join(p), 0) for p in _product(options))
+        return max(vocab.get("".join(p), 0) for p in itertools.product(*options))
 
     def hits(code: int, char: str) -> float:
         space = char.isspace()
         total = 0.0
         for run, n in by_code[code]:
-            for s, e in spans(run, blank | {code} if space else blank):
+            for s, e in spans(run, blank | {code} if space else blank - {code}):
                 touches = (e < len(run) and run[e] == code) or (s > 0 and run[s - 1] == code)
                 if touches if space else code in run[s:e]:
                     total += n * math.log2(1 + known(run[s:e], code, char))
         return total
     return hits
-
-
-def _product(options: list) -> Iterable:
-    if not options:
-        yield ()
-        return
-    for head in options[0]:
-        for tail in _product(options[1:]):
-            yield (head,) + tail
 
 
 def _table(unit: FontUnit) -> tuple:
@@ -253,10 +241,6 @@ def narrow(unit: FontUnit, evidence: str) -> None:
         unit.candidates[c] = {alpha[j][0] for j, t in totals[i].items() if t == total}
         if len(unit.candidates[c]) == 1 and c not in unit.decoded:
             unit.decoded[c] = (next(iter(unit.candidates[c])), evidence)
-
-
-def open_codes(unit: FontUnit) -> list:
-    return [c for c in sorted(unit.counts) if len(unit.candidates.get(c, ())) > 1]
 
 
 def solve(unit: FontUnit, vocab: Counter) -> None:
@@ -320,9 +304,9 @@ def settle_by(unit: FontUnit, judge: Callable[[dict], float], codes: list) -> No
     least two readings apart; otherwise it stays open."""
     scored = [(judge(dict(zip(codes, pick))), pick)
               for pick in monotone_choices([unit.candidates[c] for c in codes])]
-    if len(scored) < 2 or max(s for s, _ in scored) == min(s for s, _ in scored):
+    top = max((s for s, _ in scored), default=0)
+    if top == min((s for s, _ in scored), default=0):
         return
-    top = max(s for s, _ in scored)
     picks = [p for s, p in scored if s == top]
     for k, c in enumerate(codes):
         if len({p[k] for p in picks}) == 1:
@@ -335,14 +319,12 @@ def translate(text: str, unit: Optional[FontUnit], trial: Optional[dict] = None)
     code = cid_of(text)
     if code is None or unit is None:
         return text
-    if trial and code in trial:
-        return trial[code]
-    return unit.decoded.get(code, (UNKNOWN, ""))[0]
+    return (trial or {}).get(code) or unit.decoded.get(code, (UNKNOWN, ""))[0]
 
 
 def decode_chars(chars: list, keys: dict, page: int, units: dict,
                  unit: Optional[FontUnit] = None, trial: Optional[dict] = None) -> list:
-    """Copies of a page's chars with decoded text."""
+    """Copies of a page's chars with decoded text (trial applies to `unit` only)."""
     out = []
     for ch in chars:
         u = units.get(unit_key(keys, page, ch["fontname"]))
@@ -361,12 +343,11 @@ def decode_pages(pages: dict, keys: dict, vocab: Counter, judge: Optional[Callab
     units = collect(pages, keys)
     for unit in sorted(units.values(), key=lambda u: -sum(u.counts.values())):
         solve(unit, vocab)
-    if judge is not None:
-        for unit in units.values():
-            codes = open_codes(unit)
-            verdict = judge(units, unit, codes) if codes else None
-            if verdict:
-                settle_by(unit, verdict[1], verdict[0])
+    for unit in units.values() if judge else ():
+        codes = [c for c in sorted(unit.counts) if len(unit.candidates.get(c, ())) > 1]
+        verdict = judge(units, unit, codes) if codes else None
+        if verdict:
+            settle_by(unit, verdict[1], verdict[0])
     out = {i: decode_chars(chars, keys[i], i, units) for i, chars in pages.items()}
     return out, units
 
@@ -377,14 +358,12 @@ def summary(units: dict) -> dict:
     out = {"font_units": len(units), "glyph_codes": 0, "occurrences": 0, **{k: 0 for k in kinds}, "fonts": []}
     for u in sorted(units.values(), key=lambda u: -sum(u.counts.values())):
         row = {"font": u.name, "metrics": u.reference, "codes": len(u.counts),
-               "occurrences": sum(u.counts.values()), **{k: 0 for k in kinds}}
+               "occurrences": sum(u.counts.values()), **{k: 0 for k in kinds},
+               "undecoded_codes": sum(1 for c in u.counts if c not in u.decoded)}
         for c, n in u.counts.items():
             row[u.decoded[c][1] if c in u.decoded else "undecoded"] += n
-        row["undecoded_codes"] = sum(1 for c in u.counts if c not in u.decoded)
         out["fonts"].append(row)
-        out["glyph_codes"] += row["codes"]
-        out["occurrences"] += row["occurrences"]
-        for k in kinds:
-            out[k] += row[k]
+        for k in ("glyph_codes", "occurrences", *kinds):
+            out[k] += row["codes" if k == "glyph_codes" else k]
     out["share"] = {k: round(out[k] / out["occurrences"], 5) for k in kinds} if out["occurrences"] else {}
     return out
