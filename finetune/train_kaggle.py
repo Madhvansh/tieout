@@ -24,7 +24,8 @@ EVAL_BATCH = 16
 EVAL_MAX_NEW_TOKENS = 384
 EVAL_LIMIT = 0          # 0 = whole val set
 TRAIN_LIMIT = 0         # 0 = whole train set; e.g. 1500 for a fast smoke run
-GGUF_QUANT = "Q4_K_M"   # llama-quantize type; falls back to q8_0 from the converter if the build fails
+GGUF_QUANT = "Q4_K_M"   # llama-quantize type
+GGUF_ROUTE = "quantize" # "quantize": build llama-quantize (Linux/Kaggle); "f16": ship f16, run_local quantizes via `ollama create -q`
 MODEL_NAME = "planner"  # output file stem
 SEED = 435
 # ============================================================================
@@ -39,11 +40,12 @@ import sys
 import time
 
 T0 = time.time()
-WORK = "/kaggle/working"
-SCRATCH = "/tmp/ft"
-os.makedirs(SCRATCH, exist_ok=True)
+WORK = os.environ.get("FT_WORK", "/kaggle/working")      # env overrides let train_local.py reuse this file
+INPUT = os.environ.get("FT_INPUT", "/kaggle/input")
+SCRATCH = os.environ.get("FT_SCRATCH", "/tmp/ft")
+os.makedirs(SCRATCH, exist_ok=True); os.makedirs(WORK, exist_ok=True)
 LOG = open(os.path.join(WORK, "train_log.txt"), "w", buffering=1)
-METRICS = {"base_model": BASE_MODEL, "hparams": {k: v for k, v in globals().items() if k.isupper() and k not in ("WORK", "SCRATCH", "LOG", "T0")}}
+METRICS = {"base_model": BASE_MODEL, "hparams": {k: v for k, v in globals().items() if k.isupper() and k not in ("WORK", "SCRATCH", "INPUT", "LOG", "T0")}}
 
 
 def log(*a):
@@ -72,14 +74,14 @@ def save_metrics():
 
 # ---------------------------------------------------------------- data + env
 def find(name):
-    hits = sorted(glob.glob(f"/kaggle/input/**/{name}", recursive=True))
+    hits = sorted(glob.glob(os.path.join(INPUT, "**", name), recursive=True))
     if not hits:
-        raise FileNotFoundError(f"{name} not found under /kaggle/input")
+        raise FileNotFoundError(f"{name} not found under {INPUT}")
     return hits[0]
 
 
 # Optional overrides.json in the dataset (written by push_kaggle.py --set KEY=VALUE).
-_ov = glob.glob("/kaggle/input/**/overrides.json", recursive=True)
+_ov = glob.glob(os.path.join(INPUT, "**", "overrides.json"), recursive=True)
 if _ov:
     for _k, _v in json.load(open(_ov[0])).items():
         if _k not in METRICS["hparams"]:
@@ -89,11 +91,11 @@ if _ov:
 
 # Kaggle image (Nov 2026) ships torchao 0.10 next to peft 0.21, and peft refuses to build LoRA
 # layers when it sees a torchao older than 0.16. Nothing here uses torchao, so remove it first.
-sh(f"{sys.executable} -m pip uninstall -y -q torchao", check=False)
+sh(f'"{sys.executable}" -m pip uninstall -y -q torchao', check=False)
 try:
     import peft  # noqa: F401
 except ImportError:
-    sh(f"{sys.executable} -m pip install -q peft")
+    sh(f'"{sys.executable}" -m pip install -q peft')
 import torch
 import transformers
 import peft
@@ -142,6 +144,7 @@ enc = [encode(r) for r in train_rows]
 dropped = sum(len(e["input_ids"]) > MAX_LEN for e in enc)
 enc = [e for e in enc if len(e["input_ids"]) <= MAX_LEN]
 lens = [len(e["input_ids"]) for e in enc]
+plen = [e["labels"].index(next(v for v in e["labels"] if v != -100)) for e in enc]   # prompt length per row
 plan_lens = [sum(x != -100 for x in e["labels"]) for e in enc]
 METRICS["data"] = {"train_rows": len(enc), "dropped_over_max_len": dropped, "val_rows": len(val_rows),
                    "mean_seq_tokens": round(sum(lens) / len(lens), 1), "max_seq_tokens": max(lens),
@@ -202,8 +205,13 @@ for ep in range(EPOCHS):
     bl = batches(ep)
     for i, ids in enumerate(bl):
         x, y, a = collate(ids)
+        L = x.shape[1]
+        keep = L - min(plen[j] for j in ids) + 1                # covers every plan token in the batch
         with torch.autocast("cuda", dtype=DTYPE):
-            loss = model(input_ids=x, attention_mask=a, labels=y).loss / GRAD_ACCUM
+            logits = model(input_ids=x, attention_mask=a, logits_to_keep=keep).logits   # positions L-keep .. L-1
+        tgt = y[:, L - keep + 1:]                                # token at t+1 predicted from position t
+        loss = torch.nn.functional.cross_entropy(logits[:, :-1].float().reshape(-1, logits.shape[-1]),
+                                                 tgt.reshape(-1), ignore_index=-100) / GRAD_ACCUM
         scaler.scale(loss).backward()
         seen_tokens += int(a.sum())
         if (i + 1) % GRAD_ACCUM == 0 or i + 1 == len(bl):
@@ -274,26 +282,29 @@ log("merged ->", merged_dir)
 # ---------------------------------------------------------------- GGUF export
 t = time.time()
 lc = os.path.join(SCRATCH, "llama.cpp")
-sh(f"git clone --depth 1 https://github.com/ggml-org/llama.cpp {lc}")
+if not os.path.isdir(lc):
+    sh(f'git clone --depth 1 https://github.com/ggml-org/llama.cpp "{lc}"')
 METRICS["llama_cpp_commit"] = sh("git rev-parse --short HEAD", cwd=lc).stdout.strip()
-sh(f"{sys.executable} -m pip install -q {lc}/gguf-py sentencepiece protobuf")
+sh(f'"{sys.executable}" -m pip install -q "{lc}/gguf-py" sentencepiece protobuf')
 f16 = os.path.join(SCRATCH, f"{MODEL_NAME}-f16.gguf")
-sh(f"{sys.executable} {lc}/convert_hf_to_gguf.py {merged_dir} --outtype f16 --outfile {f16}")
+sh(f'"{sys.executable}" "{lc}/convert_hf_to_gguf.py" "{merged_dir}" --outtype f16 --outfile "{f16}"')
 gguf_name = f"{MODEL_NAME}-{GGUF_QUANT.lower()}.gguf"
 final = os.path.join(WORK, gguf_name)
 try:
+    if GGUF_ROUTE != "quantize":
+        raise RuntimeError("GGUF_ROUTE=f16")
     if sh("which cmake", check=False).returncode != 0:
-        sh(f"{sys.executable} -m pip install -q cmake")
-    sh(f"cmake -S {lc} -B {lc}/build -DGGML_CUDA=OFF -DLLAMA_CURL=OFF -DBUILD_SHARED_LIBS=OFF -DGGML_NATIVE=ON -DCMAKE_BUILD_TYPE=Release")
-    sh(f"cmake --build {lc}/build --target llama-quantize -j {os.cpu_count()}")
+        sh(f'"{sys.executable}" -m pip install -q cmake')
+    sh(f'cmake -S "{lc}" -B "{lc}/build" -DGGML_CUDA=OFF -DLLAMA_CURL=OFF -DBUILD_SHARED_LIBS=OFF -DGGML_NATIVE=ON -DCMAKE_BUILD_TYPE=Release')
+    sh(f'cmake --build "{lc}/build" --target llama-quantize -j {os.cpu_count()}')
     qbin = glob.glob(f"{lc}/build/**/llama-quantize", recursive=True)[0]
-    sh(f"{qbin} {f16} {final} {GGUF_QUANT}")
+    sh(f'"{qbin}" "{f16}" "{final}" {GGUF_QUANT}')
     METRICS["gguf_quant"] = GGUF_QUANT
-except Exception as e:  # fallback: pure-python q8_0, quantize locally with `ollama create -q q4_K_M`
-    log("llama-quantize route failed, falling back to q8_0:", e)
-    gguf_name = f"{MODEL_NAME}-q8_0.gguf"; final = os.path.join(WORK, gguf_name)
-    sh(f"{sys.executable} {lc}/convert_hf_to_gguf.py {merged_dir} --outtype q8_0 --outfile {final}")
-    METRICS["gguf_quant"] = "Q8_0 (fallback)"
+except Exception as e:  # fallback: ship f16; run_local.py quantizes with `ollama create -q q4_K_M`
+    log("llama-quantize route not used, shipping f16:", e)
+    gguf_name = f"{MODEL_NAME}-f16.gguf"; final = os.path.join(WORK, gguf_name)
+    import shutil; shutil.copy(f16, final)
+    METRICS["gguf_quant"] = "F16 (quantized to Q4_K_M by ollama create -q)"
 METRICS["gguf_file"] = gguf_name
 METRICS["gguf_mb"] = round(os.path.getsize(final) / 1e6, 1)
 METRICS["gguf_min"] = round((time.time() - t) / 60, 2)

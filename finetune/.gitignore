@@ -1,6 +1,7 @@
 out/
 out_*/
 .kaggle_stage/
+.local_stage/
 .venv/
 __pycache__/
 *.log

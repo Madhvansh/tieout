@@ -12,14 +12,14 @@
      "op": {
       "type": "string",
       "enum": [
-       "get",
-       "metric",
+       "attr",
        "calc",
        "change",
-       "rank",
-       "filter",
-       "attr",
        "count",
+       "filter",
+       "get",
+       "metric",
+       "rank",
        "restated"
       ]
      },
@@ -30,6 +30,9 @@
       "type": "string"
      },
      "metric": {
+      "type": "string"
+     },
+     "item": {
       "type": "string"
      },
      "over": {
@@ -63,6 +66,9 @@
         "type": "string"
        },
        "metric": {
+        "type": "string"
+       },
+       "attr": {
         "type": "string"
        }
       }
