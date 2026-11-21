@@ -1,0 +1,31 @@
+{
+ "model": "groq:openai/gpt-oss-20b@low",
+ "system": "You map financial concepts to rows of one company's financial statement.\nYou are shown the printed row labels with their section headings and structural roles. You are never\nshown values. For each concept listed, give the single row that reports it for the whole company\n(consolidated, attributable to the parent where the statement separates it), or null if no row\nreports it. Never a component of the concept, never a per-share row for an amount.\nAnswer as JSON, one key per concept: {\"<Concept>\": <row number or null>, ...}",
+ "user": "Company: Visa Inc. (V)\nStatement: IS\nConcepts:\nEPSDiluted: diluted earnings per share\nEPSBasic: basic earnings per share\nSharesDiluted: diluted weighted-average number of shares used for diluted earnings per share\nSharesBasic: basic weighted-average number of shares outstanding\nNoninterestIncome: total noninterest income (banks)\nNetInterestIncome: net interest income (banks)\nProvisionForCreditLosses: provision for credit losses (banks)\n\nRows (number: label (section) <role>):\n0: Net revenue  <operand> [already: Revenue]\n1: Personnel  (under: Operating Expenses)  <operand>\n2: Marketing  (under: Operating Expenses)  <operand>\n3: Network and processing  (under: Operating Expenses)  <operand>\n4: Professional fees  (under: Operating Expenses)  <operand>\n5: Depreciation and amortization  (under: Operating Expenses)  <operand>\n6: General and administrative  (under: Operating Expenses)  <operand> [already: GeneralAndAdministrative]\n7: Litigation provision  (under: Operating Expenses)  <operand>\n8: Total operating expenses  (under: Operating Expenses)  <total> [already: NoninterestExpense]\n9: Operating income  (under: Operating Expenses)  <total> [already: OperatingIncome]\n10: Interest expense  (under: Non-operating Income (Expense))  <operand> [already: InterestExpense]\n11: Investment income (expense) and other  (under: Non-operating Income (Expense))  <operand>\n12: Total non-operating income (expense)  (under: Non-operating Income (Expense))  <total>\n13: Income before income taxes  (under: Non-operating Income (Expense))  <total> [already: PretaxIncome]\n14: Income tax provision  (under: Non-operating Income (Expense))  <operand> [already: IncomeTax]\n15: Net income  (under: Non-operating Income (Expense))  <total> [already: ConsolidatedNetIncome]\n16: Class A common stock  (under: Basic Earnings Per Share)  <loose>\n17: Class B-1 common stock  (under: Basic Earnings Per Share)  <loose>\n18: Class B-2 common stock  (under: Basic Earnings Per Share)  <loose>\n19: Class B-3 common stock(1)  (under: Basic Earnings Per Share)  <loose>\n20: Class C common stock  (under: Basic Earnings Per Share)  <loose>\n21: Class A common stock  (under: Basic Weighted-average Shares Outstanding)  <loose>\n22: Class B-1 common stock  (under: Basic Weighted-average Shares Outstanding)  <loose>\n23: Class B-2 common stock  (under: Basic Weighted-average Shares Outstanding)  <loose>\n24: Class B-3 common stock(1)  (under: Basic Weighted-average Shares Outstanding)  <loose>\n25: Class C common stock  (under: Basic Weighted-average Shares Outstanding)  <loose>\n26: Class A common stock  (under: Diluted Earnings Per Share)  <loose>\n27: Class B-1 common stock  (under: Diluted Earnings Per Share)  <loose>\n28: Class B-2 common stock  (under: Diluted Earnings Per Share)  <loose>\n29: Class B-3 common stock(1)  (under: Diluted Earnings Per Share)  <loose>\n30: Class C common stock  (under: Diluted Earnings Per Share)  <loose>\n31: Class A common stock  (under: Diluted Weighted-average Shares Outstanding)  <loose>\n32: Class B-1 common stock  (under: Diluted Weighted-average Shares Outstanding)  <loose>\n33: Class B-2 common stock  (under: Diluted Weighted-average Shares Outstanding)  <loose>\n34: Class B-3 common stock(1)  (under: Diluted Weighted-average Shares Outstanding)  <loose>\n35: Class C common stock  (under: Diluted Weighted-average Shares Outstanding)  <loose>",
+ "answer": {
+  "EPSDiluted": null,
+  "EPSBasic": null,
+  "SharesDiluted": [
+   31,
+   32,
+   33,
+   34,
+   35
+  ],
+  "SharesBasic": [
+   21,
+   22,
+   23,
+   24,
+   25
+  ],
+  "NoninterestIncome": 12,
+  "NetInterestIncome": null,
+  "ProvisionForCreditLosses": null
+ },
+ "seconds": 1.06,
+ "usage": {
+  "in": 1104,
+  "out": 416
+ }
+}

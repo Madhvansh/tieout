@@ -25,13 +25,13 @@ import pathlib
 import re
 import time
 
-from tieout.concepts import concept_defs
+from tieout.concepts import concept_defs, norm_label
 from tieout.execute import concept_words
 from tieout.graph import Graph
 from tieout.link import candidates, load_links, store
 from tieout.living import (ABSENT, SAYS, apply_entry, closure, gate, latest_doc, load_learned, propose_rows,
                            row_table, save_entry)
-from tieout.llm import DailyLimit
+from tieout.llm import CALLS, DailyLimit
 
 logging.getLogger("pdfminer").setLevel(logging.ERROR)
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -39,6 +39,11 @@ BANK_ONLY = {"NetInterestIncome", "ProvisionForCreditLosses", "NoninterestExpens
 NOT_FOR_BANKS = {"GrossProfit", "CostOfRevenue", "Inventory", "TotalCurrentAssets", "TotalCurrentLiabilities",
                  "ResearchAndDevelopment", "SellingGeneralAdmin", "SalesAndMarketing", "GeneralAndAdministrative"}
 CLOSED = 0.80
+# Every US public company prints these on the face of its statements (GAAP requires earnings per
+# share and an equity account for retained earnings, whatever its name), so they are never "absent":
+# an unbound one is a gap in the reading, not a fact about the company.
+NEVER_ABSENT = {"EPSBasic", "EPSDiluted", "SharesBasic", "SharesDiluted", "RetainedEarnings", "NetIncome",
+                "Revenue", "TotalAssets", "Cash", "OperatingCashFlow", "PretaxIncome", "IncomeTax"}
 
 
 def unbound(g: Graph, ticker: str) -> dict:
@@ -84,7 +89,7 @@ def main():
                 continue
             for kind, concepts in sorted(unbound(g, t).items()):
                 asked = [c for c in concepts if applicable(g, t, c)]
-                t0 = time.time()
+                t0, live_before = time.time(), CALLS["live"]
                 try:
                     picks = propose_rows(g, t, kind, asked, model=a.model) if asked else {}
                 except DailyLimit:
@@ -108,19 +113,21 @@ def main():
                 verified, total = closure(g, doc, kind)
                 said_none = {c for c, row in picks.items() if row is None}       # asked, and the proposer found no row
                 for c in unbound(g, t).get(kind, []):
-                    if applicable(g, t, c) and c not in said_none:
-                        continue                      # proposed but held, or never asked: the gap stays open
+                    if c in NEVER_ABSENT or (applicable(g, t, c) and c not in said_none):
+                        continue                      # proposed but held, never asked, or always printed: stays open
                     words = concept_words(c)
                     fy = g.filings[doc]["fiscal_year"]
                     found = [x for phrase in (words, meaning(c))
                              for x in candidates(st, g, t, phrase, {fy, fy + "@end"}, fy) if x["covered"]]
-                    if total and verified / total >= CLOSED and not found:
+                    seed = [r for r in st.rows_by_ticker.get(t, [])                 # the concept's curated label rules
+                            if any(p.search(norm_label(r["label"])) for p in concept_defs()[c].labels)]
+                    if total and verified / total >= CLOSED and not found and not seed:
                         evidence = (f"its {kind} statement ({doc}) was read whole: {verified} of {total} amount rows sit "
                                     f"inside passing formulas, none of them is {c}, and no table row or sentence in "
                                     f"its filings carries the words '{words}'")
                         absent_lines.append({"ticker": t, "concept": c, "doc": doc, "evidence": evidence})
                         log["absent"].append({"ticker": t, "concept": c})
-                if asked:
+                if asked and CALLS["live"] > live_before:          # wait only after a live call, never a replay
                     time.sleep(max(0.0, gap - (time.time() - t0)))
             print(f"{t:5s} unbound before {before[t]:3d}  after {sum(len(v) for v in unbound(g, t).values()):3d}", flush=True)
     except DailyLimit as e:

@@ -1,0 +1,16 @@
+{
+ "model": "groq:openai/gpt-oss-20b@low",
+ "system": "You map financial concepts to rows of one company's financial statement.\nYou are shown the printed row labels with their section headings and structural roles. You are never\nshown values. For each concept listed, give the single row that reports it for the whole company\n(consolidated, attributable to the parent where the statement separates it), or null if no row\nreports it. Never a component of the concept, never a per-share row for an amount.\nAnswer as JSON, one key per concept: {\"<Concept>\": <row number or null>, ...}",
+ "user": "Company: Target Corp (TGT)\nStatement: BS\nConcepts:\nTotalLiabilities: total liabilities (only if printed as a line)\nAccountsReceivable: accounts receivable, net\nIntangibleAssets: intangible assets other than goodwill, net\nGoodwill: goodwill\n\nRows (number: label (section) <role>):\n0: Cash and cash equivalents  (under: Assets)  <operand> [already: Cash]\n1: Inventory  (under: Assets)  <operand> [already: Inventory]\n2: Other current assets  (under: Assets)  <operand>\n3: Total current assets  (under: Assets)  <total> [already: TotalCurrentAssets]\n4: Property and equipment, net  (under: Assets)  <operand> [already: PropertyPlantEquipment]\n5: Operating lease assets  (under: Assets)  <operand>\n6: Other noncurrent assets  (under: Assets)  <operand>\n7: Total assets  (under: Assets)  <total> [already: TotalAssets]\n8: Accounts payable  (under: Liabilities and shareholders' investment)  <operand> [already: AccountsPayable]\n9: Accrued and other current liabilities  (under: Liabilities and shareholders' investment)  <operand>\n10: Current portion of long-term debt and other borrowings  (under: Liabilities and shareholders' investment)  <operand>\n11: Total current liabilities  (under: Liabilities and shareholders' investment)  <total> [already: TotalCurrentLiabilities]\n12: Long-term debt and other borrowings  (under: Liabilities and shareholders' investment)  <operand> [already: LongTermDebt]\n13: Noncurrent operating lease liabilities  (under: Liabilities and shareholders' investment)  <operand>\n14: Deferred income taxes  (under: Liabilities and shareholders' investment)  <operand>\n15: Other noncurrent liabilities  (under: Liabilities and shareholders' investment)  <operand>\n16: Total noncurrent liabilities  (under: Liabilities and shareholders' investment)  <total>\n17: Common stock  (under: Shareholders' investment)  <operand>\n18: Additional paid-in capital  (under: Shareholders' investment)  <operand>\n19: Retained earnings  (under: Shareholders' investment)  <operand> [already: RetainedEarnings]\n20: Accumulated other comprehensive loss  (under: Shareholders' investment)  <operand>\n21: Total shareholders' investment  (under: Shareholders' investment)  <total> [already: TotalEquity]\n22: Total liabilities and shareholders' investment  (under: Shareholders' investment)  <total> [already: TotalLiabilitiesAndEquity]\n23: TARGET CORPORATION 2025 Form 10-K  (under: See accompanying Notes to Consolidated Financial S)  <loose>",
+ "answer": {
+  "TotalLiabilities": null,
+  "AccountsReceivable": null,
+  "IntangibleAssets": null,
+  "Goodwill": null
+ },
+ "seconds": 0.75,
+ "usage": {
+  "in": 823,
+  "out": 109
+ }
+}

@@ -1,0 +1,15 @@
+{
+ "model": "groq:openai/gpt-oss-20b@low",
+ "system": "You map financial concepts to rows of one company's financial statement.\nYou are shown the printed row labels with their section headings and structural roles. You are never\nshown values. For each concept listed, give the single row that reports it for the whole company\n(consolidated, attributable to the parent where the statement separates it), or null if no row\nreports it. Never a component of the concept, never a per-share row for an amount.\nAnswer as JSON, one key per concept: {\"<Concept>\": <row number or null>, ...}",
+ "user": "Company: The Home Depot Inc. (HD)\nStatement: IS\nConcepts:\nResearchAndDevelopment: research and development expense\nSalesAndMarketing: sales and marketing expense, where printed as its own line\nGeneralAndAdministrative: general and administrative expense, where printed as its own line\n\nRows (number: label (section) <role>):\n0: Net sales  <operand> [already: Revenue]\n1: Cost of sales  <operand> [already: CostOfRevenue]\n2: Gross profit  <total> [already: GrossProfit]\n3: Selling, general and administrative  (under: Operating expenses)  <operand> [already: SellingGeneralAdmin]\n4: Depreciation and amortization  (under: Operating expenses)  <operand>\n5: Total operating expenses  (under: Operating expenses)  <total>\n6: Operating income  (under: Operating expenses)  <total> [already: OperatingIncome]\n7: Interest income and other, net  (under: Interest and other (income) expense)  <operand>\n8: Interest expense  (under: Interest and other (income) expense)  <operand> [already: InterestExpense]\n9: Interest and other, net  (under: Interest and other (income) expense)  <total>\n10: Earnings before provision for income taxes  (under: Interest and other (income) expense)  <total> [already: PretaxIncome]\n11: Provision for income taxes  (under: Interest and other (income) expense)  <operand> [already: IncomeTax]\n12: Net earnings  (under: Interest and other (income) expense)  <total> [already: ConsolidatedNetIncome]\n14: Basic earnings per share  (under: Interest and other (income) expense)  <loose> [already: EPSBasic]\n16: Diluted earnings per share  (under: Interest and other (income) expense)  <loose> [already: EPSDiluted]",
+ "answer": {
+  "ResearchAndDevelopment": null,
+  "SalesAndMarketing": null,
+  "GeneralAndAdministrative": null
+ },
+ "seconds": 0.65,
+ "usage": {
+  "in": 628,
+  "out": 63
+ }
+}

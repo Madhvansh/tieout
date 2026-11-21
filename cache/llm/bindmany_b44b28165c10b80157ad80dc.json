@@ -1,0 +1,18 @@
+{
+ "model": "groq:openai/gpt-oss-20b@low",
+ "system": "You map financial concepts to rows of one company's financial statement.\nYou are shown the printed row labels with their section headings and structural roles. You are never\nshown values. For each concept listed, give the single row that reports it for the whole company\n(consolidated, attributable to the parent where the statement separates it), or null if no row\nreports it. Never a component of the concept, never a per-share row for an amount.\nAnswer as JSON, one key per concept: {\"<Concept>\": <row number or null>, ...}",
+ "user": "Company: Procter & Gamble Co. (PG)\nStatement: IS\nConcepts:\nGrossProfit: revenue minus cost of revenue, if printed as its own line\nResearchAndDevelopment: research and development expense\nSharesDiluted: diluted weighted-average number of shares used for diluted earnings per share\nSharesBasic: basic weighted-average number of shares outstanding\nSalesAndMarketing: sales and marketing expense, where printed as its own line\nGeneralAndAdministrative: general and administrative expense, where printed as its own line\n\nRows (number: label (section) <role>):\n0: NET SALES  <operand> [already: Revenue]\n1: Cost of products sold  <operand> [already: CostOfRevenue]\n2: Selling, general and administrative expense  <operand> [already: SellingGeneralAdmin]\n3: Indefinite-lived intangible asset impairment charge  <operand>\n4: OPERATING INCOME  <total> [already: OperatingIncome]\n5: Interest expense  <operand> [already: InterestExpense]\n6: Interest income  <operand>\n7: Other non-operating income/(expense), net  <operand>\n8: EARNINGS BEFORE INCOME TAXES  <total> [already: PretaxIncome]\n9: Income taxes  <operand> [already: IncomeTax]\n10: NET EARNINGS  <total> [already: ConsolidatedNetIncome]\n11: Less: Net earnings attributable to noncontrolling interests  <operand>\n12: NET EARNINGS ATTRIBUTABLE TO PROCTER & GAMBLE  <total> [already: NetIncome]\n13: Basic  (under: NET EARNINGS PER COMMON SHARE)  <loose>\n14: Diluted  (under: NET EARNINGS PER COMMON SHARE)  <loose>",
+ "answer": {
+  "GrossProfit": null,
+  "ResearchAndDevelopment": null,
+  "SharesDiluted": 14,
+  "SharesBasic": 13,
+  "SalesAndMarketing": null,
+  "GeneralAndAdministrative": 2
+ },
+ "seconds": 0.65,
+ "usage": {
+  "in": 581,
+  "out": 84
+ }
+}

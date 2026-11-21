@@ -1,0 +1,2274 @@
+{
+ "proposals": [
+  {
+   "ticker": "AAPL",
+   "concept": "Goodwill",
+   "state": "proposed",
+   "label": "Intangible assets, net",
+   "objections": [
+    "row is already bound to IntangibleAssets"
+   ]
+  },
+  {
+   "ticker": "AAPL",
+   "concept": "GeneralAndAdministrative",
+   "state": "proposed",
+   "label": "Selling, general and administrative",
+   "objections": [
+    "row is already bound to SellingGeneralAdmin"
+   ]
+  },
+  {
+   "ticker": "ADBE",
+   "concept": "IntangibleAssets",
+   "state": "active",
+   "label": "Other intangibles, net",
+   "objections": []
+  },
+  {
+   "ticker": "ADBE",
+   "concept": "SellingGeneralAdmin",
+   "state": "proposed",
+   "label": "General and administrative",
+   "objections": [
+    "row is already bound to GeneralAndAdministrative"
+   ]
+  },
+  {
+   "ticker": "ADBE",
+   "concept": "SharesDiluted",
+   "state": "proposed",
+   "label": "Shares used to compute diluted net income per share",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "ADBE",
+   "concept": "SharesBasic",
+   "state": "proposed",
+   "label": "Shares used to compute basic net income per share",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "AMD",
+   "concept": "IntangibleAssets",
+   "state": "proposed",
+   "label": "Acquisition-related intangibles, net",
+   "objections": [
+    "the heading names the concept and this is one of 12 lines under it; the concept is their total"
+   ]
+  },
+  {
+   "ticker": "AMZN",
+   "concept": "SellingGeneralAdmin",
+   "state": "proposed",
+   "label": "General and administrative",
+   "objections": [
+    "row is already bound to GeneralAndAdministrative"
+   ]
+  },
+  {
+   "ticker": "AXP",
+   "concept": "AccountsReceivable",
+   "state": "active",
+   "label": "Card Member receivables (includes gross receivables available to settle obligations of a consolidated variable interest entity: 2025, $5,659; 2024, $3,927), less reserves for credit losses: 2025, $180; 2024, $171",
+   "objections": []
+  },
+  {
+   "ticker": "AXP",
+   "concept": "PropertyPlantEquipment",
+   "state": "active",
+   "label": "Premises and equipment, less accumulated depreciation and amortization: 2025, $12,039; 2024, $10,739",
+   "objections": []
+  },
+  {
+   "ticker": "AXP",
+   "concept": "Loans",
+   "state": "active",
+   "label": "Card Member loans (includes gross loans available to settle obligations of a consolidated variable interest entity: 2025, $27,719; 2024, $28,278), less reserves for credit losses: 2025, $5,909; 2024, $5,679",
+   "objections": []
+  },
+  {
+   "ticker": "AXP",
+   "concept": "OperatingIncome",
+   "state": "proposed",
+   "label": "Pretax income",
+   "objections": [
+    "row is already bound to PretaxIncome"
+   ]
+  },
+  {
+   "ticker": "BAC",
+   "concept": "AccountsReceivable",
+   "state": "proposed",
+   "label": "Customer and other receivables",
+   "objections": [
+    "the line also holds other items ('and other'), so it is broader than the concept"
+   ]
+  },
+  {
+   "ticker": "BAC",
+   "concept": "PropertyPlantEquipment",
+   "state": "active",
+   "label": "Premises and equipment, net",
+   "objections": []
+  },
+  {
+   "ticker": "BAC",
+   "concept": "OperatingIncome",
+   "state": "proposed",
+   "label": "Income before income taxes",
+   "objections": [
+    "row is already bound to PretaxIncome"
+   ]
+  },
+  {
+   "ticker": "BAC",
+   "concept": "EPSBasic",
+   "state": "proposed",
+   "label": "Earnings",
+   "objections": [
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "BAC",
+   "concept": "SharesDiluted",
+   "state": "proposed",
+   "label": "Average diluted common shares issued and outstanding",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "BAC",
+   "concept": "SharesBasic",
+   "state": "proposed",
+   "label": "Average common shares issued and outstanding",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "BLK",
+   "concept": "LongTermDebt",
+   "state": "active",
+   "label": "Borrowings",
+   "objections": []
+  },
+  {
+   "ticker": "BLK",
+   "concept": "SharesDiluted",
+   "state": "proposed",
+   "label": "Diluted (including Subco Units)",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "BLK",
+   "concept": "SharesBasic",
+   "state": "proposed",
+   "label": "Basic",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "C",
+   "concept": "Cash",
+   "state": "proposed",
+   "label": "Cash and due from banks (including segregated cash and other deposits)",
+   "objections": [
+    "the line also holds other items ('and other'), so it is broader than the concept"
+   ]
+  },
+  {
+   "ticker": "C",
+   "concept": "PropertyPlantEquipment",
+   "state": "active",
+   "label": "Premises and equipment, net of depreciation and amortization",
+   "objections": []
+  },
+  {
+   "ticker": "C",
+   "concept": "OperatingIncome",
+   "state": "proposed",
+   "label": "Income from continuing operations before income taxes",
+   "objections": [
+    "row is already bound to PretaxIncome"
+   ]
+  },
+  {
+   "ticker": "C",
+   "concept": "EPSDiluted",
+   "state": "proposed",
+   "label": "Net income",
+   "objections": [
+    "value is not covered by any check",
+    "the heading names the concept and this is one of 2 lines under it; the concept is their total"
+   ]
+  },
+  {
+   "ticker": "C",
+   "concept": "EPSBasic",
+   "state": "proposed",
+   "label": "Net income",
+   "objections": [
+    "value is not covered by any check",
+    "the heading names the concept and this is one of 2 lines under it; the concept is their total"
+   ]
+  },
+  {
+   "ticker": "CAT",
+   "concept": "AccountsReceivable",
+   "state": "proposed",
+   "label": "Receivables \u2013 trade and other",
+   "objections": [
+    "the line also holds other items ('and other'), so it is broader than the concept"
+   ]
+  },
+  {
+   "ticker": "CAT",
+   "concept": "LongTermDebt",
+   "state": "proposed",
+   "label": "Machinery, Power & Energy",
+   "objections": [
+    "the heading names the concept and this is one of 12 lines under it; the concept is their total"
+   ]
+  },
+  {
+   "ticker": "CAT",
+   "concept": "EPSDiluted",
+   "state": "proposed",
+   "label": "Profit per common share \u2014 diluted 2",
+   "objections": [
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "CAT",
+   "concept": "EPSBasic",
+   "state": "proposed",
+   "label": "Profit per common share",
+   "objections": [
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "CAT",
+   "concept": "SharesDiluted",
+   "state": "proposed",
+   "label": "- Diluted 2",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "CAT",
+   "concept": "SharesBasic",
+   "state": "proposed",
+   "label": "- Basic",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "CAT",
+   "concept": "GeneralAndAdministrative",
+   "state": "proposed",
+   "label": "Selling, general and administrative expenses",
+   "objections": [
+    "row is already bound to SellingGeneralAdmin"
+   ]
+  },
+  {
+   "ticker": "COST",
+   "concept": "IntangibleAssets",
+   "state": "active",
+   "label": "Other long-term assets",
+   "objections": []
+  },
+  {
+   "ticker": "COST",
+   "concept": "GeneralAndAdministrative",
+   "state": "proposed",
+   "label": "Selling, general and administrative",
+   "objections": [
+    "row is already bound to SellingGeneralAdmin"
+   ]
+  },
+  {
+   "ticker": "CRM",
+   "concept": "IntangibleAssets",
+   "state": "active",
+   "label": "Intangible assets acquired through business combinations, net",
+   "objections": []
+  },
+  {
+   "ticker": "CRM",
+   "concept": "AccountsPayable",
+   "state": "proposed",
+   "label": "Accounts payable, accrued expenses and other liabilities",
+   "objections": [
+    "the line also holds other items ('and other'), so it is broader than the concept"
+   ]
+  },
+  {
+   "ticker": "CRM",
+   "concept": "SellingGeneralAdmin",
+   "state": "proposed",
+   "label": "General and administrative",
+   "objections": [
+    "row is already bound to GeneralAndAdministrative"
+   ]
+  },
+  {
+   "ticker": "CRM",
+   "concept": "SharesDiluted",
+   "state": "proposed",
+   "label": "Shares used in computing diluted net income per share",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "CRM",
+   "concept": "SharesBasic",
+   "state": "proposed",
+   "label": "Shares used in computing basic net income per share",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "CSCO",
+   "concept": "SellingGeneralAdmin",
+   "state": "proposed",
+   "label": "General and administrative.......................................................................",
+   "objections": [
+    "row is already bound to GeneralAndAdministrative"
+   ]
+  },
+  {
+   "ticker": "CSCO",
+   "concept": "SharesDiluted",
+   "state": "proposed",
+   "label": "Diluted......................................................................................................",
+   "objections": [
+    "unit is USD, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "CSCO",
+   "concept": "SharesBasic",
+   "state": "proposed",
+   "label": "Basic.........................................................................................................",
+   "objections": [
+    "unit is USD, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "CVX",
+   "concept": "PropertyPlantEquipment",
+   "state": "active",
+   "label": "Properties, plant and equipment, net",
+   "objections": []
+  },
+  {
+   "ticker": "CVX",
+   "concept": "CostOfRevenue",
+   "state": "active",
+   "label": "Purchased crude oil and products",
+   "objections": []
+  },
+  {
+   "ticker": "CVX",
+   "concept": "OperatingIncome",
+   "state": "proposed",
+   "label": "Income (Loss) Before Income Tax Expense",
+   "objections": [
+    "row is already bound to PretaxIncome"
+   ]
+  },
+  {
+   "ticker": "CVX",
+   "concept": "GeneralAndAdministrative",
+   "state": "proposed",
+   "label": "Selling, general and administrative expenses",
+   "objections": [
+    "row is already bound to SellingGeneralAdmin"
+   ]
+  },
+  {
+   "ticker": "F",
+   "concept": "AccountsReceivable",
+   "state": "proposed",
+   "label": "Trade and other receivables, less allowances of $84 and $108",
+   "objections": [
+    "the line also holds other items ('and other'), so it is broader than the concept"
+   ]
+  },
+  {
+   "ticker": "F",
+   "concept": "PropertyPlantEquipment",
+   "state": "active",
+   "label": "Net property (Note",
+   "objections": []
+  },
+  {
+   "ticker": "F",
+   "concept": "ConsolidatedNetIncome",
+   "state": "active",
+   "label": "Net income/(loss)",
+   "objections": []
+  },
+  {
+   "ticker": "F",
+   "concept": "EPSDiluted",
+   "state": "proposed",
+   "label": "EARNINGS/(LOSS) PER SHARE ATTRIBUTABLE TO FORD MOTOR COMPANY COMMON AND CLASS B STOCK (Note Basic income/(loss)",
+   "objections": [
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "F",
+   "concept": "InterestExpense",
+   "state": "active",
+   "label": "Interest expense on Company debt excluding Ford Credit",
+   "objections": []
+  },
+  {
+   "ticker": "F",
+   "concept": "GeneralAndAdministrative",
+   "state": "proposed",
+   "label": "Selling, administrative, and other expenses",
+   "objections": [
+    "row is already bound to SellingGeneralAdmin",
+    "the line also holds other items ('and other'), so it is broader than the concept"
+   ]
+  },
+  {
+   "ticker": "GM",
+   "concept": "PropertyPlantEquipment",
+   "state": "active",
+   "label": "Property, net (Note",
+   "objections": []
+  },
+  {
+   "ticker": "GM",
+   "concept": "AccountsPayable",
+   "state": "active",
+   "label": "Accounts payable (principally trade)",
+   "objections": []
+  },
+  {
+   "ticker": "GM",
+   "concept": "Goodwill",
+   "state": "active",
+   "label": "Goodwill and intangible assets, net (Note",
+   "objections": []
+  },
+  {
+   "ticker": "GM",
+   "concept": "CostOfRevenue",
+   "state": "proposed",
+   "label": "Automotive and other cost of sales",
+   "objections": [
+    "the line also holds other items ('and other'), so it is broader than the concept"
+   ]
+  },
+  {
+   "ticker": "GM",
+   "concept": "InterestExpense",
+   "state": "proposed",
+   "label": "Automotive interest expense",
+   "objections": [
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "GM",
+   "concept": "GeneralAndAdministrative",
+   "state": "proposed",
+   "label": "Automotive and other selling, general, and administrative expense",
+   "objections": [
+    "row is already bound to SellingGeneralAdmin",
+    "the line also holds other items ('and other'), so it is broader than the concept"
+   ]
+  },
+  {
+   "ticker": "GOOGL",
+   "concept": "IntangibleAssets",
+   "state": "active",
+   "label": "Other non-current assets",
+   "objections": []
+  },
+  {
+   "ticker": "GS",
+   "concept": "AccountsReceivable",
+   "state": "proposed",
+   "label": "Customer and other receivables (includes $315 and $23 at fair value)",
+   "objections": [
+    "the line also holds other items ('and other'), so it is broader than the concept"
+   ]
+  },
+  {
+   "ticker": "GS",
+   "concept": "AccountsPayable",
+   "state": "proposed",
+   "label": "Customer and other payables",
+   "objections": [
+    "the line also holds other items ('and other'), so it is broader than the concept"
+   ]
+  },
+  {
+   "ticker": "GS",
+   "concept": "OperatingIncome",
+   "state": "proposed",
+   "label": "Net earnings",
+   "objections": [
+    "row is already bound to NetIncome"
+   ]
+  },
+  {
+   "ticker": "GS",
+   "concept": "SharesDiluted",
+   "state": "proposed",
+   "label": "Diluted",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "GS",
+   "concept": "SharesBasic",
+   "state": "proposed",
+   "label": "Basic",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "JNJ",
+   "concept": "AccountsReceivable",
+   "state": "active",
+   "label": "Accounts receivable trade, less allowances $183 (2024, $167)",
+   "objections": []
+  },
+  {
+   "ticker": "JNJ",
+   "concept": "RetainedEarnings",
+   "state": "active",
+   "label": "Retained earnings and Additional-paid-in-capital",
+   "objections": []
+  },
+  {
+   "ticker": "JNJ",
+   "concept": "OperatingIncome",
+   "state": "proposed",
+   "label": "Earnings before provision for taxes on income",
+   "objections": [
+    "row is already bound to PretaxIncome"
+   ]
+  },
+  {
+   "ticker": "JNJ",
+   "concept": "EPSDiluted",
+   "state": "proposed",
+   "label": "Total net earnings per share - diluted",
+   "objections": [
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "JNJ",
+   "concept": "EPSBasic",
+   "state": "proposed",
+   "label": "Net earnings per share (Notes 1 and Continuing operations - basic",
+   "objections": [
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "JNJ",
+   "concept": "SharesBasic",
+   "state": "proposed",
+   "label": "Average shares outstanding (Notes 1 and Basic",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "JPM",
+   "concept": "AccountsReceivable",
+   "state": "active",
+   "label": "Accrued interest and accounts receivable",
+   "objections": []
+  },
+  {
+   "ticker": "JPM",
+   "concept": "PropertyPlantEquipment",
+   "state": "active",
+   "label": "Premises and equipment",
+   "objections": []
+  },
+  {
+   "ticker": "JPM",
+   "concept": "AccountsPayable",
+   "state": "proposed",
+   "label": "Accounts payable and other liabilities (included $6,660 and $5,893 at fair value)",
+   "objections": [
+    "the line also holds other items ('and other'), so it is broader than the concept"
+   ]
+  },
+  {
+   "ticker": "JPM",
+   "concept": "Goodwill",
+   "state": "proposed",
+   "label": "Goodwill, MSRs and other intangible assets",
+   "objections": [
+    "the line also holds other items ('and other'), so it is broader than the concept"
+   ]
+  },
+  {
+   "ticker": "JPM",
+   "concept": "OperatingIncome",
+   "state": "proposed",
+   "label": "Income before income tax expense",
+   "objections": [
+    "row is already bound to PretaxIncome"
+   ]
+  },
+  {
+   "ticker": "JPM",
+   "concept": "SharesDiluted",
+   "state": "proposed",
+   "label": "Weighted-average diluted shares",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "JPM",
+   "concept": "SharesBasic",
+   "state": "proposed",
+   "label": "Weighted-average basic shares",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "JPM",
+   "concept": "NoninterestIncome",
+   "state": "active",
+   "label": "Noninterest revenue",
+   "objections": []
+  },
+  {
+   "ticker": "KO",
+   "concept": "AccountsReceivable",
+   "state": "active",
+   "label": "Trade accounts receivable, less allowances of $495 and $506, respectively",
+   "objections": []
+  },
+  {
+   "ticker": "KO",
+   "concept": "IntangibleAssets",
+   "state": "proposed",
+   "label": "Trademarks with indefinite lives",
+   "objections": [
+    "the heading names the concept and this is one of 16 lines under it; the concept is their total"
+   ]
+  },
+  {
+   "ticker": "KO",
+   "concept": "GeneralAndAdministrative",
+   "state": "proposed",
+   "label": "Selling, general and administrative expenses",
+   "objections": [
+    "row is already bound to SellingGeneralAdmin"
+   ]
+  },
+  {
+   "ticker": "MA",
+   "concept": "PropertyPlantEquipment",
+   "state": "active",
+   "label": "Property, equipment and right-of-use assets, net",
+   "objections": []
+  },
+  {
+   "ticker": "MCD",
+   "concept": "Cash",
+   "state": "active",
+   "label": "Cash and equivalents",
+   "objections": []
+  },
+  {
+   "ticker": "MCD",
+   "concept": "Inventory",
+   "state": "active",
+   "label": "Inventories, at cost, not in excess of market",
+   "objections": []
+  },
+  {
+   "ticker": "MCD",
+   "concept": "DividendsPaid",
+   "state": "active",
+   "label": "Common stock dividends",
+   "objections": []
+  },
+  {
+   "ticker": "MCD",
+   "concept": "ShareRepurchases",
+   "state": "active",
+   "label": "Treasury stock purchases",
+   "objections": []
+  },
+  {
+   "ticker": "MCD",
+   "concept": "CostOfRevenue",
+   "state": "proposed",
+   "label": "Total operating costs and expenses",
+   "objections": [
+    "revenue minus this row is operating income: it is all operating costs, not one of them"
+   ]
+  },
+  {
+   "ticker": "MCD",
+   "concept": "SellingGeneralAdmin",
+   "state": "proposed",
+   "label": "Total operating costs and expenses",
+   "objections": [
+    "revenue minus this row is operating income: it is all operating costs, not one of them",
+    "the heading names the concept and this is one of 10 lines under it; the concept is their total"
+   ]
+  },
+  {
+   "ticker": "MCD",
+   "concept": "EPSDiluted",
+   "state": "proposed",
+   "label": "Earnings per common share\ufffddiluted",
+   "objections": [
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "MCD",
+   "concept": "EPSBasic",
+   "state": "proposed",
+   "label": "Earnings per common share\ufffdbasic",
+   "objections": [
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "MCD",
+   "concept": "SharesDiluted",
+   "state": "proposed",
+   "label": "Weighted-average shares outstanding\ufffddiluted",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "MCD",
+   "concept": "SharesBasic",
+   "state": "proposed",
+   "label": "Weighted-average shares outstanding\ufffdbasic",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "MCD",
+   "concept": "InterestExpense",
+   "state": "active",
+   "label": "Interest expense-net of capitalized interest of $29, $22 and $14",
+   "objections": []
+  },
+  {
+   "ticker": "MCD",
+   "concept": "GeneralAndAdministrative",
+   "state": "proposed",
+   "label": "Total operating costs and expenses",
+   "objections": [
+    "revenue minus this row is operating income: it is all operating costs, not one of them",
+    "the heading names the concept and this is one of 10 lines under it; the concept is their total"
+   ]
+  },
+  {
+   "ticker": "META",
+   "concept": "IntangibleAssets",
+   "state": "active",
+   "label": "Other assets",
+   "objections": []
+  },
+  {
+   "ticker": "META",
+   "concept": "SellingGeneralAdmin",
+   "state": "proposed",
+   "label": "General and administrative",
+   "objections": [
+    "row is already bound to GeneralAndAdministrative"
+   ]
+  },
+  {
+   "ticker": "MRK",
+   "concept": "IntangibleAssets",
+   "state": "active",
+   "label": "Other Intangibles, Net",
+   "objections": []
+  },
+  {
+   "ticker": "MS",
+   "concept": "AccountsReceivable",
+   "state": "proposed",
+   "label": "Customer and other receivables",
+   "objections": [
+    "the line also holds other items ('and other'), so it is broader than the concept"
+   ]
+  },
+  {
+   "ticker": "MS",
+   "concept": "AccountsPayable",
+   "state": "proposed",
+   "label": "Customer and other payables",
+   "objections": [
+    "the line also holds other items ('and other'), so it is broader than the concept"
+   ]
+  },
+  {
+   "ticker": "MS",
+   "concept": "Loans",
+   "state": "proposed",
+   "label": "Held for investment (net of allowance for credit losses of $1,132 and $1,066)",
+   "objections": [
+    "the heading names the concept and this is one of 6 lines under it; the concept is their total"
+   ]
+  },
+  {
+   "ticker": "MS",
+   "concept": "LongTermDebt",
+   "state": "active",
+   "label": "Borrowings (includes $132,479 and $103,332 at fair value)",
+   "objections": []
+  },
+  {
+   "ticker": "MS",
+   "concept": "OperatingIncome",
+   "state": "proposed",
+   "label": "Income before provision for income taxes",
+   "objections": [
+    "row is already bound to PretaxIncome"
+   ]
+  },
+  {
+   "ticker": "MS",
+   "concept": "InterestExpense",
+   "state": "active",
+   "label": "Interest expense1",
+   "objections": []
+  },
+  {
+   "ticker": "MSFT",
+   "concept": "SellingGeneralAdmin",
+   "state": "proposed",
+   "label": "General and administrative",
+   "objections": [
+    "row is already bound to GeneralAndAdministrative"
+   ]
+  },
+  {
+   "ticker": "NKE",
+   "concept": "IntangibleAssets",
+   "state": "active",
+   "label": "Identifiable intangible assets, net",
+   "objections": []
+  },
+  {
+   "ticker": "NKE",
+   "concept": "RetainedEarnings",
+   "state": "active",
+   "label": "Retained earnings (deficit)",
+   "objections": []
+  },
+  {
+   "ticker": "NKE",
+   "concept": "SharesDiluted",
+   "state": "proposed",
+   "label": "Diluted",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "NKE",
+   "concept": "SharesBasic",
+   "state": "proposed",
+   "label": "Basic",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "NKE",
+   "concept": "InterestExpense",
+   "state": "active",
+   "label": "Interest (income) expense, net",
+   "objections": []
+  },
+  {
+   "ticker": "NVDA",
+   "concept": "GeneralAndAdministrative",
+   "state": "proposed",
+   "label": "Sales, general and administrative",
+   "objections": [
+    "row is already bound to SellingGeneralAdmin"
+   ]
+  },
+  {
+   "ticker": "ORCL",
+   "concept": "TotalLiabilities",
+   "state": "active",
+   "label": "Total non-current liabilities................................................................................................",
+   "objections": []
+  },
+  {
+   "ticker": "ORCL",
+   "concept": "IntangibleAssets",
+   "state": "active",
+   "label": "Other non-current assets......................................................................................................",
+   "objections": []
+  },
+  {
+   "ticker": "ORCL",
+   "concept": "SellingGeneralAdmin",
+   "state": "proposed",
+   "label": "General and administrative...................................................................",
+   "objections": [
+    "row is already bound to GeneralAndAdministrative"
+   ]
+  },
+  {
+   "ticker": "ORCL",
+   "concept": "SharesDiluted",
+   "state": "proposed",
+   "label": "Diluted ................................................................................................",
+   "objections": [
+    "unit is USD, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "ORCL",
+   "concept": "SharesBasic",
+   "state": "proposed",
+   "label": "Basic....................................................................................................",
+   "objections": [
+    "unit is USD, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "PEP",
+   "concept": "IntangibleAssets",
+   "state": "active",
+   "label": "Amortizable Intangible Assets, net",
+   "objections": []
+  },
+  {
+   "ticker": "PEP",
+   "concept": "AccountsPayable",
+   "state": "proposed",
+   "label": "Accounts payable and other current liabilities",
+   "objections": [
+    "the line also holds other items ('and other'), so it is broader than the concept"
+   ]
+  },
+  {
+   "ticker": "PEP",
+   "concept": "InterestExpense",
+   "state": "proposed",
+   "label": "Net interest expense and other",
+   "objections": [
+    "the line also holds other items ('and other'), so it is broader than the concept"
+   ]
+  },
+  {
+   "ticker": "PEP",
+   "concept": "SalesAndMarketing",
+   "state": "proposed",
+   "label": "Selling, general and administrative expenses",
+   "objections": [
+    "row is already bound to SellingGeneralAdmin"
+   ]
+  },
+  {
+   "ticker": "PEP",
+   "concept": "GeneralAndAdministrative",
+   "state": "proposed",
+   "label": "Selling, general and administrative expenses",
+   "objections": [
+    "row is already bound to SellingGeneralAdmin"
+   ]
+  },
+  {
+   "ticker": "PFE",
+   "concept": "IntangibleAssets",
+   "state": "active",
+   "label": "Identifiable intangible assets, net",
+   "objections": []
+  },
+  {
+   "ticker": "PFE",
+   "concept": "OperatingIncome",
+   "state": "active",
+   "label": "Income from continuing operations",
+   "objections": []
+  },
+  {
+   "ticker": "PFE",
+   "concept": "GeneralAndAdministrative",
+   "state": "proposed",
+   "label": "Selling, informational and administrative expenses(a)",
+   "objections": [
+    "row is already bound to SellingGeneralAdmin"
+   ]
+  },
+  {
+   "ticker": "PG",
+   "concept": "IntangibleAssets",
+   "state": "proposed",
+   "label": "TRADEMARKS AND OTHER INTANGIBLE ASSETS, NET",
+   "objections": [
+    "the line also holds other items ('and other'), so it is broader than the concept"
+   ]
+  },
+  {
+   "ticker": "PG",
+   "concept": "InvestingCashFlow",
+   "state": "active",
+   "label": "TOTAL INVESTING ACTIVITIES",
+   "objections": []
+  },
+  {
+   "ticker": "PG",
+   "concept": "SharesDiluted",
+   "state": "proposed",
+   "label": "Diluted",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "PG",
+   "concept": "SharesBasic",
+   "state": "proposed",
+   "label": "Basic",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "PG",
+   "concept": "GeneralAndAdministrative",
+   "state": "proposed",
+   "label": "Selling, general and administrative expense",
+   "objections": [
+    "row is already bound to SellingGeneralAdmin"
+   ]
+  },
+  {
+   "ticker": "TGT",
+   "concept": "SharesDiluted",
+   "state": "proposed",
+   "label": "Diluted",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "TGT",
+   "concept": "SharesBasic",
+   "state": "proposed",
+   "label": "Basic",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "TGT",
+   "concept": "InterestExpense",
+   "state": "active",
+   "label": "Net interest expense",
+   "objections": []
+  },
+  {
+   "ticker": "TGT",
+   "concept": "GeneralAndAdministrative",
+   "state": "proposed",
+   "label": "Selling, general, and administrative expenses",
+   "objections": [
+    "row is already bound to SellingGeneralAdmin"
+   ]
+  },
+  {
+   "ticker": "TSLA",
+   "concept": "IntangibleAssets",
+   "state": "active",
+   "label": "Other non-current assets",
+   "objections": []
+  },
+  {
+   "ticker": "TSLA",
+   "concept": "SalesAndMarketing",
+   "state": "proposed",
+   "label": "Selling, general and administrative",
+   "objections": [
+    "row is already bound to SellingGeneralAdmin"
+   ]
+  },
+  {
+   "ticker": "TSLA",
+   "concept": "GeneralAndAdministrative",
+   "state": "proposed",
+   "label": "Selling, general and administrative",
+   "objections": [
+    "row is already bound to SellingGeneralAdmin"
+   ]
+  },
+  {
+   "ticker": "UNH",
+   "concept": "PropertyPlantEquipment",
+   "state": "active",
+   "label": "Property, equipment and capitalized software, net of accumulated depreciation and amortization of $7,546 and $6,971.........................................................................................",
+   "objections": []
+  },
+  {
+   "ticker": "V",
+   "concept": "PropertyPlantEquipment",
+   "state": "active",
+   "label": "Property, equipment and technology, net",
+   "objections": []
+  },
+  {
+   "ticker": "V",
+   "concept": "RetainedEarnings",
+   "state": "proposed",
+   "label": "Accumulated income",
+   "objections": [
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "V",
+   "concept": "NoninterestIncome",
+   "state": "active",
+   "label": "Total non-operating income (expense)",
+   "objections": []
+  },
+  {
+   "ticker": "WFC",
+   "concept": "PropertyPlantEquipment",
+   "state": "active",
+   "label": "Premises and equipment, net",
+   "objections": []
+  },
+  {
+   "ticker": "WFC",
+   "concept": "OperatingIncome",
+   "state": "proposed",
+   "label": "Income before income tax expense",
+   "objections": [
+    "row is already bound to PretaxIncome"
+   ]
+  },
+  {
+   "ticker": "WFC",
+   "concept": "EPSBasic",
+   "state": "proposed",
+   "label": "Earnings per common share",
+   "objections": [
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "WFC",
+   "concept": "SharesDiluted",
+   "state": "proposed",
+   "label": "Diluted average common shares outstanding",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "WFC",
+   "concept": "SharesBasic",
+   "state": "proposed",
+   "label": "Average common shares outstanding",
+   "objections": [
+    "unit is USD/share, concept needs shares",
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "WMT",
+   "concept": "IntangibleAssets",
+   "state": "active",
+   "label": "Other long-term assets",
+   "objections": []
+  },
+  {
+   "ticker": "XOM",
+   "concept": "AccountsReceivable",
+   "state": "active",
+   "label": "Notes and accounts receivable \u2013 net",
+   "objections": []
+  },
+  {
+   "ticker": "XOM",
+   "concept": "IntangibleAssets",
+   "state": "active",
+   "label": "Other assets, including intangibles \u2013 net",
+   "objections": []
+  },
+  {
+   "ticker": "XOM",
+   "concept": "Inventory",
+   "state": "proposed",
+   "label": "Crude oil, products and merchandise",
+   "objections": [
+    "the heading names the concept and this is one of 8 lines under it; the concept is their total"
+   ]
+  },
+  {
+   "ticker": "XOM",
+   "concept": "CostOfRevenue",
+   "state": "proposed",
+   "label": "Total costs and other deductions",
+   "objections": [
+    "the line also holds other items ('and other'), so it is broader than the concept"
+   ]
+  },
+  {
+   "ticker": "XOM",
+   "concept": "OperatingIncome",
+   "state": "proposed",
+   "label": "Income (loss) before income taxes",
+   "objections": [
+    "row is already bound to PretaxIncome"
+   ]
+  },
+  {
+   "ticker": "XOM",
+   "concept": "EPSDiluted",
+   "state": "proposed",
+   "label": "Earnings (loss) per common share - assuming dilution (dollars)",
+   "objections": [
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "XOM",
+   "concept": "EPSBasic",
+   "state": "proposed",
+   "label": "Earnings (loss) per common share (dollars)",
+   "objections": [
+    "value is not covered by any check"
+   ]
+  },
+  {
+   "ticker": "XOM",
+   "concept": "GeneralAndAdministrative",
+   "state": "proposed",
+   "label": "Selling, general and administrative expenses",
+   "objections": [
+    "row is already bound to SellingGeneralAdmin"
+   ]
+  }
+ ],
+ "absent": [
+  {
+   "ticker": "AAPL",
+   "concept": "Loans"
+  },
+  {
+   "ticker": "AAPL",
+   "concept": "InterestExpense"
+  },
+  {
+   "ticker": "AAPL",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "AAPL",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "AAPL",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "ADBE",
+   "concept": "Inventory"
+  },
+  {
+   "ticker": "ADBE",
+   "concept": "DividendsPaid"
+  },
+  {
+   "ticker": "ADBE",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "ADBE",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "ADBE",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "AMD",
+   "concept": "DividendsPaid"
+  },
+  {
+   "ticker": "AMD",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "AMD",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "AMD",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "AMZN",
+   "concept": "DividendsPaid"
+  },
+  {
+   "ticker": "AMZN",
+   "concept": "ShareRepurchases"
+  },
+  {
+   "ticker": "AMZN",
+   "concept": "GrossProfit"
+  },
+  {
+   "ticker": "AMZN",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "AMZN",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "AMZN",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "AXP",
+   "concept": "TotalCurrentAssets"
+  },
+  {
+   "ticker": "AXP",
+   "concept": "TotalCurrentLiabilities"
+  },
+  {
+   "ticker": "AXP",
+   "concept": "Inventory"
+  },
+  {
+   "ticker": "AXP",
+   "concept": "CostOfRevenue"
+  },
+  {
+   "ticker": "AXP",
+   "concept": "GrossProfit"
+  },
+  {
+   "ticker": "AXP",
+   "concept": "ResearchAndDevelopment"
+  },
+  {
+   "ticker": "AXP",
+   "concept": "SellingGeneralAdmin"
+  },
+  {
+   "ticker": "AXP",
+   "concept": "GeneralAndAdministrative"
+  },
+  {
+   "ticker": "BAC",
+   "concept": "TotalCurrentLiabilities"
+  },
+  {
+   "ticker": "BAC",
+   "concept": "AccountsPayable"
+  },
+  {
+   "ticker": "BAC",
+   "concept": "CapitalExpenditures"
+  },
+  {
+   "ticker": "BAC",
+   "concept": "GrossProfit"
+  },
+  {
+   "ticker": "BAC",
+   "concept": "ResearchAndDevelopment"
+  },
+  {
+   "ticker": "BAC",
+   "concept": "SellingGeneralAdmin"
+  },
+  {
+   "ticker": "BAC",
+   "concept": "GeneralAndAdministrative"
+  },
+  {
+   "ticker": "BLK",
+   "concept": "Inventory"
+  },
+  {
+   "ticker": "BLK",
+   "concept": "Deposits"
+  },
+  {
+   "ticker": "BLK",
+   "concept": "GrossProfit"
+  },
+  {
+   "ticker": "BLK",
+   "concept": "ResearchAndDevelopment"
+  },
+  {
+   "ticker": "BLK",
+   "concept": "SellingGeneralAdmin"
+  },
+  {
+   "ticker": "BLK",
+   "concept": "SalesAndMarketing"
+  },
+  {
+   "ticker": "BLK",
+   "concept": "GeneralAndAdministrative"
+  },
+  {
+   "ticker": "BLK",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "BLK",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "C",
+   "concept": "TotalCurrentAssets"
+  },
+  {
+   "ticker": "C",
+   "concept": "TotalCurrentLiabilities"
+  },
+  {
+   "ticker": "C",
+   "concept": "AccountsReceivable"
+  },
+  {
+   "ticker": "C",
+   "concept": "AccountsPayable"
+  },
+  {
+   "ticker": "C",
+   "concept": "ResearchAndDevelopment"
+  },
+  {
+   "ticker": "C",
+   "concept": "SellingGeneralAdmin"
+  },
+  {
+   "ticker": "C",
+   "concept": "GeneralAndAdministrative"
+  },
+  {
+   "ticker": "CAT",
+   "concept": "GrossProfit"
+  },
+  {
+   "ticker": "CAT",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "CAT",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "COST",
+   "concept": "Loans"
+  },
+  {
+   "ticker": "COST",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "COST",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "COST",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "CRM",
+   "concept": "Inventory"
+  },
+  {
+   "ticker": "CSCO",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "CSCO",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "CVX",
+   "concept": "IntangibleAssets"
+  },
+  {
+   "ticker": "CVX",
+   "concept": "SalesAndMarketing"
+  },
+  {
+   "ticker": "CVX",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "CVX",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "F",
+   "concept": "GrossProfit"
+  },
+  {
+   "ticker": "F",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "F",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "GM",
+   "concept": "GrossProfit"
+  },
+  {
+   "ticker": "GM",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "GM",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "GM",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "GOOGL",
+   "concept": "Loans"
+  },
+  {
+   "ticker": "GOOGL",
+   "concept": "GrossProfit"
+  },
+  {
+   "ticker": "GOOGL",
+   "concept": "SellingGeneralAdmin"
+  },
+  {
+   "ticker": "GOOGL",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "GOOGL",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "GOOGL",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "GS",
+   "concept": "TotalCurrentLiabilities"
+  },
+  {
+   "ticker": "GS",
+   "concept": "PropertyPlantEquipment"
+  },
+  {
+   "ticker": "GS",
+   "concept": "Inventory"
+  },
+  {
+   "ticker": "GS",
+   "concept": "GrossProfit"
+  },
+  {
+   "ticker": "GS",
+   "concept": "ResearchAndDevelopment"
+  },
+  {
+   "ticker": "GS",
+   "concept": "SellingGeneralAdmin"
+  },
+  {
+   "ticker": "GS",
+   "concept": "GeneralAndAdministrative"
+  },
+  {
+   "ticker": "HD",
+   "concept": "Loans"
+  },
+  {
+   "ticker": "HD",
+   "concept": "Deposits"
+  },
+  {
+   "ticker": "HD",
+   "concept": "ResearchAndDevelopment"
+  },
+  {
+   "ticker": "HD",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "HD",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "HD",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "JNJ",
+   "concept": "SalesAndMarketing"
+  },
+  {
+   "ticker": "JNJ",
+   "concept": "GeneralAndAdministrative"
+  },
+  {
+   "ticker": "JNJ",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "JNJ",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "JNJ",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "JPM",
+   "concept": "TotalCurrentAssets"
+  },
+  {
+   "ticker": "JPM",
+   "concept": "TotalCurrentLiabilities"
+  },
+  {
+   "ticker": "JPM",
+   "concept": "Inventory"
+  },
+  {
+   "ticker": "JPM",
+   "concept": "CapitalExpenditures"
+  },
+  {
+   "ticker": "JPM",
+   "concept": "GrossProfit"
+  },
+  {
+   "ticker": "JPM",
+   "concept": "ResearchAndDevelopment"
+  },
+  {
+   "ticker": "JPM",
+   "concept": "SellingGeneralAdmin"
+  },
+  {
+   "ticker": "JPM",
+   "concept": "GeneralAndAdministrative"
+  },
+  {
+   "ticker": "KO",
+   "concept": "ResearchAndDevelopment"
+  },
+  {
+   "ticker": "KO",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "KO",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "KO",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "MA",
+   "concept": "Inventory"
+  },
+  {
+   "ticker": "MA",
+   "concept": "CostOfRevenue"
+  },
+  {
+   "ticker": "MA",
+   "concept": "GrossProfit"
+  },
+  {
+   "ticker": "MA",
+   "concept": "ResearchAndDevelopment"
+  },
+  {
+   "ticker": "MA",
+   "concept": "SellingGeneralAdmin"
+  },
+  {
+   "ticker": "MA",
+   "concept": "SalesAndMarketing"
+  },
+  {
+   "ticker": "MA",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "MA",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "MCD",
+   "concept": "GrossProfit"
+  },
+  {
+   "ticker": "MCD",
+   "concept": "ResearchAndDevelopment"
+  },
+  {
+   "ticker": "MCD",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "MCD",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "MCD",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "META",
+   "concept": "Loans"
+  },
+  {
+   "ticker": "META",
+   "concept": "Inventory"
+  },
+  {
+   "ticker": "META",
+   "concept": "GrossProfit"
+  },
+  {
+   "ticker": "META",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "META",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "META",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "MRK",
+   "concept": "Deposits"
+  },
+  {
+   "ticker": "MRK",
+   "concept": "DepreciationAmortization"
+  },
+  {
+   "ticker": "MRK",
+   "concept": "GrossProfit"
+  },
+  {
+   "ticker": "MRK",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "MRK",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "MRK",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "MS",
+   "concept": "TotalCurrentLiabilities"
+  },
+  {
+   "ticker": "MS",
+   "concept": "PropertyPlantEquipment"
+  },
+  {
+   "ticker": "MS",
+   "concept": "CostOfRevenue"
+  },
+  {
+   "ticker": "MS",
+   "concept": "GrossProfit"
+  },
+  {
+   "ticker": "MS",
+   "concept": "ResearchAndDevelopment"
+  },
+  {
+   "ticker": "MS",
+   "concept": "SellingGeneralAdmin"
+  },
+  {
+   "ticker": "MS",
+   "concept": "SalesAndMarketing"
+  },
+  {
+   "ticker": "MS",
+   "concept": "GeneralAndAdministrative"
+  },
+  {
+   "ticker": "MSFT",
+   "concept": "Loans"
+  },
+  {
+   "ticker": "MSFT",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "MSFT",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "MSFT",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "NKE",
+   "concept": "Loans"
+  },
+  {
+   "ticker": "NKE",
+   "concept": "GeneralAndAdministrative"
+  },
+  {
+   "ticker": "NKE",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "NKE",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "NKE",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "NVDA",
+   "concept": "Loans"
+  },
+  {
+   "ticker": "NVDA",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "NVDA",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "NVDA",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "ORCL",
+   "concept": "Inventory"
+  },
+  {
+   "ticker": "ORCL",
+   "concept": "DepreciationAmortization"
+  },
+  {
+   "ticker": "ORCL",
+   "concept": "GrossProfit"
+  },
+  {
+   "ticker": "ORCL",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "ORCL",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "ORCL",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "PEP",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "PEP",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "PEP",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "PFE",
+   "concept": "Loans"
+  },
+  {
+   "ticker": "PFE",
+   "concept": "SalesAndMarketing"
+  },
+  {
+   "ticker": "PFE",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "PFE",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "PG",
+   "concept": "Loans"
+  },
+  {
+   "ticker": "PG",
+   "concept": "Deposits"
+  },
+  {
+   "ticker": "PG",
+   "concept": "GrossProfit"
+  },
+  {
+   "ticker": "PG",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "PG",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "PG",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "TGT",
+   "concept": "IntangibleAssets"
+  },
+  {
+   "ticker": "TGT",
+   "concept": "Loans"
+  },
+  {
+   "ticker": "TGT",
+   "concept": "Deposits"
+  },
+  {
+   "ticker": "TGT",
+   "concept": "GrossProfit"
+  },
+  {
+   "ticker": "TGT",
+   "concept": "ResearchAndDevelopment"
+  },
+  {
+   "ticker": "TGT",
+   "concept": "SalesAndMarketing"
+  },
+  {
+   "ticker": "TGT",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "TGT",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "TGT",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "TSLA",
+   "concept": "DividendsPaid"
+  },
+  {
+   "ticker": "TSLA",
+   "concept": "ShareRepurchases"
+  },
+  {
+   "ticker": "TSLA",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "TSLA",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "TSLA",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "UNH",
+   "concept": "GrossProfit"
+  },
+  {
+   "ticker": "UNH",
+   "concept": "ResearchAndDevelopment"
+  },
+  {
+   "ticker": "UNH",
+   "concept": "SellingGeneralAdmin"
+  },
+  {
+   "ticker": "UNH",
+   "concept": "GeneralAndAdministrative"
+  },
+  {
+   "ticker": "UNH",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "UNH",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "UNH",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "V",
+   "concept": "Loans"
+  },
+  {
+   "ticker": "V",
+   "concept": "Inventory"
+  },
+  {
+   "ticker": "WFC",
+   "concept": "TotalCurrentAssets"
+  },
+  {
+   "ticker": "WFC",
+   "concept": "TotalCurrentLiabilities"
+  },
+  {
+   "ticker": "WFC",
+   "concept": "AccountsPayable"
+  },
+  {
+   "ticker": "WFC",
+   "concept": "CapitalExpenditures"
+  },
+  {
+   "ticker": "WFC",
+   "concept": "GrossProfit"
+  },
+  {
+   "ticker": "WFC",
+   "concept": "ResearchAndDevelopment"
+  },
+  {
+   "ticker": "WFC",
+   "concept": "SellingGeneralAdmin"
+  },
+  {
+   "ticker": "WFC",
+   "concept": "SalesAndMarketing"
+  },
+  {
+   "ticker": "WFC",
+   "concept": "GeneralAndAdministrative"
+  },
+  {
+   "ticker": "WMT",
+   "concept": "Loans"
+  },
+  {
+   "ticker": "WMT",
+   "concept": "InterestExpense"
+  },
+  {
+   "ticker": "WMT",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "WMT",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "WMT",
+   "concept": "NoninterestExpense"
+  },
+  {
+   "ticker": "XOM",
+   "concept": "GrossProfit"
+  },
+  {
+   "ticker": "XOM",
+   "concept": "SalesAndMarketing"
+  },
+  {
+   "ticker": "XOM",
+   "concept": "NoninterestIncome"
+  },
+  {
+   "ticker": "XOM",
+   "concept": "ProvisionForCreditLosses"
+  },
+  {
+   "ticker": "XOM",
+   "concept": "NoninterestExpense"
+  }
+ ],
+ "before": {
+  "AAPL": 10,
+  "ADBE": 12,
+  "AMD": 11,
+  "AMZN": 13,
+  "AXP": 15,
+  "BAC": 18,
+  "BLK": 17,
+  "C": 19,
+  "CAT": 18,
+  "COST": 12,
+  "CRM": 13,
+  "CSCO": 9,
+  "CVX": 19,
+  "F": 18,
+  "GM": 17,
+  "GOOGL": 13,
+  "GS": 17,
+  "HD": 9,
+  "JNJ": 15,
+  "JPM": 20,
+  "KO": 12,
+  "MA": 12,
+  "MCD": 23,
+  "META": 11,
+  "MRK": 18,
+  "MS": 16,
+  "MSFT": 8,
+  "NKE": 16,
+  "NVDA": 8,
+  "ORCL": 15,
+  "PEP": 13,
+  "PFE": 13,
+  "PG": 14,
+  "TGT": 17,
+  "TSLA": 12,
+  "UNH": 13,
+  "V": 19,
+  "WFC": 19,
+  "WMT": 14,
+  "XOM": 21
+ },
+ "after": {
+  "AAPL": 10,
+  "ADBE": 11,
+  "AMD": 11,
+  "AMZN": 13,
+  "AXP": 12,
+  "BAC": 17,
+  "BLK": 16,
+  "C": 18,
+  "CAT": 18,
+  "COST": 11,
+  "CRM": 12,
+  "CSCO": 9,
+  "CVX": 17,
+  "F": 15,
+  "GM": 14,
+  "GOOGL": 12,
+  "GS": 17,
+  "HD": 9,
+  "JNJ": 13,
+  "JPM": 17,
+  "KO": 11,
+  "MA": 11,
+  "MCD": 18,
+  "META": 10,
+  "MRK": 17,
+  "MS": 14,
+  "MSFT": 8,
+  "NKE": 13,
+  "NVDA": 8,
+  "ORCL": 13,
+  "PEP": 12,
+  "PFE": 11,
+  "PG": 13,
+  "TGT": 16,
+  "TSLA": 11,
+  "UNH": 12,
+  "V": 17,
+  "WFC": 18,
+  "WMT": 13,
+  "XOM": 19
+ },
+ "summary": {
+  "unbound_before": 589,
+  "unbound_after": 537,
+  "admitted": 52,
+  "held": 102,
+  "absent_recorded": 215
+ }
+}

@@ -1,0 +1,20 @@
+{
+ "model": "groq:openai/gpt-oss-20b@low",
+ "system": "You map financial concepts to rows of one company's financial statement.\nYou are shown the printed row labels with their section headings and structural roles. You are never\nshown values. For each concept listed, give the single row that reports it for the whole company\n(consolidated, attributable to the parent where the statement separates it), or null if no row\nreports it. Never a component of the concept, never a per-share row for an amount.\nAnswer as JSON, one key per concept: {\"<Concept>\": <row number or null>, ...}",
+ "user": "Company: Merck & Co. Inc. (MRK)\nStatement: IS\nConcepts:\nGrossProfit: revenue minus cost of revenue, if printed as its own line\nOperatingIncome: operating income / income from operations / earnings from operations\nEPSDiluted: diluted earnings per share\nSharesDiluted: diluted weighted-average number of shares used for diluted earnings per share\nSharesBasic: basic weighted-average number of shares outstanding\nInterestExpense: interest expense\nSalesAndMarketing: sales and marketing expense, where printed as its own line\nGeneralAndAdministrative: general and administrative expense, where printed as its own line\n\nRows (number: label (section) <role>):\n0: Sales  <operand> [already: Revenue]\n1: Cost of sales  (under: Costs, Expenses and Other)  <operand> [already: CostOfRevenue]\n2: Selling, general and administrative  (under: Costs, Expenses and Other)  <operand> [already: SellingGeneralAdmin]\n3: Research and development  (under: Costs, Expenses and Other)  <operand> [already: ResearchAndDevelopment]\n4: Restructuring costs  (under: Costs, Expenses and Other)  <operand>\n5: Other (income) expense, net  (under: Costs, Expenses and Other)  <operand>\n7: Income Before Taxes  (under: Costs, Expenses and Other)  <total> [already: PretaxIncome]\n8: Taxes on Income  (under: Costs, Expenses and Other)  <operand> [already: IncomeTax]\n9: Net Income  (under: Costs, Expenses and Other)  <total> [already: ConsolidatedNetIncome]\n10: Less: Net Income Attributable to Noncontrolling Interests  (under: Costs, Expenses and Other)  <operand>\n11: Net Income Attributable to Merck & Co., Inc.  (under: Costs, Expenses and Other)  <total> [already: NetIncome]\n12: Basic Earnings per Common Share Attributable to Merck & Co., Inc. Common Shareholders  (under: Costs, Expenses and Other)  <loose>\n13: Shareholders  (under: Earnings per Common Share Assuming Dilution Attrib)  <loose>",
+ "answer": {
+  "GrossProfit": null,
+  "OperatingIncome": null,
+  "EPSDiluted": null,
+  "SharesDiluted": null,
+  "SharesBasic": null,
+  "InterestExpense": null,
+  "SalesAndMarketing": null,
+  "GeneralAndAdministrative": null
+ },
+ "seconds": 0.84,
+ "usage": {
+  "in": 685,
+  "out": 107
+ }
+}

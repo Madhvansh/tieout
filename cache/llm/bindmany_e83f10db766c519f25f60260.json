@@ -1,0 +1,15 @@
+{
+ "model": "groq:openai/gpt-oss-20b@low",
+ "system": "You map financial concepts to rows of one company's financial statement.\nYou are shown the printed row labels with their section headings and structural roles. You are never\nshown values. For each concept listed, give the single row that reports it for the whole company\n(consolidated, attributable to the parent where the statement separates it), or null if no row\nreports it. Never a component of the concept, never a per-share row for an amount.\nAnswer as JSON, one key per concept: {\"<Concept>\": <row number or null>, ...}",
+ "user": "Company: Amazon.com Inc. (AMZN)\nStatement: IS\nConcepts:\nGrossProfit: revenue minus cost of revenue, if printed as its own line\nResearchAndDevelopment: research and development expense\nSellingGeneralAdmin: selling, general and administrative expense (one combined line)\n\nRows (number: label (section) <role>):\n0: Net product sales  <operand>\n1: Net service sales  <operand>\n2: Total net sales  <total> [already: Revenue]\n3: Cost of sales  (under: Operating expenses)  <operand> [already: CostOfRevenue]\n4: Fulfillment  (under: Operating expenses)  <operand>\n5: Technology and infrastructure  (under: Operating expenses)  <operand>\n6: Sales and marketing  (under: Operating expenses)  <operand> [already: SalesAndMarketing]\n7: General and administrative  (under: Operating expenses)  <operand> [already: GeneralAndAdministrative]\n8: Other operating expense (income), net  (under: Operating expenses)  <operand>\n9: Total operating expenses  (under: Operating expenses)  <total>\n10: Operating income  (under: Operating expenses)  <total> [already: OperatingIncome]\n11: Interest income  (under: Operating expenses)  <operand>\n12: Interest expense  (under: Operating expenses)  <operand> [already: InterestExpense]\n13: Other income (expense), net  (under: Operating expenses)  <operand>\n14: Total non-operating income  (under: Operating expenses)  <total>\n15: Income before income taxes  (under: Operating expenses)  <total> [already: PretaxIncome]\n16: Provision for income taxes  (under: Operating expenses)  <operand> [already: IncomeTax]\n17: Equity-method investment activity, net of tax  (under: Operating expenses)  <operand>\n18: Net income  (under: Operating expenses)  <total> [already: ConsolidatedNetIncome]\n19: Basic earnings per share  (under: Operating expenses)  <loose> [already: EPSBasic]\n20: Diluted earnings per share  (under: Operating expenses)  <loose> [already: EPSDiluted]",
+ "answer": {
+  "GrossProfit": null,
+  "ResearchAndDevelopment": null,
+  "SellingGeneralAdmin": 7
+ },
+ "seconds": 1.04,
+ "usage": {
+  "in": 686,
+  "out": 57
+ }
+}

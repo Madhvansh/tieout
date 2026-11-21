@@ -1,0 +1,16 @@
+{
+ "model": "groq:openai/gpt-oss-20b@low",
+ "system": "You map financial concepts to rows of one company's financial statement.\nYou are shown the printed row labels with their section headings and structural roles. You are never\nshown values. For each concept listed, give the single row that reports it for the whole company\n(consolidated, attributable to the parent where the statement separates it), or null if no row\nreports it. Never a component of the concept, never a per-share row for an amount.\nAnswer as JSON, one key per concept: {\"<Concept>\": <row number or null>, ...}",
+ "user": "Company: PepsiCo Inc. (PEP)\nStatement: IS\nConcepts:\nResearchAndDevelopment: research and development expense\nInterestExpense: interest expense\nSalesAndMarketing: sales and marketing expense, where printed as its own line\nGeneralAndAdministrative: general and administrative expense, where printed as its own line\n\nRows (number: label (section) <role>):\n0: Net Revenue  <operand> [already: Revenue]\n1: Cost of sales  <operand> [already: CostOfRevenue]\n2: Gross profit  <total> [already: GrossProfit]\n3: Selling, general and administrative expenses  <operand> [already: SellingGeneralAdmin]\n4: Impairment of intangible assets (see Notes 1 and  <operand>\n5: Operating Profit  <total> [already: OperatingIncome]\n6: Other pension and retiree medical benefits (expense)/income  <operand>\n7: Net interest expense and other  <operand>\n8: Income before income taxes  <total> [already: PretaxIncome]\n9: Provision for income taxes  <operand> [already: IncomeTax]\n10: Net income  <total> [already: ConsolidatedNetIncome]\n11: Less: Net income attributable to noncontrolling interests  <operand>\n12: Net Income Attributable to PepsiCo  <total> [already: NetIncome]\n13: Basic  (under: Net Income Attributable to PepsiCo per Common Shar)  <loose> [already: EPSBasic]\n14: Diluted  (under: Net Income Attributable to PepsiCo per Common Shar)  <loose> [already: EPSDiluted]",
+ "answer": {
+  "ResearchAndDevelopment": null,
+  "InterestExpense": 7,
+  "SalesAndMarketing": 3,
+  "GeneralAndAdministrative": 3
+ },
+ "seconds": 0.8,
+ "usage": {
+  "in": 559,
+  "out": 174
+ }
+}

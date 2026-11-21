@@ -1,0 +1,15 @@
+{
+ "model": "groq:openai/gpt-oss-20b@low",
+ "system": "You map financial concepts to rows of one company's financial statement.\nYou are shown the printed row labels with their section headings and structural roles. You are never\nshown values. For each concept listed, give the single row that reports it for the whole company\n(consolidated, attributable to the parent where the statement separates it), or null if no row\nreports it. Never a component of the concept, never a per-share row for an amount.\nAnswer as JSON, one key per concept: {\"<Concept>\": <row number or null>, ...}",
+ "user": "Company: The Coca-Cola Company (KO)\nStatement: IS\nConcepts:\nResearchAndDevelopment: research and development expense\nSalesAndMarketing: sales and marketing expense, where printed as its own line\nGeneralAndAdministrative: general and administrative expense, where printed as its own line\n\nRows (number: label (section) <role>):\n0: Net Operating Revenues  <operand> [already: Revenue]\n1: Cost of goods sold  <operand> [already: CostOfRevenue]\n2: Gross Profit  <total> [already: GrossProfit]\n3: Selling, general and administrative expenses  <operand> [already: SellingGeneralAdmin]\n4: Other operating charges  <operand>\n5: Operating Income  <total> [already: OperatingIncome]\n6: Interest income  <operand>\n7: Interest expense  <operand> [already: InterestExpense]\n8: Equity income (loss) \u2014 net  <operand>\n9: Other income (loss) \u2014 net  <operand>\n10: Income Before Income Taxes  <total> [already: PretaxIncome]\n11: Income taxes  <operand> [already: IncomeTax]\n12: Consolidated Net Income  <total> [already: ConsolidatedNetIncome]\n13: Less: Net income (loss) attributable to noncontrolling interests  <operand>\n14: Net Income Attributable to Shareowners of The Coca-Cola Company  <total> [already: NetIncome]\n15: Basic Net Income Per Share1  <loose> [already: EPSBasic]\n16: Diluted Net Income Per Share1  <loose> [already: EPSDiluted]",
+ "answer": {
+  "ResearchAndDevelopment": null,
+  "SalesAndMarketing": null,
+  "GeneralAndAdministrative": 3
+ },
+ "seconds": 0.57,
+ "usage": {
+  "in": 552,
+  "out": 75
+ }
+}

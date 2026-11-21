@@ -1,0 +1,23 @@
+{
+ "model": "groq:openai/gpt-oss-20b@low",
+ "system": "You map financial concepts to rows of one company's financial statement.\nYou are shown the printed row labels with their section headings and structural roles. You are never\nshown values. For each concept listed, give the single row that reports it for the whole company\n(consolidated, attributable to the parent where the statement separates it), or null if no row\nreports it. Never a component of the concept, never a per-share row for an amount.\nAnswer as JSON, one key per concept: {\"<Concept>\": <row number or null>, ...}",
+ "user": "Company: McDonald's Corp (MCD)\nStatement: IS\nConcepts:\nCostOfRevenue: total cost of sales / cost of revenue / cost of goods sold\nGrossProfit: revenue minus cost of revenue, if printed as its own line\nResearchAndDevelopment: research and development expense\nSellingGeneralAdmin: selling, general and administrative expense (one combined line)\nEPSDiluted: diluted earnings per share\nEPSBasic: basic earnings per share\nSharesDiluted: diluted weighted-average number of shares used for diluted earnings per share\nSharesBasic: basic weighted-average number of shares outstanding\nInterestExpense: interest expense\nSalesAndMarketing: sales and marketing expense, where printed as its own line\nGeneralAndAdministrative: general and administrative expense, where printed as its own line\n\nRows (number: label (section) <role>):\n0: Revenues from franchised restaurants  (under: REVENUES)  <operand>\n1: Sales by Company-owned and operated restaurants  (under: REVENUES)  <operand>\n2: Other revenues  (under: REVENUES)  <operand>\n3: Total revenues  (under: REVENUES)  <total> [already: Revenue]\n4: Franchised restaurants-occupancy expenses  (under: OPERATING COSTS AND EXPENSES)  <operand>\n5: Food & paper  (under: Company-owned and operated restaurant expenses)  <operand>\n6: Payroll & employee benefits  (under: Company-owned and operated restaurant expenses)  <operand>\n7: Occupancy & other operating expenses  (under: Company-owned and operated restaurant expenses)  <operand>\n8: Other restaurant expenses  (under: Company-owned and operated restaurant expenses)  <operand>\n9: Depreciation and amortization  (under: Selling, general & administrative expenses)  <operand>\n10: Other  (under: Selling, general & administrative expenses)  <operand>\n11: Other operating (income) expense, net  (under: Selling, general & administrative expenses)  <operand>\n12: Total operating costs and expenses  (under: Selling, general & administrative expenses)  <total>\n13: Operating income  (under: Selling, general & administrative expenses)  <total> [already: OperatingIncome]\n14: Interest expense-net of capitalized interest of $29, $22 and $14  (under: Selling, general & administrative expenses)  <operand>\n15: Nonoperating (income) expense, net  (under: Selling, general & administrative expenses)  <operand>\n16: Income before provision for income taxes  (under: Selling, general & administrative expenses)  <total> [already: PretaxIncome]\n17: Provision for income taxes  (under: Selling, general & administrative expenses)  <operand> [already: IncomeTax]\n18: Net income  (under: Selling, general & administrative expenses)  <total> [already: ConsolidatedNetIncome]\n19: Earnings per common share\ufffdbasic  (under: Selling, general & administrative expenses)  <loose>\n20: Earnings per common share\ufffddiluted  (under: Selling, general & administrative expenses)  <loose>\n21: Dividends declared per common share  (under: Selling, general & administrative expenses)  <loose>\n22: Weighted-average shares outstanding\ufffdbasic  (under: Selling, general & administrative expenses)  <loose>\n23: Weighted-average shares outstanding\ufffddiluted  (under: Selling, general & administrative expenses)  <loose>\n24: Corporation  (under: See Notes to Consolidated Financial Statements.)  <loose>",
+ "answer": {
+  "CostOfRevenue": 12,
+  "GrossProfit": null,
+  "ResearchAndDevelopment": null,
+  "SellingGeneralAdmin": 12,
+  "EPSDiluted": 20,
+  "EPSBasic": 19,
+  "SharesDiluted": 23,
+  "SharesBasic": 22,
+  "InterestExpense": 14,
+  "SalesAndMarketing": null,
+  "GeneralAndAdministrative": 12
+ },
+ "seconds": 0.95,
+ "usage": {
+  "in": 971,
+  "out": 267
+ }
+}

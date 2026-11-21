@@ -1,0 +1,14 @@
+{
+ "model": "groq:openai/gpt-oss-20b@low",
+ "system": "You map financial concepts to rows of one company's financial statement.\nYou are shown the printed row labels with their section headings and structural roles. You are never\nshown values. For each concept listed, give the single row that reports it for the whole company\n(consolidated, attributable to the parent where the statement separates it), or null if no row\nreports it. Never a component of the concept, never a per-share row for an amount.\nAnswer as JSON, one key per concept: {\"<Concept>\": <row number or null>, ...}",
+ "user": "Company: NVIDIA Corp (NVDA)\nStatement: IS\nConcepts:\nSalesAndMarketing: sales and marketing expense, where printed as its own line\nGeneralAndAdministrative: general and administrative expense, where printed as its own line\n\nRows (number: label (section) <role>):\n0: Revenue  <operand> [already: Revenue]\n1: Cost of revenue  <operand> [already: CostOfRevenue]\n2: Gross profit  <total> [already: GrossProfit]\n3: Research and development  (under: Operating expenses)  <operand> [already: ResearchAndDevelopment]\n4: Sales, general and administrative  (under: Operating expenses)  <operand> [already: SellingGeneralAdmin]\n5: Total operating expenses  (under: Operating expenses)  <total>\n6: Operating income  (under: Operating expenses)  <total> [already: OperatingIncome]\n7: Interest income  (under: Operating expenses)  <operand>\n8: Interest expense  (under: Operating expenses)  <operand> [already: InterestExpense]\n9: Other income, net  (under: Operating expenses)  <operand>\n10: Total other income, net  (under: Operating expenses)  <total>\n11: Income before income tax  (under: Operating expenses)  <total> [already: PretaxIncome]\n12: Income tax expense  (under: Operating expenses)  <operand> [already: IncomeTax]\n13: Net income  (under: Operating expenses)  <total> [already: ConsolidatedNetIncome]\n14: Basic  (under: Net income per share)  <loose> [already: EPSBasic]\n15: Diluted  (under: Net income per share)  <loose> [already: EPSDiluted]",
+ "answer": {
+  "SalesAndMarketing": null,
+  "GeneralAndAdministrative": 4
+ },
+ "seconds": 0.81,
+ "usage": {
+  "in": 588,
+  "out": 110
+ }
+}

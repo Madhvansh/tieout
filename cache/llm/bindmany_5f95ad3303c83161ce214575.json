@@ -1,0 +1,15 @@
+{
+ "model": "groq:openai/gpt-oss-20b@low",
+ "system": "You map financial concepts to rows of one company's financial statement.\nYou are shown the printed row labels with their section headings and structural roles. You are never\nshown values. For each concept listed, give the single row that reports it for the whole company\n(consolidated, attributable to the parent where the statement separates it), or null if no row\nreports it. Never a component of the concept, never a per-share row for an amount.\nAnswer as JSON, one key per concept: {\"<Concept>\": <row number or null>, ...}",
+ "user": "Company: Mastercard Inc. (MA)\nStatement: IS\nConcepts:\nNoninterestIncome: total noninterest income (banks)\nNetInterestIncome: net interest income (banks)\nProvisionForCreditLosses: provision for credit losses (banks)\n\nRows (number: label (section) <role>):\n0: Net Revenue  <operand> [already: Revenue]\n1: General and administrative  (under: Operating Expenses)  <operand> [already: GeneralAndAdministrative]\n2: Advertising and marketing  (under: Operating Expenses)  <operand>\n3: Depreciation and amortization  (under: Operating Expenses)  <operand>\n4: Provision for litigation  (under: Operating Expenses)  <operand>\n5: Total operating expenses  (under: Operating Expenses)  <total> [already: NoninterestExpense]\n6: Operating income  (under: Operating Expenses)  <total> [already: OperatingIncome]\n7: Investment income  (under: Other Income (Expense))  <operand>\n8: Gains (losses) on equity investments, net  (under: Other Income (Expense))  <operand>\n9: Interest expense  (under: Other Income (Expense))  <operand> [already: InterestExpense]\n10: Other income (expense), net  (under: Other Income (Expense))  <operand>\n11: Total other income (expense)  (under: Other Income (Expense))  <total>\n12: Income before income taxes  (under: Other Income (Expense))  <total> [already: PretaxIncome]\n13: Income tax expense  (under: Other Income (Expense))  <operand> [already: IncomeTax]\n14: Net Income  (under: Other Income (Expense))  <total> [already: ConsolidatedNetIncome]\n15: Basic Earnings per Share  (under: Other Income (Expense))  <loose> [already: EPSBasic]\n17: Diluted Earnings per Share  (under: Other Income (Expense))  <loose> [already: EPSDiluted]",
+ "answer": {
+  "NoninterestIncome": null,
+  "NetInterestIncome": null,
+  "ProvisionForCreditLosses": null
+ },
+ "seconds": 0.67,
+ "usage": {
+  "in": 642,
+  "out": 65
+ }
+}

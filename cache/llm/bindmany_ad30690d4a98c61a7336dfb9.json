@@ -1,0 +1,19 @@
+{
+ "model": "groq:openai/gpt-oss-20b@low",
+ "system": "You map financial concepts to rows of one company's financial statement.\nYou are shown the printed row labels with their section headings and structural roles. You are never\nshown values. For each concept listed, give the single row that reports it for the whole company\n(consolidated, attributable to the parent where the statement separates it), or null if no row\nreports it. Never a component of the concept, never a per-share row for an amount.\nAnswer as JSON, one key per concept: {\"<Concept>\": <row number or null>, ...}",
+ "user": "Company: NIKE Inc. (NKE)\nStatement: IS\nConcepts:\nResearchAndDevelopment: research and development expense\nOperatingIncome: operating income / income from operations / earnings from operations\nSharesDiluted: diluted weighted-average number of shares used for diluted earnings per share\nSharesBasic: basic weighted-average number of shares outstanding\nInterestExpense: interest expense\nSalesAndMarketing: sales and marketing expense, where printed as its own line\nGeneralAndAdministrative: general and administrative expense, where printed as its own line\n\nRows (number: label (section) <role>):\n0: Revenues  <operand> [already: Revenue]\n1: Cost of sales  <operand> [already: CostOfRevenue]\n2: Gross profit  <total> [already: GrossProfit]\n3: Demand creation expense  <operand>\n4: Operating overhead expense  <operand>\n5: Total selling and administrative expense  <total> [already: SellingGeneralAdmin]\n6: Interest (income) expense, net  <operand>\n7: Other (income) expense, net  <operand>\n8: Income before income taxes  <total> [already: PretaxIncome]\n9: Income tax expense  <operand> [already: IncomeTax]\n10: NET INCOME  <total> [already: ConsolidatedNetIncome]\n11: Basic  (under: Earnings per common share)  <loose>\n12: Diluted  (under: Earnings per common share)  <loose>\n13: Basic  (under: Weighted average common shares outstanding)  <loose>\n14: Diluted  (under: Weighted average common shares outstanding)  <loose>\n15: The accompanying Notes to the Consolidated Financial Statements are an integral part of th  (under: Weighted average common shares outstanding)  <loose>",
+ "answer": {
+  "ResearchAndDevelopment": null,
+  "OperatingIncome": null,
+  "SharesDiluted": 14,
+  "SharesBasic": 13,
+  "InterestExpense": 6,
+  "SalesAndMarketing": null,
+  "GeneralAndAdministrative": null
+ },
+ "seconds": 0.62,
+ "usage": {
+  "in": 590,
+  "out": 230
+ }
+}

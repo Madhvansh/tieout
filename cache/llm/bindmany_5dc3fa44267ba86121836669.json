@@ -1,0 +1,17 @@
+{
+ "model": "groq:openai/gpt-oss-20b@low",
+ "system": "You map financial concepts to rows of one company's financial statement.\nYou are shown the printed row labels with their section headings and structural roles. You are never\nshown values. For each concept listed, give the single row that reports it for the whole company\n(consolidated, attributable to the parent where the statement separates it), or null if no row\nreports it. Never a component of the concept, never a per-share row for an amount.\nAnswer as JSON, one key per concept: {\"<Concept>\": <row number or null>, ...}",
+ "user": "Company: Alphabet Inc. (GOOGL)\nStatement: IS\nConcepts:\nGrossProfit: revenue minus cost of revenue, if printed as its own line\nSellingGeneralAdmin: selling, general and administrative expense (one combined line)\nSharesDiluted: diluted weighted-average number of shares used for diluted earnings per share\nSharesBasic: basic weighted-average number of shares outstanding\nInterestExpense: interest expense\n\nRows (number: label (section) <role>):\n0: Revenues  <operand> [already: Revenue]\n1: Cost of revenues  (under: Costs and expenses)  <operand> [already: CostOfRevenue]\n2: Research and development  (under: Costs and expenses)  <operand> [already: ResearchAndDevelopment]\n3: Sales and marketing  (under: Costs and expenses)  <operand> [already: SalesAndMarketing]\n4: General and administrative  (under: Costs and expenses)  <operand> [already: GeneralAndAdministrative]\n5: Total costs and expenses  (under: Costs and expenses)  <total>\n6: Income from operations  (under: Costs and expenses)  <total> [already: OperatingIncome]\n7: Other income (expense), net  (under: Costs and expenses)  <operand>\n8: Income before income taxes  (under: Costs and expenses)  <total> [already: PretaxIncome]\n9: Provision for income taxes  (under: Costs and expenses)  <operand> [already: IncomeTax]\n10: Net income  (under: Costs and expenses)  <total> [already: ConsolidatedNetIncome]\n11: Basic net income per share (Note  (under: Costs and expenses)  <loose>\n12: Diluted net income per share (Note  (under: Costs and expenses)  <loose>",
+ "answer": {
+  "GrossProfit": null,
+  "SellingGeneralAdmin": null,
+  "SharesDiluted": null,
+  "SharesBasic": null,
+  "InterestExpense": null
+ },
+ "seconds": 0.7,
+ "usage": {
+  "in": 596,
+  "out": 119
+ }
+}

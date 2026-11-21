@@ -1,0 +1,16 @@
+{
+ "model": "groq:openai/gpt-oss-20b@low",
+ "system": "You map financial concepts to rows of one company's financial statement.\nYou are shown the printed row labels with their section headings and structural roles. You are never\nshown values. For each concept listed, give the single row that reports it for the whole company\n(consolidated, attributable to the parent where the statement separates it), or null if no row\nreports it. Never a component of the concept, never a per-share row for an amount.\nAnswer as JSON, one key per concept: {\"<Concept>\": <row number or null>, ...}",
+ "user": "Company: JPMorgan Chase & Co. (JPM)\nStatement: IS\nConcepts:\nOperatingIncome: operating income / income from operations / earnings from operations\nSharesDiluted: diluted weighted-average number of shares used for diluted earnings per share\nSharesBasic: basic weighted-average number of shares outstanding\nNoninterestIncome: total noninterest income (banks)\n\nRows (number: label (section) <role>):\n0: Investment banking fees  (under: Revenue)  <operand>\n1: Principal transactions  (under: Revenue)  <operand>\n2: Lending- and deposit-related fees  (under: Revenue)  <operand>\n3: Asset management fees  (under: Revenue)  <operand>\n4: Commissions and other fees  (under: Revenue)  <operand>\n5: Investment securities losses  (under: Revenue)  <operand>\n6: Mortgage fees and related income  (under: Revenue)  <operand>\n7: Card income  (under: Revenue)  <operand>\n8: Other income  (under: Revenue)  <operand>\n9: Noninterest revenue  (under: Revenue)  <total>\n10: Interest income  (under: Revenue)  <operand>\n11: Interest expense  (under: Revenue)  <operand> [already: InterestExpense]\n12: Net interest income  (under: Revenue)  <total> [already: NetInterestIncome]\n13: Total net revenue  (under: Revenue)  <total> [already: Revenue]\n14: Provision for credit losses  (under: Revenue)  <operand> [already: ProvisionForCreditLosses]\n15: Compensation expense  (under: Noninterest expense)  <operand>\n16: Occupancy expense  (under: Noninterest expense)  <operand>\n17: Technology, communications and equipment expense  (under: Noninterest expense)  <operand>\n18: Professional and outside services  (under: Noninterest expense)  <operand>\n19: Marketing  (under: Noninterest expense)  <operand>\n20: Other expense  (under: Noninterest expense)  <operand>\n21: Total noninterest expense  (under: Noninterest expense)  <total> [already: NoninterestExpense]\n22: Income before income tax expense  (under: Noninterest expense)  <total> [already: PretaxIncome]\n23: Income tax expense  (under: Noninterest expense)  <operand> [already: IncomeTax]\n24: Net income  (under: Noninterest expense)  <total> [already: ConsolidatedNetIncome]\n25: Net income applicable to common stockholders  (under: Noninterest expense)  <loose>\n26: Basic earnings per share  (under: Net income per common share data)  <loose>\n27: Diluted earnings per share  (under: Net income per common share data)  <loose>\n28: Weighted-average basic shares  (under: Net income per common share data)  <loose>\n29: Weighted-average diluted shares  (under: Net income per common share data)  <loose>",
+ "answer": {
+  "OperatingIncome": 22,
+  "SharesDiluted": 29,
+  "SharesBasic": 28,
+  "NoninterestIncome": 9
+ },
+ "seconds": 0.97,
+ "usage": {
+  "in": 864,
+  "out": 78
+ }
+}

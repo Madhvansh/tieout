@@ -121,6 +121,8 @@ def gate(g: Graph, doc: str, concept: str, row: int, rows: dict) -> tuple:
         objections.append(f"row is already bound to {taken[0].concept}")
     if concept in COST_PARTS and _is_all_costs(g, doc, d):
         objections.append("revenue minus this row is operating income: it is all operating costs, not one of them")
+    if re.search(r"\band other\b", d["label"], re.I) and not concept.lower().startswith("other"):
+        objections.append("the line also holds other items ('and other'), so it is broader than the concept")
     siblings = _one_of_several(concept, row, rows)
     if siblings:
         objections.append(f"the heading names the concept and this is one of {siblings} lines under it; "
