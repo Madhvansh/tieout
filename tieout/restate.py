@@ -34,6 +34,9 @@ term is tolerated when sums are compared.
 """
 from __future__ import annotations
 
+import gzip
+import json
+import pathlib
 import re
 from collections import defaultdict
 from difflib import SequenceMatcher
@@ -371,9 +374,18 @@ def _columns(page: dict) -> list:
     return [[w for w in words if (w.x0 + w.x1) / 2 < best[1]], [w for w in words if (w.x0 + w.x1) / 2 >= best[1]]]
 
 
-@lru_cache(maxsize=8)
-def _sentences(doc: str) -> tuple:
-    """(page, sentence) for every sentence of a filing, from the cached word boxes."""
+SENTENCES_PATH = pathlib.Path(__file__).resolve().parents[1] / "graph" / "restate_sentences.json.gz"
+
+
+def _tier(s: str) -> int:
+    """How plainly a sentence says prior figures changed: 4 strong, 2 medium, 1 weak, 0 not at all."""
+    if NOISE.search(s) or MODAL.search(s):
+        return 0
+    return 4 if STRONG.search(s) else 2 if MEDIUM.search(s) else 1 if WEAK.search(s) else 0
+
+
+def _page_sentences(doc: str) -> list:
+    """(page, sentence) for every sentence of a filing that says figures changed, from the word boxes."""
     from .pdfio import load_pages
     from .statements import page_lines
     out = []
@@ -382,9 +394,41 @@ def _sentences(doc: str) -> tuple:
                         for col in _columns(page) for ln in page_lines({**page, "words": col}))
         for s in re.split(r"(?<=[.;])\s+(?=[A-Z(])", text):
             s = s.strip()
-            if 30 <= len(s) <= 700 and len(re.findall(r"\d[\d,.]*", s)) < 12:
+            if 30 <= len(s) <= 700 and len(re.findall(r"\d[\d,.]*", s)) < 12 and _tier(s):
                 out.append((i + 1, s))
-    return tuple(out)
+    return out
+
+
+@lru_cache(maxsize=1)
+def _saved() -> dict:
+    """Sentences saved at build time, so a copy of the repository without the page caches still quotes them."""
+    if not SENTENCES_PATH.exists():
+        return {}
+    with gzip.open(SENTENCES_PATH, "rt", encoding="utf-8") as f:
+        return json.load(f)
+
+
+@lru_cache(maxsize=8)
+def _sentences(doc: str) -> tuple:
+    if doc in _saved():
+        return tuple((pg, s) for pg, s in _saved()[doc])
+    try:
+        return tuple(_page_sentences(doc))
+    except OSError:                                    # no page cache: answer without a quote
+        return ()
+
+
+def save_sentences(g, path: pathlib.Path = SENTENCES_PATH) -> int:
+    """Save the explaining sentences of every filing of a company with more than one filing."""
+    docs = defaultdict(list)
+    for doc, f in g.filings.items():
+        docs[f["ticker"]].append(doc)
+    data = {d: _page_sentences(d) for ds in docs.values() if len(ds) > 1 for d in ds}
+    with gzip.open(path, "wt", encoding="utf-8") as f:
+        json.dump(data, f)
+    _saved.cache_clear()
+    _sentences.cache_clear()
+    return sum(len(v) for v in data.values())
 
 
 def explanations(doc: str, page: int, labels: list, limit: int = 3) -> list:
@@ -397,11 +441,8 @@ def explanations(doc: str, page: int, labels: list, limit: int = 3) -> list:
     words = {w for lab in labels for w in re.findall(r"[a-z]{4,}", norm_label(lab)) if w not in STOP}
     hits = []
     for pg, s in _sentences(doc):
-        tier = 4 if STRONG.search(s) else 2 if MEDIUM.search(s) else 1 if WEAK.search(s) else 0
-        if not tier or NOISE.search(s) or MODAL.search(s):
-            continue
         named = sum(1 for w in words if re.search(rf"\b{w}", s, re.I))
-        hits.append(((-tier - min(named, 2), abs(pg - page)), pg, s))
+        hits.append(((-_tier(s) - min(named, 2), abs(pg - page)), pg, s))
     hits.sort(key=lambda h: h[0])
     return [{"doc": doc, "page": pg, "sentence": s} for _, pg, s in hits[:limit]]
 

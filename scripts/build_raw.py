@@ -12,6 +12,7 @@ from collections import Counter
 from tieout.graph import Graph
 from tieout.mentions import build_mentions, load_mentions, save_mentions
 from tieout.rawlayer import build_raw, load_raw, save_raw, search, summary
+from tieout.restate import save_sentences
 
 logging.getLogger("pdfminer").setLevel(logging.ERROR)
 
@@ -27,6 +28,7 @@ def main():
         mentions = [m for m in load_mentions() if m["doc"] not in docs] + mentions
     save_raw(rows)
     save_mentions(mentions)
+    print("sentences that explain changed figures, saved for a copy without page caches:", save_sentences(g))
     s = summary(rows)
     ok = sum(1 for r in rows for c in r["cells"] if c["ok"])
     print(f"rows {s['rows']}  cells {s['cells']}  verified cells {ok} ({ok / max(1, s['cells']):.1%})")
