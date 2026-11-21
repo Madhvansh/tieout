@@ -49,6 +49,13 @@ def answer(question: str, g: Graph, model: Optional[str] = None, allow_learning:
     res, learned = _execute(plan, g, ex, **learn_args)
     repaired = False
     misfit = shape_misfit(question, plan, res)
+    if planned_here and misfit and ("quarter" in misfit or "part of the year" in misfit):
+        fixed = fix_periods(question, plan)               # periods named in words are set without a model call
+        if fixed != plan:
+            res2, learned2 = _execute(fixed, g, ex, **learn_args)
+            learned += learned2
+            if res2.ok and not shape_misfit(question, fixed, res2):
+                res, plan, misfit, repaired = res2, fixed, "", True
     if planned_here and repair and (misfit or _repairable(res, plan)):
         problem = misfit or _problem(res, plan, errors)
         fixed, errs2 = _plan(question, g, model, offline, feedback={"plan": plan, "problem": problem})
@@ -136,6 +143,39 @@ def shape_misfit(question: str, plan: dict, res: Result) -> str:
         return ("the question asks which of two companies: rank over the two with k=2, which gives both values, "
                 "the winner and the gap")
     return ""
+
+
+_QWORD = {"first": 1, "1st": 1, "second": 2, "2nd": 2, "third": 3, "3rd": 3, "fourth": 4, "4th": 4}
+_MONTHS = {"three": 1, "six": 2, "nine": 3}
+
+
+def fix_periods(question: str, plan: dict) -> dict:
+    """Set the periods a question names in words: "the third quarter" is {"q": 3} with no year to date,
+    "the first nine months" is {"q": 3, "ytd": true}. Only periods that already name a year are touched."""
+    quarter, so_far = _QUARTER.search(question), _SO_FAR.search(question)
+    if quarter and not so_far:
+        word = (quarter.group(1) or "").lower()
+        q = _QWORD.get(word) or int(re.search(r"[1-4]", quarter.group(0)).group(0))
+        change = {"q": q, "ytd": None}
+    elif so_far:
+        m = re.search(r"\b(nine|six|three)\s+months\b", question, re.I)
+        change = {"q": _MONTHS[m.group(1).lower()] if m else 3, "ytd": True}
+    else:
+        return plan
+    steps = []
+    for s in plan.get("steps", []):
+        s = dict(s)
+        for key in ("period", "from", "to"):
+            p = s.get(key)
+            if isinstance(p, dict) and "fy" in p:
+                p = {**p, "q": change["q"]}
+                if change["ytd"]:
+                    p["ytd"] = True
+                else:
+                    p.pop("ytd", None)
+                s[key] = p
+        steps.append(s)
+    return {**plan, "steps": steps}
 
 
 def _repairable(res: Result, plan: dict) -> bool:

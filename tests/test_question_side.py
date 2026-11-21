@@ -104,3 +104,12 @@ def test_a_quarter_answered_with_the_year_or_the_year_to_date_is_a_misfit():
     assert shape_misfit("What operating income did Coca-Cola report for the third quarter of 2025?", ytd, res)
     assert shape_misfit("What operating income did Coca-Cola report for the third quarter of 2025?", q3, res) == ""
     assert shape_misfit("How much cash did Target generate in the first nine months of fiscal 2025?", year, res)
+
+
+def test_periods_named_in_words_are_set_without_a_model():
+    from tieout.ask import fix_periods
+    year = _plan({"op": "get", "company": "JNJ", "concept": "Revenue", "period": {"fy": 2025}})
+    assert fix_periods("What were J&J's sales in the fourth quarter of fiscal 2025?", year)["steps"][0]["period"] == {"fy": 2025, "q": 4}
+    ytd = _plan({"op": "get", "company": "KO", "concept": "OperatingIncome", "period": {"fy": 2025, "q": 3, "ytd": True}})
+    assert fix_periods("What operating income did Coca-Cola report for the third quarter of 2025?", ytd)["steps"][0]["period"] == {"fy": 2025, "q": 3}
+    assert fix_periods("How much cash in the first nine months of fiscal 2025?", year)["steps"][0]["period"] == {"fy": 2025, "q": 3, "ytd": True}
