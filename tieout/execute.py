@@ -50,6 +50,7 @@ class Result:
     notes: list = field(default_factory=list)
     tree: dict = field(default_factory=dict)
     missing: list = field(default_factory=list)
+    extra: dict = field(default_factory=dict)     # restated: {"first": v, "latest": v}
 
     @property
     def ok(self) -> bool:
@@ -408,7 +409,9 @@ class Executor:
             notes.append(f"{t} {s['concept']}: only one filing reports this period, so nothing to compare")
         return Result("number", last.value - first.value, first.unit, leaves, notes,
                       {"op": "restated", "what": f"{t} {s['concept']} latest minus first reported",
-                       "value": last.value - first.value, "children": [first.tree, last.tree]})
+                       "value": last.value - first.value, "children": [first.tree, last.tree]},
+                      extra={"first": first.value, "latest": last.value,
+                             "first_doc": first.leaves[0].doc, "latest_doc": last.leaves[0].doc})
 
 
 def _norm(x) -> str:
@@ -421,6 +424,12 @@ def render(r: Result) -> str:
         return "ABSTAIN: " + ("; ".join(r.notes) or "a needed fact is missing")
     if r.kind == "text":
         return str(r.value)
+    if r.extra.get("first") is not None:
+        a, b = r.extra["first"], r.extra["latest"]
+        if a == b:
+            return f"Not restated: both filings print {_fmt(a, r.unit)}"
+        return (f"Restated by {_fmt(b - a, r.unit)}: first reported {_fmt(a, r.unit)} ({r.extra['first_doc']}), "
+                f"latest {_fmt(b, r.unit)} ({r.extra['latest_doc']})")
     if r.kind == "companies":
         return ", ".join(f"{t} ({_fmt(v, r.unit)})" if not isinstance(v, str) else f"{t} ({v})" for t, v in r.value) or "none"
     return _fmt(r.value, r.unit)

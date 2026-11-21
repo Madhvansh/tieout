@@ -65,7 +65,7 @@ def strip_concept_layer(g: Graph) -> int:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--bench", default=str(ROOT / "benchmark" / "questions.jsonl"))
-    ap.add_argument("--oracle", action="store_true")
+    ap.add_argument("--oracle", default=None, help="JSON file of hand-written plans keyed by question id")
     ap.add_argument("--ablate", choices=["concepts", "derivations", "living", "checks"])
     ap.add_argument("--strict", action="store_true")
     ap.add_argument("--noise", type=float, default=0.0)
@@ -89,7 +89,7 @@ def main():
                   require_verified=a.strict)
     oracle = {}
     if a.oracle:
-        oracle = json.loads((ROOT / "benchmark" / "oracle_plans.json").read_text(encoding="utf-8"))
+        oracle = json.loads(pathlib.Path(a.oracle).read_text(encoding="utf-8"))
 
     def run(q):
         return answer(q["question"], g, model=a.model, question_id=q["id"], offline=a.offline,

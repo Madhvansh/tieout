@@ -31,7 +31,7 @@ KINDS = {
 NOT_PRIMARY = re.compile(
     r"comprehensive (income|loss|earnings)|stockholders|shareholders|shareowners|changes in (total )?equity|"
     r"parent company|schedule|supplement|quarterly|selected|pro forma|management|discussion|"
-    r"notes to|report of|index to|average balance|item 7", re.I)
+    r"notes to|report of|index to|average balance|item 7|information relating to|relating to the", re.I)
 OTHER_TITLE = re.compile(
     r"statements? of (consolidated )?(comprehensive|stockholders|shareholders|shareowners|changes in|"
     r"equity|redeemable|total equity)|comprehensive (income|loss|earnings)\b", re.I)

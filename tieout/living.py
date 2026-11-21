@@ -124,8 +124,10 @@ def gate(g: Graph, doc: str, concept: str, row: int, rows: dict) -> tuple:
     if s.get("ties_with_cf_first_row"):
         if _reappears(g, doc, d, "CF"):
             evidence.append("same values reappear on the cash-flow statement")
+        elif (via := _derived_from_cf_row(g, doc, d, rows)) is not None:
+            evidence.append(f"recovered formula derives it from '{via[:40]}', which reappears on the cash-flow statement")
         else:
-            objections.append("values do not reappear on the cash-flow statement")
+            objections.append("values neither reappear on the cash-flow statement nor derive from a row that does")
     prior = role_prior(g, concept)
     if prior == "total" and d["role"] != "total":
         objections.append("in other companies this concept is the total of a formula; here it is not")
@@ -134,6 +136,20 @@ def gate(g: Graph, doc: str, concept: str, row: int, rows: dict) -> tuple:
     elif prior:
         evidence.append(f"role agrees with other companies ({'total' if prior == 'total' else 'line item'})")
     return (not objections), evidence, objections
+
+
+def _derived_from_cf_row(g: Graph, doc: str, d: dict, rows: dict):
+    """Label of an operand of this row's formula whose values reappear on the cash-flow statement."""
+    ops = set()
+    for r in d["readings"]:
+        for cid in r.checks:
+            ch = g.checks[cid]
+            if ch.type == "SUM" and ch.status != "fail" and [r.id, "total"] in ch.members:
+                ops |= {g.readings[rid].row for rid, role in ch.members if role != "total"}
+    for row in ops:
+        if row in rows and _reappears(g, doc, rows[row], "CF"):
+            return rows[row]["label"]
+    return None
 
 
 def _reappears(g: Graph, doc: str, d: dict, other_kind: str) -> bool:

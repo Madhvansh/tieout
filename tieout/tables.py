@@ -190,17 +190,34 @@ def find_columns(lines: list, tol: float = 3.5, min_hits: int = 3) -> list:
 def _mostly_years(ln: list) -> bool:
     """True for a header line of years: "2025 2024 2023", also when a date
     such as "December 31" or "June 30" is printed on the same line."""
-    years, other = 0, 0
+    years, days, other, stub = 0, 0, 0, True
     for i, w in enumerate(ln):
         if not is_numeric(w.text):
             continue
         if YEAR_RE.match(w.text):
             years += 1
         elif i and ln[i - 1].text.lower().rstrip(".")[:3] in MONTH_ABBR and w.text.isdigit() and int(w.text) <= 31:
-            pass                                   # the day of a printed date
+            days += 1                              # the day of a printed date: "Year ended December 31"
         else:
             other += 1
-    return years > 0 and other == 0
+            stub = stub and len(w.text) <= 2
+    if (years > 0 or days > 0) and other == 0:
+        return True
+    # a year header whose last year is cut off at the page edge: "2025  2024  20"
+    return years >= 2 and other == 1 and stub
+
+
+def _note_columns(lines: list, cols: list) -> set:
+    """Indexes of columns that hold only note references: whole numbers below 100, never a year."""
+    seen: dict = {}
+    for ln in lines:
+        for w in ln:
+            if is_numeric(w.text) and not YEAR_RE.match(w.text):
+                ci = _col_of(w, cols)
+                if ci is not None:
+                    seen.setdefault(ci, []).append(w.text)
+    out = {ci for ci, texts in seen.items() if len(texts) >= 3 and all(re.fullmatch(r"\d{1,2}", t) for t in texts)}
+    return out if len(out) < len(cols) else set()
 
 
 def _col_of(w: Word, cols: list, tol: float = 4.5) -> Optional[int]:
@@ -249,7 +266,10 @@ def _parse_header(header_lines: list, cols: list, context: str = "") -> str:
             dated = bool(re.search(r"(19|20)\d\d|\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)", text, re.I))
             if dated and x1 - x0 < 110:
                 # a date or a year sits over exactly one column: the nearest one
-                near = min(range(len(cols)), key=lambda i: abs(centre - (bands[i][0] + bands[i][1]) / 2))
+                # Headers are right-aligned with the numbers or centred over them, so
+                # compare right edges and centres with the column's own values.
+                near = min(range(len(cols)), key=lambda i: min(abs(x1 - cols[i].x_right),
+                                                               abs(centre - (cols[i].x_right - 14))))
                 per_col[near].append(text)
             else:
                 hit = [i for i, (l, r) in enumerate(bands) if not (x1 < l or x0 > r)]
@@ -336,6 +356,17 @@ def build_table(doc_name: str, page_no: int, lines: list, title: str = "") -> Op
                 if ci is not None and w.x0 >= cols[ci].x_left - 45:
                     found[ci] = (w, parse_number(w.text))
         return found
+
+    # A "Note" column holds reference numbers (1, 12, 7), not values. Drop it:
+    # its tokens would otherwise shift the period headers onto the wrong columns.
+    note_cols = _note_columns(lines, cols)
+    if note_cols:
+        note_words = {id(w) for ln in lines for w in ln
+                      if is_numeric(w.text) and _col_of(w, cols) in note_cols}
+        lines = [[w for w in ln if id(w) not in note_words] for ln in lines]
+        lines = [ln for ln in lines if ln]
+        cols = [Column(i, c.x_right, c.x_left) for i, c in enumerate(c for c in cols if c.idx not in note_cols)]
+        label_limit = min(c.x_left for c in cols) - 4
 
     first_num = next((i for i, ln in enumerate(lines)
                       if cells_of(ln) and not _mostly_years(ln)), None)

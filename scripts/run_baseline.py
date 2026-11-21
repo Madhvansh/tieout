@@ -34,12 +34,29 @@ def scoring_pred(pred: dict, companies: dict) -> dict:
             "value": [[bench.company_to_ticker(n, companies) or bench._norm_text(n), v] for n, v in pred["value"]]}
 
 
+def _page_texts(pages: list) -> dict:
+    idx = index.load()
+    want = {(p["doc"], p["page"]) for p in pages}
+    return {(c["doc"], c["page"]): c["body"] for c in idx["chunks"] if (c["doc"], c["page"]) in want}
+
+
 def page_match(q: dict, pages: list) -> dict:
+    """Strict (b): gold (doc, page) among the k pages. Relaxed (b'), supplementary: the gold fact's
+    printed figure appears on a retrieved page of the same company, any filing, any page; this
+    mirrors fact_match, which also accepts the same number read from another page or filing."""
     got = {(p["doc"], p["page"]) for p in pages}
-    gold = [(gf["doc"], gf.get("page")) for gf in q.get("supporting_facts", []) or []]
+    gfs = q.get("supporting_facts", []) or []
+    gold = [(gf["doc"], gf.get("page")) for gf in gfs]
     gold_set = set(gold)
+    texts = _page_texts(pages)
+    relaxed = 0
+    for gf in gfs:
+        tick, printed = gf["doc"].split("_")[0], str(gf.get("printed", "")).strip()
+        if (gf["doc"], gf.get("page")) in got or (printed and any(
+                d.split("_")[0] == tick and printed in t for (d, _), t in texts.items())):
+            relaxed += 1
     return {"pages": len(got), "gold": len(gold), "recalled": sum(1 for g in gold if g in got),
-            "relevant_pages": sum(1 for p in got if p in gold_set)}
+            "relevant_pages": sum(1 for p in got if p in gold_set), "recalled_relaxed": relaxed}
 
 
 def page_scores(rows: list) -> dict:
@@ -56,6 +73,7 @@ def page_scores(rows: list) -> dict:
             "precision_micro": sum(m["relevant_pages"] for m in pm) / max(1, sum(m["pages"] for m in pm)),
             "recall_micro": sum(m["recalled"] for m in pm) / max(1, sum(m["gold"] for m in pm)),
             "all_gold_pages_retrieved": sum(1 for m in pm if m["recalled"] == m["gold"]) / len(pm),
+            "recall_relaxed_macro": sum(m["recalled_relaxed"] / m["gold"] for m in pm) / len(pm),
         }
     return out
 
@@ -113,10 +131,12 @@ def main() -> None:
         print(f"{t:13s} {s['n']:3d} {s['accuracy']:5.3f} {ci:>13s} {fmt(s['precision_macro'])} {fmt(s['recall_macro'])} "
               f"{fmt(s['precision_micro'])} {fmt(s['recall_micro'])} {s['abstained']:4d} {s['answered_accuracy']:7.3f}")
     print("\n(b) PAGE-LEVEL (retrieved = the k pages given to the LLM; answerable questions only)")
-    print(f"{'type':13s} {'n':>3s} {'P mac':>5s} {'R mac':>5s} {'P mic':>5s} {'R mic':>5s} {'all-gold':>8s}")
+    print(f"{'type':13s} {'n':>3s} {'P mac':>5s} {'R mac':>5s} {'P mic':>5s} {'R mic':>5s} {'all-gold':>8s} "
+          f"{'R relaxed mac':>13s}")
     for t, s in page_level.items():
         print(f"{t:13s} {s['n']:3d} {fmt(s['precision_macro'])} {fmt(s['recall_macro'])} {fmt(s['precision_micro'])} "
-              f"{fmt(s['recall_micro'])} {s['all_gold_pages_retrieved']:8.3f}")
+              f"{fmt(s['recall_micro'])} {s['all_gold_pages_retrieved']:8.3f} {fmt(s['recall_relaxed_macro']):>13s}")
+    print("  R relaxed (supplementary): gold figure printed on any retrieved page of the same company")
 
     result = {"system": "baseline (page BM25 + TF-IDF, RRF, LLM reads and computes)", "model": model,
               "benchmark": str(args.bench), "params": {"k": args.k, "page_budget_chars": ba.PAGE_BUDGET,

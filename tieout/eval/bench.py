@@ -82,6 +82,9 @@ def is_correct(q: dict, pred: dict, companies: dict) -> bool:
             return False
         tol = q.get("tolerance", 0.005) or 0.0
         v = pred["value"]
+        alt = pred.get("extra") or {}
+        if alt.get("first") is not None and v == 0 and gold != 0:
+            v = alt["latest"]                         # "not restated, both filings print X": X is the answer
         if abs(gold) < 1e-12:
             return abs(v) < 1e-9
         return abs(v - gold) <= max(tol, 1e-9) * abs(gold) or (unit == "USD" and abs(abs(v) - abs(gold)) <= max(tol, 1e-9) * abs(gold))
@@ -91,7 +94,7 @@ def is_correct(q: dict, pred: dict, companies: dict) -> bool:
             return False
         got = [t for t, _ in pred["value"]]
         return got[:len(want)] == want
-    if unit == "company":
+    if unit == "company" and company_to_ticker(gold, companies) is not None:
         want = company_to_ticker(gold, companies)
         if pred["kind"] == "companies":
             return bool(pred["value"]) and pred["value"][0][0] == want
@@ -190,7 +193,7 @@ def run_graph_system(questions: list, g, answer_fn: Callable, label: str = "tieo
         out = answer_fn(q)
         res = out["result"]
         retrieved = [{"ticker": lf.ticker, "value": lf.value, "doc": lf.doc, "page": lf.page} for lf in res.leaves]
-        pred = {"kind": res.kind, "value": res.value}
+        pred = {"kind": res.kind, "value": res.value, "extra": res.extra}
         rows.append({
             "id": q["id"], "type": q["type"], "question": q["question"], "gold": q.get("answer"),
             "answer": out["answer"], "correct": is_correct(q, pred, g.companies),

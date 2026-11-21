@@ -1,0 +1,317 @@
+{
+ "system": "baseline (page BM25 + TF-IDF, RRF, LLM reads and computes)",
+ "model": "ollama:phi4-mini",
+ "benchmark": "benchmark/questions.jsonl",
+ "params": {
+  "k": 8,
+  "page_budget_chars": 2400,
+  "bm25_k1": 1.5,
+  "bm25_b": 0.75,
+  "rrf_k": 60,
+  "rrf_depth": 200
+ },
+ "llm_calls": {
+  "live": 3,
+  "cached": 0,
+  "seconds": 20.94948387145996
+ },
+ "score_fact_level": {
+  "overall": {
+   "n": 3,
+   "correct": 0,
+   "accuracy": 0.0,
+   "accuracy_ci95": [
+    0.0,
+    0.5615
+   ],
+   "precision_macro": 0.0,
+   "recall_macro": 0.0,
+   "precision_micro": 0.0,
+   "recall_micro": 0.0,
+   "page_exact_share": 0.0,
+   "abstained": 0,
+   "answered_accuracy": 0.0
+  },
+  "single_fact": {
+   "n": 3,
+   "correct": 0,
+   "accuracy": 0.0,
+   "accuracy_ci95": [
+    0.0,
+    0.5615
+   ],
+   "precision_macro": 0.0,
+   "recall_macro": 0.0,
+   "precision_micro": 0.0,
+   "recall_micro": 0.0,
+   "page_exact_share": 0.0,
+   "abstained": 0,
+   "answered_accuracy": 0.0
+  }
+ },
+ "score_page_level": {
+  "overall": {
+   "n": 3,
+   "precision_macro": 0.041666666666666664,
+   "recall_macro": 0.3333333333333333,
+   "precision_micro": 0.041666666666666664,
+   "recall_micro": 0.3333333333333333,
+   "all_gold_pages_retrieved": 0.3333333333333333,
+   "recall_relaxed_macro": 0.6666666666666666
+  },
+  "single_fact": {
+   "n": 3,
+   "precision_macro": 0.041666666666666664,
+   "recall_macro": 0.3333333333333333,
+   "precision_micro": 0.041666666666666664,
+   "recall_micro": 0.3333333333333333,
+   "all_gold_pages_retrieved": 0.3333333333333333,
+   "recall_relaxed_macro": 0.6666666666666666
+  }
+ },
+ "rows": [
+  {
+   "id": "C01",
+   "type": "single_fact",
+   "question": "What was Apple's top line for fiscal 2026?",
+   "tags": [
+    "fiscal_year_trap"
+   ],
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 0,
+    "gold": 1,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 8,
+    "gold": 1,
+    "recalled": 0,
+    "relevant_pages": 0,
+    "recalled_relaxed": 0
+   },
+   "answer": "Cash paid for income taxes, net in 2026",
+   "pred": {
+    "kind": "number",
+    "value": 34888.0
+   },
+   "gold": "$478,834 million",
+   "gold_value": 478834000000,
+   "retrieved_pages": [
+    {
+     "doc": "AAPL_FY2026_10K",
+     "page": 4,
+     "score": 0.031778
+    },
+    {
+     "doc": "AAPL_FY2025_10K",
+     "page": 4,
+     "score": 0.031025
+    },
+    {
+     "doc": "AAPL_FY2026_10K",
+     "page": 117,
+     "score": 0.029572
+    },
+    {
+     "doc": "AAPL_FY2026_10K",
+     "page": 26,
+     "score": 0.027052
+    },
+    {
+     "doc": "AAPL_FY2026_10K",
+     "page": 40,
+     "score": 0.026882
+    },
+    {
+     "doc": "AAPL_FY2026_10K",
+     "page": 116,
+     "score": 0.026614
+    },
+    {
+     "doc": "AAPL_FY2026_10K",
+     "page": 50,
+     "score": 0.025625
+    },
+    {
+     "doc": "AAPL_FY2026_10K",
+     "page": 123,
+     "score": 0.024503
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "AAPL",
+     "doc": "AAPL_FY2026_10K",
+     "page": 7,
+     "value": 34888.0,
+     "label": "Cash paid for income taxes, net in 2026",
+     "in_context": false
+    }
+   ],
+   "seconds": 10.23,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline"
+  },
+  {
+   "id": "C03",
+   "type": "single_fact",
+   "question": "What net income did Costco report for fiscal 2026?",
+   "tags": [
+    "fiscal_year_trap"
+   ],
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 1,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 8,
+    "gold": 1,
+    "recalled": 1,
+    "relevant_pages": 1,
+    "recalled_relaxed": 1
+   },
+   "answer": "Net income",
+   "pred": {
+    "kind": "number",
+    "value": 9226000.0
+   },
+   "gold": "$9,226 million",
+   "gold_value": 9226000000,
+   "retrieved_pages": [
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 77,
+     "score": 0.030777
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 76,
+     "score": 0.03009
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 67,
+     "score": 0.029762
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 39,
+     "score": 0.028787
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 38,
+     "score": 0.02837
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 29,
+     "score": 0.027757
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 72,
+     "score": 0.02692
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 35,
+     "score": 0.026916
+    }
+   ],
+   "facts_used": [],
+   "seconds": 5.1,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline"
+  },
+  {
+   "id": "C04",
+   "type": "single_fact",
+   "question": "How much cash did Cisco generate from operations in fiscal 2026?",
+   "tags": [
+    "fiscal_year_trap"
+   ],
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 1,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 8,
+    "gold": 1,
+    "recalled": 0,
+    "relevant_pages": 0,
+    "recalled_relaxed": 1
+   },
+   "answer": "cash generated from operations",
+   "pred": {
+    "kind": "number",
+    "value": 14177000.0
+   },
+   "gold": "$14,177 million",
+   "gold_value": 14177000000,
+   "retrieved_pages": [
+    {
+     "doc": "CSCO_FY2026_10K",
+     "page": 5,
+     "score": 0.030886
+    },
+    {
+     "doc": "CSCO_FY2026_10K",
+     "page": 88,
+     "score": 0.029462
+    },
+    {
+     "doc": "CSCO_FY2026_10K",
+     "page": 17,
+     "score": 0.029139
+    },
+    {
+     "doc": "GOOGL_FY2025_10K",
+     "page": 38,
+     "score": 0.028577
+    },
+    {
+     "doc": "CSCO_FY2026_10K",
+     "page": 4,
+     "score": 0.028175
+    },
+    {
+     "doc": "CSCO_FY2026_10K",
+     "page": 3,
+     "score": 0.028021
+    },
+    {
+     "doc": "CSCO_FY2026_10K",
+     "page": 50,
+     "score": 0.02781
+    },
+    {
+     "doc": "CSCO_FY2026_10K",
+     "page": 2,
+     "score": 0.027425
+    }
+   ],
+   "facts_used": [],
+   "seconds": 5.77,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline"
+  }
+ ]
+}

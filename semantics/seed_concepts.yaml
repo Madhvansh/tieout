@@ -109,13 +109,14 @@ concepts:
     statement: IS
     unit: USD
     nature: flow
-    pick: first
+    pick: last          # where a statement separates noncontrolling interests, the line attributable to the company
     labels:
       - '^net (income|earnings)( \(loss\))?$'
       - '^consolidated net (income|earnings)$'
-      - '^net (income|earnings) including noncontrolling interests?$'
+      - '^net (income|earnings)( \(loss\))? including non-?controlling interests?$'
       - '^profit of consolidated and affiliated companies$'
-      - '^net (income|earnings) attributable to .*'
+      - '^net (income|earnings)( \(loss\))? attributable to (?!.*non-?controlling)(?!.*redeemable).*'
+      - '^(profit|net income)( \(loss\))? attributable to common (stockholders|shareholders)$'
     structure:
       ties_with_cf_first_row: true
 

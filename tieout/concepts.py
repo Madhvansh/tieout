@@ -55,6 +55,7 @@ def norm_label(s: str) -> str:
     """Lower case, straight quotes, no footnote marks or note references."""
     s = s.lower().replace("’", "'").replace("‘", "'").replace("–", "-").replace("—", "-")
     s = re.sub(r"\((notes?|see note)[^)]*\)?", " ", s)          # (Note 5), (Notes 1 and 3
+    s = re.sub(r"\([^)]*\d[^)]*\)", " ", s)                      # (includes $76,569 and $44,855 at fair value)
     s = re.sub(r"\(\d{1,2}\)|\([a-z]\)|\*+", " ", s)               # (1), (a), *
     s = re.sub(r"[:$]", " ", s)
     s = re.sub(r"(\. ?){2,}", " ", s)                              # dot leaders
@@ -161,6 +162,15 @@ def gate(doc: str, statements: dict, proposals: dict) -> tuple:
                 confirmed = hit is not None
                 if confirmed:
                     evidence.append(f"same values reappear on the cash-flow statement (row '{cf.table.rows[hit].label[:40]}')")
+                elif row in by_total:
+                    # attributable net income = consolidated net income - noncontrolling interests:
+                    # the consolidated operand is the one the cash-flow statement starts from
+                    for op_row, _sign in by_total[row].operands:
+                        if _appears_in(t, op_row, cf.table) is not None:
+                            confirmed = True
+                            evidence.append("recovered formula derives it from '" + t.rows[op_row].label[:40]
+                                            + "', which reappears on the cash-flow statement")
+                            break
             if s.get("eps_identity"):
                 confirmed = bool(eps_ok)
                 if confirmed:
