@@ -104,6 +104,9 @@ class Executor:
                 env[step["id"]] = getattr(self, "_op_" + step["op"])(step, env)
         except PlanTypeError as e:
             return abstain(f"type error: {e}")
+        except (KeyError, TypeError, ValueError, IndexError, ZeroDivisionError) as e:
+            # a plan that passed validation but asks for something its steps cannot give
+            return abstain(f"plan could not run: {type(e).__name__}: {str(e)[:120]}")
         final = env[plan["answer"]]
         final.leaves = list({lf.id: lf for lf in final.leaves}.values())   # everything read on the way, once
         final.notes = list(dict.fromkeys(final.notes))

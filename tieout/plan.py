@@ -159,6 +159,10 @@ def validate(plan: dict, graph) -> list:
             seen.add(sid)
             continue
         company = s.get("company")
+        if company is not None and not isinstance(company, str):
+            errs.append(f"{sid}: company is one ticker or \"$sN\", never a list; for several companies use rank, "
+                        "filter or agg over a set")
+            company = None
         ref_ok(company, sid)
         if isinstance(company, str) and not company.startswith("$") and company not in graph.companies:
             errs.append(f"{sid}: unknown company {company}")

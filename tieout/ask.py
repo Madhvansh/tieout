@@ -6,8 +6,10 @@
                     a shared concept with no row bound at this company   (living.learn)
                     a line item or a figure stated in a sentence         (link.learn_link)
                     the parts of a total                                 (link.learn_breakdown)
-             -> if the plan still cannot run, the planner sees its plan and the executor's
-                reason once (figures masked) and may repair it; the repair is kept only if it runs
+             -> if the plan still cannot run, or its answer is of the wrong type for the question
+                (a list where "how many" was asked, an amount where a share was asked, one number
+                where "which of A or B" was asked), the planner sees its plan and the reason once,
+                with figures masked, and may repair it; the repair is kept only if it runs and fits
              -> answer with its proof leaves, or an abstention that names what is missing
 
 Learning never changes a number. It only records which printed row or sentence
@@ -46,13 +48,14 @@ def answer(question: str, g: Graph, model: Optional[str] = None, allow_learning:
                       offline=offline, persist=persist)
     res, learned = _execute(plan, g, ex, **learn_args)
     repaired = False
-    if planned_here and repair and _repairable(res, plan):
-        problem = _problem(res, plan, errors)
+    misfit = shape_misfit(question, plan, res)
+    if planned_here and repair and (misfit or _repairable(res, plan)):
+        problem = misfit or _problem(res, plan, errors)
         fixed, errs2 = _plan(question, g, model, offline, feedback={"plan": plan, "problem": problem})
         if fixed.get("steps") and not errs2 and fixed != plan:
             res2, learned2 = _execute(fixed, g, ex, **learn_args)
             learned += learned2
-            if res2.ok:
+            if res2.ok and not shape_misfit(question, fixed, res2):
                 res, plan, errors, repaired = res2, fixed, [], True
     out = _package(res, plan, learned, t0, errors)
     out["repaired"] = repaired
@@ -91,6 +94,37 @@ def _execute(plan: dict, g: Graph, ex: Executor, allow_learning: bool, question:
                     (save_link if entry.get("kind") in ("item", "mention", "breakdown") else save_entry)(entry)
         res = ex.run(plan)
     return res, learned
+
+
+_HOW_MANY = re.compile(r"(?<!by )(?<!by roughly )(?<!by about )(?<!by approximately )\bhow many\b"
+                       r"(?! (times|percentage points?|dollars|billion|million|basis points))", re.I)
+_SHARE = re.compile(r"\b(what|which) (share|fraction|percentage|proportion|portion)\b|\bas a (share|percentage|fraction)\b"
+                    r"|\bmargin\b|\bratio\b|\bpercent of\b|\bslice of\b", re.I)
+_EITHER = re.compile(r"\b(which|who)\b[^?]*\bor\b", re.I)
+
+
+def shape_misfit(question: str, plan: dict, res: Result) -> str:
+    """Why the answer's type cannot answer the question, or "" if it can (or the plan did not run).
+
+    Three checks only, each a clear mismatch between the words of the question and the kind of
+    answer: "how many" answered with a list, an amount where a share is asked, and a single
+    number where the question asks which of two named companies. Nothing here looks at a value.
+    """
+    if not res.ok or not plan.get("steps"):
+        return ""
+    last = next((s for s in plan["steps"] if s.get("id") == plan.get("answer")), {})
+    if _HOW_MANY.search(question) and res.kind in ("companies", "lines") and last.get("op") != "count":
+        return "the question asks how many: end the plan with a count step over the set"
+    if not _HOW_MANY.search(question) and last.get("op") == "count":
+        return "the question does not ask how many: the answer is not a count; end on the step that answers it"
+    if _SHARE.search(question) and res.kind == "number" and res.unit == "USD":
+        return "the question asks for a share, margin or ratio, but the plan returns an amount in dollars"
+    named = [s for s in plan["steps"] if s.get("op") in ("get", "change", "metric")]
+    if (_EITHER.search(question) and last.get("op") == "calc" and len({s.get("company") for s in named}) == 2
+            and not re.search(r"\bhow much (more|less|higher|lower|larger|smaller)\b", question, re.I)):
+        return ("the question asks which of two companies: rank over the two with k=2, which gives both values, "
+                "the winner and the gap")
+    return ""
 
 
 def _repairable(res: Result, plan: dict) -> bool:

@@ -26,72 +26,64 @@ from collections import Counter
 from typing import Optional
 
 from .llm import ask_json
-from .plan import validate, vocabulary
+from .plan import metric_defs, validate, vocabulary
 
-PROMPT_VERSION = "p9"
-N_EXAMPLES = 8
+PROMPT_VERSION = "p11"
+N_EXAMPLES = 6
 
-RULES = """You translate a question about US public companies into a query plan over a knowledge graph built
-from their SEC filings. Output JSON only: {"steps": [...], "answer": "<id of the step that answers>"}.
-You never write a figure from your own knowledge: figures come only from steps that read the graph.
-The only numbers you write are thresholds stated in the question.
+RULES = """Translate a question about US public companies into a query plan over a knowledge graph of their
+SEC filings. Output JSON only: {"steps":[...],"answer":"<id of the answering step>"}. Never write a figure
+from your own knowledge; the only numbers you write are thresholds stated in the question.
 
-STEPS (each has "id": "s1", "s2", ... and "op")
-get      {"op":"get","company":T,"concept":C,"period":P}  one figure. In place of "concept" use "metric":M,
-         "item":"words" or "by":MEASURE. Add "as":"first_reported" for the figure as first printed.
-calc     {"op":"calc","expr":"s1 / s2"}  + - * / ( ) and abs() over earlier steps
+STEPS (each has "id" s1, s2, ... and "op")
+get      {"op":"get","company":T,"concept":C,"period":P}; instead of "concept": "metric":M, "item":"words"
+         or "by":MEASURE. "as":"first_reported" reads the figure as first printed
+calc     {"op":"calc","expr":"s1 / s2"}  + - * / ( ) abs() over earlier steps
 change   {"op":"change","company":T,"concept":C,"from":P,"to":P,"mode":"pct"|"abs"}
 rank     {"op":"rank","over":SET,"by":MEASURE,"period":P,"order":"desc"|"asc","k":N}
-filter   {"op":"filter","over":SET,"where":{"by":MEASURE,"period":P,"gt"|"lt"|"ge"|"le":X}}
-         or {"op":"filter","over":SET,"where":{"attr":A,"eq":"text"}}
-count    {"op":"count","of":"$s1"}  how many an earlier filter or rank kept (and which)
+filter   {"op":"filter","over":SET,"where":{"by":MEASURE,"period":P,"gt"|"lt"|"ge"|"le":X}} or
+         {"op":"filter","over":SET,"where":{"attr":A,"eq":"text"}}
+count    {"op":"count","of":"$sN"}  how many step sN kept, and which
 agg      {"op":"agg","over":SET,"by":MEASURE,"period":P,"fn":"sum"|"avg"|"median"|"min"|"max"}
-members  {"op":"members","company":T,"of":"words naming the breakdown","period":P}  the lines that add
-         up to a total: segments, products, regions, businesses
-series   {"op":"series","company":T,"by":MEASURE,"last":N}  add "pick":"max"|"min" for the peak year
+members  {"op":"members","company":T,"of":"words naming the breakdown","period":P}  the lines adding up to
+         a total: segments, products, regions, businesses
+series   {"op":"series","company":T,"by":MEASURE,"last":N}  "pick":"max"|"min" for the peak year
 attr     {"op":"attr","company":T,"attr":A}  a text fact (auditor, state of incorporation, CEO ...)
-restated {"op":"restated","company":T,"concept":C or "item":"words","period":P}  the figure as first
-         reported against the latest report, and why it changed
-
-MEASURE {"concept":C} | {"metric":M} | {"item":"words"} | {"attr":"employees"|"shares_outstanding"}
-        | {"growth":MEASURE} percent change from the year before | {"delta":MEASURE} that change as an
-        amount | {"ratio":[MEASURE,MEASURE]} | {"value":true} a line's own figure (over lines)
-T       a ticker, or "$sN": the top member of step sN (a company, or a line when sN ranked lines)
-SET     "all" | {"cluster":name} | [tickers] | "$sN" (the companies or lines step sN kept)
-P       {"fy":2025} | {"fy":2025,"q":3} | {"fy":2025,"q":3,"ytd":true} | {"fy":"latest"} | {"fy":"prior"}
+restated {"op":"restated","company":T,"concept":C or "item":"words","period":P}  first against latest
+         report of a figure, and why it changed
+MEASURE  {"concept":C} {"metric":M} {"item":"words"} {"attr":"employees"|"shares_outstanding"}
+         {"growth":MEASURE} percent change from the year before, {"delta":MEASURE} the same as an amount,
+         {"ratio":[MEASURE,MEASURE]}, {"value":true} a line's own figure (over lines)
+T        one ticker, or "$sN" = the top member of step sN (a company, or a line if sN ranked lines).
+         Never a list: for several companies use rank, filter or agg over a SET
+SET      "all" | {"cluster":name} | [tickers] | "$sN"
+P        {"fy":2025} {"fy":2025,"q":3} {"fy":2025,"q":3,"ytd":true} {"fy":"latest"} {"fy":"prior"}
 
 RULES
-1. Concept or item. A concept is a company-wide line of the income statement, balance sheet or cash
-   flow statement. Anything narrower or outside them is an "item": a segment, product, region or
-   business; a count (stores, warehouses, members, vehicles delivered, employees in a region); ARR,
-   backlog, remaining performance obligation, assets under management, client assets, net new money,
-   capital ratios, deliveries. Write an item as the filing would label it, naming the segment or
-   product: {"item":"Greater China net sales"}, {"item":"number of stores in Texas"}. If the question
-   names a narrower line than a concept means (net sales without membership fees, one class of shares),
-   use the item.
-2. Periods. Copy the fiscal year the question names: "fiscal 2025", "FY25", "2025" all mean {"fy":2025}.
-   A balance or count "at the end of fiscal 2025" is {"fy":2025}. No year means {"fy":"latest"}; "the
-   year before" that is {"fy":"prior"}. A quarter is {"fy":Y,"q":Q} where Y is the fiscal year the
-   quarter belongs to. "Nine months" or "year to date" adds "ytd":true.
-3. A ratio, share, margin, per-unit figure, growth or difference is computed, never read: use a metric
-   only when it means exactly what is asked; otherwise get the parts and calc, or use a growth, delta
-   or ratio measure. "Per store", "per member", "per vehicle" divide by an item count.
-4. "Which company has the highest X" is rank with k=1. "Rank A, B and C" keeps them all (k = how many).
-5. "Which of A or B had more X (and by how much)" is rank over [A,B] with k=2: the answer shows both
-   values, the winner and the gap. Do the same when the two values are growth rates or ratios.
-6. "How many companies ..." is filter then count; count also names them.
-7. A hop (find a company or a line, then ask about it) refers to the earlier step with "$sN".
-8. "Which segment / product / region / business ..." is members, then rank or filter over "$sN" by
-   {"value":true} or {"growth":{"value":true}}. To give the chosen line's figure, add a get with
-   "company":"$sN" and the period.
-9. Thresholds are in full units: $10 billion is 10000000000; 20 percent is 0.2.
-10. The size of a loss or a gap ("how large", "how big", "by how much") uses abs() in calc.
-11. General knowledge may only tell you WHICH listed company is meant (a brand it owns, "Google's
-    parent"), never a figure.
-12. Output {"steps":[],"answer":null,"cannot":"<why>"} when the question needs a company that is not
-    listed, or something annual and quarterly reports do not print (stock prices, market share,
-    forecasts, ratings), or something a 10-K leaves to the proxy statement (audit fees, executive pay).
-13. A question that also asks why a figure changed is planned for the figure (restated explains why).
+1. A concept is a company-wide line of the income statement, balance sheet or cash flow statement.
+   Anything narrower or elsewhere is an item, written as the filing labels it with the segment or product
+   named: a segment, product, region or business line; a count (stores, warehouses, members, vehicles,
+   people in a region); ARR, backlog, remaining performance obligation, assets under management, client
+   assets, net new money, capital ratios. A line narrower than a concept (net sales without membership
+   fees, one share class) is an item too.
+2. Copy the fiscal year named: "fiscal 2025", "FY25", "2025" are {"fy":2025}; a balance "at the end of
+   fiscal 2025" is {"fy":2025}. No year: {"fy":"latest"}; the year before it: {"fy":"prior"}. A quarter
+   is {"fy":Y,"q":Q} with Y the fiscal year it belongs to; "nine months"/"year to date" add "ytd":true.
+3. Ratios, shares, margins, per-unit figures, growth and differences are computed: a metric only when it
+   means exactly what is asked, otherwise get the parts and calc, or a growth, delta or ratio measure.
+4. "Which company has the highest X": rank, k=1. "Rank A, B and C": rank over them, k = their number.
+5. "Which of A or B had more X (and by how much)": rank over [A,B], k=2; it gives both values, the winner
+   and the gap. Also when X is a growth rate or a ratio.
+6. "How many ...": filter then count. Do not end on count unless the question asks how many.
+7. A hop (find a company or line, then ask about it) names the earlier step as "$sN".
+8. "Which segment/product/region/business ...": members, then rank or filter over "$sN" by {"value":true}
+   or {"growth":{"value":true}}; for the chosen line's figure add get with "company":"$sN" and the period.
+9. Thresholds in full units: $10 billion is 10000000000; 20 percent is 0.2.
+10. The size of a loss or gap ("how big", "how large") uses abs() in calc.
+11. General knowledge may only say WHICH listed company is meant (a brand, "Google's parent").
+12. {"steps":[],"answer":null,"cannot":"<why>"} when a company is not listed, or for what filings do not
+    print (stock prices, market share, forecasts, ratings) or leave to the proxy (audit fees, pay).
+13. If the question also asks why a figure changed, plan the figure (restated explains why).
 """
 
 # The example pool: one or more per operation and shape, written from the language above.
@@ -234,14 +226,25 @@ def _name_words(companies: dict) -> frozenset:
     return frozenset(w for t, name in companies.items() for w in _WORD.findall(f"{t} {name}".lower()))
 
 
+CONCEPT_NOTES = """NetIncome is net income attributable to the company's shareholders (the usual "net income", "profit",
+"earnings"); ConsolidatedNetIncome includes noncontrolling interests. ShareholdersEquity is stockholders'
+equity (book value); TotalEquity includes noncontrolling interests. Revenue is total revenue or net sales
+(banks: total net revenue). TotalLiabilities only where printed; the metric total_liabilities also solves it.
+CapitalExpenditures, DividendsPaid, ShareRepurchases are cash paid, from the cash-flow statement, as are
+DepreciationAmortization and StockBasedCompensation. NetInterestIncome, NoninterestIncome, NoninterestExpense,
+ProvisionForCreditLosses, Deposits, Loans are bank lines. SharesDiluted and SharesBasic are weighted-average
+share counts used for EPS (shares outstanding on the cover is the attribute shares_outstanding)."""
+
+
 def system_prompt(graph, question: str = "") -> str:
     v = vocabulary(graph)
     shots = pick_examples(question, ignore=_name_words(v["companies"])) if question else EXAMPLES
+    formulas = {m["name"]: m["formula"] for m in metric_defs().values()}
     parts = [RULES,
              "COMPANIES " + "; ".join(f"{t}: {n}" for t, n in v["companies"].items()),
              "CLUSTERS " + ", ".join(v["clusters"]),
-             "CONCEPTS\n" + "\n".join(f"{c}: {d}" for c, d in v["concepts"].items()),
-             "METRICS\n" + "\n".join(f"{m}: {d}" for m, d in v["metrics"].items()),
+             "CONCEPTS " + ", ".join(v["concepts"]) + "\n" + CONCEPT_NOTES,
+             "METRICS " + "; ".join(f"{m} = {formulas[m]}" for m in v["metrics"]),
              "ATTRIBUTES " + ", ".join(v["attributes"]),
              "EXAMPLES\n" + "\n".join(f"Q: {q}\nA: {json.dumps(p, separators=(',', ':'))}" for q, p in shots)]
     return "\n\n".join(parts)
