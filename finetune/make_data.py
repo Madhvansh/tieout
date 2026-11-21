@@ -461,8 +461,7 @@ def system_prompt() -> str:
              "METRICS: " + ", ".join(metric_defs()),
              "ATTRIBUTES: auditor, auditor_since, state_of_incorporation, hq_city, hq_state, exchange, employees, "
              "shares_outstanding, ceo, cfo"]
-    return "
-".join(lines)
+    return "\n".join(lines)
 
 
 def main():
