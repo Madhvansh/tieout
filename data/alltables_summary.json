@@ -1,0 +1,1110 @@
+{
+ "total": {
+  "tables": 4562,
+  "cells": 171969,
+  "money_cells": 150347,
+  "verified_cells": 117939,
+  "dated_tables": 2715,
+  "verified_share": 0.7844,
+  "dated_share": 0.5951,
+  "documents": 55,
+  "seconds": 68.7
+ },
+ "documents": [
+  {
+   "doc": "AAPL_FY2026_10K",
+   "tables": 39,
+   "cells": 853,
+   "money_cells": 804,
+   "verified_cells": 762,
+   "verified_share": 0.9478,
+   "dated_tables": 33,
+   "dated_share": 0.8462,
+   "scale_sources": {
+    "caption": 19,
+    "intro": 11,
+    "inherited": 9
+   },
+   "skipped_pages": [
+    35,
+    37,
+    39
+   ]
+  },
+  {
+   "doc": "MSFT_FY2026_10K",
+   "tables": 48,
+   "cells": 1204,
+   "money_cells": 1121,
+   "verified_cells": 935,
+   "verified_share": 0.8341,
+   "dated_tables": 35,
+   "dated_share": 0.7292,
+   "scale_sources": {
+    "caption": 40,
+    "intro": 0,
+    "inherited": 8
+   },
+   "skipped_pages": [
+    50,
+    52,
+    53
+   ]
+  },
+  {
+   "doc": "GOOGL_FY2025_10K",
+   "tables": 55,
+   "cells": 1250,
+   "money_cells": 1161,
+   "verified_cells": 930,
+   "verified_share": 0.801,
+   "dated_tables": 39,
+   "dated_share": 0.7091,
+   "scale_sources": {
+    "caption": 24,
+    "intro": 10,
+    "inherited": 21
+   },
+   "skipped_pages": [
+    49,
+    50,
+    53
+   ]
+  },
+  {
+   "doc": "AMZN_FY2025_10K",
+   "tables": 41,
+   "cells": 971,
+   "money_cells": 888,
+   "verified_cells": 742,
+   "verified_share": 0.8356,
+   "dated_tables": 33,
+   "dated_share": 0.8049,
+   "scale_sources": {
+    "caption": 22,
+    "intro": 14,
+    "inherited": 5
+   },
+   "skipped_pages": [
+    36,
+    37,
+    39
+   ]
+  },
+  {
+   "doc": "META_FY2025_10K",
+   "tables": 44,
+   "cells": 976,
+   "money_cells": 857,
+   "verified_cells": 791,
+   "verified_share": 0.923,
+   "dated_tables": 33,
+   "dated_share": 0.75,
+   "scale_sources": {
+    "caption": 20,
+    "intro": 14,
+    "inherited": 10
+   },
+   "skipped_pages": [
+    89,
+    90,
+    93
+   ]
+  },
+  {
+   "doc": "NVDA_FY2026_10K",
+   "tables": 58,
+   "cells": 1304,
+   "money_cells": 1154,
+   "verified_cells": 567,
+   "verified_share": 0.4913,
+   "dated_tables": 34,
+   "dated_share": 0.5862,
+   "scale_sources": {
+    "caption": 37,
+    "intro": 1,
+    "inherited": 20
+   },
+   "skipped_pages": [
+    139,
+    141,
+    143
+   ]
+  },
+  {
+   "doc": "AMD_FY2025_10K",
+   "tables": 41,
+   "cells": 892,
+   "money_cells": 821,
+   "verified_cells": 731,
+   "verified_share": 0.8904,
+   "dated_tables": 30,
+   "dated_share": 0.7317,
+   "scale_sources": {
+    "caption": 38,
+    "intro": 1,
+    "inherited": 2
+   },
+   "skipped_pages": [
+    61,
+    63,
+    65
+   ]
+  },
+  {
+   "doc": "ORCL_FY2026_10K",
+   "tables": 48,
+   "cells": 1052,
+   "money_cells": 936,
+   "verified_cells": 723,
+   "verified_share": 0.7724,
+   "dated_tables": 27,
+   "dated_share": 0.5625,
+   "scale_sources": {
+    "caption": 29,
+    "intro": 4,
+    "inherited": 15
+   },
+   "skipped_pages": [
+    66,
+    67,
+    70
+   ]
+  },
+  {
+   "doc": "CRM_FY2026_10K",
+   "tables": 56,
+   "cells": 1224,
+   "money_cells": 922,
+   "verified_cells": 801,
+   "verified_share": 0.8688,
+   "dated_tables": 25,
+   "dated_share": 0.4464,
+   "scale_sources": {
+    "caption": 34,
+    "intro": 9,
+    "inherited": 13
+   },
+   "skipped_pages": [
+    66,
+    67,
+    70
+   ]
+  },
+  {
+   "doc": "ADBE_FY2025_10K",
+   "tables": 50,
+   "cells": 1172,
+   "money_cells": 952,
+   "verified_cells": 814,
+   "verified_share": 0.855,
+   "dated_tables": 29,
+   "dated_share": 0.58,
+   "scale_sources": {
+    "caption": 45,
+    "intro": 0,
+    "inherited": 5
+   },
+   "skipped_pages": [
+    47,
+    48,
+    51
+   ]
+  },
+  {
+   "doc": "CSCO_FY2026_10K",
+   "tables": 61,
+   "cells": 1124,
+   "money_cells": 955,
+   "verified_cells": 593,
+   "verified_share": 0.6209,
+   "dated_tables": 26,
+   "dated_share": 0.4262,
+   "scale_sources": {
+    "caption": 8,
+    "intro": 15,
+    "inherited": 38
+   },
+   "skipped_pages": [
+    75,
+    76,
+    78
+   ]
+  },
+  {
+   "doc": "JPM_FY2025_10K",
+   "tables": 234,
+   "cells": 9887,
+   "money_cells": 8680,
+   "verified_cells": 6875,
+   "verified_share": 0.7921,
+   "dated_tables": 146,
+   "dated_share": 0.6239,
+   "scale_sources": {
+    "caption": 156,
+    "intro": 3,
+    "inherited": 75
+   },
+   "skipped_pages": [
+    167,
+    169,
+    171
+   ]
+  },
+  {
+   "doc": "BAC_FY2025_10K",
+   "tables": 153,
+   "cells": 9001,
+   "money_cells": 7807,
+   "verified_cells": 6177,
+   "verified_share": 0.7912,
+   "dated_tables": 103,
+   "dated_share": 0.6732,
+   "scale_sources": {
+    "caption": 106,
+    "intro": 0,
+    "inherited": 47
+   },
+   "skipped_pages": [
+    93,
+    94,
+    96
+   ]
+  },
+  {
+   "doc": "C_FY2025_10K",
+   "tables": 248,
+   "cells": 12322,
+   "money_cells": 10537,
+   "verified_cells": 8322,
+   "verified_share": 0.7898,
+   "dated_tables": 141,
+   "dated_share": 0.5685,
+   "scale_sources": {
+    "caption": 144,
+    "intro": 10,
+    "inherited": 94
+   },
+   "skipped_pages": [
+    146,
+    148,
+    152
+   ]
+  },
+  {
+   "doc": "WFC_FY2025_10K",
+   "tables": 155,
+   "cells": 9560,
+   "money_cells": 8580,
+   "verified_cells": 6347,
+   "verified_share": 0.7397,
+   "dated_tables": 112,
+   "dated_share": 0.7226,
+   "scale_sources": {
+    "caption": 114,
+    "intro": 3,
+    "inherited": 38
+   },
+   "skipped_pages": [
+    91,
+    93,
+    95
+   ]
+  },
+  {
+   "doc": "GS_FY2025_10K",
+   "tables": 205,
+   "cells": 7069,
+   "money_cells": 5877,
+   "verified_cells": 4896,
+   "verified_share": 0.8331,
+   "dated_tables": 91,
+   "dated_share": 0.4439,
+   "scale_sources": {
+    "caption": 157,
+    "intro": 0,
+    "inherited": 48
+   },
+   "skipped_pages": [
+    141,
+    142,
+    144
+   ]
+  },
+  {
+   "doc": "MS_FY2025_10K",
+   "tables": 223,
+   "cells": 7186,
+   "money_cells": 6732,
+   "verified_cells": 5292,
+   "verified_share": 0.7861,
+   "dated_tables": 152,
+   "dated_share": 0.6816,
+   "scale_sources": {
+    "caption": 166,
+    "intro": 1,
+    "inherited": 56
+   },
+   "skipped_pages": [
+    80,
+    81,
+    83
+   ]
+  },
+  {
+   "doc": "V_FY2026_10K",
+   "tables": 58,
+   "cells": 1243,
+   "money_cells": 851,
+   "verified_cells": 732,
+   "verified_share": 0.8602,
+   "dated_tables": 43,
+   "dated_share": 0.7414,
+   "scale_sources": {
+    "caption": 53,
+    "intro": 0,
+    "inherited": 5
+   },
+   "skipped_pages": [
+    59,
+    60,
+    66
+   ]
+  },
+  {
+   "doc": "MA_FY2025_10K",
+   "tables": 60,
+   "cells": 1280,
+   "money_cells": 1100,
+   "verified_cells": 810,
+   "verified_share": 0.7364,
+   "dated_tables": 41,
+   "dated_share": 0.6833,
+   "scale_sources": {
+    "caption": 53,
+    "intro": 0,
+    "inherited": 7
+   },
+   "skipped_pages": [
+    69,
+    71,
+    74
+   ]
+  },
+  {
+   "doc": "AXP_FY2025_10K",
+   "tables": 83,
+   "cells": 2433,
+   "money_cells": 2114,
+   "verified_cells": 1404,
+   "verified_share": 0.6641,
+   "dated_tables": 33,
+   "dated_share": 0.3976,
+   "scale_sources": {
+    "caption": 33,
+    "intro": 0,
+    "inherited": 50
+   },
+   "skipped_pages": [
+    95,
+    97,
+    98
+   ]
+  },
+  {
+   "doc": "BLK_FY2025_10K",
+   "tables": 97,
+   "cells": 3867,
+   "money_cells": 3550,
+   "verified_cells": 3148,
+   "verified_share": 0.8868,
+   "dated_tables": 52,
+   "dated_share": 0.5361,
+   "scale_sources": {
+    "caption": 73,
+    "intro": 1,
+    "inherited": 23
+   },
+   "skipped_pages": [
+    79,
+    80,
+    83
+   ]
+  },
+  {
+   "doc": "WMT_FY2026_10K",
+   "tables": 52,
+   "cells": 1313,
+   "money_cells": 1079,
+   "verified_cells": 613,
+   "verified_share": 0.5681,
+   "dated_tables": 39,
+   "dated_share": 0.75,
+   "scale_sources": {
+    "caption": 44,
+    "intro": 0,
+    "inherited": 8
+   },
+   "skipped_pages": [
+    52,
+    54,
+    56
+   ]
+  },
+  {
+   "doc": "COST_FY2026_10K",
+   "tables": 35,
+   "cells": 732,
+   "money_cells": 652,
+   "verified_cells": 492,
+   "verified_share": 0.7546,
+   "dated_tables": 24,
+   "dated_share": 0.6857,
+   "scale_sources": {
+    "caption": 3,
+    "intro": 1,
+    "inherited": 31
+   },
+   "skipped_pages": [
+    38,
+    40,
+    42
+   ]
+  },
+  {
+   "doc": "TGT_FY2025_10K",
+   "tables": 53,
+   "cells": 922,
+   "money_cells": 692,
+   "verified_cells": 343,
+   "verified_share": 0.4957,
+   "dated_tables": 34,
+   "dated_share": 0.6415,
+   "scale_sources": {
+    "caption": 23,
+    "intro": 0,
+    "inherited": 30
+   },
+   "skipped_pages": [
+    51,
+    53,
+    54
+   ]
+  },
+  {
+   "doc": "KO_FY2025_10K",
+   "tables": 78,
+   "cells": 1976,
+   "money_cells": 1812,
+   "verified_cells": 1585,
+   "verified_share": 0.8747,
+   "dated_tables": 53,
+   "dated_share": 0.6795,
+   "scale_sources": {
+    "caption": 12,
+    "intro": 41,
+    "inherited": 25
+   },
+   "skipped_pages": [
+    63,
+    65,
+    66
+   ]
+  },
+  {
+   "doc": "PEP_FY2025_10K",
+   "tables": 77,
+   "cells": 2021,
+   "money_cells": 1754,
+   "verified_cells": 1162,
+   "verified_share": 0.6625,
+   "dated_tables": 40,
+   "dated_share": 0.5195,
+   "scale_sources": {
+    "caption": 3,
+    "intro": 0,
+    "inherited": 74
+   },
+   "skipped_pages": [
+    60,
+    62,
+    64
+   ]
+  },
+  {
+   "doc": "PG_FY2026_10K",
+   "tables": 56,
+   "cells": 1362,
+   "money_cells": 1166,
+   "verified_cells": 817,
+   "verified_share": 0.7007,
+   "dated_tables": 37,
+   "dated_share": 0.6607,
+   "scale_sources": {
+    "caption": 7,
+    "intro": 1,
+    "inherited": 48
+   },
+   "skipped_pages": [
+    39,
+    40,
+    42
+   ]
+  },
+  {
+   "doc": "NKE_FY2026_10K",
+   "tables": 59,
+   "cells": 1591,
+   "money_cells": 1491,
+   "verified_cells": 1263,
+   "verified_share": 0.8471,
+   "dated_tables": 25,
+   "dated_share": 0.4237,
+   "scale_sources": {
+    "caption": 36,
+    "intro": 5,
+    "inherited": 18
+   },
+   "skipped_pages": [
+    58,
+    60,
+    61
+   ]
+  },
+  {
+   "doc": "MCD_FY2025_10K",
+   "tables": 0,
+   "cells": 0,
+   "money_cells": 0,
+   "verified_cells": 0,
+   "verified_share": 0.0,
+   "dated_tables": 0,
+   "dated_share": 0.0,
+   "scale_sources": {
+    "caption": 0,
+    "intro": 0,
+    "inherited": 0
+   },
+   "skipped_pages": []
+  },
+  {
+   "doc": "HD_FY2025_10K",
+   "tables": 52,
+   "cells": 1021,
+   "money_cells": 915,
+   "verified_cells": 619,
+   "verified_share": 0.6765,
+   "dated_tables": 32,
+   "dated_share": 0.6154,
+   "scale_sources": {
+    "caption": 42,
+    "intro": 0,
+    "inherited": 10
+   },
+   "skipped_pages": [
+    47,
+    48,
+    51
+   ]
+  },
+  {
+   "doc": "JNJ_FY2025_10K",
+   "tables": 67,
+   "cells": 2444,
+   "money_cells": 1544,
+   "verified_cells": 1168,
+   "verified_share": 0.7565,
+   "dated_tables": 35,
+   "dated_share": 0.5224,
+   "scale_sources": {
+    "caption": 53,
+    "intro": 0,
+    "inherited": 14
+   },
+   "skipped_pages": [
+    49,
+    50,
+    53
+   ]
+  },
+  {
+   "doc": "PFE_FY2025_10K",
+   "tables": 73,
+   "cells": 2490,
+   "money_cells": 2232,
+   "verified_cells": 1564,
+   "verified_share": 0.7007,
+   "dated_tables": 47,
+   "dated_share": 0.6438,
+   "scale_sources": {
+    "caption": 50,
+    "intro": 0,
+    "inherited": 23
+   },
+   "skipped_pages": [
+    58,
+    60,
+    62
+   ]
+  },
+  {
+   "doc": "MRK_FY2025_10K",
+   "tables": 66,
+   "cells": 2787,
+   "money_cells": 2571,
+   "verified_cells": 1918,
+   "verified_share": 0.746,
+   "dated_tables": 40,
+   "dated_share": 0.6061,
+   "scale_sources": {
+    "caption": 13,
+    "intro": 2,
+    "inherited": 51
+   },
+   "skipped_pages": [
+    79,
+    80,
+    82
+   ]
+  },
+  {
+   "doc": "UNH_FY2025_10K",
+   "tables": 51,
+   "cells": 2002,
+   "money_cells": 1832,
+   "verified_cells": 1256,
+   "verified_share": 0.6856,
+   "dated_tables": 31,
+   "dated_share": 0.6078,
+   "scale_sources": {
+    "caption": 44,
+    "intro": 1,
+    "inherited": 6
+   },
+   "skipped_pages": [
+    43,
+    44,
+    47
+   ]
+  },
+  {
+   "doc": "TSLA_FY2025_10K",
+   "tables": 53,
+   "cells": 1062,
+   "money_cells": 990,
+   "verified_cells": 721,
+   "verified_share": 0.7283,
+   "dated_tables": 35,
+   "dated_share": 0.6604,
+   "scale_sources": {
+    "caption": 18,
+    "intro": 20,
+    "inherited": 15
+   },
+   "skipped_pages": [
+    52,
+    53,
+    56
+   ]
+  },
+  {
+   "doc": "F_FY2025_10K",
+   "tables": 121,
+   "cells": 3110,
+   "money_cells": 2713,
+   "verified_cells": 1857,
+   "verified_share": 0.6845,
+   "dated_tables": 53,
+   "dated_share": 0.438,
+   "scale_sources": {
+    "caption": 25,
+    "intro": 32,
+    "inherited": 64
+   },
+   "skipped_pages": [
+    115,
+    116,
+    117
+   ]
+  },
+  {
+   "doc": "GM_FY2025_10K",
+   "tables": 85,
+   "cells": 2573,
+   "money_cells": 2199,
+   "verified_cells": 1730,
+   "verified_share": 0.7867,
+   "dated_tables": 66,
+   "dated_share": 0.7765,
+   "scale_sources": {
+    "caption": 14,
+    "intro": 5,
+    "inherited": 66
+   },
+   "skipped_pages": [
+    57,
+    58,
+    59
+   ]
+  },
+  {
+   "doc": "XOM_FY2025_10K",
+   "tables": 110,
+   "cells": 6910,
+   "money_cells": 6140,
+   "verified_cells": 5361,
+   "verified_share": 0.8731,
+   "dated_tables": 34,
+   "dated_share": 0.3091,
+   "scale_sources": {
+    "caption": 78,
+    "intro": 0,
+    "inherited": 32
+   },
+   "skipped_pages": [
+    73,
+    75,
+    76
+   ]
+  },
+  {
+   "doc": "CVX_FY2025_10K",
+   "tables": 103,
+   "cells": 6233,
+   "money_cells": 5796,
+   "verified_cells": 5071,
+   "verified_share": 0.8749,
+   "dated_tables": 70,
+   "dated_share": 0.6796,
+   "scale_sources": {
+    "caption": 32,
+    "intro": 1,
+    "inherited": 70
+   },
+   "skipped_pages": [
+    66,
+    68,
+    69
+   ]
+  },
+  {
+   "doc": "CAT_FY2025_10K",
+   "tables": 97,
+   "cells": 4413,
+   "money_cells": 4140,
+   "verified_cells": 3139,
+   "verified_share": 0.7582,
+   "dated_tables": 56,
+   "dated_share": 0.5773,
+   "scale_sources": {
+    "caption": 64,
+    "intro": 0,
+    "inherited": 33
+   },
+   "skipped_pages": [
+    61,
+    63,
+    66
+   ]
+  },
+  {
+   "doc": "AAPL_FY2025_10K",
+   "tables": 33,
+   "cells": 795,
+   "money_cells": 749,
+   "verified_cells": 708,
+   "verified_share": 0.9453,
+   "dated_tables": 29,
+   "dated_share": 0.8788,
+   "scale_sources": {
+    "caption": 15,
+    "intro": 10,
+    "inherited": 8
+   },
+   "skipped_pages": [
+    32,
+    34,
+    36
+   ]
+  },
+  {
+   "doc": "MSFT_FY2025_10K",
+   "tables": 48,
+   "cells": 1187,
+   "money_cells": 1092,
+   "verified_cells": 933,
+   "verified_share": 0.8544,
+   "dated_tables": 36,
+   "dated_share": 0.75,
+   "scale_sources": {
+    "caption": 40,
+    "intro": 0,
+    "inherited": 8
+   },
+   "skipped_pages": [
+    50,
+    52,
+    53
+   ]
+  },
+  {
+   "doc": "GOOGL_FY2024_10K",
+   "tables": 51,
+   "cells": 1244,
+   "money_cells": 1130,
+   "verified_cells": 951,
+   "verified_share": 0.8416,
+   "dated_tables": 33,
+   "dated_share": 0.6471,
+   "scale_sources": {
+    "caption": 19,
+    "intro": 13,
+    "inherited": 19
+   },
+   "skipped_pages": [
+    53,
+    54,
+    57
+   ]
+  },
+  {
+   "doc": "BAC_FY2024_10K",
+   "tables": 154,
+   "cells": 9011,
+   "money_cells": 7775,
+   "verified_cells": 6060,
+   "verified_share": 0.7794,
+   "dated_tables": 100,
+   "dated_share": 0.6494,
+   "scale_sources": {
+    "caption": 104,
+    "intro": 0,
+    "inherited": 50
+   },
+   "skipped_pages": [
+    92,
+    93,
+    95
+   ]
+  },
+  {
+   "doc": "GS_FY2024_10K",
+   "tables": 219,
+   "cells": 7315,
+   "money_cells": 6071,
+   "verified_cells": 5068,
+   "verified_share": 0.8348,
+   "dated_tables": 94,
+   "dated_share": 0.4292,
+   "scale_sources": {
+    "caption": 159,
+    "intro": 0,
+    "inherited": 60
+   },
+   "skipped_pages": [
+    134,
+    135,
+    137
+   ]
+  },
+  {
+   "doc": "WMT_FY2025_10K",
+   "tables": 51,
+   "cells": 1299,
+   "money_cells": 1048,
+   "verified_cells": 614,
+   "verified_share": 0.5859,
+   "dated_tables": 39,
+   "dated_share": 0.7647,
+   "scale_sources": {
+    "caption": 40,
+    "intro": 1,
+    "inherited": 10
+   },
+   "skipped_pages": [
+    53,
+    55,
+    57
+   ]
+  },
+  {
+   "doc": "KO_FY2024_10K",
+   "tables": 89,
+   "cells": 2212,
+   "money_cells": 2018,
+   "verified_cells": 1591,
+   "verified_share": 0.7884,
+   "dated_tables": 59,
+   "dated_share": 0.6629,
+   "scale_sources": {
+    "caption": 11,
+    "intro": 45,
+    "inherited": 33
+   },
+   "skipped_pages": [
+    64,
+    66,
+    67
+   ]
+  },
+  {
+   "doc": "JNJ_FY2024_10K",
+   "tables": 72,
+   "cells": 2602,
+   "money_cells": 1502,
+   "verified_cells": 1118,
+   "verified_share": 0.7443,
+   "dated_tables": 35,
+   "dated_share": 0.4861,
+   "scale_sources": {
+    "caption": 51,
+    "intro": 0,
+    "inherited": 21
+   },
+   "skipped_pages": [
+    49,
+    53
+   ]
+  },
+  {
+   "doc": "XOM_FY2024_10K",
+   "tables": 117,
+   "cells": 7080,
+   "money_cells": 6307,
+   "verified_cells": 5436,
+   "verified_share": 0.8619,
+   "dated_tables": 33,
+   "dated_share": 0.2821,
+   "scale_sources": {
+    "caption": 82,
+    "intro": 0,
+    "inherited": 35
+   },
+   "skipped_pages": [
+    79,
+    81,
+    82
+   ]
+  },
+  {
+   "doc": "CAT_FY2024_10K",
+   "tables": 91,
+   "cells": 4257,
+   "money_cells": 3966,
+   "verified_cells": 2941,
+   "verified_share": 0.7416,
+   "dated_tables": 49,
+   "dated_share": 0.5385,
+   "scale_sources": {
+    "caption": 55,
+    "intro": 0,
+    "inherited": 36
+   },
+   "skipped_pages": [
+    60,
+    62,
+    65
+   ]
+  },
+  {
+   "doc": "AAPL_FY2026_Q3_10Q",
+   "tables": 18,
+   "cells": 657,
+   "money_cells": 605,
+   "verified_cells": 580,
+   "verified_share": 0.9587,
+   "dated_tables": 16,
+   "dated_share": 0.8889,
+   "scale_sources": {
+    "caption": 13,
+    "intro": 1,
+    "inherited": 4
+   },
+   "skipped_pages": [
+    4,
+    6,
+    8
+   ]
+  },
+  {
+   "doc": "GOOGL_FY2025_Q3_10Q",
+   "tables": 48,
+   "cells": 1358,
+   "money_cells": 1240,
+   "verified_cells": 904,
+   "verified_share": 0.729,
+   "dated_tables": 33,
+   "dated_share": 0.6875,
+   "scale_sources": {
+    "caption": 20,
+    "intro": 10,
+    "inherited": 18
+   },
+   "skipped_pages": [
+    6,
+    7,
+    11
+   ]
+  },
+  {
+   "doc": "JNJ_FY2025_Q3_10Q",
+   "tables": 45,
+   "cells": 1880,
+   "money_cells": 1637,
+   "verified_cells": 1120,
+   "verified_share": 0.6842,
+   "dated_tables": 27,
+   "dated_share": 0.6,
+   "scale_sources": {
+    "caption": 31,
+    "intro": 1,
+    "inherited": 13
+   },
+   "skipped_pages": [
+    6,
+    7,
+    12
+   ]
+  },
+  {
+   "doc": "KO_FY2025_Q3_10Q",
+   "tables": 43,
+   "cells": 1393,
+   "money_cells": 1306,
+   "verified_cells": 813,
+   "verified_share": 0.6225,
+   "dated_tables": 31,
+   "dated_share": 0.7209,
+   "scale_sources": {
+    "caption": 5,
+    "intro": 14,
+    "inherited": 24
+   },
+   "skipped_pages": [
+    5,
+    7,
+    8
+   ]
+  },
+  {
+   "doc": "BAC_FY2025_Q3_10Q",
+   "tables": 138,
+   "cells": 8847,
+   "money_cells": 7784,
+   "verified_cells": 6031,
+   "verified_share": 0.7748,
+   "dated_tables": 92,
+   "dated_share": 0.6667,
+   "scale_sources": {
+    "caption": 88,
+    "intro": 2,
+    "inherited": 48
+   },
+   "skipped_pages": [
+    50,
+    51,
+    53
+   ]
+  }
+ ]
+}

@@ -1,0 +1,14 @@
+.venv/
+.env
+data/pdf/
+data/words/
+data/pdf_sample/
+data/sec/
+data/fetch.log
+__pycache__/
+*.pyc
+*.pkl
+finetune/out/
+finetune/__pycache__/
+baseline/cache/
+.pytest_cache/

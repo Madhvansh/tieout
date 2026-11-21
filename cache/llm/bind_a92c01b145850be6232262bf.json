@@ -1,0 +1,10 @@
+{
+ "model": "ollama:phi4-mini",
+ "system": "You map one financial concept to one row of a company's financial statement.\nYou are shown the printed row labels of the statement with their section headings and structural\nroles. You are never shown values. Pick the single row that reports the concept for the whole\ncompany (consolidated, attributable to the parent company where the statement separates it),\nor answer null if no row reports it. Do not pick a component of the concept or a per-share row.\nAnswer as JSON: {\"row\": <row number or null>, \"reason\": \"<one short sentence>\"}",
+ "user": "Company: Costco Wholesale Corp (COST)\nStatement: IS\nConcept: CostOfRevenue: total cost of sales / cost of revenue / cost of goods sold\n\nRows (number: label (section) <role>):\n0: Net sales  (under: REVENUE)  <operand>\n1: Membership fees  (under: REVENUE)  <operand>\n2: Total revenue  (under: REVENUE)  <total> [already: Revenue]\n3: Merchandise costs  (under: OPERATING EXPENSES)  <operand>\n4: Selling, general and administrative  (under: OPERATING EXPENSES)  <operand> [already: SellingGeneralAdmin]\n5: Operating income  (under: OPERATING EXPENSES)  <total> [already: OperatingIncome]\n6: Interest expense  (under: OTHER INCOME (EXPENSE))  <operand>\n7: Interest income and other, net  (under: OTHER INCOME (EXPENSE))  <operand>\n8: INCOME BEFORE INCOME TAXES  (under: OTHER INCOME (EXPENSE))  <total> [already: PretaxIncome]\n9: Provision for income taxes  (under: OTHER INCOME (EXPENSE))  <operand> [already: IncomeTax]\n10: NET INCOME  (under: OTHER INCOME (EXPENSE))  <total> [already: NetIncome]\n11: Basic  (under: NET INCOME PER COMMON SHARE)  <loose>\n12: Diluted  (under: NET INCOME PER COMMON SHARE)  <loose>",
+ "answer": {
+  "row": null,
+  "reason": "no row reports total cost of sales / cost of revenue"
+ },
+ "seconds": 3.44
+}

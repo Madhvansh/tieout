@@ -1,0 +1,97 @@
+# Derived metrics: numbers that are printed nowhere and are computed by walking
+# from the metric to its concepts to the facts.
+#
+# formula   arithmetic over concept names; abs() takes a magnitude
+# fallback  used when a concept in `formula` is missing for a company
+# unit      ratio (shown as a percentage or a multiple) or USD
+# A stock concept inside a flow metric is taken at the end of the same period.
+
+metrics:
+  - name: gross_margin
+    formula: GrossProfit / Revenue
+    fallback: (Revenue - CostOfRevenue) / Revenue
+    unit: ratio
+    says: gross profit as a share of revenue
+
+  - name: gross_profit
+    formula: GrossProfit
+    fallback: Revenue - CostOfRevenue
+    unit: USD
+    says: revenue minus cost of revenue
+
+  - name: operating_margin
+    formula: OperatingIncome / Revenue
+    unit: ratio
+    says: operating income as a share of revenue
+
+  - name: net_margin
+    formula: NetIncome / Revenue
+    unit: ratio
+    says: net income as a share of revenue
+
+  - name: rnd_intensity
+    formula: ResearchAndDevelopment / Revenue
+    unit: ratio
+    says: research and development spending as a share of revenue
+
+  - name: effective_tax_rate
+    formula: IncomeTax / PretaxIncome
+    unit: ratio
+    says: income tax as a share of pre-tax income
+
+  - name: free_cash_flow
+    formula: OperatingCashFlow - abs(CapitalExpenditures)
+    unit: USD
+    says: operating cash flow minus capital expenditures
+
+  - name: capex_intensity
+    formula: abs(CapitalExpenditures) / Revenue
+    unit: ratio
+    says: capital expenditures as a share of revenue
+
+  - name: return_on_equity
+    formula: NetIncome / TotalEquity
+    unit: ratio
+    says: net income divided by total equity at period end
+
+  - name: return_on_assets
+    formula: NetIncome / TotalAssets
+    unit: ratio
+    says: net income divided by total assets at period end
+
+  - name: current_ratio
+    formula: TotalCurrentAssets / TotalCurrentLiabilities
+    unit: ratio
+    says: current assets divided by current liabilities
+
+  - name: total_liabilities
+    formula: TotalLiabilities
+    fallback: TotalLiabilitiesAndEquity - TotalEquity
+    unit: USD
+    says: total liabilities, derived from the balance-sheet identity when no total is printed
+
+  - name: liabilities_to_equity
+    formula: TotalLiabilities / TotalEquity
+    fallback: (TotalLiabilitiesAndEquity - TotalEquity) / TotalEquity
+    unit: ratio
+    says: total liabilities divided by total equity
+
+  - name: asset_turnover
+    formula: Revenue / TotalAssets
+    unit: ratio
+    says: revenue divided by total assets at period end
+
+  - name: cash_conversion
+    formula: OperatingCashFlow / NetIncome
+    unit: ratio
+    says: operating cash flow divided by net income
+
+  - name: shareholder_payout
+    formula: abs(DividendsPaid) + abs(ShareRepurchases)
+    unit: USD
+    says: dividends paid plus share repurchases
+
+  - name: sbc_share_of_revenue
+    formula: StockBasedCompensation / Revenue
+    unit: ratio
+    says: stock-based compensation as a share of revenue

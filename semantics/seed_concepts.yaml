@@ -1,0 +1,376 @@
+# Seed semantics: the small set of concepts the graph knows before any question is asked.
+#
+# Each concept lists the printed labels it may appear under (regular expressions on the
+# normalised row label: lower case, footnote marks removed). A label match is only a
+# PROPOSAL. It becomes an active binding when the recovered formula graph agrees with it
+# (see `structure`), which is what tieout/concepts.py checks:
+#
+#   total_of        the row must be the total of a recovered formula
+#   ties_with       the row must print the same values as the row bound to that concept
+#   equals          the recovered formula for this row must be exactly these concepts
+#   operand_of      the row must be an operand of the formula whose total is that concept
+#
+# statement: IS income statement, BS balance sheet, CF cash-flow statement
+# nature:    flow (a period) or stock (a date)
+# pick:      when several rows match, take the "total" one, the "first" or the "last"
+
+concepts:
+  - name: Revenue
+    statement: IS
+    unit: USD
+    nature: flow
+    pick: total
+    labels:
+      - '^(total )?(net )?(operating )?(revenues?|sales)$'
+      - '^(total )?net (sales|revenues?)$'
+      - '^total revenues?,? net of interest expense$'
+      - '^(total )?(sales|revenues?) and other (operating )?(revenues?|income)$'
+      - '^sales to customers$'
+      - '^net operating revenues$'
+      - '^(total )?sales and revenues$'
+      - '^total company revenues?$'
+
+  - name: CostOfRevenue
+    statement: IS
+    unit: USD
+    nature: flow
+    pick: total
+    labels:
+      - '^(total )?cost of (sales|revenues?|goods sold|products sold|net revenues?)$'
+      - '^cost of sales and services$'
+      - '^cost of (sales|goods sold)[,( ].*'
+
+  - name: GrossProfit
+    statement: IS
+    unit: USD
+    nature: flow
+    pick: first
+    labels:
+      - '^gross (profit|margin)$'
+      - '^total gross (profit|margin)$'
+    structure:
+      equals: [Revenue, -CostOfRevenue]
+
+  - name: ResearchAndDevelopment
+    statement: IS
+    unit: USD
+    nature: flow
+    pick: first
+    labels:
+      - '^research and development( expenses?)?$'
+      - '^research, development and (engineering|related expenses)$'
+
+  - name: SellingGeneralAdmin
+    statement: IS
+    unit: USD
+    nature: flow
+    pick: first
+    labels:
+      - '^selling, general and administrative( expenses?)?$'
+      - '^selling, informational and administrative( expenses?)?$'
+      - '^marketing, general and administrative$'
+      - '^operating, selling, general and administrative expenses$'
+      - '^selling, marketing and administrative( expenses?)?$'
+
+  - name: OperatingIncome
+    statement: IS
+    unit: USD
+    nature: flow
+    pick: first
+    labels:
+      - '^(total )?operating (income|profit|earnings)( \(loss\))?$'
+      - '^(income|loss|income \(loss\)) from operations$'
+
+  - name: PretaxIncome
+    statement: IS
+    unit: USD
+    nature: flow
+    pick: first
+    labels:
+      - '^(income|earnings)( \(loss\))? before (provision for |\(?benefit from\)? |benefit from )?(income )?tax(es)?( expense)?$'
+      - '^(income|earnings)( \(loss\))? before (provision for )?taxes on income$'
+      - '^(income|earnings)( \(loss\))? before income taxes and .*'
+      - '^(income|earnings) from continuing operations before (income )?tax(es)?$'
+      - '^consolidated profit before taxes$'
+
+  - name: IncomeTax
+    statement: IS
+    unit: USD
+    nature: flow
+    pick: first
+    labels:
+      - '^(provision for|\(?benefit from\)?|provision for \(benefit from\)|provision \(benefit\) for) (income )?tax(es)?( on income)?$'
+      - '^income tax(es)?( expense| provision)?( \(benefit\))?$'
+      - '^(provision|benefit) \(benefit\) for income taxes$'
+      - '^taxes on income$'
+      - '^total income tax expense$'
+
+  - name: NetIncome
+    statement: IS
+    unit: USD
+    nature: flow
+    pick: first
+    labels:
+      - '^net (income|earnings)( \(loss\))?$'
+      - '^consolidated net (income|earnings)$'
+      - '^net (income|earnings) including noncontrolling interests?$'
+      - '^profit of consolidated and affiliated companies$'
+      - '^net (income|earnings) attributable to .*'
+    structure:
+      ties_with_cf_first_row: true
+
+  - name: EPSDiluted
+    statement: IS
+    unit: USD/share
+    nature: flow
+    pick: last
+    labels:
+      - '^diluted$'
+      - '^diluted (net )?(earnings|income)( \(loss\))? per (common |ordinary )?share$'
+      - '^(net )?(earnings|income)( \(loss\))? per (common )?share[ ,:—–-]+(assuming dilution|diluted)$'
+      - '^diluted (eps|earnings per common share)$'
+      - '^profit per (common )?share[ ,:—–-]+diluted$'
+    section: 'per (common |ordinary )?share|earnings per|eps'
+    structure:
+      eps_identity: true
+
+  - name: SharesDiluted
+    statement: IS
+    unit: shares
+    nature: flow
+    pick: last
+    labels:
+      - '^diluted$'
+      - '^diluted (weighted[- ]average )?(common )?shares( outstanding)?$'
+      - '^weighted[- ]average .*dilut.*'
+      - '^(shares used|average shares|average common shares).*dilut.*'
+      - '.*assuming dilution$'
+    section: 'shares|weighted'
+    structure:
+      eps_identity: true
+
+  - name: NetInterestIncome
+    statement: IS
+    unit: USD
+    nature: flow
+    pick: first
+    labels:
+      - '^net interest income$'
+
+  - name: ProvisionForCreditLosses
+    statement: IS
+    unit: USD
+    nature: flow
+    pick: first
+    labels:
+      - '^(total )?provisions? for credit losses$'
+      - '^provisions? for credit losses and for benefits and claims$'
+
+  - name: NoninterestExpense
+    statement: IS
+    unit: USD
+    nature: flow
+    pick: total
+    labels:
+      - '^total non-?interest expenses?$'
+
+  - name: Cash
+    statement: BS
+    unit: USD
+    nature: stock
+    pick: first
+    labels:
+      - '^cash and cash equivalents$'
+      - '^cash and due from banks$'
+      - '^total cash and cash equivalents$'
+
+  - name: TotalCurrentAssets
+    statement: BS
+    unit: USD
+    nature: stock
+    pick: first
+    labels:
+      - '^total current assets$'
+    structure:
+      total_of: true
+
+  - name: TotalAssets
+    statement: BS
+    unit: USD
+    nature: stock
+    pick: first
+    labels:
+      - '^total assets$'
+    structure:
+      ties_with: TotalLiabilitiesAndEquity
+
+  - name: TotalCurrentLiabilities
+    statement: BS
+    unit: USD
+    nature: stock
+    pick: first
+    labels:
+      - '^total current liabilities$'
+    structure:
+      total_of: true
+
+  - name: TotalLiabilities
+    statement: BS
+    unit: USD
+    nature: stock
+    pick: first
+    labels:
+      - '^total liabilities$'
+    structure:
+      total_of: true
+
+  - name: TotalEquity
+    statement: BS
+    unit: USD
+    nature: stock
+    pick: last
+    labels:
+      - '^total (stockholders|shareholders|shareowners|share-owners)[’'']? ?(equity|investment)( \(deficit\))?$'
+      - '^total equity( \(deficit\))?$'
+      - '^total .{0,40}(stockholders|shareholders|shareowners)[’'']? ?equity$'
+      - '^total shareholders[’'']? (deficit|equity \(deficit\))$'
+    structure:
+      total_of: true
+
+  - name: TotalLiabilitiesAndEquity
+    statement: BS
+    unit: USD
+    nature: stock
+    pick: last
+    labels:
+      - '^total liabilities(,| and) .*(equity|investment|deficit)( \(deficit\))?$'
+      - '^total liabilities and (stockholders|shareholders|shareowners)[’'']? ?(equity|investment|deficit).*'
+
+  - name: Inventory
+    statement: BS
+    unit: USD
+    nature: stock
+    pick: first
+    labels:
+      - '^(total |merchandise )?inventor(y|ies)(, net)?$'
+
+  - name: Goodwill
+    statement: BS
+    unit: USD
+    nature: stock
+    pick: first
+    labels:
+      - '^goodwill(, net)?$'
+
+  - name: LongTermDebt
+    statement: BS
+    unit: USD
+    nature: stock
+    pick: first
+    labels:
+      - '^long-term debt(, net)?$'
+      - '^long-term debt,? (excluding|less|net of) current (portion|maturities|installments).*'
+      - '^term debt$'
+      - '^long-term borrowings$'
+      - '^total long-term debt$'
+
+  - name: Deposits
+    statement: BS
+    unit: USD
+    nature: stock
+    pick: total
+    labels:
+      - '^(total )?deposits$'
+      - '^customer deposits$'
+
+  - name: OperatingCashFlow
+    statement: CF
+    unit: USD
+    nature: flow
+    pick: first
+    labels:
+      - '^(net )?cash (flows? )?(provided by|from|generated by|generated from|\(?used (in|for)\)?|provided by \(used (in|for)\)|provided \(used\) by) (\(used (in|for)\) )?operating activities.*'
+      - '^(net )?cash (flows? )?(provided by|from|used in|used for).{0,24}operati(ng|ons).*'
+      - '^cash generated by operating activities$'
+      - '^net cash flows? from operating activities$'
+    structure:
+      total_of: true
+
+  - name: InvestingCashFlow
+    statement: CF
+    unit: USD
+    nature: flow
+    pick: first
+    labels:
+      - '^(net )?cash (flows? )?(provided by|from|generated by|\(?used (in|for)\)?|provided by \(used (in|for)\)|provided \(used\) by|used in|used for|generated by/\(used in\)).{0,24}investing activities.*'
+    structure:
+      total_of: true
+
+  - name: FinancingCashFlow
+    statement: CF
+    unit: USD
+    nature: flow
+    pick: first
+    labels:
+      - '^(net )?cash (flows? )?(provided by|from|generated by|\(?used (in|for)\)?|provided by \(used (in|for)\)|provided \(used\) by|used in|used for).{0,24}financing activities.*'
+    structure:
+      total_of: true
+
+  - name: CapitalExpenditures
+    statement: CF
+    unit: USD
+    nature: flow
+    pick: first
+    labels:
+      - '^(purchases?|acquisitions?) of property(,| and) .*'
+      - '^payments for (acquisition|purchases?) of property.*'
+      - '^(additions|expenditures) (to|for) property.*'
+      - '^capital expenditures.*'
+      - '^(purchases?|payments for) (of )?property and equipment.*'
+      - '^payments for property and equipment.*'
+      - '^capital spending$'
+
+  - name: DepreciationAmortization
+    statement: CF
+    unit: USD
+    nature: flow
+    pick: first
+    labels:
+      - '^depreciation(,| and) (depletion and )?amortization.*'
+      - '^depreciation, amortization(,| and) .*'
+      - '^amortization and depreciation.*'
+
+  - name: StockBasedCompensation
+    statement: CF
+    unit: USD
+    nature: flow
+    pick: first
+    labels:
+      - '^(stock|share)-based compensation( expense)?$'
+      - '^stock-based compensation.*'
+      - '^share-based compensation.*'
+
+  - name: DividendsPaid
+    statement: CF
+    unit: USD
+    nature: flow
+    pick: first
+    labels:
+      - '^(payments? (for|of) )?(cash )?dividends( and dividend equivalents)?( paid)?( to (shareholders|stockholders|shareowners))?$'
+      - '^(cash )?dividends paid.*'
+      - '^payments for dividends.*'
+      - '^common stock (cash )?dividends paid$'
+      - '^dividends to (shareholders|stockholders|shareowners)$'
+
+  - name: ShareRepurchases
+    statement: CF
+    unit: USD
+    nature: flow
+    pick: first
+    labels:
+      - '^(repurchases?|purchases?) of (class a )?(common|treasury) (stock|shares).*'
+      - '^(common )?(stock|shares?) repurchase[ds]?.*'
+      - '^(payments for )?repurchases? of (common )?(stock|shares).*'
+      - '^treasury stock (purchased|acquired).*'
+      - '^(purchases?|acquisition) of (stock|shares) for treasury.*'
+      - '^common stock repurchased$'

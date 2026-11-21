@@ -1,0 +1,290 @@
+{
+ "all": {
+  "sign_flip": {
+   "injected": 1280,
+   "caught": 1269,
+   "silent": 11,
+   "catch_rate": 0.99140625,
+   "ci95": [
+    0.9847,
+    0.9952
+   ]
+  },
+  "digit_error": {
+   "injected": 1280,
+   "caught": 1113,
+   "silent": 167,
+   "catch_rate": 0.86953125,
+   "ci95": [
+    0.85,
+    0.8869
+   ]
+  },
+  "column_shift": {
+   "injected": 1264,
+   "caught": 1263,
+   "silent": 1,
+   "catch_rate": 0.9992088607594937,
+   "ci95": [
+    0.9955,
+    0.9999
+   ]
+  },
+  "row_swap": {
+   "injected": 1234,
+   "caught": 333,
+   "silent": 901,
+   "catch_rate": 0.2698541329011345,
+   "ci95": [
+    0.2458,
+    0.2953
+   ]
+  },
+  "drop_row": {
+   "injected": 1280,
+   "caught": 1010,
+   "silent": 270,
+   "catch_rate": 0.7890625,
+   "ci95": [
+    0.7659,
+    0.8105
+   ]
+  },
+  "cell_scale": {
+   "injected": 1280,
+   "caught": 1280,
+   "silent": 0,
+   "catch_rate": 1.0,
+   "ci95": [
+    0.997,
+    1.0
+   ]
+  },
+  "table_scale": {
+   "injected": 160,
+   "caught": 6,
+   "silent": 154,
+   "catch_rate": 0.0375,
+   "ci95": [
+    0.0173,
+    0.0794
+   ]
+  }
+ },
+ "IS": {
+  "sign_flip": {
+   "injected": 416,
+   "caught": 416,
+   "silent": 0,
+   "catch_rate": 1.0,
+   "ci95": [
+    0.9908,
+    1.0
+   ]
+  },
+  "digit_error": {
+   "injected": 416,
+   "caught": 387,
+   "silent": 29,
+   "catch_rate": 0.9302884615384616,
+   "ci95": [
+    0.9017,
+    0.951
+   ]
+  },
+  "column_shift": {
+   "injected": 416,
+   "caught": 416,
+   "silent": 0,
+   "catch_rate": 1.0,
+   "ci95": [
+    0.9908,
+    1.0
+   ]
+  },
+  "row_swap": {
+   "injected": 387,
+   "caught": 128,
+   "silent": 259,
+   "catch_rate": 0.330749354005168,
+   "ci95": [
+    0.2857,
+    0.3791
+   ]
+  },
+  "drop_row": {
+   "injected": 416,
+   "caught": 255,
+   "silent": 161,
+   "catch_rate": 0.6129807692307693,
+   "ci95": [
+    0.5653,
+    0.6585
+   ]
+  },
+  "cell_scale": {
+   "injected": 416,
+   "caught": 416,
+   "silent": 0,
+   "catch_rate": 1.0,
+   "ci95": [
+    0.9908,
+    1.0
+   ]
+  },
+  "table_scale": {
+   "injected": 52,
+   "caught": 1,
+   "silent": 51,
+   "catch_rate": 0.019230769230769232,
+   "ci95": [
+    0.0034,
+    0.1012
+   ]
+  }
+ },
+ "BS": {
+  "sign_flip": {
+   "injected": 432,
+   "caught": 428,
+   "silent": 4,
+   "catch_rate": 0.9907407407407407,
+   "ci95": [
+    0.9764,
+    0.9964
+   ]
+  },
+  "digit_error": {
+   "injected": 432,
+   "caught": 380,
+   "silent": 52,
+   "catch_rate": 0.8796296296296297,
+   "ci95": [
+    0.8456,
+    0.907
+   ]
+  },
+  "column_shift": {
+   "injected": 415,
+   "caught": 414,
+   "silent": 1,
+   "catch_rate": 0.9975903614457832,
+   "ci95": [
+    0.9865,
+    0.9996
+   ]
+  },
+  "row_swap": {
+   "injected": 422,
+   "caught": 65,
+   "silent": 357,
+   "catch_rate": 0.15402843601895735,
+   "ci95": [
+    0.1227,
+    0.1916
+   ]
+  },
+  "drop_row": {
+   "injected": 432,
+   "caught": 354,
+   "silent": 78,
+   "catch_rate": 0.8194444444444444,
+   "ci95": [
+    0.7804,
+    0.8529
+   ]
+  },
+  "cell_scale": {
+   "injected": 432,
+   "caught": 432,
+   "silent": 0,
+   "catch_rate": 1.0,
+   "ci95": [
+    0.9912,
+    1.0
+   ]
+  },
+  "table_scale": {
+   "injected": 54,
+   "caught": 2,
+   "silent": 52,
+   "catch_rate": 0.037037037037037035,
+   "ci95": [
+    0.0102,
+    0.1254
+   ]
+  }
+ },
+ "CF": {
+  "sign_flip": {
+   "injected": 432,
+   "caught": 431,
+   "silent": 1,
+   "catch_rate": 0.9976851851851852,
+   "ci95": [
+    0.987,
+    0.9996
+   ]
+  },
+  "digit_error": {
+   "injected": 432,
+   "caught": 343,
+   "silent": 89,
+   "catch_rate": 0.7939814814814815,
+   "ci95": [
+    0.7533,
+    0.8294
+   ]
+  },
+  "column_shift": {
+   "injected": 432,
+   "caught": 430,
+   "silent": 2,
+   "catch_rate": 0.9953703703703703,
+   "ci95": [
+    0.9833,
+    0.9987
+   ]
+  },
+  "row_swap": {
+   "injected": 420,
+   "caught": 97,
+   "silent": 323,
+   "catch_rate": 0.23095238095238096,
+   "ci95": [
+    0.1932,
+    0.2736
+   ]
+  },
+  "drop_row": {
+   "injected": 432,
+   "caught": 377,
+   "silent": 55,
+   "catch_rate": 0.8726851851851852,
+   "ci95": [
+    0.8379,
+    0.9009
+   ]
+  },
+  "cell_scale": {
+   "injected": 432,
+   "caught": 432,
+   "silent": 0,
+   "catch_rate": 1.0,
+   "ci95": [
+    0.9912,
+    1.0
+   ]
+  },
+  "table_scale": {
+   "injected": 54,
+   "caught": 2,
+   "silent": 52,
+   "catch_rate": 0.037037037037037035,
+   "ci95": [
+    0.0102,
+    0.1254
+   ]
+  }
+ }
+}

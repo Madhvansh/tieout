@@ -1,0 +1,25 @@
+Kaggle user: madhvanshatulchoksi
+creating PRIVATE dataset madhvanshatulchoksi/planner-ft-data
+Starting upload for file system_prompt.txt
+Upload successful: system_prompt.txt (1KB)
+Starting upload for file train.jsonl
+Upload successful: train.jsonl (144KB)
+Starting upload for file val.jsonl
+Upload successful: val.jsonl (15KB)
+Your private Dataset is being created. Please check progress at https://www.kaggle.com/datasets/madhvanshatulchoksi/planner-ft-data
+
+  0%|          | 0.00/1.47k [00:00<?, ?B/s]
+100%|##########| 1.47k/1.47k [00:00<00:00, 5.12kB/s]
+100%|##########| 1.47k/1.47k [00:01<00:00, 1.34kB/s]
+
+  0%|          | 0.00/144k [00:00<?, ?B/s]
+ 11%|#1        | 16.0k/144k [00:00<00:02, 53.4kB/s]
+100%|##########| 144k/144k [00:01<00:00, 82.2kB/s] 
+
+  0%|          | 0.00/15.0k [00:00<?, ?B/s]
+100%|##########| 15.0k/15.0k [00:00<00:00, 52.5kB/s]
+100%|##########| 15.0k/15.0k [00:01<00:00, 13.5kB/s]
+dataset ready
+pushing PRIVATE kernel madhvanshatulchoksi/planner-lora-ft on NvidiaTeslaT4
+Kernel version 1 successfully pushed.  Please check progress at https://www.kaggle.com/code/madhvanshatulchoksi/planner-lora-ft
+[  0.0 min] QUEUED

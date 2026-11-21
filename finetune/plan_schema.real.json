@@ -1,0 +1,234 @@
+{
+ "type": "object",
+ "properties": {
+  "steps": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "op": {
+      "type": "string",
+      "enum": [
+       "get",
+       "metric",
+       "calc",
+       "change",
+       "rank",
+       "filter",
+       "attr",
+       "count",
+       "restated"
+      ]
+     },
+     "company": {
+      "type": "string"
+     },
+     "concept": {
+      "type": "string"
+     },
+     "metric": {
+      "type": "string"
+     },
+     "over": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "cluster": {
+          "type": "string"
+         }
+        },
+        "required": [
+         "cluster"
+        ]
+       }
+      ]
+     },
+     "by": {
+      "type": "object",
+      "properties": {
+       "concept": {
+        "type": "string"
+       },
+       "metric": {
+        "type": "string"
+       }
+      }
+     },
+     "period": {
+      "type": "object",
+      "properties": {
+       "fy": {
+        "type": [
+         "integer",
+         "string"
+        ]
+       },
+       "q": {
+        "type": "integer"
+       },
+       "ytd": {
+        "type": "boolean"
+       }
+      },
+      "required": [
+       "fy"
+      ]
+     },
+     "from": {
+      "type": "object",
+      "properties": {
+       "fy": {
+        "type": [
+         "integer",
+         "string"
+        ]
+       },
+       "q": {
+        "type": "integer"
+       },
+       "ytd": {
+        "type": "boolean"
+       }
+      },
+      "required": [
+       "fy"
+      ]
+     },
+     "to": {
+      "type": "object",
+      "properties": {
+       "fy": {
+        "type": [
+         "integer",
+         "string"
+        ]
+       },
+       "q": {
+        "type": "integer"
+       },
+       "ytd": {
+        "type": "boolean"
+       }
+      },
+      "required": [
+       "fy"
+      ]
+     },
+     "mode": {
+      "type": "string",
+      "enum": [
+       "pct",
+       "abs"
+      ]
+     },
+     "order": {
+      "type": "string",
+      "enum": [
+       "desc",
+       "asc"
+      ]
+     },
+     "k": {
+      "type": "integer"
+     },
+     "where": {
+      "type": "object",
+      "properties": {
+       "attr": {
+        "type": "string"
+       },
+       "eq": {
+        "type": "string"
+       },
+       "by": {
+        "type": "object",
+        "properties": {
+         "concept": {
+          "type": "string"
+         },
+         "metric": {
+          "type": "string"
+         }
+        }
+       },
+       "period": {
+        "type": "object",
+        "properties": {
+         "fy": {
+          "type": [
+           "integer",
+           "string"
+          ]
+         },
+         "q": {
+          "type": "integer"
+         },
+         "ytd": {
+          "type": "boolean"
+         }
+        },
+        "required": [
+         "fy"
+        ]
+       },
+       "gt": {
+        "type": "number"
+       },
+       "lt": {
+        "type": "number"
+       },
+       "ge": {
+        "type": "number"
+       },
+       "le": {
+        "type": "number"
+       }
+      }
+     },
+     "attr": {
+      "type": "string"
+     },
+     "as": {
+      "type": "string"
+     },
+     "of": {
+      "type": "string"
+     },
+     "expr": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id",
+     "op"
+    ]
+   }
+  },
+  "answer": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "cannot": {
+   "type": "string"
+  }
+ },
+ "required": [
+  "steps",
+  "answer"
+ ]
+}
