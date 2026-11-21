@@ -13,6 +13,7 @@
   python scripts/run_benchmark.py --offline             # replay from the cache only; no LLM call is made
   python scripts/run_benchmark.py --ids A01,A06         # only these questions
   python scripts/run_benchmark.py --no-repair           # no second planner call after an executor failure
+  python scripts/run_benchmark.py --persist             # development only: keep what was learned in the store
 
 Each row records the model calls the question made (live or replayed from the cache) with their
 tokens and seconds. The result file is rewritten after every question, so a run that stops keeps
@@ -89,6 +90,9 @@ def main():
     ap.add_argument("--name", default=None)
     ap.add_argument("--ids", default=None, help="comma-separated question ids to run")
     ap.add_argument("--no-repair", action="store_true")
+    ap.add_argument("--persist", action="store_true",
+                    help="save what the run learns to the learned store (development runs only: the store is "
+                         "the system's learning history, which a held-out run then starts from)")
     a = ap.parse_args()
 
     questions = load_benchmark(pathlib.Path(a.bench))
@@ -115,8 +119,8 @@ def main():
     def run(q):
         return answer(q["question"], g, model=a.model, question_id=q["id"], offline=a.offline,
                       plan=oracle.get(q["id"]) if a.oracle else None, executor=ex,
-                      allow_learning=not (a.no_learning or a.ablate == "living" or a.noise > 0), persist=False,
-                      repair=not a.no_repair)
+                      allow_learning=not (a.no_learning or a.ablate == "living" or a.noise > 0),
+                      persist=a.persist and not a.ablate and a.noise == 0, repair=not a.no_repair)
 
     name = a.name or "_".join(x for x in ["tieout", "oracle" if a.oracle else "", f"no-{a.ablate}" if a.ablate else "",
                                           "strict" if a.strict else "", f"noise{a.noise}" if a.noise else ""] if x)
