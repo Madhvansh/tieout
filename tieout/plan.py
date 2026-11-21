@@ -156,6 +156,14 @@ def normalize(plan: dict) -> dict:
             steps.append(s)
             continue
         s = dict(s)
+        if isinstance(s.get("over"), str) and s["over"] != "all" and not s["over"].startswith("$"):
+            s["over"] = [s["over"]]                                     # one ticker given as a set
+        where = s.get("where")
+        if (s.get("op") in ("get", "change", "restated") and isinstance(where, dict) and isinstance(s.get("item"), str)
+                and not any(k in where for k in ("gt", "lt", "ge", "le", "by", "attr"))):
+            # a read never filters: words put in a "where" belong to the line asked for ("stores in California")
+            s["item"] = (s["item"] + " in " + " ".join(str(v) for v in where.values())).strip()
+            del s["where"]
         if s.get("op") == "calc" and isinstance(s.get("expr"), str):
             s["expr"] = re.sub(r"\$(s\d+)\b", r"\1", s["expr"])          # "$s1 / $s2" -> "s1 / s2"
         if isinstance(s.get("by"), (str, dict)):

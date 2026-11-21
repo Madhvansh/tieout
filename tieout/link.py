@@ -73,10 +73,8 @@ the filing prints; the period is chosen later.
 For a ROW whose columns are not periods, also give the number of the column that holds the item.
 For a SENTENCE, give the slot that holds the item's figure for the period asked (a count for "number of",
 an amount for revenue or spending, a percentage only when a percentage is asked).
-When a ROW whose columns are periods reports the item, prefer it to a SENTENCE or to a ROW without
-period columns: sentences and summary tables often round. For a figure of the whole company, prefer
-the consolidated statements' row to a row of a segment table. A sentence slot that holds a change
-(an increase or a decrease) is not the item itself.
+For a figure of the whole company, prefer the consolidated statements' row to a row of a segment
+table. A sentence slot that holds a change (an increase or a decrease) is not the item itself.
 Answer null only if no candidate reports the item.
 Answer as JSON: {"pick": <candidate number or null>, "column": <column number or null>,
 "slot": "<slot or null>", "reason": "<one short sentence>"}"""
@@ -465,8 +463,17 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
         if _unit_fit(unit, expected_unit(phrase)) < 0:
             entry["objections"] = [f"the number picked is in {unit}, the item asks for {expected_unit(phrase)}"]
             return entry
-        entry.update(kind="mention", item=f"said:{ref['id']}:{slot}", ref_id=ref["id"], slot=slot,
-                     label=ref["masked"][:160], page=ref["page"], doc=ref["doc"])
+        tied = _tied_row(st, ref, slot, wanted)
+        if tied is None:
+            entry.update(kind="mention", item=f"said:{ref['id']}:{slot}", ref_id=ref["id"], slot=slot,
+                         label=ref["masked"][:160], page=ref["page"], doc=ref["doc"])
+        else:                                         # the same figure, printed exactly, in a table of the filing
+            sentence_page, ref = ref["page"], tied
+            cand = {"kind": "row", "ref": ref}
+            key = f"item:{_slug(ref['label'])}@{_slug(ref['section'] or ref['title'])}"
+            entry.update(item=key, ref_id=ref["id"], row_id=ref["id"], column=None, label=ref["label"],
+                         title=ref["title"], section=ref["section"], page=ref["page"], doc=ref["doc"],
+                         tied_from=f"the sentence on page {sentence_page} states this figure")
     else:
         column = None
         if not any(c.get("pid") for c in ref["cells"]):
@@ -480,9 +487,34 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
         entry.update(item=key, ref_id=ref["id"], row_id=ref["id"], column=column, label=ref["label"],
                      title=ref["title"], section=ref["section"], page=ref["page"], doc=ref["doc"])
     confirmed, entry["evidence"], entry["objections"] = gate(cand)
+    if entry.get("tied_from"):
+        entry["evidence"].append(entry["tied_from"])
     entry["state"] = "active" if confirmed else "flagged"
     apply_link(g, entry)
     return entry
+
+
+def _tied_row(st: Store, mention: dict, slot: str, wanted: set) -> Optional[dict]:
+    """The table row that prints the chosen sentence figure exactly, for the period asked, if one does.
+
+    Sentences round ("$16.6 billion"); the table cell the sentence ties to holds the exact amount and
+    sits in the table's arithmetic. The match is by value, in code; the model never sees either number.
+    """
+    number = next((n for n in mention["numbers"] if n["slot"].strip("<>") == slot), None)
+    v = number.get("value") if number else None
+    if not isinstance(v, (int, float)) or isinstance(v, bool) or not v:
+        return None
+    for cid in mention.get("ties") or []:
+        rid, _, ci = str(cid).rpartition(":c")
+        row = st.by_id.get(rid)
+        if row is None or not ci.isdigit() or int(ci) >= len(row.get("cells", [])):
+            continue
+        j = int(ci)
+        cell = row["cells"][j]
+        if (_cell_pid(row, j) in wanted and isinstance(cell.get("value"), (int, float))
+                and abs(abs(cell["value"]) - abs(v)) <= max(1.0, 0.006 * abs(v))):
+            return row
+    return None
 
 
 def _as_int(x) -> Optional[int]:
