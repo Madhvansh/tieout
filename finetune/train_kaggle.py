@@ -91,6 +91,7 @@ if _ov:
             raise KeyError(f"unknown hyperparameter override {_k}")
         globals()[_k] = _v; METRICS["hparams"][_k] = _v
     log("overrides", json.load(open(_ov[0])))
+METRICS["base_model"] = BASE_MODEL                 # after overrides (it used to record the default)
 
 # Kaggle image (Nov 2026) ships torchao 0.10 next to peft 0.21, and peft refuses to build LoRA
 # layers when it sees a torchao older than 0.16. Nothing here uses torchao, so remove it first.

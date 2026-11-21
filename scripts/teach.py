@@ -85,7 +85,13 @@ def main():
             for kind, concepts in sorted(unbound(g, t).items()):
                 asked = [c for c in concepts if applicable(g, t, c)]
                 t0 = time.time()
-                picks = propose_rows(g, t, kind, asked, model=a.model) if asked else {}
+                try:
+                    picks = propose_rows(g, t, kind, asked, model=a.model) if asked else {}
+                except DailyLimit:
+                    raise
+                except Exception as e:  # noqa: BLE001 - one statement's failure is logged, the pass goes on
+                    print(f"{t} {kind}: proposer failed ({type(e).__name__}); left open", flush=True)
+                    continue
                 rows = row_table(g, doc, kind)
                 for c, row in picks.items():
                     if row is None:

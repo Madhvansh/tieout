@@ -680,9 +680,11 @@ _WEAK_NOTES = ("matched by wording only", "not covered by any check", "covered "
 def trust(r: Result) -> tuple:
     """The answer's tier and the reasons for it.
 
-    VERIFIED  every number the answer rests on sits inside a formula that holds on its page (or is
-              solved from such numbers), every text fact is quoted from its page, and nothing was
-              matched by wording alone, skipped, or left with a second defensible reading.
+    VERIFIED  every number the answer rests on is a statement line bound to its concept by structure
+              and sits inside a formula that holds on its page (or is solved from such numbers),
+              every text fact is quoted from its page, and nothing was matched by wording alone,
+              skipped, or left with a second defensible reading. A line the linker chose by its
+              words is never VERIFIED: the arithmetic proves the number, not which line it is.
     FLAGGED   answered, with each weakness named.
     ABSTAIN   no answer.
     """
@@ -690,6 +692,10 @@ def trust(r: Result) -> tuple:
         return "ABSTAIN", list(r.notes[:3])
     reasons = []
     for lf in r.leaves:
+        if str(lf.what).startswith(("item:", "said:")):
+            reasons.append(f"{lf.ticker}: the line was chosen by the linker from its words; the arithmetic confirms "
+                           f"the number, not that it is the line asked for ({lf.doc} page {lf.page})")
+            continue
         if lf.status == "verified":
             continue
         if lf.status == "text" and lf.what not in NUMERIC_ATTRS and not str(lf.what).startswith(("said:", "item:")):

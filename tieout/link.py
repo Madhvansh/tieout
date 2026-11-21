@@ -73,6 +73,8 @@ the filing prints; the period is chosen later.
 For a ROW whose columns are not periods, also give the number of the column that holds the item.
 For a SENTENCE, give the slot that holds the item's figure for the period asked (a count for "number of",
 an amount for revenue or spending, a percentage only when a percentage is asked).
+When a ROW whose columns are periods reports the item, prefer it to a SENTENCE or to a ROW without
+period columns: sentences and summary tables often round.
 Answer null only if no candidate reports the item.
 Answer as JSON: {"pick": <candidate number or null>, "column": <column number or null>,
 "slot": "<slot or null>", "reason": "<one short sentence>"}"""
@@ -427,8 +429,10 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
     cand = cands[pick]
     ref = cand["ref"]
     if cand["kind"] == "sentence":
-        said = str(ans.get("slot") or (ref["numbers"][0]["slot"] if len(ref["numbers"]) == 1 else ""))
-        slot = (re.search(r"n\d+", said) or re.search(r".*", "")).group(0)      # "<n1 count>" or "n1" -> "n1"
+        said = re.search(r"n\d+", str(ans.get("slot") or ""))                   # "<n1 count>" or "n1" -> "n1"
+        fitting = [n["slot"].strip("<>") for n in ref["numbers"]
+                   if n.get("unit") not in ("date", "year") and _unit_fit(n.get("unit"), expected_unit(phrase)) >= 0]
+        slot = said.group(0) if said else (fitting[0] if len(fitting) == 1 else "")   # one figure of the right unit
         if slot not in {n["slot"].strip("<>") for n in ref["numbers"]}:
             entry["objections"] = ["proposer named no number slot of the sentence"]
             return entry

@@ -147,8 +147,12 @@ def _groq(name: str, system: str, user: str, schema: Optional[dict]) -> str:
     if effort:
         body["reasoning_effort"] = effort
     for attempt in range(8):
-        r = requests.post("https://api.groq.com/openai/v1/chat/completions",
-                          headers={"Authorization": f"Bearer {os.environ['GROQ_API_KEY']}"}, json=body, timeout=120)
+        try:
+            r = requests.post("https://api.groq.com/openai/v1/chat/completions",
+                              headers={"Authorization": f"Bearer {os.environ['GROQ_API_KEY']}"}, json=body, timeout=120)
+        except (requests.ConnectionError, requests.Timeout):
+            time.sleep(10 * (attempt + 1))         # a dropped connection is retried like a rate limit
+            continue
         if r.status_code == 429 and "per day" in r.text:
             raise DailyLimit(f"groq {name}: daily quota spent")
         if r.status_code == 400 and "failed_generation" in r.text:
@@ -164,8 +168,7 @@ def _groq(name: str, system: str, user: str, schema: Optional[dict]) -> str:
         usage = r.json().get("usage", {})
         _USAGE.update({"in": usage.get("prompt_tokens", 0), "out": usage.get("completion_tokens", 0)})
         return r.json()["choices"][0]["message"]["content"]
-    r.raise_for_status()
-    return ""
+    raise RuntimeError(f"groq {name}: no answer after 8 attempts")
 
 
 def _ollama(name: str, system: str, user: str, schema: Optional[dict]) -> str:
