@@ -1,0 +1,12 @@
+# core: build the graph, answer questions, run the benchmark
+pdfplumber>=0.11
+PyYAML>=6.0
+requests>=2.31
+
+# baseline only (scripts/run_baseline.py)
+rank-bm25>=0.2.2
+scikit-learn>=1.4
+numpy>=1.26
+
+# tests
+pytest>=8.0

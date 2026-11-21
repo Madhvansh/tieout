@@ -22,22 +22,22 @@
   },
   "column_shift": {
    "injected": 1264,
-   "caught": 1263,
-   "silent": 1,
-   "catch_rate": 0.9992088607594937,
+   "caught": 1262,
+   "silent": 2,
+   "catch_rate": 0.9984177215189873,
    "ci95": [
-    0.9955,
-    0.9999
+    0.9942,
+    0.9996
    ]
   },
   "row_swap": {
    "injected": 1234,
-   "caught": 333,
-   "silent": 901,
-   "catch_rate": 0.2698541329011345,
+   "caught": 329,
+   "silent": 905,
+   "catch_rate": 0.26661264181523503,
    "ci95": [
-    0.2458,
-    0.2953
+    0.2427,
+    0.292
    ]
   },
   "drop_row": {
@@ -62,64 +62,64 @@
   },
   "table_scale": {
    "injected": 160,
-   "caught": 6,
-   "silent": 154,
-   "catch_rate": 0.0375,
+   "caught": 4,
+   "silent": 156,
+   "catch_rate": 0.025,
    "ci95": [
-    0.0173,
-    0.0794
+    0.0098,
+    0.0625
    ]
   }
  },
  "IS": {
   "sign_flip": {
    "injected": 416,
-   "caught": 416,
-   "silent": 0,
-   "catch_rate": 1.0,
+   "caught": 415,
+   "silent": 1,
+   "catch_rate": 0.9975961538461539,
    "ci95": [
-    0.9908,
-    1.0
+    0.9865,
+    0.9996
    ]
   },
   "digit_error": {
    "injected": 416,
-   "caught": 387,
-   "silent": 29,
-   "catch_rate": 0.9302884615384616,
+   "caught": 371,
+   "silent": 45,
+   "catch_rate": 0.8918269230769231,
    "ci95": [
-    0.9017,
-    0.951
+    0.8583,
+    0.9182
    ]
   },
   "column_shift": {
    "injected": 416,
-   "caught": 416,
-   "silent": 0,
-   "catch_rate": 1.0,
+   "caught": 415,
+   "silent": 1,
+   "catch_rate": 0.9975961538461539,
    "ci95": [
-    0.9908,
-    1.0
+    0.9865,
+    0.9996
    ]
   },
   "row_swap": {
-   "injected": 387,
-   "caught": 128,
-   "silent": 259,
-   "catch_rate": 0.330749354005168,
+   "injected": 394,
+   "caught": 140,
+   "silent": 254,
+   "catch_rate": 0.3553299492385787,
    "ci95": [
-    0.2857,
-    0.3791
+    0.3097,
+    0.4038
    ]
   },
   "drop_row": {
    "injected": 416,
-   "caught": 255,
-   "silent": 161,
-   "catch_rate": 0.6129807692307693,
+   "caught": 275,
+   "silent": 141,
+   "catch_rate": 0.6610576923076923,
    "ci95": [
-    0.5653,
-    0.6585
+    0.6143,
+    0.7049
    ]
   },
   "cell_scale": {
@@ -134,12 +134,12 @@
   },
   "table_scale": {
    "injected": 52,
-   "caught": 1,
-   "silent": 51,
-   "catch_rate": 0.019230769230769232,
+   "caught": 0,
+   "silent": 52,
+   "catch_rate": 0.0,
    "ci95": [
-    0.0034,
-    0.1012
+    0.0,
+    0.0688
    ]
   }
  },
@@ -176,12 +176,12 @@
   },
   "row_swap": {
    "injected": 422,
-   "caught": 65,
-   "silent": 357,
-   "catch_rate": 0.15402843601895735,
+   "caught": 67,
+   "silent": 355,
+   "catch_rate": 0.15876777251184834,
    "ci95": [
-    0.1227,
-    0.1916
+    0.127,
+    0.1967
    ]
   },
   "drop_row": {
@@ -248,12 +248,12 @@
   },
   "row_swap": {
    "injected": 420,
-   "caught": 97,
-   "silent": 323,
-   "catch_rate": 0.23095238095238096,
+   "caught": 96,
+   "silent": 324,
+   "catch_rate": 0.22857142857142856,
    "ci95": [
-    0.1932,
-    0.2736
+    0.191,
+    0.2711
    ]
   },
   "drop_row": {
@@ -278,12 +278,12 @@
   },
   "table_scale": {
    "injected": 54,
-   "caught": 2,
-   "silent": 52,
-   "catch_rate": 0.037037037037037035,
+   "caught": 1,
+   "silent": 53,
+   "catch_rate": 0.018518518518518517,
    "ci95": [
-    0.0102,
-    0.1254
+    0.0033,
+    0.0977
    ]
   }
  }

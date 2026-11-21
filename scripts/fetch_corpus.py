@@ -22,15 +22,37 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "data" / "manifest.csv"
 OUT = ROOT / "data" / "pdf"
 # several investor-relations hosts refuse the default python client string
-UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
+UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
+# a full browser header set: a bare client string is refused by about one host in six
+HEADERS = {"User-Agent": UA, "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,application/pdf,*/*;q=0.8",
+           "Accept-Language": "en-US,en;q=0.9", "Sec-Fetch-Dest": "document", "Sec-Fetch-Mode": "navigate",
+           "Sec-Fetch-Site": "none", "Upgrade-Insecure-Requests": "1"}
 MAX_BYTES = 90 * 1024 * 1024
+
+
+def fetch_with_curl(url: str, dest: pathlib.Path) -> tuple:
+    """Some investor-relations hosts refuse python's HTTP client whatever headers it sends
+    and serve the same request from curl. Fall back to the system curl for those."""
+    import subprocess
+    tmp = dest.with_suffix(".part")
+    cmd = ["curl", "-sS", "-L", "--compressed", "--max-time", "180", "-o", str(tmp)]
+    for k, v in HEADERS.items():
+        cmd += ["-H", f"{k}: {v}"]
+    subprocess.run(cmd + [url], check=True)
+    data = tmp.read_bytes()
+    if not data.lstrip()[:5].startswith(b"%PDF"):
+        tmp.unlink(missing_ok=True)
+        raise ValueError("not a PDF (first bytes %r)" % data[:12])
+    tmp.replace(dest)
+    return len(data), hashlib.sha256(data).hexdigest()
 
 
 def fetch(url: str, dest: pathlib.Path) -> tuple:
     h = hashlib.sha256()
     n = 0
-    with requests.get(url, headers={"User-Agent": UA, "Accept": "application/pdf,*/*"},
-                      stream=True, timeout=90, allow_redirects=True) as r:
+    with requests.get(url, headers=HEADERS, stream=True, timeout=120, allow_redirects=True) as r:
+        if r.status_code in (403, 406, 429):
+            return fetch_with_curl(url, dest)
         r.raise_for_status()
         tmp = dest.with_suffix(".part")
         with open(tmp, "wb") as f:
