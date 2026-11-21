@@ -5,6 +5,7 @@
     python -m tieout concepts            which companies each concept is bound for
     python -m tieout ask "question"      answer one question, with plan, sources and notes
     python -m tieout language            the plan language: rules, vocabulary, worked examples
+    python -m tieout show "question"     the source page with the answer's cells and formula drawn on it
 """
 from __future__ import annotations
 
@@ -43,6 +44,7 @@ def main() -> int:
         result = out["result"]
         print("PLAN:  ", json.dumps(out["plan"]))
         print("ANSWER:", out["answer"])
+        print("TRUST: ", result.tier or "FLAGGED", *(f"\n  why: {x}" for x in result.tier_reasons))
         for lf in result.leaves[:MAX_SOURCES_SHOWN]:
             print(f"  source: {lf.doc} page {lf.page} | {lf.label[:60]} | printed {lf.printed} | {lf.status}")
         if len(result.leaves) > MAX_SOURCES_SHOWN:
@@ -53,6 +55,9 @@ def main() -> int:
             print(f"  the filing says ({quote['doc']} page {quote['page']}): {quote['sentence'][:300]}")
         for e in out["learned"]:
             print(f"  learned: {e['ticker']} {e.get('concept') or e.get('phrase')} -> {e['state']} ({e.get('label')})")
+    elif cmd == "show":
+        from .show import main as show_main
+        return show_main(sys.argv[2:])
     elif cmd == "language":
         from .graph import Graph
         from .planner import system_prompt

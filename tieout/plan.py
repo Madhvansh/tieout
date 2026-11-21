@@ -48,7 +48,9 @@ Periods
 """
 from __future__ import annotations
 
+import ast
 import pathlib
+import re
 from typing import Optional
 
 import yaml
@@ -154,6 +156,8 @@ def normalize(plan: dict) -> dict:
             steps.append(s)
             continue
         s = dict(s)
+        if s.get("op") == "calc" and isinstance(s.get("expr"), str):
+            s["expr"] = re.sub(r"\$(s\d+)\b", r"\1", s["expr"])          # "$s1 / $s2" -> "s1 / s2"
         if isinstance(s.get("by"), (str, dict)):
             s["by"] = _as_measure(s["by"])
         if isinstance(s.get("where"), dict) and "by" in s["where"]:
@@ -176,6 +180,32 @@ def normalize(plan: dict) -> dict:
             period_of[s["id"]] = s["period"]
         steps.append(s)
     return {**plan, "steps": steps}
+
+
+_CALC_NODES = (ast.Expression, ast.BinOp, ast.UnaryOp, ast.USub, ast.UAdd, ast.Add, ast.Sub, ast.Mult, ast.Div,
+               ast.Call, ast.Name, ast.Load, ast.Constant)
+
+
+def calc_errors(expr, defined: set, sid: str) -> list:
+    """Why a calc expression cannot run: not arithmetic, or it names a step that is not defined before it."""
+    if not isinstance(expr, str) or not expr.strip():
+        return [f"{sid}: calc needs expr"]
+    try:
+        tree = ast.parse(expr, mode="eval")
+    except SyntaxError:
+        return [f"{sid}: calc expr is not arithmetic over step ids (write s1 / s2, not $s1 / $s2)"]
+    errs = []
+    for node in ast.walk(tree):
+        if not isinstance(node, _CALC_NODES):
+            errs.append(f"{sid}: calc expr may only use + - * / ( ), numbers, step ids and abs()")
+            break
+        if isinstance(node, ast.Call) and getattr(node.func, "id", "") != "abs":
+            errs.append(f"{sid}: the only function a calc may call is abs()")
+        if isinstance(node, ast.Constant) and not isinstance(node.value, (int, float)):
+            errs.append(f"{sid}: calc constants must be numbers")
+        if isinstance(node, ast.Name) and node.id != "abs" and node.id not in defined:
+            errs.append(f"{sid}: calc uses {node.id}, which is not a step defined before it")
+    return errs
 
 
 def measure_errors(m, where: str) -> list:
@@ -268,8 +298,8 @@ def validate(plan: dict, graph) -> list:
             errs.append(f"{sid}: members needs of (the total whose parts are wanted)")
         if op == "attr" and s.get("attr") not in TEXT_ATTRS:
             errs.append(f"{sid}: unknown attribute {s.get('attr')}")
-        if op == "calc" and not s.get("expr"):
-            errs.append(f"{sid}: calc needs expr")
+        if op == "calc":
+            errs.extend(calc_errors(s.get("expr"), seen, sid))
         if op == "count":
             ref_ok(s.get("of"), sid)
             if not s.get("of"):

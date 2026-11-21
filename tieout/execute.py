@@ -59,6 +59,8 @@ class Result:
     tree: dict = field(default_factory=dict)
     missing: list = field(default_factory=list)   # (ticker, what, period spec) the graph could not supply
     extra: dict = field(default_factory=dict)
+    tier: str = ""            # VERIFIED | FLAGGED | ABSTAIN, set on the final answer (see trust())
+    tier_reasons: list = field(default_factory=list)
 
     @property
     def ok(self) -> bool:
@@ -84,11 +86,13 @@ def abstain(note: str, leaves: Optional[list] = None, missing: Optional[list] = 
 
 class Executor:
     def __init__(self, graph: Graph, use_checks: bool = True, use_derivations: bool = True,
-                 require_verified: bool = False):
+                 require_verified: bool = False, use_solving: bool = True, use_links: bool = True):
         self.g = graph
         self.use_checks = use_checks              # ablation: serve failed readings as if they were fine
         self.require_verified = require_verified  # strict policy: abstain unless every leaf is verified
         self.use_derivations = use_derivations    # ablation: no metric formulas, no equation solving
+        self.use_solving = use_solving            # ablation: no fourth quarter from the year, no identities
+        self.use_links = use_links                # ablation: no line items, sentences or breakdowns
         self.concepts = concept_defs()
         self.metrics = metric_defs()
         self.identities = identity_defs()
@@ -117,12 +121,13 @@ class Executor:
             r = e.result
             return Result("abstain", leaves=list(r.leaves), notes=list(r.notes), missing=list(r.missing),
                           extra=dict(r.extra))
-        except (KeyError, TypeError, ValueError, IndexError, ZeroDivisionError) as e:
+        except Exception as e:  # noqa: BLE001 - no plan may stop a run; the reason is kept
             # a plan that passed validation but asks for something its steps cannot give
             return abstain(f"plan could not run: {type(e).__name__}: {str(e)[:120]}")
         final = env[plan["answer"]]
         final.leaves = list({lf.id: lf for lf in final.leaves}.values())   # everything read on the way, once
         final.notes = list(dict.fromkeys(final.notes))
+        final.tier, final.tier_reasons = trust(final)
         return final
 
     # ------------------------------------------------------------ periods
@@ -154,8 +159,8 @@ class Executor:
         f = self.g.fact(ticker, concept, pid)
         if f is not None:
             return self._from_fact(f, ticker, concept, pid, first, c.unit, concept in OUTFLOW)
-        if derive and self.use_derivations:
-            solved = self._derive(ticker, concept, spec)
+        if derive and self.use_derivations and self.use_solving:
+            solved = self._derive(ticker, concept, spec, first)
             if solved is not None:
                 return solved
         reason = getattr(self.g, "absent", {}).get((ticker, concept))
@@ -182,10 +187,26 @@ class Executor:
         if any(self.g.readings[i].superseded for i in f.readings):
             notes.append(f"{ticker} {what} {pid} was restated; "
                          + ("first-reported" if first else "latest-reported") + " value used")
+        other = self._second_reading(ticker, what, pid, value)
+        if other:
+            notes.append(other)
         return Result("number", value, unit, [leaf], notes,
                       {"op": "read", "what": f"{ticker} {what} {pid}", "value": value, "page": r.page, "doc": r.doc})
 
-    def _derive(self, ticker: str, concept: str, spec: dict) -> Optional[Result]:
+    def _second_reading(self, ticker: str, concept: str, pid: str, value) -> str:
+        """The other defensible reading of a concept that has two forms (attributable and consolidated
+        net income, shareholders' and total equity), when the company prints both and they differ."""
+        other = SECOND_READING.get(concept)
+        f = self.g.fact(ticker, other, pid) if other else None
+        if f is None:
+            return ""
+        r = self.g.best_reading(f)
+        if r.value is None or r.value == value:
+            return ""
+        return (f"second reading: {other} is {_fmt(r.value, self.concepts[other].unit)} "
+                f"({r.doc} page {r.page}, '{(r.label or '')[:50]}')")
+
+    def _derive(self, ticker: str, concept: str, spec: dict, first: bool = False) -> Optional[Result]:
         """Solve for a fact that is printed nowhere, from one equation whose other terms are printed.
 
         Two kinds of equation: the period lattice (a year is nine months plus a fourth
@@ -193,8 +214,8 @@ class Executor:
         """
         c = self.concepts[concept]
         if c.nature == "flow" and spec.get("q") == 4 and not spec.get("ytd"):
-            year = self._fact(ticker, concept, {"fy": spec.get("fy", "latest")}, derive=False)
-            ytd = self._fact(ticker, concept, {"fy": spec.get("fy", "latest"), "q": 3, "ytd": True}, derive=False)
+            year = self._fact(ticker, concept, {"fy": spec.get("fy", "latest")}, first, derive=False)
+            ytd = self._fact(ticker, concept, {"fy": spec.get("fy", "latest"), "q": 3, "ytd": True}, first, derive=False)
             if year.ok and ytd.ok:
                 value = year.value - ytd.value
                 return Result("number", value, c.unit, year.leaves + ytd.leaves,
@@ -205,7 +226,7 @@ class Executor:
         for identity in self.identities:
             if concept not in identity:
                 continue
-            terms = {name: self._fact(ticker, name, spec, derive=False) for name in identity if name != concept}
+            terms = {name: self._fact(ticker, name, spec, first, derive=False) for name in identity if name != concept}
             if not all(r.ok for r in terms.values()):
                 continue
             value = -sum(identity[name] * r.value for name, r in terms.items()) / identity[concept]
@@ -222,6 +243,8 @@ class Executor:
     def _item(self, ticker: str, phrase: str, spec: dict, first: bool = False) -> Result:
         """A line of any table, or a figure stated in a sentence, linked on demand by the living layer."""
         from .link import resolve
+        if not self.use_links:
+            return abstain(f"linking is switched off; '{phrase}' is not a shared concept")
         key = resolve(self.g, ticker, phrase)
         if key is None:
             return abstain(f"no link yet for '{phrase}' at {ticker}", missing=[(ticker, "item:" + phrase, spec)])
@@ -252,9 +275,10 @@ class Executor:
         """One measure for one company and period. See plan.py for the forms a measure takes."""
         if "growth" in m or "delta" in m:
             inner = m.get("growth") or m.get("delta")
-            return self._between(ticker, inner, self._year_before(ticker, spec), spec, "pct" if "growth" in m else "abs")
+            return self._between(ticker, inner, self._year_before(ticker, spec), spec, "pct" if "growth" in m else "abs",
+                                 first)
         if "ratio" in m:
-            top, bottom = (self.measure(ticker, part, spec) for part in m["ratio"])
+            top, bottom = (self.measure(ticker, part, spec, first) for part in m["ratio"])
             if not (top.ok and bottom.ok):
                 return _merge_abstain(top, bottom)
             if not bottom.value:
@@ -269,11 +293,11 @@ class Executor:
         if "item" in m:
             return self._item(ticker, m["item"], spec, first)
         if "metric" in m:
-            return self._metric(ticker, m["metric"], spec)
+            return self._metric(ticker, m["metric"], spec, first)
         return self._fact(ticker, m["concept"], spec, first)
 
-    def _between(self, ticker: str, m: dict, start: dict, end: dict, mode: str) -> Result:
-        a, b = self.measure(ticker, m, start), self.measure(ticker, m, end)
+    def _between(self, ticker: str, m: dict, start: dict, end: dict, mode: str, first: bool = False) -> Result:
+        a, b = self.measure(ticker, m, start, first), self.measure(ticker, m, end, first)
         if not (a.ok and b.ok):
             return _merge_abstain(a, b)
         leaves, notes = a.leaves + b.leaves, a.notes + b.notes
@@ -286,7 +310,7 @@ class Executor:
         return Result("number", value, unit, leaves, notes,
                       {"op": "change", "what": f"{ticker} {_name(m)} {mode}", "value": value, "children": [a.tree, b.tree]})
 
-    def _metric(self, ticker: str, name: str, spec: dict) -> Result:
+    def _metric(self, ticker: str, name: str, spec: dict, first: bool = False) -> Result:
         m = self.metrics[name]
         if not self.use_derivations:
             return abstain(f"derivations are switched off; {name} is not a printed fact")
@@ -309,7 +333,7 @@ class Executor:
                 v = term(node.args[0])
                 return None if v is None else abs(v)
             if isinstance(node, ast.Name):
-                r = self._fact(ticker, node.id, spec)
+                r = self._fact(ticker, node.id, spec, first)
                 leaves.extend(r.leaves)
                 notes.extend(r.notes)
                 if not r.ok:
@@ -559,6 +583,8 @@ class Executor:
 
     def _op_members(self, s: dict, env: dict) -> Result:
         from .link import breakdown
+        if not self.use_links:
+            return abstain("linking is switched off; breakdowns come from the linker")
         ticker = self._company(s["company"], env)
         lines = breakdown(self.g, ticker, s["of"])
         if lines is None:
@@ -626,6 +652,38 @@ class Executor:
                                       r["printed"], "verified", r.get("value")))
         return {"kind": d["kind"], "summary": d.get("summary", ""), "explanations": d.get("explanations", []),
                 "leaves": cited}
+
+
+# ---------------------------------------------------------------- trust
+
+SECOND_READING = {"NetIncome": "ConsolidatedNetIncome", "ConsolidatedNetIncome": "NetIncome",
+                  "ShareholdersEquity": "TotalEquity", "TotalEquity": "ShareholdersEquity"}
+_WEAK_NOTES = ("matched by wording only", "not covered by any check", "covered ", "prints no period column",
+               "second reading:", "only one filing reports")
+
+
+def trust(r: Result) -> tuple:
+    """The answer's tier and the reasons for it.
+
+    VERIFIED  every number the answer rests on sits inside a formula that holds on its page (or is
+              solved from such numbers), every text fact is quoted from its page, and nothing was
+              matched by wording alone, skipped, or left with a second defensible reading.
+    FLAGGED   answered, with each weakness named.
+    ABSTAIN   no answer.
+    """
+    if not r.ok:
+        return "ABSTAIN", list(r.notes[:3])
+    reasons = []
+    for lf in r.leaves:
+        if lf.status == "verified":
+            continue
+        if lf.status == "text" and lf.what not in NUMERIC_ATTRS and not str(lf.what).startswith(("said:", "item:")):
+            continue                                      # a name quoted from the cover page or audit report
+        reasons.append(f"{lf.ticker} {lf.what}: {'stated in a sentence only' if lf.status == 'text' else 'not inside a passing formula'}"
+                       f" ({lf.doc} page {lf.page})")
+    reasons += [n for n in r.notes if any(w in n for w in _WEAK_NOTES)]
+    reasons = list(dict.fromkeys(reasons))
+    return ("FLAGGED", reasons[:6]) if reasons else ("VERIFIED", [])
 
 
 # ---------------------------------------------------------------- rendering

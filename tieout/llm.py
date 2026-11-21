@@ -27,6 +27,7 @@ import requests
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 CACHE = ROOT / "cache" / "llm"
 CALLS = {"live": 0, "cached": 0, "seconds": 0.0, "tokens_in": 0, "tokens_out": 0}
+CALL_LOG: list = []          # one record per call: provider, model, tag, tokens, seconds, cached
 REPLAY_MODEL = "gemini:gemini-3.5-flash-lite"      # the model the cached benchmark plans were written by
 _USAGE: dict = {}                                  # token counts of the last live call
 
@@ -75,7 +76,9 @@ def ask_json(system: str, user: str, schema: Optional[dict] = None, model: Optio
     path = CACHE / f"{tag + '_' if tag else ''}{key[:24]}.json"
     if path.exists():
         CALLS["cached"] += 1
-        return json.loads(path.read_text(encoding="utf-8"))["answer"]
+        rec = json.loads(path.read_text(encoding="utf-8"))
+        _log(rec.get("model", model), tag, rec.get("usage") or {}, rec.get("seconds", 0.0), cached=True)
+        return rec["answer"]
     if offline:
         raise RuntimeError("no cached answer and offline mode is on")
     provider, name = model.split(":", 1)
@@ -86,12 +89,20 @@ def ask_json(system: str, user: str, schema: Optional[dict] = None, model: Optio
     CALLS["seconds"] += time.time() - t0
     CALLS["tokens_in"] += _USAGE.get("in", 0)
     CALLS["tokens_out"] += _USAGE.get("out", 0)
+    _log(model, tag, dict(_USAGE), round(time.time() - t0, 2), cached=False)
     answer = _parse(text)
     CACHE.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps({"model": model, "system": system, "user": user, "answer": answer,
                                 "seconds": round(time.time() - t0, 2), "usage": dict(_USAGE)}, indent=1),
                     encoding="utf-8")
     return answer
+
+
+def _log(model: str, tag: str, usage: dict, seconds: float, cached: bool) -> None:
+    provider = model.split(":", 1)[0]
+    CALL_LOG.append({"provider": provider, "model": model, "tag": tag, "prompt_tokens": int(usage.get("in", 0)),
+                     "completion_tokens": int(usage.get("out", 0)), "seconds": float(seconds or 0.0),
+                     "cached": cached})
 
 
 def _parse(text: str) -> dict:

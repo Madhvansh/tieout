@@ -1,18 +1,24 @@
 """Run the benchmark and write results.
 
   python scripts/run_benchmark.py                       # the system as shipped (LLM plans, cached)
-  python scripts/run_benchmark.py --oracle              # hand-written plans: isolates the graph from the planner
+  python scripts/run_benchmark.py --oracle FILE         # hand-written plans: isolates the graph from the planner
   python scripts/run_benchmark.py --ablate concepts     # no shared concepts: a fact is found only under its literal label
-  python scripts/run_benchmark.py --ablate derivations  # no metric formulas, no period lattice
-  python scripts/run_benchmark.py --ablate living       # seed semantics only, nothing learned from questions
+  python scripts/run_benchmark.py --ablate solve        # no solving: no fourth quarter from the year, no identities
+  python scripts/run_benchmark.py --ablate link         # no linker: only the three statements' shared concepts
+  python scripts/run_benchmark.py --ablate checks       # serve readings whose formulas fail as if they were fine
+  python scripts/run_benchmark.py --ablate store        # start from an empty learned store (learning still on)
+  python scripts/run_benchmark.py --ablate living       # seed semantics only: nothing learned, before or during
   python scripts/run_benchmark.py --strict              # answer only from verified leaves
   python scripts/run_benchmark.py --noise 0.05          # rebuild the graph with 5% of statement cells damaged
   python scripts/run_benchmark.py --offline             # replay from the cache only; no LLM call is made
-  python scripts/run_benchmark.py --ids A01,A06          # only these questions
-  python scripts/run_benchmark.py --no-repair            # no second planner call after an executor failure
+  python scripts/run_benchmark.py --ids A01,A06         # only these questions
+  python scripts/run_benchmark.py --no-repair           # no second planner call after an executor failure
 
-If a provider's daily quota runs out, the run stops, the questions answered so far are saved
-with "complete": false, and a later rerun replays them from the cache at no cost.
+Each row records the model calls the question made (live or replayed from the cache) with their
+tokens and seconds. The result file is rewritten after every question, so a run that stops keeps
+what it answered. If a provider's daily quota runs out the run stops with "complete": false, and
+a rerun replays the answered questions from the cache at no cost. A question that raises an error
+is recorded as wrong, with the error, and the run goes on.
 
 Results go to results/<name>.json; a summary table is printed.
 """
@@ -21,6 +27,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import pathlib
 
 from tieout.ask import answer
@@ -30,7 +37,7 @@ from tieout.execute import Executor
 from tieout.graph import Graph, build
 from tieout.link import load_links
 from tieout.living import load_learned
-from tieout.llm import CALLS, DailyLimit
+from tieout.llm import CALL_LOG, CALLS, DailyLimit
 
 logging.getLogger("pdfminer").setLevel(logging.ERROR)
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -72,7 +79,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--bench", default=str(ROOT / "benchmark" / "questions.jsonl"))
     ap.add_argument("--oracle", default=None, help="JSON file of hand-written plans keyed by question id")
-    ap.add_argument("--ablate", choices=["concepts", "derivations", "living", "checks"])
+    ap.add_argument("--ablate", choices=["concepts", "solve", "link", "checks", "store", "living", "derivations"])
     ap.add_argument("--strict", action="store_true")
     ap.add_argument("--noise", type=float, default=0.0)
     ap.add_argument("--seed", type=int, default=1)
@@ -88,17 +95,18 @@ def main():
     if a.ids:
         keep = set(a.ids.split(","))
         questions = [q for q in questions if q["id"] in keep]
+    fresh_store = a.ablate in ("living", "store")
     if a.noise > 0:
-        g = build(verbose=False, learned=a.ablate != "living", corrupt=(a.noise, a.seed))
+        g = build(verbose=False, learned=not fresh_store, corrupt=(a.noise, a.seed))
     else:
         g = Graph.load()
-        if a.ablate != "living":
+        if not fresh_store:
             load_learned(g)
             load_links(g)
     if a.ablate == "concepts":
         print("concept layer off: facts dropped =", strip_concept_layer(g))
     ex = Executor(g, use_checks=a.ablate != "checks", use_derivations=a.ablate != "derivations",
-                  require_verified=a.strict)
+                  use_solving=a.ablate != "solve", use_links=a.ablate != "link", require_verified=a.strict)
     oracle = {}
     if a.oracle:
         oracle = json.loads(pathlib.Path(a.oracle).read_text(encoding="utf-8"))
@@ -111,29 +119,66 @@ def main():
 
     name = a.name or "_".join(x for x in ["tieout", "oracle" if a.oracle else "", f"no-{a.ablate}" if a.ablate else "",
                                           "strict" if a.strict else "", f"noise{a.noise}" if a.noise else ""] if x)
+    path = ROOT / "results" / f"{name}.json"
+    path.parent.mkdir(exist_ok=True)
     rows, complete = [], True
     for q in questions:
+        start = len(CALL_LOG)
         try:
-            rows += run_graph_system([q], g, run, label=name)
+            row = run_graph_system([q], g, run, label=name)[0]
         except DailyLimit as e:
             print(f"STOPPED at {q['id']}: {e}. Rerun later; answered questions replay from the cache.")
             complete = False
             break
+        except Exception as e:  # noqa: BLE001 - one question must never stop the run
+            row = error_row(q, name, e)
+        row.update(call_totals(CALL_LOG[start:]))
+        rows.append(row)
+        save(path, name, a, complete, rows, g)
+    table = save(path, name, a, complete, rows, g)
+    print(f"\n== {name} ==")
+    print(f"{'type':14s} {'n':>3s} {'correct':>7s} {'accuracy':>9s} {'P macro':>8s} {'R macro':>8s} "
+          f"{'P micro':>8s} {'R micro':>8s} {'abstain':>7s}")
+    for t, s in table.items():
+        fmt = lambda x: f"{x:8.3f}" if x is not None else "     n/a"  # noqa: E731
+        print(f"{t:14s} {s['n']:3d} {s['correct']:7d} {s['accuracy']:9.3f} {fmt(s['precision_macro'])} "
+              f"{fmt(s['recall_macro'])} {fmt(s['precision_micro'])} {fmt(s['recall_micro'])} {s['abstained']:7d}")
+    if "overall" in table:
+        bt = table["overall"]["by_tier"]
+        print("trust: " + ", ".join(f"{t} {v['correct']}/{v['n']}" for t, v in bt.items())
+              + f"; silent wrong (wrong while VERIFIED): {table['overall']['silent_wrong']}")
+    for r in rows:
+        if not r["correct"]:
+            print(f"  x {r['id']} [{r['type']}] [{r.get('tier', '')}] gold={str(r['gold'])[:40]!r} got={r['answer'][:70]!r}")
+    print(f"LLM calls: live {CALLS['live']}, cached {CALLS['cached']}" + ("" if complete else "  (INCOMPLETE)"))
+
+
+def call_totals(calls: list) -> dict:
+    """Model calls one question made, live or replayed, with the tokens and seconds of the original call."""
+    return {"llm_calls": len(calls), "llm_live": sum(1 for c in calls if not c["cached"]),
+            "tokens_in": sum(c["prompt_tokens"] for c in calls), "tokens_out": sum(c["completion_tokens"] for c in calls),
+            "llm_seconds": round(sum(c["seconds"] for c in calls), 2), "models": sorted({c["model"] for c in calls})}
+
+
+def error_row(q: dict, label: str, e: Exception) -> dict:
+    """A question that raised: recorded as wrong, with the error, so the run can go on."""
+    return {"id": q["id"], "type": q["type"], "question": q["question"], "gold": q.get("answer"),
+            "answer": f"ERROR: {type(e).__name__}: {str(e)[:160]}", "correct": False, "abstained": False,
+            "match": {"retrieved": 0, "matched_retrieved": 0, "gold": len(q.get("supporting_facts") or []),
+                      "matched_gold": 0, "page_exact": 0},
+            "plan": None, "notes": [], "learned": [], "seconds": 0.0, "system": label, "tags": q.get("tags", []),
+            "error": True}
+
+
+def save(path: pathlib.Path, name: str, a, complete: bool, rows: list, g) -> dict:
+    """Write the result file atomically and return the score table."""
     table = score(rows) if rows else {}
     out = {"name": name, "args": vars(a), "complete": complete, "score": table, "rows": rows,
            "llm": dict(CALLS), "graph": g.stats()}
-    (ROOT / "results").mkdir(exist_ok=True)
-    (ROOT / "results" / f"{name}.json").write_text(json.dumps(out, indent=1, default=str), encoding="utf-8")
-    print(f"\n== {name} ==")
-    print(f"{'type':14s} {'n':>3s} {'correct':>7s} {'accuracy':>9s} {'P macro':>8s} {'R macro':>8s} {'P micro':>8s} {'R micro':>8s} {'abstain':>7s}")
-    for t, s in table.items():
-        fmt = lambda x: f"{x:8.3f}" if x is not None else "     n/a"
-        print(f"{t:14s} {s['n']:3d} {s['correct']:7d} {s['accuracy']:9.3f} {fmt(s['precision_macro'])} {fmt(s['recall_macro'])} "
-              f"{fmt(s['precision_micro'])} {fmt(s['recall_micro'])} {s['abstained']:7d}")
-    wrong = [r for r in rows if not r["correct"]]
-    for r in wrong:
-        print(f"  x {r['id']} [{r['type']}] gold={str(r['gold'])[:40]!r} got={r['answer'][:70]!r}")
-    print(f"LLM calls: live {CALLS['live']}, cached {CALLS['cached']}")
+    tmp = path.with_suffix(".tmp")
+    tmp.write_text(json.dumps(out, indent=1, default=str), encoding="utf-8")
+    os.replace(tmp, path)
+    return table
 
 
 if __name__ == "__main__":

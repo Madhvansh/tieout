@@ -28,6 +28,16 @@ Precision    matched retrieved facts / retrieved facts.   Abstention with nothin
 Recall       matched gold facts / gold facts.             Unanswerable questions have no gold facts
                                                           and are left out of recall.
 Both are reported macro (mean over questions) and micro (pooled counts).
+
+Trust       every answer carries a tier (tieout.execute.trust): VERIFIED, FLAGGED with its named
+            weaknesses, or ABSTAIN. Accuracy is reported per tier, and "silent wrong" counts the
+            answers that were wrong while marked VERIFIED: the number a bank cares about.
+
+On 22 Nov at 03:00, before any held-out run, the code was brought in line with the rules above
+in three places where it had drifted: unanswerable questions are left out of recall even when
+their notes list facts; a retrieved fact matches every gold fact with the same company and value;
+a ranked list of segments, products or regions is scored like a ranked list of companies. Every
+system, the baseline included, is scored by this one function.
 """
 from __future__ import annotations
 
@@ -102,6 +112,9 @@ def is_correct(q: dict, pred: dict, companies: dict) -> bool:
             return abs(v) < 1e-9
         return abs(v - gold) <= max(tol, 1e-9) * abs(gold) or (unit == "USD" and abs(abs(v) - abs(gold)) <= max(tol, 1e-9) * abs(gold))
     if isinstance(gold, list):
+        if pred["kind"] == "lines":                   # a ranked list of segments, products or regions
+            want, got = [_norm_text(x) for x in gold], [_norm_text(n) for n, _ in pred["value"]]
+            return len(got) >= len(want) and all(w and g and (w in g or g in w) for w, g in zip(want, got))
         want = [company_to_ticker(x, companies) or _norm_text(x) for x in gold]
         if pred["kind"] != "companies":
             return False
@@ -119,6 +132,8 @@ def is_correct(q: dict, pred: dict, companies: dict) -> bool:
 def fact_match(q: dict, retrieved: list, companies: dict) -> dict:
     """retrieved = [{"ticker", "value", "doc", "page"}, ...] -> counts for precision and recall."""
     gold = q.get("supporting_facts", []) or []
+    if q.get("answer_value") is None or "unanswerable" in q.get("tags", []):
+        gold = []                                     # unanswerable questions are left out of recall
     gold_keys = []
     for gf in gold:
         ticker = gf["doc"].split("_")[0]
@@ -128,12 +143,11 @@ def fact_match(q: dict, retrieved: list, companies: dict) -> dict:
     matched_ret = page_exact = 0
     for rf in retrieved:
         key = (rf["ticker"], _vkey(rf["value"]))
-        hit = next((i for i, gk in enumerate(gold_keys) if gk[0] == key[0] and _same(gk[1], key[1])), None)
-        if hit is not None:
+        hits = [i for i, gk in enumerate(gold_keys) if gk[0] == key[0] and _same(gk[1], key[1])]
+        if hits:                                      # the same company and value matches every such gold fact
             matched_ret += 1
-            used.add(hit)
-            if any(gk[2] == rf["doc"] and gk[3] == rf["page"] and gk[0] == key[0] and _same(gk[1], key[1])
-                   for gk in gold_keys):
+            used.update(hits)
+            if any(gold_keys[i][2] == rf["doc"] and gold_keys[i][3] == rf["page"] for i in hits):
                 page_exact += 1
     return {"retrieved": len(retrieved), "matched_retrieved": matched_ret, "gold": len(gold_keys),
             "matched_gold": len(used), "page_exact": page_exact}
@@ -181,6 +195,10 @@ def score(rows: list) -> dict:
             "page_exact_share": (sum(r["match"]["page_exact"] for r in subset) /
                                  max(1, sum(r["match"]["matched_retrieved"] for r in subset))),
             "abstained": sum(1 for r in subset if r["abstained"]),
+            "by_tier": {t: {"n": sum(1 for r in subset if r.get("tier") == t),
+                            "correct": sum(1 for r in subset if r.get("tier") == t and r["correct"])}
+                        for t in ("VERIFIED", "FLAGGED", "ABSTAIN")},
+            "silent_wrong": sum(1 for r in subset if r.get("tier") == "VERIFIED" and not r["correct"]),
             "answered_accuracy": (sum(1 for r in subset if r["correct"] and not r["abstained"]) /
                                   max(1, sum(1 for r in subset if not r["abstained"]))),
         }
@@ -227,5 +245,6 @@ def run_graph_system(questions: list, g, answer_fn: Callable, label: str = "tieo
             "learned": [{k: e.get(k) for k in ("ticker", "concept", "state", "label")} for e in out.get("learned", [])],
             "seconds": round(out.get("seconds", 0.0), 2), "system": label, "tags": q.get("tags", []),
             "repaired": out.get("repaired", False), "plan_errors": out.get("plan_errors", []),
+            "tier": res.tier or ("ABSTAIN" if res.kind == "abstain" else "FLAGGED"), "tier_reasons": res.tier_reasons[:4],
         })
     return rows
