@@ -8,7 +8,7 @@ OPERATIONS (each step has "id" like "s1" and "op")
 - metric   {"op":"metric","company":T,"metric":M,"period":P}           a derived metric
 - calc     {"op":"calc","expr":"s1 - s2"}                              arithmetic on earlier steps: + - * / ( )
 - change   {"op":"change","company":T,"concept":C or "metric":M,"from":P,"to":P,"mode":"pct"|"abs"}
-- rank     {"op":"rank","over":SET,"by":{"concept":C} or {"metric":M},"period":P,"order":"desc"|"asc","k":N}
+- rank     {"op":"rank","over":SET,"by":{"concept":C} or {"metric":M} or {"attr":A},"period":P,"order":"desc"|"asc","k":N}
 - filter   {"op":"filter","over":SET,"where":{"attr":A,"eq":"value"}}
            or "where":{"by":{"concept":C} or {"metric":M},"period":P,"gt"|"lt"|"ge"|"le": number}
 - attr     {"op":"attr","company":T,"attr":A}                          a text fact (auditor, state, employees ...)
@@ -21,8 +21,14 @@ P is {"fy": 2025} (the fiscal year as that company labels it), {"fy": "latest"},
   {"fy": 2025, "q": 3} for a fiscal quarter, or {"fy": 2025, "q": 3, "ytd": true} for year to date.
 
 RULES
-1. Use only the tickers, concepts, metrics and attributes listed below. If the question needs something
-   that is not listed, output {"steps": [], "answer": null, "cannot": "<what is missing>"}.
+1. Use only the tickers, concepts, metrics and attributes listed below. A line item a filing prints in
+   a table but that is not a listed concept (revenue of a segment, a product line or a region, a specific
+   expense or balance) is asked for with "item" in place of "concept":
+   {"op":"get","company":T,"item":"iPhone net sales","period":P}. Write the item the way a filing
+   would label it, with the segment or product name. "item" also works in change and restated.
+   If the question needs something a filing would not print as a number in a table (unit volumes it does
+   not disclose, market share, forecasts, prices), output
+   {"steps": [], "answer": null, "cannot": "<what is missing>"}.
 2. A ratio, margin, growth rate or difference is never a `get`: use metric, change or calc.
 3. "Which company has the highest/lowest ..." is a rank with k = 1. "Top three" is k = 3.
 4. "How many companies ..." is a filter followed by count.
@@ -30,8 +36,24 @@ RULES
 6. If no year is given use {"fy": "latest"}. "Fiscal 2025", "FY2025" and "in 2025" all mean {"fy": 2025}.
 7. Amounts in the question (thresholds) are written in full units: 10 billion dollars is 10000000000.
    Percent thresholds are fractions: 20 percent is 0.2.
-8. To compare two companies, get each value and finish with calc (difference) or rank over the two tickers.
+8. "How much more/less was A's X than B's" asks for an amount: get each value and finish with calc.
+   "Which of A or B had the higher X" (with or without "and by how much") asks for a company:
+   rank over the two tickers with k = 2, so the answer names the winner and shows both values.
 9. Balance-sheet items use the same {"fy": N}: the graph takes the value at the end of that fiscal year.
+10. You may use general knowledge to work out WHICH listed company a question means (a brand it owns, a
+    product, a nickname, "Google's parent"). You may not use general knowledge for any figure or fact.
+11. Choose the closest listed concept even when the question words it differently (for example
+    "depreciation, amortization and other" is DepreciationAmortization; "bottom line" is NetIncome).
+    Use "cannot" only when nothing listed is close.
+13. A question may ask for a figure and also for a reason ("... and why did it change?"). The graph holds
+    facts, not reasons: plan the factual part (for a changed figure, the restated operation) and do not
+    answer "cannot" because of the "why".
+14. To order companies by headcount or share count use an attribute in "by": {"attr": "employees"}.
+    "How many companies ... and which are they" ends on the count step.
+12. Use a metric only when the question asks for exactly what the metric means. When the question
+    names the line items itself ("dividends as a share of earnings", "R&D relative to gross profit"),
+    get each item and combine them with calc. "Cash dividends" alone is DividendsPaid, never the
+    dividends-plus-buybacks metric.
 
 COMPANIES: AAPL (Apple), MSFT (Microsoft), GOOGL (Alphabet), AMZN (Amazon), META (Meta), NVDA (Nvidia), AMD (AMD), ORCL (Oracle), CRM (Salesforce), ADBE (Adobe), CSCO (Cisco), JPM (JPMorgan), BAC (Bank of America), C (Citigroup), WFC (Wells Fargo), GS (Goldman Sachs), MS (Morgan Stanley), V (Visa), MA (Mastercard), AXP (American Express), BLK (BlackRock), WMT (Walmart), COST (Costco), TGT (Target), KO (Coca-Cola), PEP (PepsiCo), PG (Procter & Gamble), NKE (Nike), MCD (McDonald's), HD (Home Depot), JNJ (Johnson & Johnson), PFE (Pfizer), MRK (Merck), UNH (UnitedHealth), TSLA (Tesla), F (Ford), GM (General Motors), XOM (Exxon Mobil), CVX (Chevron), CAT (Caterpillar)
 CLUSTERS: big_tech, banks_finance, consumer_retail, health, industrial_auto_energy

@@ -227,12 +227,13 @@ def verified_cells(table: Table, checks: list) -> set:
     """(row, col) pairs that sit inside at least one passing formula."""
     ok = set()
     for ch in checks:
-        if ch.status == "fail":
-            continue
         for row in ch.rows:
             for c, res in enumerate(ch.residuals):
-                if res is not None and c in table.rows[row].cells:
-                    ok.add((row, c))
+                if res is None or c not in table.rows[row].cells:
+                    continue
+                if ch.status == "fail" and c in ch.failing_cols:
+                    continue            # the formula does not hold here; it still vouches for its other columns
+                ok.add((row, c))
     return ok
 
 

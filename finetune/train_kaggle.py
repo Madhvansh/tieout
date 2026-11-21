@@ -23,6 +23,7 @@ GRAD_CHECKPOINT = True
 EVAL_BATCH = 16
 EVAL_MAX_NEW_TOKENS = 384
 EVAL_LIMIT = 0          # 0 = whole val set
+TRAIN_LIMIT = 0         # 0 = whole train set; e.g. 1500 for a fast smoke run
 GGUF_QUANT = "Q4_K_M"   # llama-quantize type; falls back to q8_0 from the converter if the build fails
 MODEL_NAME = "planner"  # output file stem
 SEED = 435
@@ -86,6 +87,9 @@ if _ov:
         globals()[_k] = _v; METRICS["hparams"][_k] = _v
     log("overrides", json.load(open(_ov[0])))
 
+# Kaggle image (Nov 2026) ships torchao 0.10 next to peft 0.21, and peft refuses to build LoRA
+# layers when it sees a torchao older than 0.16. Nothing here uses torchao, so remove it first.
+sh(f"{sys.executable} -m pip uninstall -y -q torchao", check=False)
 try:
     import peft  # noqa: F401
 except ImportError:
@@ -109,6 +113,8 @@ train_rows = [json.loads(l) for l in open(find("train.jsonl"), encoding="utf-8")
 val_rows = [json.loads(l) for l in open(find("val.jsonl"), encoding="utf-8") if l.strip()]
 if EVAL_LIMIT:
     val_rows = val_rows[:EVAL_LIMIT]
+if TRAIN_LIMIT:
+    train_rows = train_rows[:TRAIN_LIMIT]
 log(f"train={len(train_rows)} val={len(val_rows)}")
 
 # The chat template, written out by hand so the Ollama TEMPLATE below is byte-identical.
@@ -167,7 +173,7 @@ def collate(ids):
 
 # ---------------------------------------------------------------- model + LoRA
 t = time.time()
-model = AutoModelForCausalLM.from_pretrained(BASE_MODEL, torch_dtype=DTYPE, attn_implementation="sdpa").cuda()
+model = AutoModelForCausalLM.from_pretrained(BASE_MODEL, dtype=DTYPE, attn_implementation="sdpa").cuda()
 METRICS["load_min"] = round((time.time() - t) / 60, 2)
 if GRAD_CHECKPOINT:
     model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
@@ -258,7 +264,7 @@ t = time.time()
 merged_dir = os.path.join(SCRATCH, "merged")
 merged = model.merge_and_unload()
 merged = merged.to(torch.float16)
-merged.save_pretrained(merged_dir, safe_serialization=True)
+merged.save_pretrained(merged_dir)
 tok.padding_side = "right"
 tok.save_pretrained(merged_dir)
 del model, merged; torch.cuda.empty_cache()

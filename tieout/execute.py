@@ -251,6 +251,11 @@ class Executor:
                       {"op": "metric", "what": f"{ticker} {name} = {formula}", "value": value, "children": children})
 
     def _measure(self, ticker: str, by: dict, spec: dict) -> Result:
+        if by.get("attr"):
+            r = self._attr(ticker, by["attr"])
+            if r.ok and r.kind != "number":
+                raise TypeErrorInPlan(f"attribute {by['attr']} is not a number")
+            return r
         if by.get("item"):
             return self._item(ticker, by["item"], spec)
         if by.get("metric"):
@@ -364,14 +369,21 @@ class Executor:
                 skipped.append(t)
                 missing.extend(r.missing)
         if not rows:
-            return Result("abstain", leaves=leaves, notes=["no company in the set has this fact"])
+            return Result("abstain", leaves=leaves, notes=["no company in the set has this fact"], missing=missing)
+        if skipped and isinstance(s.get("over"), list):
+            # the question named these companies; ranking the ones we happen to have would look complete and not be
+            return Result("abstain", leaves=leaves, missing=missing,
+                          notes=[f"cannot rank the named companies: no fact for {', '.join(skipped)}"])
         rows.sort(key=lambda x: x[1], reverse=s.get("order", "desc") == "desc")
         if skipped:
             notes.append(f"ranked {len(rows)} of {len(tickers)} companies; no fact for: {', '.join(skipped)}")
         k = int(s.get("k", 1))
-        unit = self.metrics[s["by"]["metric"]]["unit"] if s["by"].get("metric") else self.concepts[s["by"]["concept"]].unit
+        by = s["by"]
+        unit = (self.metrics[by["metric"]]["unit"] if by.get("metric") else
+                self.concepts[by["concept"]].unit if by.get("concept") else
+                NUMERIC_ATTRS.get(by.get("attr"), "USD"))
         return Result("companies", rows[:k], unit, leaves, notes,
-                      {"op": "rank", "what": f"{list(s['by'].values())[0]} over {len(rows)} companies", "value": rows[:k]},
+                      {"op": "rank", "what": f"{list(by.values())[0]} over {len(rows)} companies", "value": rows[:k]},
                       missing)
 
     def _op_filter(self, s, env) -> Result:

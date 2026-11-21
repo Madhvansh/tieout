@@ -17,7 +17,7 @@ from typing import Optional
 from .llm import ask_json
 from .plan import validate, vocabulary
 
-PROMPT_VERSION = "p7"
+PROMPT_VERSION = "p8"
 
 RULES = """You translate a question about US public companies into a query plan over a knowledge graph
 of facts taken from their SEC filings. Output JSON only: {"steps": [...], "answer": "<step id>"}.
@@ -29,7 +29,7 @@ OPERATIONS (each step has "id" like "s1" and "op")
 - metric   {"op":"metric","company":T,"metric":M,"period":P}           a derived metric
 - calc     {"op":"calc","expr":"s1 - s2"}                              arithmetic on earlier steps: + - * / ( )
 - change   {"op":"change","company":T,"concept":C or "metric":M,"from":P,"to":P,"mode":"pct"|"abs"}
-- rank     {"op":"rank","over":SET,"by":{"concept":C} or {"metric":M},"period":P,"order":"desc"|"asc","k":N}
+- rank     {"op":"rank","over":SET,"by":{"concept":C} or {"metric":M} or {"attr":A},"period":P,"order":"desc"|"asc","k":N}
 - filter   {"op":"filter","over":SET,"where":{"attr":A,"eq":"value"}}
            or "where":{"by":{"concept":C} or {"metric":M},"period":P,"gt"|"lt"|"ge"|"le": number}
 - attr     {"op":"attr","company":T,"attr":A}                          a text fact (auditor, state, employees ...)
@@ -66,6 +66,11 @@ RULES
 11. Choose the closest listed concept even when the question words it differently (for example
     "depreciation, amortization and other" is DepreciationAmortization; "bottom line" is NetIncome).
     Use "cannot" only when nothing listed is close.
+13. A question may ask for a figure and also for a reason ("... and why did it change?"). The graph holds
+    facts, not reasons: plan the factual part (for a changed figure, the restated operation) and do not
+    answer "cannot" because of the "why".
+14. To order companies by headcount or share count use an attribute in "by": {"attr": "employees"}.
+    "How many companies ... and which are they" ends on the count step.
 12. Use a metric only when the question asks for exactly what the metric means. When the question
     names the line items itself ("dividends as a share of earnings", "R&D relative to gross profit"),
     get each item and combine them with calc. "Cash dividends" alone is DividendsPaid, never the
@@ -104,6 +109,10 @@ EXAMPLES = [
                 {"id": "s3", "op": "calc", "expr": "s1 / s2"}], "answer": "s3"}),
     ("How much revenue did Google Cloud bring in during 2025?",
      {"steps": [{"id": "s1", "op": "get", "company": "GOOGL", "item": "Google Cloud revenue", "period": {"fy": 2025}}], "answer": "s1"}),
+    ("Which employs more people, Visa or Mastercard, and by roughly how many?",
+     {"steps": [{"id": "s1", "op": "rank", "over": ["V", "MA"], "by": {"attr": "employees"}, "period": {"fy": "latest"}, "order": "desc", "k": 2}], "answer": "s1"}),
+    ("Did Nike revise its fiscal 2025 inventory figure in the next annual report, and if so why?",
+     {"steps": [{"id": "s1", "op": "restated", "company": "NKE", "concept": "Inventory", "period": {"fy": 2025}}], "answer": "s1"}),
     ("What was Tesla's headcount of robots in 2025?",
      {"steps": [], "answer": None, "cannot": "no concept or attribute for a count of robots"}),
 ]

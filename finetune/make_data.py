@@ -29,6 +29,22 @@ from tieout.planner import RULES  # noqa: E402
 
 ALIASES = yaml.safe_load((ROOT / "semantics" / "company_aliases.yaml").read_text(encoding="utf-8"))
 
+
+def _revenue_parts() -> dict:
+    """Segment, product and region names per company: rows of the raw layer whose table total is Revenue."""
+    from tieout.rawlayer import load_raw
+    out: dict = {}
+    for r in load_raw():
+        if r.get("anchor") == "Revenue" and r["role"] == "operand" and r["unit"] == "USD":
+            label = r["label"].strip()
+            if 2 < len(label) <= 32 and len(label.split()) <= 4 and not any(ch.isdigit() for ch in label) \
+                    and label.lower() not in ("other", "products", "services", "total", "eliminations"):
+                out.setdefault(r["ticker"], set()).add(label)
+    return {t: sorted(v) for t, v in out.items() if v}
+
+
+PARTS = _revenue_parts()
+
 # (training phrasings, held-out phrasings used only in validation)
 CONCEPT_WORDS = {
     "Revenue": (["revenue", "total revenue", "net sales", "sales", "total net sales", "revenues"], ["top line", "turnover"]),
@@ -375,6 +391,8 @@ class Gen:
         y = self.r.choice([2024, 2025])
         if self.r.random() < 0.6:
             q = self.r.choice([f"Did {self.co(t)} restate its fiscal {y} {w} in the following year's filing, and by how much?",
+                               f"What did {self.co(t)} first report as {w} for fiscal {y}, what does the next annual report show, and why the difference?",
+                               f"Did the fiscal {y} {w} figure of {self.co(t)} change in the later filing, and if so by how much and why?",
                                f"How did {self.co(t)}'s reported {w} for fiscal {y} change between the original filing and the next one?"])
             return q, {"steps": [{"id": "s1", "op": "restated", "company": t, "concept": c, "period": {"fy": y}}], "answer": "s1"}
         q = f"What did {self.co(t)} originally report as {w} for fiscal {y}, before any later revision?"
@@ -385,22 +403,66 @@ class Gen:
         t = self.r.choice(self.tickers)
         return frame.format(co=self.co(t), yr=self.r.choice([2024, 2025])), {"steps": [], "answer": None, "cannot": why}
 
+    def item_q(self):
+        t = self.r.choice([x for x in PARTS if x in self.tickers])
+        part = self.r.choice(PARTS[t])
+        word = self.r.choice(["revenue", "net sales", "revenues", "sales"])
+        p, pw = self.period()
+        frames = ["What was {co}'s {part} {word} {pw}?", "How much {word} did {part} bring in for {co} {pw}?",
+                  "{co}: {part} {word} {pw}?", "What {word} did {co} report for {part} {pw}?"]
+        if self.val:
+            frames = ["How big was {co}'s {part} business by {word} {pw}?", "Give me the {part} {word} line for {co} {pw}."]
+        q = self.r.choice(frames).format(co=self.co(t), part=part, word=word, pw=pw)
+        item = f"{part} {word if word != 'sales' else 'net sales'}"
+        if self.r.random() < 0.2:
+            y = self.r.choice([2024, 2025, 2026])
+            q = f"By what percentage did {self.co(t)}'s {part} {word} grow from fiscal {y - 1} to fiscal {y}?"
+            return q, {"steps": [{"id": "s1", "op": "change", "company": t, "item": item, "from": {"fy": y - 1},
+                                  "to": {"fy": y}, "mode": "pct"}], "answer": "s1"}
+        return q, {"steps": [{"id": "s1", "op": "get", "company": t, "item": item, "period": p}], "answer": "s1"}
+
+    def rank_attr(self):
+        over, one, many = self.a_set()
+        attr, word = self.r.choice([("employees", "employees"), ("employees", "people on its payroll"),
+                                    ("shares_outstanding", "shares outstanding")])
+        order = "desc" if self.r.random() < 0.75 else "asc"
+        if isinstance(over, list) and len(over) > 2:
+            over = over[:2]
+            many = " or ".join(self.co(t) for t in over)
+        if isinstance(over, list):
+            q = (f"Which has {'more' if order == 'desc' else 'fewer'} {word}, {many}, and by roughly how many?")
+            k = 2
+        else:
+            q = f"Which {one} has the {'most' if order == 'desc' else 'fewest'} {word}?"
+            k = 1
+        return q, {"steps": [{"id": "s1", "op": "rank", "over": over, "by": {"attr": attr}, "period": {"fy": "latest"},
+                              "order": order, "k": k}], "answer": "s1"}
+
     def sample(self):
         makers = [(self.get, 22), (self.metric_q, 12), (self.change, 10), (self.compare, 10), (self.own_ratio, 4), (self.rank, 12),
                   (self.hop, 7), (self.filt, 7), (self.attr_filter, 5), (self.attr, 4), (self.per_employee, 2), (self.restated, 3),
-                  (self.cannot, 2)]
+                  (self.cannot, 2), (self.item_q, 9), (self.rank_attr, 3)]
         fn = self.r.choices([m for m, _ in makers], weights=[w for _, w in makers])[0]
         return fn()
 
 
 def system_prompt() -> str:
-    """The short prompt the local planner is trained and run with: the rules and the vocabulary, no examples."""
-    lines = [RULES.strip(), "", "COMPANIES: " + ", ".join(f"{t} ({ALIASES[t][0]})" for t in ALIASES),
-             "CLUSTERS: " + ", ".join(CLUSTERS), "CONCEPTS: " + ", ".join(concept_defs()),
+    """The short prompt the local planner is trained and run with.
+
+    A fine-tuned model has learned the rules from the examples, so the prompt only names the
+    task and the vocabulary. It is a quarter the length of the hosted planner's prompt, which
+    keeps training and CPU inference fast.
+    """
+    lines = ["Translate the question into a TieOut query plan. Output JSON only: "
+             '{"steps": [...], "answer": "<step id>"} or {"steps": [], "answer": null, "cannot": "<why>"}.',
+             "COMPANIES: " + ", ".join(f"{t} ({ALIASES[t][0]})" for t in ALIASES),
+             "CLUSTERS: " + ", ".join(CLUSTERS),
+             "CONCEPTS: " + ", ".join(concept_defs()),
              "METRICS: " + ", ".join(metric_defs()),
              "ATTRIBUTES: auditor, auditor_since, state_of_incorporation, hq_city, hq_state, exchange, employees, "
              "shares_outstanding, ceo, cfo"]
-    return "\n".join(lines)
+    return "
+".join(lines)
 
 
 def main():

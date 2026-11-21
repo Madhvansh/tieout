@@ -96,6 +96,8 @@ def validate(plan: dict, graph) -> list:
             errs.append(f"{sid}: unknown metric {s['metric']}")
         by = s.get("by") or (s.get("where") or {}).get("by")
         if isinstance(by, dict):
+            if by.get("attr") and by["attr"] not in NUMERIC_ATTRS:
+                errs.append(f"{sid}: cannot order by attribute {by['attr']} (not a number)")
             if by.get("concept") and by["concept"] not in concepts:
                 errs.append(f"{sid}: unknown concept {by['concept']}")
             if by.get("metric") and by["metric"] not in metrics:

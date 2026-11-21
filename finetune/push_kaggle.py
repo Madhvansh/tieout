@@ -22,7 +22,8 @@ KAGGLE = shutil.which("kaggle") or "kaggle"
 
 
 def run(args, check=True, quiet=False):
-    p = subprocess.run([KAGGLE, "-W"] + args, capture_output=True, text=True, encoding="utf-8", errors="replace")
+    env = dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONUTF8="1")   # Windows cp1252 console breaks `kernels output`
+    p = subprocess.run([KAGGLE, "-W"] + args, capture_output=True, text=True, encoding="utf-8", errors="replace", env=env)
     out = (p.stdout + p.stderr).strip()
     if not quiet and out:
         print(out)
