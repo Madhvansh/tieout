@@ -1,0 +1,19 @@
+
+== benchmark_local_qwen4b ==
+type             n correct  accuracy  P macro  R macro  P micro  R micro abstain
+overall         30      19     0.633    0.967    0.603    0.970    0.337      12
+single_fact     10       8     0.800    0.900    0.800    0.889    0.800       1
+multi_hop       10       8     0.800    1.000    0.778    1.000    0.778       3
+cross_filing    10       3     0.300    1.000    0.250    1.000    0.149       8
+  x C03 [single_fact] gold='$9,226 million' got='$8.099 billion'
+  x C14 [single_fact] gold='2,187,177,748 Class A shares (as of Janu' got='ABSTAIN: planner: no concept or attribute for class-specific share cou'
+  x C27 [multi_hop] gold='About $70.24 per paid member' got="ABSTAIN: planner: no attribute or concept for 'paid members' count; me"
+  x C31 [multi_hop] gold='57.03%' got='ABSTAIN: planner: segment-level operating income breakdown by product/'
+  x C34 [cross_filing] gold='JPMorgan ($2,559,320M) > Bank of America' got='ABSTAIN: planner: planner failed (ValueError: model reply is not JSON)'
+  x C36 [cross_filing] gold='Ford, about 169,000 vs about 155,000 (14' got='ABSTAIN: cannot rank the named companies: no fact for GM'
+  x C40 [cross_filing] gold='Visa, by $8,536 million (23,504 for fisc' got='ABSTAIN: planner: planner failed (ValueError: model reply is not JSON)'
+  x C42 [cross_filing] gold='Six: JPMorgan, Bank of America, Citigrou' got='ABSTAIN: planner: planner failed (ValueError: model reply is not JSON)'
+  x C44 [cross_filing] gold='Originally $27,132 million; the 2025 10-' got='ABSTAIN: planner: planner failed (ValueError: model reply is not JSON)'
+  x C45 [cross_filing] gold='Yes. It fell from $83,727 million to $72' got="ABSTAIN: planner: no concept for 'other non-current assets' - balance "
+  x C46 [cross_filing] gold='Yes. It went from $3,129 million to $2,9' got='ABSTAIN: planner: no concept for prepaid expenses or similar current a'
+LLM calls: live 12, cached 21
