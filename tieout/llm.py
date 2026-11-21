@@ -78,7 +78,12 @@ def _parse(text: str) -> dict:
         text = text.strip("`")
         text = text[text.index("{"):]
     start, end = text.find("{"), text.rfind("}")
-    return json.loads(text[start:end + 1])
+    if start < 0 or end <= start:
+        raise ValueError("model reply is not JSON")
+    try:
+        return json.loads(text[start:end + 1])
+    except json.JSONDecodeError as e:
+        raise ValueError(f"model reply is not valid JSON: {e.msg}") from None
 
 
 def _gemini(name: str, system: str, user: str, schema: Optional[dict]) -> str:

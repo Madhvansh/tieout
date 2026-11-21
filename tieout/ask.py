@@ -36,8 +36,11 @@ def answer(question: str, g: Graph, model: Optional[str] = None, allow_learning:
     ex = executor or Executor(g)
     errors: list = []
     if plan is None:
-        p = plan_question(question, g, model=model, offline=offline)
-        plan, errors = p["plan"], p["errors"]
+        try:
+            p = plan_question(question, g, model=model, offline=offline)
+            plan, errors = p["plan"], p["errors"]
+        except Exception as e:  # noqa: BLE001 - a model that returns no usable plan must not crash an answer
+            plan, errors = {"steps": [], "answer": None, "cannot": f"planner failed ({type(e).__name__}: {str(e)[:80]})"}, []
     if plan.get("cannot") or not plan.get("steps"):
         res = Result("abstain", notes=["planner: " + str(plan.get("cannot", "question is outside the graph's vocabulary"))])
         return {"answer": render(res), "result": res, "plan": plan, "learned": [], "seconds": time.time() - t0,
