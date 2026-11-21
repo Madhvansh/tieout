@@ -17,7 +17,7 @@ from typing import Optional
 from .llm import ask_json
 from .plan import validate, vocabulary
 
-PROMPT_VERSION = "p6"
+PROMPT_VERSION = "p7"
 
 RULES = """You translate a question about US public companies into a query plan over a knowledge graph
 of facts taken from their SEC filings. Output JSON only: {"steps": [...], "answer": "<step id>"}.
@@ -42,8 +42,14 @@ P is {"fy": 2025} (the fiscal year as that company labels it), {"fy": "latest"},
   {"fy": 2025, "q": 3} for a fiscal quarter, or {"fy": 2025, "q": 3, "ytd": true} for year to date.
 
 RULES
-1. Use only the tickers, concepts, metrics and attributes listed below. If the question needs something
-   that is not listed, output {"steps": [], "answer": null, "cannot": "<what is missing>"}.
+1. Use only the tickers, concepts, metrics and attributes listed below. A line item a filing prints in
+   a table but that is not a listed concept (revenue of a segment, a product line or a region, a specific
+   expense or balance) is asked for with "item" in place of "concept":
+   {"op":"get","company":T,"item":"iPhone net sales","period":P}. Write the item the way a filing
+   would label it, with the segment or product name. "item" also works in change and restated.
+   If the question needs something a filing would not print as a number in a table (unit volumes it does
+   not disclose, market share, forecasts, prices), output
+   {"steps": [], "answer": null, "cannot": "<what is missing>"}.
 2. A ratio, margin, growth rate or difference is never a `get`: use metric, change or calc.
 3. "Which company has the highest/lowest ..." is a rank with k = 1. "Top three" is k = 3.
 4. "How many companies ..." is a filter followed by count.
@@ -96,6 +102,8 @@ EXAMPLES = [
      {"steps": [{"id": "s1", "op": "get", "company": "AAPL", "concept": "Revenue", "period": {"fy": 2026}},
                 {"id": "s2", "op": "attr", "company": "AAPL", "attr": "employees"},
                 {"id": "s3", "op": "calc", "expr": "s1 / s2"}], "answer": "s3"}),
+    ("How much revenue did Google Cloud bring in during 2025?",
+     {"steps": [{"id": "s1", "op": "get", "company": "GOOGL", "item": "Google Cloud revenue", "period": {"fy": 2025}}], "answer": "s1"}),
     ("What was Tesla's headcount of robots in 2025?",
      {"steps": [], "answer": None, "cannot": "no concept or attribute for a count of robots"}),
 ]

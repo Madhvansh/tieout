@@ -112,7 +112,7 @@
     "JPM FY2025 ends 2025-12-31"
    ],
    "learned": [],
-   "seconds": 1.64,
+   "seconds": 0.03,
    "system": "dev_full",
    "tags": [
     "bank"
@@ -151,7 +151,7 @@
     "ORCL FY2026 ends 2026-05-31"
    ],
    "learned": [],
-   "seconds": 2.33,
+   "seconds": 0.03,
    "system": "dev_full",
    "tags": [
     "fiscal_year_trap"
@@ -190,7 +190,7 @@
     "GS FY2025@end ends 2025-12-20"
    ],
    "learned": [],
-   "seconds": 1.89,
+   "seconds": 0.02,
    "system": "dev_full",
    "tags": [
     "bank"
@@ -229,7 +229,7 @@
     "AAPL FY2026 ends 2026-09-26"
    ],
    "learned": [],
-   "seconds": 2.18,
+   "seconds": 0.02,
    "system": "dev_full",
    "tags": [
     "scale_trap",
@@ -264,7 +264,7 @@
    },
    "notes": [],
    "learned": [],
-   "seconds": 1.25,
+   "seconds": 0.02,
    "system": "dev_full",
    "tags": [
     "scale_trap",
@@ -276,7 +276,7 @@
    "type": "single_fact",
    "question": "How many iPhone units did Apple sell in fiscal 2026?",
    "gold": "Not disclosed: the filings in this set report iPhone net sales but not unit volumes.",
-   "answer": "ABSTAIN: planner: no concept or attribute for units sold",
+   "answer": "ABSTAIN: planner: unit volumes of products are not disclosed as listed concepts",
    "correct": true,
    "abstained": true,
    "match": {
@@ -289,13 +289,13 @@
    "plan": {
     "steps": [],
     "answer": null,
-    "cannot": "no concept or attribute for units sold"
+    "cannot": "unit volumes of products are not disclosed as listed concepts"
    },
    "notes": [
-    "planner: no concept or attribute for units sold"
+    "planner: unit volumes of products are not disclosed as listed concepts"
    ],
    "learned": [],
-   "seconds": 1.8,
+   "seconds": 0.02,
    "system": "dev_full",
    "tags": [
     "unanswerable"
@@ -337,7 +337,7 @@
     "GOOGL Revenue Q4 is not printed; derived as full year minus nine months"
    ],
    "learned": [],
-   "seconds": 1.53,
+   "seconds": 0.02,
    "system": "dev_full",
    "tags": [
     "quarter_derived",
@@ -388,7 +388,7 @@
     "WMT FY2026 ends 2026-01-31"
    ],
    "learned": [],
-   "seconds": 1.34,
+   "seconds": 0.02,
    "system": "dev_full",
    "tags": [
     "derived_metric",
@@ -423,7 +423,7 @@
    },
    "notes": [],
    "learned": [],
-   "seconds": 1.63,
+   "seconds": 0.02,
    "system": "dev_full",
    "tags": [
     "text_fact"
@@ -462,7 +462,7 @@
     "CAT FY2025 ends 2025-12-31"
    ],
    "learned": [],
-   "seconds": 1.39,
+   "seconds": 0.03,
    "system": "dev_full",
    "tags": [
     "derived_metric"
@@ -506,7 +506,7 @@
     "WFC FY2025 ends 2025-12-31"
    ],
    "learned": [],
-   "seconds": 15.46,
+   "seconds": 0.03,
    "system": "dev_full",
    "tags": [
     "derived_metric",
@@ -560,7 +560,7 @@
     "TGT FY2025 ends 2026-01-31"
    ],
    "learned": [],
-   "seconds": 1.37,
+   "seconds": 0.02,
    "system": "dev_full",
    "tags": [
     "derived_metric",
@@ -599,36 +599,13 @@
       },
       "order": "desc",
       "k": 2
-     },
-     {
-      "id": "s2",
-      "op": "get",
-      "company": "PEP",
-      "concept": "Revenue",
-      "period": {
-       "fy": 2025
-      }
-     },
-     {
-      "id": "s3",
-      "op": "get",
-      "company": "KO",
-      "concept": "Revenue",
-      "period": {
-       "fy": 2025
-      }
-     },
-     {
-      "id": "s4",
-      "op": "calc",
-      "expr": "s2 - s3"
      }
     ],
     "answer": "s1"
    },
    "notes": [],
    "learned": [],
-   "seconds": 1.36,
+   "seconds": 0.02,
    "system": "dev_full",
    "tags": [
     "derived_metric"
@@ -675,7 +652,7 @@
    },
    "notes": [],
    "learned": [],
-   "seconds": 2.88,
+   "seconds": 0.02,
    "system": "dev_full",
    "tags": [
     "ranking",
@@ -730,7 +707,7 @@
     "CVX FY2025 ends 2025-12-20"
    ],
    "learned": [],
-   "seconds": 1.36,
+   "seconds": 0.02,
    "system": "dev_full",
    "tags": [
     "derived_metric"
@@ -786,7 +763,7 @@
      "label": null
     }
    ],
-   "seconds": 2.51,
+   "seconds": 0.04,
    "system": "dev_full",
    "tags": [
     "ranking"
@@ -825,7 +802,7 @@
     "AAPL FY2025 ends 2025-09-27"
    ],
    "learned": [],
-   "seconds": 1.47,
+   "seconds": 0.02,
    "system": "dev_full",
    "tags": [
     "fiscal_year_trap"
@@ -852,7 +829,7 @@
       "id": "s1",
       "op": "restated",
       "company": "MSFT",
-      "concept": "DepreciationAmortization",
+      "item": "depreciation, amortization, and other",
       "period": {
        "fy": 2025
       }
@@ -862,11 +839,18 @@
    },
    "notes": [
     "MSFT FY2025 ends 2025-06-30",
-    "MSFT DepreciationAmortization FY2025 was restated; first-reported value used",
-    "MSFT DepreciationAmortization FY2025 was restated; latest-reported value used"
+    "MSFT item:depreciation-amortization-and-other@adjustments-to-reconcile-net-income-to-net-cash- FY2025 was restated; first-reported value used",
+    "MSFT item:depreciation-amortization-and-other@adjustments-to-reconcile-net-income-to-net-cash- FY2025 was restated; latest-reported value used"
    ],
-   "learned": [],
-   "seconds": 1.78,
+   "learned": [
+    {
+     "ticker": "MSFT",
+     "concept": null,
+     "state": "active",
+     "label": "Depreciation, amortization, and other"
+    }
+   ],
+   "seconds": 1.91,
    "system": "dev_full",
    "tags": [
     "restated",
@@ -875,17 +859,17 @@
   }
  ],
  "llm": {
-  "live": 18,
-  "cached": 1,
-  "seconds": 45.11642360687256
+  "live": 1,
+  "cached": 19,
+  "seconds": 1.3909416198730469
  },
  "graph": {
   "filings": 55,
   "companies": 40,
   "tables": 161,
-  "readings": 12773,
+  "readings": 12792,
   "reading_status": {
-   "verified": 11882,
+   "verified": 11901,
    "unverified": 890,
    "failed": 1
   },
@@ -898,7 +882,7 @@
    "CARRY:pass": 1204,
    "CARRY:restated": 32
   },
-  "facts": 2979,
+  "facts": 2998,
   "bindings": 1302,
   "bindings_active": 1254,
   "textfacts": 724

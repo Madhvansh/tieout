@@ -281,6 +281,8 @@ def load_learned(g: Graph, path: pathlib.Path = LEARNED) -> int:
     for line in path.read_text(encoding="utf-8").splitlines():
         if line.strip():
             e = json.loads(line)
+            if e.get("kind") == "item":
+                continue                                 # line items are re-applied by items.load_items
             if e.get("state") == "active" and e.get("label"):
                 n += apply_entry(g, e)
     return n

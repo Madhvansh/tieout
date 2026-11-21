@@ -129,6 +129,28 @@ class Executor:
                 return derived
             return Result("abstain", missing=[(ticker, concept, pid or str(spec))],
                           notes=[f"no fact for {ticker} {concept} {pid or spec}"])
+        return self._from_fact(f, ticker, concept, pid, first, c.unit, concept in OUTFLOW)
+
+    def _item(self, ticker: str, phrase: str, spec: dict, first: bool = False) -> Result:
+        """A line item outside the seed concepts, bound on demand by the living layer."""
+        from .items import resolve
+        key = resolve(self.g, ticker, phrase)
+        if key is None:
+            return Result("abstain", missing=[(ticker, "item:" + phrase, str(spec))],
+                          notes=[f"no binding yet for '{phrase}' at {ticker}"])
+        f = pid = None
+        for nature in ("flow", "stock"):
+            pid = self._pid(ticker, spec, nature, key)
+            f = self.g.fact(ticker, key, pid) if pid else None
+            if f is not None:
+                break
+        if f is None:
+            return Result("abstain", missing=[],
+                          notes=[f"'{phrase}' is bound for {ticker} but has no value for {pid or spec}"])
+        unit = self.g.readings[f.readings[0]].unit
+        return self._from_fact(f, ticker, key, pid, first, unit, False)
+
+    def _from_fact(self, f, ticker: str, concept: str, pid: str, first: bool, unit: str, outflow: bool) -> Result:
         r = self.g.best_reading(f, as_first_reported=first)
         leaf = Leaf(r.id, ticker, concept, r.period, r.doc, r.page, r.label, r.text, r.status, r.value)
         if self.use_checks and r.status == "failed":
@@ -137,7 +159,7 @@ class Executor:
         if self.use_checks and self.require_verified and r.status != "verified":
             return Result("abstain", missing=[], leaves=[leaf],
                           notes=[f"{ticker} {concept} {pid} is not covered by any passing check (strict policy)"])
-        value = abs(r.value) if concept in OUTFLOW else r.value
+        value = abs(r.value) if outflow else r.value
         notes = [f"{ticker} {pid} ends {r.period_end}"]
         if f.binding_state != "active":
             notes.append(f"{ticker} {concept}: label '{r.label[:40]}' matched by wording only, structure did not confirm it")
@@ -146,7 +168,7 @@ class Executor:
         if any(self.g.readings[i].superseded for i in f.readings):
             notes.append(f"{ticker} {concept} {pid} was restated; "
                          + ("first-reported" if first else "latest-reported") + " value used")
-        return Result("number", value, c.unit, [leaf], notes,
+        return Result("number", value, unit, [leaf], notes,
                       {"op": "get", "what": f"{ticker} {concept} {pid}", "value": value, "page": r.page, "doc": r.doc})
 
     def _derive_q4(self, ticker: str, concept: str, spec: dict) -> Optional[Result]:
@@ -229,6 +251,8 @@ class Executor:
                       {"op": "metric", "what": f"{ticker} {name} = {formula}", "value": value, "children": children})
 
     def _measure(self, ticker: str, by: dict, spec: dict) -> Result:
+        if by.get("item"):
+            return self._item(ticker, by["item"], spec)
         if by.get("metric"):
             return self._metric(ticker, by["metric"], spec)
         return self._fact(ticker, by["concept"], spec)
@@ -256,8 +280,10 @@ class Executor:
         return [t for t, _ in r.value], list(r.leaves)
 
     def _op_get(self, s, env) -> Result:
-        return self._fact(self._company(s["company"], env), s["concept"], s["period"],
-                          first=s.get("as") == "first_reported")
+        first = s.get("as") == "first_reported"
+        if s.get("item"):
+            return self._item(self._company(s["company"], env), s["item"], s["period"], first=first)
+        return self._fact(self._company(s["company"], env), s["concept"], s["period"], first=first)
 
     def _op_metric(self, s, env) -> Result:
         return self._metric(self._company(s["company"], env), s["metric"], s["period"])
@@ -310,7 +336,8 @@ class Executor:
 
     def _op_change(self, s, env) -> Result:
         t = self._company(s["company"], env)
-        by = {"metric": s["metric"]} if s.get("metric") else {"concept": s["concept"]}
+        by = ({"metric": s["metric"]} if s.get("metric") else
+              {"item": s["item"]} if s.get("item") else {"concept": s["concept"]})
         a, b = self._measure(t, by, s["from"]), self._measure(t, by, s["to"])
         leaves, notes = a.leaves + b.leaves, a.notes + b.notes
         if not (a.ok and b.ok):
@@ -400,15 +427,18 @@ class Executor:
 
     def _op_restated(self, s, env) -> Result:
         t = self._company(s["company"], env)
-        first = self._fact(t, s["concept"], s["period"], first=True)
-        last = self._fact(t, s["concept"], s["period"], first=False)
+        if s.get("item"):
+            first, last = self._item(t, s["item"], s["period"], first=True), self._item(t, s["item"], s["period"])
+        else:
+            first = self._fact(t, s["concept"], s["period"], first=True)
+            last = self._fact(t, s["concept"], s["period"], first=False)
         leaves, notes = first.leaves + last.leaves, first.notes + last.notes
         if not (first.ok and last.ok):
             return Result("abstain", leaves=leaves, notes=notes, missing=first.missing + last.missing)
         if first.leaves[0].doc == last.leaves[0].doc:
-            notes.append(f"{t} {s['concept']}: only one filing reports this period, so nothing to compare")
+            notes.append(f"{t} {s.get('concept') or s.get('item')}: only one filing reports this period, so nothing to compare")
         return Result("number", last.value - first.value, first.unit, leaves, notes,
-                      {"op": "restated", "what": f"{t} {s['concept']} latest minus first reported",
+                      {"op": "restated", "what": f"{t} {s.get('concept') or s.get('item')} latest minus first reported",
                        "value": last.value - first.value, "children": [first.tree, last.tree]},
                       extra={"first": first.value, "latest": last.value,
                              "first_doc": first.leaves[0].doc, "latest_doc": last.leaves[0].doc})

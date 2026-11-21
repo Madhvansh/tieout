@@ -13,7 +13,18 @@ from typing import Optional
 from .concepts import concept_defs
 from .execute import Executor, Result, render
 from .graph import Graph
+from .items import learn_item, save_item
 from .living import learn, save_entry
+from .rawlayer import load_raw
+
+_RAW: list = []
+
+
+def _raw() -> list:
+    """The raw layer is large; load it the first time a question needs it."""
+    if not _RAW:
+        _RAW.extend(load_raw())
+    return _RAW
 from .planner import plan_question
 
 
@@ -39,8 +50,17 @@ def answer(question: str, g: Graph, model: Optional[str] = None, allow_learning:
         for _ in range(3):                         # a ranking can surface several gaps; a few rounds settle them
             gaps = list(dict.fromkeys((t, c) for (t, c, _p) in _all_missing(res) if c in concepts and (t, c) not in tried
                                       and not any(k.startswith(f"{t}|{c}|") for k in g.facts)))
-            if not gaps:
+            item_gaps = list(dict.fromkeys((t, c[5:]) for (t, c, _p) in _all_missing(res)
+                                           if isinstance(c, str) and c.startswith("item:") and (t, c) not in tried))
+            if not gaps and not item_gaps:
                 break
+            for t, phrase in item_gaps:
+                tried.add((t, "item:" + phrase))
+                e = learn_item(g, _raw(), t, phrase, question_id=question_id, question=question, model=model,
+                               offline=offline)
+                learned.append(e)
+                if persist:
+                    save_item(e)
             for t, c in gaps:
                 tried.add((t, c))
                 e = learn(g, t, c, question_id=question_id, question=question, model=model, offline=offline)

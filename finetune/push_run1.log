@@ -24,3 +24,8 @@ pushing PRIVATE kernel madhvanshatulchoksi/planner-lora-ft on NvidiaTeslaT4
 Kernel version 1 successfully pushed.  Please check progress at https://www.kaggle.com/code/madhvanshatulchoksi/planner-lora-ft
 [  0.0 min] QUEUED
 [114.8 min] RUNNING
+[115.6 min] ERROR
+kernel finished: ERROR after 115.6 min wall (queue + run)
+Output file downloaded to C:\Users\Administrator\Downloads\DSA TRACKER\Genloop\takehome\repo\finetune\out\train_log.txt
+'charmap' codec can't encode characters in position 1013-1017: character maps to <undefined>
+kaggle kernels output madhvanshatulchoksi/planner-lora-ft -p C:\Users\Administrator\Downloads\DSA TRACKER\Genloop\takehome\repo\finetune\out -o failed (1)

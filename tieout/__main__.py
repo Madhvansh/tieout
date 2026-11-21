@@ -25,6 +25,8 @@ def main() -> int:
         from .ask import answer
         from .living import load_learned
         load_learned(g)
+        from .items import load_items
+        load_items(g)
         out = answer(" ".join(sys.argv[2:]), g, question_id="cli")
         print(json.dumps(out["plan"]))
         print("ANSWER:", out["answer"])
@@ -35,7 +37,7 @@ def main() -> int:
         for n in dict.fromkeys(out["result"].notes):
             print("  note:", n)
         for e in out["learned"]:
-            print(f"  learned: {e['ticker']} {e['concept']} -> {e['state']} ({e.get('label')})")
+            print(f"  learned: {e['ticker']} {e.get('concept') or e.get('phrase')} -> {e['state']} ({e.get('label')})")
         return 0
     if cmd == "stats":
         print(json.dumps(g.stats(), indent=1))

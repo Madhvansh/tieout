@@ -99,9 +99,42 @@ def build_raw(g, verbose: bool = True) -> list:
                         break
                     p, hops = parent.get(p), hops + 1
             rows.extend(table_rows.values())
+        rows.extend(_primary_rows(g, doc))
         if verbose:
             print(f"raw    {doc:22s} {len(rows) - n0:5d} rows", flush=True)
     return rows
+
+
+def _primary_rows(g, doc: str) -> list:
+    """Rows of the three primary statements, in the same shape, so that any printed line
+    (not only the seed concepts) can be bound on demand. Cells point at the readings the
+    base graph already holds."""
+    grouped: dict = {}
+    for r in g.readings.values():
+        if r.doc == doc and r.kind in ("IS", "BS", "CF"):
+            grouped.setdefault((r.table, r.row), []).append(r)
+    bound = {(b.kind, b.row): b.concept for b in g.bindings if b.doc == doc and b.state == "active"}
+    out = []
+    for (table, row), rs in grouped.items():
+        rs.sort(key=lambda r: r.col)
+        roles = set()
+        for r in rs:
+            for cid in r.checks:
+                ch = g.checks[cid]
+                if ch.type == "SUM" and ch.status != "fail":
+                    roles |= {"total" if role == "total" else "operand" for rid, role in ch.members if rid == r.id}
+        first = rs[0]
+        out.append({
+            "id": f"{table}:r{row}", "doc": doc, "ticker": first.ticker, "page": first.page, "table": first.kind,
+            "title": g.tables[table]["title"][:160], "context": "primary financial statement",
+            "label": first.label, "section": first.section,
+            "unit": "USD" if first.unit == "USD" else ("shares" if first.unit == "shares" else "ratio"),
+            "role": "total" if "total" in roles else ("operand" if roles else "loose"),
+            "verified": any(r.status == "verified" for r in rs),
+            "ties_to": bound.get((first.kind, row)), "anchor": None,
+            "cells": [{"pid": r.period, "end": r.period_end, "value": r.value, "text": r.text,
+                       "ok": r.status == "verified", "col": "", "bbox": r.bbox, "rid": r.id} for r in rs]})
+    return out
 
 
 def _period(cal, col, form: str) -> tuple:

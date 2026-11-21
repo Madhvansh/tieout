@@ -100,15 +100,15 @@ def validate(plan: dict, graph) -> list:
                 errs.append(f"{sid}: unknown concept {by['concept']}")
             if by.get("metric") and by["metric"] not in metrics:
                 errs.append(f"{sid}: unknown metric {by['metric']}")
-        if op in ("get", "restated") and not (s.get("concept") and comp and s.get("period")):
-            errs.append(f"{sid}: {op} needs company, concept and period")
+        if op in ("get", "restated") and not ((s.get("concept") or s.get("item")) and comp and s.get("period")):
+            errs.append(f"{sid}: {op} needs company, a concept or an item, and period")
         if op == "metric" and not (s.get("metric") and comp and s.get("period")):
             errs.append(f"{sid}: metric needs company, metric and period")
         if op == "attr" and s.get("attr") not in TEXT_ATTRS:
             errs.append(f"{sid}: unknown attribute {s.get('attr')}")
         if op == "calc" and not s.get("expr"):
             errs.append(f"{sid}: calc needs expr")
-        if op == "change" and not (s.get("from") and s.get("to") and (s.get("concept") or s.get("metric"))):
+        if op == "change" and not (s.get("from") and s.get("to") and (s.get("concept") or s.get("metric") or s.get("item"))):
             errs.append(f"{sid}: change needs from, to and a concept or metric")
         if op == "rank" and not (s.get("by") and s.get("period")):
             errs.append(f"{sid}: rank needs by and period")
