@@ -1,0 +1,10 @@
+{
+ "model": "gemini:gemini-3.5-flash-lite",
+ "system": "You map one financial concept to one row of a company's financial statement.\nYou are shown the printed row labels of the statement with their section headings and structural\nroles. You are never shown values. Pick the single row that reports the concept for the whole\ncompany (consolidated, attributable to the parent company where the statement separates it),\nor answer null if no row reports it. Do not pick a component of the concept or a per-share row.\nAnswer as JSON: {\"row\": <row number or null>, \"reason\": \"<one short sentence>\"}",
+ "user": "Company: NVIDIA Corp (NVDA)\nStatement: IS\nConcept: SellingGeneralAdmin: selling, general and administrative expense (one combined line)\n\nRows (number: label (section) <role>):\n0: Revenue  <operand> [already: Revenue]\n1: Cost of revenue  <operand> [already: CostOfRevenue]\n2: Gross profit  <total> [already: GrossProfit]\n3: Research and development  (under: Operating expenses)  <operand> [already: ResearchAndDevelopment]\n4: Sales, general and administrative  (under: Operating expenses)  <operand>\n5: Total operating expenses  (under: Operating expenses)  <total>\n6: Operating income  (under: Operating expenses)  <total> [already: OperatingIncome]\n7: Interest income  (under: Operating expenses)  <operand>\n8: Interest expense  (under: Operating expenses)  <operand>\n9: Other income, net  (under: Operating expenses)  <operand>\n10: Total other income, net  (under: Operating expenses)  <total>\n11: Income before income tax  (under: Operating expenses)  <total> [already: PretaxIncome]\n12: Income tax expense  (under: Operating expenses)  <operand> [already: IncomeTax]\n13: Net income  (under: Operating expenses)  <total> [already: NetIncome]\n14: Basic  (under: Net income per share)  <loose>\n15: Diluted  (under: Net income per share)  <loose> [already: EPSDiluted]",
+ "answer": {
+  "row": 4,
+  "reason": "Row 4 explicitly reports combined sales, general and administrative expenses."
+ },
+ "seconds": 0.86
+}

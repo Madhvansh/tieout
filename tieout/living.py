@@ -104,6 +104,8 @@ def gate(g: Graph, doc: str, concept: str, row: int, rows: dict) -> tuple:
     if d is None:
         return False, [], ["no such row"]
     evidence, objections = [], []
+    if not d["label"].strip():
+        objections.append("row has no printed label")
     want = "USD/share" if c.unit == "USD/share" else "USD"
     if d["unit"] != want:
         objections.append(f"unit is {d['unit']}, concept needs {want}")
@@ -121,6 +123,23 @@ def gate(g: Graph, doc: str, concept: str, row: int, rows: dict) -> tuple:
             evidence.append("is the total of a recovered formula")
         else:
             objections.append("concept must be a total of a recovered formula; this row is not")
+    if s.get("operand_of"):
+        target = next((b.row for b in g.bindings if b.doc == doc and b.concept == s["operand_of"] and b.state == "active"), None)
+        ops, level = set(), {target} if target is not None else set()
+        for _ in range(2):                              # directly, or one level down
+            nxt = set()
+            for top in level:
+                for r in rows.get(top, {"readings": []})["readings"]:
+                    for cid in r.checks:
+                        ch = g.checks[cid]
+                        if ch.type == "SUM" and ch.status != "fail" and [r.id, "total"] in ch.members:
+                            nxt |= {g.readings[rid].row for rid, role in ch.members if role != "total"}
+            ops |= nxt
+            level = nxt
+        if row in ops:
+            evidence.append(f"is an operand of the formula for {s['operand_of']}")
+        else:
+            objections.append(f"is not an operand of the formula for {s['operand_of']}")
     if s.get("ties_with_cf_first_row"):
         if _reappears(g, doc, d, "CF"):
             evidence.append("same values reappear on the cash-flow statement")
@@ -170,8 +189,8 @@ def describe(rows: dict, bound: dict) -> str:
     lines = []
     for row in sorted(rows):
         d = rows[row]
-        if d["unit"] not in ("USD", "USD/share"):
-            continue
+        if d["unit"] not in ("USD", "USD/share") or not d["label"].strip():
+            continue                                  # a row whose label was lost cannot be proposed
         tag = f" [already: {bound[row]}]" if row in bound else ""
         sec = f"  (under: {d['section'][:50]})" if d["section"] else ""
         lines.append(f"{row}: {d['label'][:90]}{sec}  <{d['role']}>{tag}")
@@ -228,10 +247,11 @@ def apply_entry(g: Graph, entry: dict) -> int:
         if f["ticker"] != ticker:
             continue
         rows = row_table(g, doc, kind)
+        # match by the printed label, not by row number: row numbers move when the parser changes
         match = [r for r, d in rows.items() if norm_label(d["label"]) == want]
         if not match:
             continue
-        row = match[0] if doc != entry["doc"] else entry["row"]
+        row = entry["row"] if (doc == entry["doc"] and entry["row"] in match) else match[0]
         if any(b.doc == doc and b.concept == concept and b.state == "active" for b in g.bindings):
             continue
         g.bindings.append(Binding(doc=doc, kind=kind, row=row, label=rows[row]["label"], concept=concept,
@@ -277,6 +297,7 @@ SAYS = {
     "IncomeTax": "provision for income taxes (income tax expense)",
     "NetIncome": "net income for the period (attributable to the company if the statement separates noncontrolling interests)",
     "EPSDiluted": "diluted earnings per share",
+    "SharesDiluted": "diluted weighted-average number of shares used for diluted earnings per share",
     "NetInterestIncome": "net interest income (banks)",
     "ProvisionForCreditLosses": "provision for credit losses (banks)",
     "NoninterestExpense": "total noninterest expense (banks)",

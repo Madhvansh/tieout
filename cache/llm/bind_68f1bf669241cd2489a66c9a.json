@@ -1,0 +1,10 @@
+{
+ "model": "gemini:gemini-3.5-flash-lite",
+ "system": "You map one financial concept to one row of a company's financial statement.\nYou are shown the printed row labels of the statement with their section headings and structural\nroles. You are never shown values. Pick the single row that reports the concept for the whole\ncompany (consolidated, attributable to the parent company where the statement separates it),\nor answer null if no row reports it. Do not pick a component of the concept or a per-share row.\nAnswer as JSON: {\"row\": <row number or null>, \"reason\": \"<one short sentence>\"}",
+ "user": "Company: NIKE Inc. (NKE)\nStatement: IS\nConcept: ResearchAndDevelopment: research and development expense\n\nRows (number: label (section) <role>):\n0: Revenues  <operand> [already: Revenue]\n1: Cost of sales  <operand> [already: CostOfRevenue]\n2: Gross profit  <total> [already: GrossProfit]\n3: Demand creation expense  <operand>\n4: Operating overhead expense  <operand>\n5: Total selling and administrative expense  <total>\n6: Interest (income) expense, net  <operand>\n7: Other (income) expense, net  <operand>\n8: Income before income taxes  <total> [already: PretaxIncome]\n9: Income tax expense  <operand> [already: IncomeTax]\n10: NET INCOME  <total> [already: NetIncome]\n11: Basic  (under: Earnings per common share)  <loose>\n12: Diluted  (under: Earnings per common share)  <loose>\n13: Basic  (under: Weighted average common shares outstanding)  <loose>\n14: Diluted  (under: Weighted average common shares outstanding)  <loose>\n15: The accompanying Notes to the Consolidated Financial Statements are an integral part of th  (under: Weighted average common shares outstanding)  <loose>",
+ "answer": {
+  "row": null,
+  "reason": "Research and development expense is not separately reported on this income statement."
+ },
+ "seconds": 1.0
+}

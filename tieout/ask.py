@@ -37,8 +37,8 @@ def answer(question: str, g: Graph, model: Optional[str] = None, allow_learning:
         concepts = concept_defs()
         tried = set()
         for _ in range(3):                         # a ranking can surface several gaps; a few rounds settle them
-            gaps = [(t, c) for (t, c, _p) in _all_missing(res) if c in concepts and (t, c) not in tried
-                    and not any(k.startswith(f"{t}|{c}|") for k in g.facts)]
+            gaps = list(dict.fromkeys((t, c) for (t, c, _p) in _all_missing(res) if c in concepts and (t, c) not in tried
+                                      and not any(k.startswith(f"{t}|{c}|") for k in g.facts)))
             if not gaps:
                 break
             for t, c in gaps:

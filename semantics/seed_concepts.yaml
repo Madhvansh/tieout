@@ -111,12 +111,11 @@ concepts:
     nature: flow
     pick: last          # where a statement separates noncontrolling interests, the line attributable to the company
     labels:
-      - '^net (income|earnings)( \(loss\))?$'
-      - '^consolidated net (income|earnings)$'
+      - '^(consolidated )?net (income|earnings)( \(loss\))?$'
       - '^net (income|earnings)( \(loss\))? including non-?controlling interests?$'
       - '^profit of consolidated and affiliated companies$'
-      - '^net (income|earnings)( \(loss\))? attributable to (?!.*non-?controlling)(?!.*redeemable).*'
-      - '^(profit|net income)( \(loss\))? attributable to common (stockholders|shareholders)$'
+      - '^profit$'
+      - '^(consolidated )?net (income|earnings)( \(loss\))? (attributable|applicable) to (?!.*non-?controlling)(?!.*redeemable)(?!.*common).*'
     structure:
       ties_with_cf_first_row: true
 
@@ -229,14 +228,18 @@ concepts:
     statement: BS
     unit: USD
     nature: stock
-    pick: last
+    pick: first         # the company's own shareholders' equity, before noncontrolling interests
     labels:
       - '^total (stockholders|shareholders|shareowners|share-owners)[’'']? ?(equity|investment)( \(deficit\))?$'
       - '^total equity( \(deficit\))?$'
-      - '^total .{0,40}(stockholders|shareholders|shareowners)[’'']? ?equity$'
+      - '^total (?!liabilities).{0,40}(stockholders|shareholders|shareowners)[’'']? ?equity$'
       - '^total shareholders[’'']? (deficit|equity \(deficit\))$'
     structure:
       total_of: true
+      # "Total liabilities and equity" is also a total and also says "equity". Total equity is
+      # the one that is an operand of the row that ties to total assets. (Found by the first
+      # audit against SEC data: wording plus "is a total" bound the wrong row.)
+      operand_of: TotalLiabilitiesAndEquity
 
   - name: TotalLiabilitiesAndEquity
     statement: BS
@@ -356,6 +359,7 @@ concepts:
     unit: USD
     nature: flow
     pick: first
+    prefer_section: 'common'
     labels:
       - '^(payments? (for|of) )?(cash )?dividends( and dividend equivalents)?( paid)?( to (shareholders|stockholders|shareowners))?$'
       - '^(cash )?dividends paid.*'
@@ -368,6 +372,7 @@ concepts:
     unit: USD
     nature: flow
     pick: first
+    prefer_section: 'common'
     labels:
       - '^(repurchases?|purchases?) of (class a )?(common|treasury) (stock|shares).*'
       - '^(common )?(stock|shares?) repurchase[ds]?.*'

@@ -1,0 +1,210 @@
+208 probes to run (0 already logged)
+  1/208 C     NetIncome                  active    'Citigroup’s net income'                         
+  2/208 CVX   NetIncome                  proposed  'Net Income (Loss) Attributable to Chevron Co'   - values neither reappear on the cash-flow statement nor deriv
+  3/208 F     NetIncome                  active    'Net income/(loss) attributable to Ford Motor'   
+  4/208 GM    NetIncome                  active    'Net income (loss) attributable to stockholde'   
+  5/208 WFC   NetIncome                  active    'Wells Fargo net income'                         
+  6/208 GM    Revenue                    active    'Total net sales and revenue (Note'              
+  7/208 BAC   TotalAssets                active    'Total assets'                                   
+  8/208 C     TotalAssets                active    'Total assets'                                   
+  9/208 MRK   TotalAssets                rejected  'None'                                           - proposer found no row
+ 10/208 V     TotalAssets                active    'Total assets'                                   
+ 11/208 C     TotalEquity                rejected  'None'                                           - proposer found no row
+ 12/208 NKE   TotalEquity                proposed  "Total shareholders' equity"                     - value is not covered by any check
+ 13/208 V     TotalEquity                rejected  'None'                                           - proposer found no row
+ 14/208 JPM   OperatingCashFlow          active    'Net cash (used in)/provided by operating act'   
+ 15/208 NKE   OperatingCashFlow          active    'Cash provided (used) by operations'             
+ 16/208 PG    OperatingCashFlow          active    'TOTAL OPERATING ACTIVITIES'                     
+ 17/208 C     Cash                       rejected  'None'                                           - proposer found no row
+ 18/208 NKE   Cash                       active    'Cash and equivalents'                           
+ 19/208 AMD   PretaxIncome               active    'Income from continuing operations before inc'   
+ 20/208 AXP   PretaxIncome               active    'Pretax income'                                  
+ 21/208 F     PretaxIncome               active    'Income/(Loss) before income taxes'              
+ 22/208 GS    PretaxIncome               active    'Pre-tax earnings'                               
+ 23/208 PFE   PretaxIncome               active    'Income from continuing operations before pro'   
+ 24/208 F     IncomeTax                  active    'Provision for/(Benefit from) income taxes (N'   
+ 25/208 PFE   IncomeTax                  active    'Provision/(benefit) for taxes on income'        
+ 26/208 CVX   OperatingIncome            rejected  'None'                                           - proposer found no row
+ 27/208 F     OperatingIncome            active    'Operating income/(loss)'                        
+ 28/208 JNJ   OperatingIncome            rejected  'None'                                           - proposer found no row
+ 29/208 MRK   OperatingIncome            rejected  'None'                                           - proposer found no row
+ 30/208 NKE   OperatingIncome            rejected  'None'                                           - proposer found no row
+ 31/208 PFE   OperatingIncome            rejected  'None'                                           - proposer found no row
+ 32/208 UNH   OperatingIncome            active    'Earnings from operations ...................'   
+ 33/208 XOM   OperatingIncome            rejected  'None'                                           - proposer found no row
+ 34/208 COST  CostOfRevenue              active    'Merchandise costs'                              
+ 35/208 CVX   CostOfRevenue              rejected  'None'                                           - proposer found no row
+ 36/208 GM    CostOfRevenue              rejected  'None'                                           - proposer found no row
+ 37/208 ORCL  CostOfRevenue              rejected  'None'                                           - proposer found no row
+ 38/208 XOM   CostOfRevenue              rejected  'None'                                           - proposer found no row
+ 39/208 C     TotalLiabilitiesAndEquity  rejected  'None'                                           - proposer found no row
+ 40/208 MRK   TotalLiabilitiesAndEquity  rejected  'None'                                           - proposer found no row
+ 41/208 NKE   TotalLiabilitiesAndEquity  proposed  "TOTAL LIABILITIES AND SHAREHOLDERS' EQUITY"     - in other companies this concept is the total of a formula; h
+ 42/208 V     TotalLiabilitiesAndEquity  rejected  'None'                                           - proposer found no row
+ 43/208 JNJ   InvestingCashFlow          active    'Net cash (used by)/from investing activities'   
+ 44/208 MSFT  InvestingCashFlow          active    'Net cash used in investing'                     
+ 45/208 PG    InvestingCashFlow          rejected  'None'                                           - proposer failed: ConnectionError
+ 46/208 C     FinancingCashFlow          rejected  'None'                                           - proposer found no row
+ 47/208 JNJ   FinancingCashFlow          rejected  'None'                                           - proposer found no row
+ 48/208 MSFT  FinancingCashFlow          active    'Net cash used in financing'                     
+ 49/208 PEP   FinancingCashFlow          rejected  'None'                                           - proposer found no row
+ 50/208 PG    FinancingCashFlow          active    'TOTAL FINANCING ACTIVITIES'                     
+ 51/208 AXP   CapitalExpenditures        active    'Purchase of premises and equipment, net of s'   
+ 52/208 BAC   CapitalExpenditures        rejected  'None'                                           - proposer found no row
+ 53/208 JPM   CapitalExpenditures        rejected  'None'                                           - proposer found no row
+ 54/208 MS    CapitalExpenditures        active    'Other assets—Premises, equipment and softwar'   
+ 55/208 NVDA  CapitalExpenditures        active    'Purchases related to property and equipment '   
+ 56/208 WFC   CapitalExpenditures        rejected  'None'                                           - proposer found no row
+ 57/208 F     DepreciationAmortization   active    'Depreciation and tooling amortization (Note '   
+ 58/208 GOOGL DepreciationAmortization   active    'Depreciation of property and equipment'         
+ 59/208 MRK   DepreciationAmortization   rejected  'None'                                           - proposer found no row
+ 60/208 ORCL  DepreciationAmortization   rejected  'None'                                           - proposer found no row
+ 61/208 XOM   DepreciationAmortization   active    'Depreciation and depletion (includes impairm'   
+ 62/208 ADBE  DividendsPaid              rejected  'None'                                           - proposer found no row
+ 63/208 AMD   DividendsPaid              rejected  'None'                                           - proposer found no row
+ 64/208 AMZN  DividendsPaid              rejected  'None'                                           - proposer found no row
+ 65/208 BLK   DividendsPaid              active    'Dividends/Subco distributions paid'             
+ 66/208 C     DividendsPaid              rejected  'None'                                           - proposer found no row
+ 67/208 COST  DividendsPaid              active    'Cash dividend payments'                         
+ 68/208 CVX   DividendsPaid              active    'Cash dividends - common stock'                  
+ 69/208 F     DividendsPaid              active    'Cash payments for dividends and dividend equ'   
+ 70/208 GOOGL DividendsPaid              active    'Dividend payments'                              
+ 71/208 GS    DividendsPaid              active    'Dividends and dividend equivalents paid on c'   
+ 72/208 JNJ   DividendsPaid              proposed  'Dividends to shareholders'                      - value is not covered by any check
+ 73/208 NKE   DividendsPaid              active    'Dividends — common and preferred'               
+ 74/208 PEP   DividendsPaid              rejected  'None'                                           - proposer found no row
+ 75/208 TSLA  DividendsPaid              rejected  'None'                                           - proposer found no row
+ 76/208 XOM   DividendsPaid              active    'Cash dividends to ExxonMobil shareholders'      
+ 77/208 AMZN  ShareRepurchases           rejected  'None'                                           - proposer found no row
+ 78/208 AXP   ShareRepurchases           active    'Repurchase of American Express common shares'   
+ 79/208 BLK   ShareRepurchases           active    'Shares/Subco Units repurchased'                 
+ 80/208 C     ShareRepurchases           rejected  'None'                                           - proposer found no row
+ 81/208 CAT   ShareRepurchases           active    'Payments to purchase common stock'              
+ 82/208 CVX   ShareRepurchases           active    'Net sales (purchases) of treasury shares'       
+ 83/208 GM    ShareRepurchases           active    'Payments to purchase common stock (Note'        
+ 84/208 JNJ   ShareRepurchases           proposed  'Repurchase of common stock'                     - value is not covered by any check
+ 85/208 JPM   ShareRepurchases           active    'Treasury stock repurchased'                     
+ 86/208 NVDA  ShareRepurchases           active    'Payments related to repurchases of common st'   
+ 87/208 PEP   ShareRepurchases           rejected  'None'                                           - proposer found no row
+ 88/208 PFE   ShareRepurchases           rejected  'None'                                           - proposer found no row
+ 89/208 PG    ShareRepurchases           active    'Treasury stock purchases'                       
+ 90/208 TSLA  ShareRepurchases           rejected  'None'                                           - proposer found no row
+ 91/208 WFC   ShareRepurchases           active    'Repurchased'                                    
+ 92/208 WMT   ShareRepurchases           active    'Purchase of Company stock'                      
+ 93/208 XOM   ShareRepurchases           active    'Common stock acquired'                          
+ 94/208 ADBE  LongTermDebt               active    'Debt'                                           
+ 95/208 BAC   LongTermDebt               active    'Long-term debt (includes and'                   
+ 96/208 BLK   LongTermDebt               rejected  'None'                                           - proposer found no row
+ 97/208 C     LongTermDebt               rejected  'None'                                           - proposer found no row
+ 98/208 CAT   LongTermDebt               rejected  'None'                                           - proposer found no row
+ 99/208 CRM   LongTermDebt               active    'Noncurrent debt'                                
+100/208 CVX   LongTermDebt               active    'Long-term debt1'                                
+101/208 GS    LongTermDebt               active    'Unsecured long-term borrowings (includes $11'   
+102/208 MS    LongTermDebt               active    'Borrowings (includes $132,479 and $103,332 a'   
+103/208 ORCL  LongTermDebt               active    'Notes payable and other borrowings, non-curr'   
+104/208 PEP   LongTermDebt               active    'Long-Term Debt Obligations'                     
+105/208 TGT   LongTermDebt               active    'Long-term debt and other borrowings'            
+106/208 TSLA  LongTermDebt               active    'Debt and finance leases, net of current port'   
+107/208 AMD   TotalLiabilities           rejected  'None'                                           - proposer found no row
+108/208 AMZN  TotalLiabilities           rejected  'None'                                           - proposer found no row
+109/208 C     TotalLiabilities           rejected  'None'                                           - proposer found no row
+110/208 CVX   TotalLiabilities           active    'Total Liabilities2'                             
+111/208 KO    TotalLiabilities           rejected  'None'                                           - proposer found no row
+112/208 MRK   TotalLiabilities           rejected  'None'                                           - proposer found no row
+113/208 NKE   TotalLiabilities           rejected  'None'                                           - proposer found no row
+114/208 ORCL  TotalLiabilities           rejected  'None'                                           - proposer found no row
+115/208 TGT   TotalLiabilities           rejected  'None'                                           - proposer found no row
+116/208 WMT   TotalLiabilities           rejected  'None'                                           - proposer found no row
+117/208 BAC   StockBasedCompensation     active    'Amortization of stock-based compensation'       
+118/208 C     StockBasedCompensation     rejected  'None'                                           - proposer found no row
+119/208 CAT   StockBasedCompensation     rejected  'None'                                           - proposer found no row
+120/208 CVX   StockBasedCompensation     rejected  'None'                                           - proposer found no row
+121/208 F     StockBasedCompensation     active    'Stock compensation (Note'                       
+122/208 GM    StockBasedCompensation     rejected  'None'                                           - proposer found no row
+123/208 JNJ   StockBasedCompensation     active    'Stock based compensation'                       
+124/208 JPM   StockBasedCompensation     rejected  'None'                                           - proposer found no row
+125/208 WFC   StockBasedCompensation     rejected  'None'                                           - proposer found no row
+126/208 WMT   StockBasedCompensation     rejected  'None'                                           - proposer found no row
+127/208 XOM   StockBasedCompensation     rejected  'None'                                           - proposer found no row
+128/208 BLK   Deposits                   rejected  'None'                                           - proposer found no row
+129/208 C     Deposits                   rejected  'None'                                           - proposer found no row
+130/208 MA    Deposits                   rejected  'None'                                           - proposer found no row
+131/208 V     Deposits                   rejected  'None'                                           - proposer found no row
+132/208 BLK   NetInterestIncome          rejected  'None'                                           - proposer found no row
+133/208 MA    NetInterestIncome          rejected  'None'                                           - proposer found no row
+134/208 MS    NetInterestIncome          active    'Net interest'                                   
+135/208 V     NetInterestIncome          rejected  'None'                                           - proposer found no row
+136/208 BLK   ProvisionForCreditLosses   rejected  'None'                                           - proposer found no row
+137/208 C     ProvisionForCreditLosses   active    'Total provisions for credit losses and for b'   
+138/208 MA    ProvisionForCreditLosses   rejected  'None'                                           - proposer found no row
+139/208 V     ProvisionForCreditLosses   rejected  'None'                                           - proposer found no row
+140/208 AXP   NoninterestExpense         active    'Total expenses'                                 
+141/208 BLK   NoninterestExpense         active    'Total expense'                                  
+142/208 C     NoninterestExpense         active    'Total operating expenses'                       
+143/208 GS    NoninterestExpense         active    'Total operating expenses'                       
+144/208 MA    NoninterestExpense         active    'Total operating expenses'                       
+145/208 V     NoninterestExpense         active    'Total operating expenses'                       
+146/208 AMZN  ResearchAndDevelopment     active    'Technology and infrastructure'                  
+147/208 COST  ResearchAndDevelopment     rejected  'None'                                           - proposer found no row
+148/208 CVX   ResearchAndDevelopment     rejected  'None'                                           - proposer found no row
+149/208 F     ResearchAndDevelopment     rejected  'None'                                           - proposer found no row
+150/208 GM    ResearchAndDevelopment     rejected  'None'                                           - proposer found no row
+151/208 HD    ResearchAndDevelopment     rejected  'None'                                           - proposer found no row
+152/208 KO    ResearchAndDevelopment     rejected  'None'                                           - proposer found no row
+153/208 NKE   ResearchAndDevelopment     rejected  'None'                                           - proposer found no row
+154/208 PEP   ResearchAndDevelopment     rejected  'None'                                           - proposer found no row
+155/208 PG    ResearchAndDevelopment     rejected  'None'                                           - proposer found no row
+156/208 TGT   ResearchAndDevelopment     rejected  'None'                                           - proposer found no row
+157/208 UNH   ResearchAndDevelopment     rejected  'None'                                           - proposer found no row
+158/208 WMT   ResearchAndDevelopment     rejected  'None'                                           - proposer found no row
+159/208 XOM   ResearchAndDevelopment     rejected  'None'                                           - proposer found no row
+160/208 ADBE  SellingGeneralAdmin        rejected  'None'                                           - proposer found no row
+161/208 AMZN  SellingGeneralAdmin        rejected  'None'                                           - proposer found no row
+162/208 CRM   SellingGeneralAdmin        rejected  'None'                                           - proposer found no row
+163/208 CSCO  SellingGeneralAdmin        rejected  'None'                                           - proposer found no row
+164/208 F     SellingGeneralAdmin        active    'Selling, administrative, and other expenses'    
+165/208 GM    SellingGeneralAdmin        active    'Automotive and other selling, general, and a'   
+166/208 GOOGL SellingGeneralAdmin        rejected  'None'                                           - proposer found no row
+167/208 META  SellingGeneralAdmin        rejected  'None'                                           - proposer found no row
+168/208 MSFT  SellingGeneralAdmin        rejected  'None'                                           - proposer found no row
+169/208 NKE   SellingGeneralAdmin        active    'Total selling and administrative expense'       
+170/208 NVDA  SellingGeneralAdmin        active    'Sales, general and administrative'              
+171/208 ORCL  SellingGeneralAdmin        rejected  'None'                                           - proposer found no row
+172/208 TGT   SellingGeneralAdmin        active    'Selling, general, and administrative expense'   
+173/208 UNH   SellingGeneralAdmin        rejected  'None'                                           - proposer found no row
+174/208 AMZN  GrossProfit                rejected  'None'                                           - proposer found no row
+175/208 CAT   GrossProfit                rejected  'None'                                           - proposer found no row
+176/208 COST  GrossProfit                rejected  'None'                                           - proposer found no row
+177/208 CVX   GrossProfit                rejected  'None'                                           - proposer found no row
+178/208 F     GrossProfit                rejected  'None'                                           - proposer found no row
+179/208 GM    GrossProfit                rejected  'None'                                           - proposer found no row
+180/208 GOOGL GrossProfit                rejected  'None'                                           - proposer found no row
+181/208 META  GrossProfit                rejected  'None'                                           - proposer found no row
+182/208 MRK   GrossProfit                rejected  'None'                                           - proposer found no row
+183/208 ORCL  GrossProfit                rejected  'None'                                           - proposer found no row
+184/208 PFE   GrossProfit                rejected  'None'                                           - proposer found no row
+185/208 PG    GrossProfit                rejected  'None'                                           - proposer found no row
+186/208 TGT   GrossProfit                rejected  'None'                                           - proposer found no row
+187/208 UNH   GrossProfit                rejected  'None'                                           - proposer found no row
+188/208 WMT   GrossProfit                rejected  'None'                                           - proposer found no row
+189/208 XOM   GrossProfit                rejected  'None'                                           - proposer found no row
+190/208 AAPL  Goodwill                   rejected  'None'                                           - proposer found no row
+191/208 AXP   Goodwill                   rejected  'None'                                           - proposer found no row
+192/208 COST  Goodwill                   rejected  'None'                                           - proposer found no row
+193/208 F     Goodwill                   rejected  'None'                                           - proposer found no row
+194/208 GM    Goodwill                   active    'Goodwill and intangible assets, net (Note'      
+195/208 GS    Goodwill                   rejected  'None'                                           - proposer found no row
+196/208 JPM   Goodwill                   rejected  'None'                                           - proposer found no row
+197/208 TGT   Goodwill                   rejected  'None'                                           - proposer found no row
+198/208 TSLA  Goodwill                   rejected  'None'                                           - proposer found no row
+199/208 XOM   Goodwill                   rejected  'None'                                           - proposer found no row
+200/208 ADBE  Inventory                  rejected  'None'                                           - proposer found no row
+201/208 CRM   Inventory                  rejected  'None'                                           - proposer found no row
+202/208 GOOGL Inventory                  rejected  'None'                                           - proposer found no row
+203/208 META  Inventory                  rejected  'None'                                           - proposer found no row
+204/208 MRK   Inventory                  active    'Inventories (excludes inventories of $5,681 '   
+205/208 ORCL  Inventory                  rejected  'None'                                           - proposer found no row
+206/208 PEP   Inventory                  active    ''                                               
+207/208 UNH   Inventory                  rejected  'None'                                           - proposer found no row
+208/208 XOM   Inventory                  rejected  'None'                                           - proposer found no row
+done: {'active': 82, 'proposed': 5, 'rejected': 121}

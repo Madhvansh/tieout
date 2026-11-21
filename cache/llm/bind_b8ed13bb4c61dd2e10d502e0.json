@@ -1,0 +1,10 @@
+{
+ "model": "gemini:gemini-3.5-flash-lite",
+ "system": "You map one financial concept to one row of a company's financial statement.\nYou are shown the printed row labels of the statement with their section headings and structural\nroles. You are never shown values. Pick the single row that reports the concept for the whole\ncompany (consolidated, attributable to the parent company where the statement separates it),\nor answer null if no row reports it. Do not pick a component of the concept or a per-share row.\nAnswer as JSON: {\"row\": <row number or null>, \"reason\": \"<one short sentence>\"}",
+ "user": "Company: PepsiCo Inc. (PEP)\nStatement: IS\nConcept: ResearchAndDevelopment: research and development expense\n\nRows (number: label (section) <role>):\n0: Net Revenue  <operand> [already: Revenue]\n1: Cost of sales  <operand> [already: CostOfRevenue]\n2: Gross profit  <total> [already: GrossProfit]\n3: Selling, general and administrative expenses  <operand> [already: SellingGeneralAdmin]\n4: Impairment of intangible assets (see Notes 1 and  <operand>\n5: Operating Profit  <total> [already: OperatingIncome]\n6: Other pension and retiree medical benefits (expense)/income  <operand>\n7: Net interest expense and other  <operand>\n8: Income before income taxes  <total> [already: PretaxIncome]\n9: Provision for income taxes  <operand> [already: IncomeTax]\n10: Net income  <total>\n11: Less: Net income attributable to noncontrolling interests  <operand>\n12: Net Income Attributable to PepsiCo  <total> [already: NetIncome]\n13: Basic  (under: Net Income Attributable to PepsiCo per Common Shar)  <loose>\n14: Diluted  (under: Net Income Attributable to PepsiCo per Common Shar)  <loose> [already: EPSDiluted]",
+ "answer": {
+  "row": null,
+  "reason": "Research and development expense is not separately reported on this income statement and is typically included within selling, general and administrative expenses."
+ },
+ "seconds": 0.9
+}

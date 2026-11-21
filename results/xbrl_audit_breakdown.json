@@ -1,0 +1,671 @@
+{
+ "total": 11077,
+ "counts": {
+  "not_in_feed": 686,
+  "confirmed": 9751,
+  "wrong_period_or_duration": 640
+ },
+ "by_statement": {
+  "IS": {
+   "not_in_feed": 316,
+   "confirmed": 2275,
+   "wrong_period_or_duration": 200
+  },
+  "BS": {
+   "confirmed": 3020,
+   "not_in_feed": 183,
+   "wrong_period_or_duration": 78
+  },
+  "CF": {
+   "wrong_period_or_duration": 362,
+   "confirmed": 4456,
+   "not_in_feed": 187
+  }
+ },
+ "examples": {
+  "not_in_feed": [
+   {
+    "doc": "AAPL_FY2026_10K",
+    "page": 35,
+    "label": "Products",
+    "period": "FY2026",
+    "printed": "355,533",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_10K",
+    "page": 35,
+    "label": "Products",
+    "period": "FY2025",
+    "printed": "307,003",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_10K",
+    "page": 35,
+    "label": "Products",
+    "period": "FY2024",
+    "printed": "294,866",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_10K",
+    "page": 35,
+    "label": "Services",
+    "period": "FY2026",
+    "printed": "123,301",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_10K",
+    "page": 35,
+    "label": "Services",
+    "period": "FY2025",
+    "printed": "109,158",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_10K",
+    "page": 35,
+    "label": "Services",
+    "period": "FY2024",
+    "printed": "96,169",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_10K",
+    "page": 35,
+    "label": "Products",
+    "period": "FY2026",
+    "printed": "215,874",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_10K",
+    "page": 35,
+    "label": "Products",
+    "period": "FY2025",
+    "printed": "194,116",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_10K",
+    "page": 35,
+    "label": "Products",
+    "period": "FY2024",
+    "printed": "185,233",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_10K",
+    "page": 35,
+    "label": "Services",
+    "period": "FY2026",
+    "printed": "29,358",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_10K",
+    "page": 35,
+    "label": "Services",
+    "period": "FY2025",
+    "printed": "26,844",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_10K",
+    "page": 35,
+    "label": "Services",
+    "period": "FY2024",
+    "printed": "25,119",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_10K",
+    "page": 37,
+    "label": "Intangible assets, net",
+    "period": "FY2026@end",
+    "printed": "20,278",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_10K",
+    "page": 37,
+    "label": "Intangible assets, net",
+    "period": "FY2025@end",
+    "printed": "11,093",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2025_10K",
+    "page": 32,
+    "label": "Products",
+    "period": "FY2025",
+    "printed": "307,003",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2025_10K",
+    "page": 32,
+    "label": "Products",
+    "period": "FY2024",
+    "printed": "294,866",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2025_10K",
+    "page": 32,
+    "label": "Products",
+    "period": "FY2023",
+    "printed": "298,085",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2025_10K",
+    "page": 32,
+    "label": "Services",
+    "period": "FY2025",
+    "printed": "109,158",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2025_10K",
+    "page": 32,
+    "label": "Services",
+    "period": "FY2024",
+    "printed": "96,169",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2025_10K",
+    "page": 32,
+    "label": "Services",
+    "period": "FY2023",
+    "printed": "85,200",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2025_10K",
+    "page": 32,
+    "label": "Products",
+    "period": "FY2025",
+    "printed": "194,116",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2025_10K",
+    "page": 32,
+    "label": "Products",
+    "period": "FY2024",
+    "printed": "185,233",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2025_10K",
+    "page": 32,
+    "label": "Products",
+    "period": "FY2023",
+    "printed": "189,282",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2025_10K",
+    "page": 32,
+    "label": "Services",
+    "period": "FY2025",
+    "printed": "26,844",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2025_10K",
+    "page": 32,
+    "label": "Services",
+    "period": "FY2024",
+    "printed": "25,119",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2025_10K",
+    "page": 32,
+    "label": "Services",
+    "period": "FY2023",
+    "printed": "24,855",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_Q3_10Q",
+    "page": 4,
+    "label": "Products",
+    "period": "FY2025Q3",
+    "printed": "66,613",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_Q3_10Q",
+    "page": 4,
+    "label": "Products",
+    "period": "FY2026Q3YTD",
+    "printed": "272,629",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_Q3_10Q",
+    "page": 4,
+    "label": "Products",
+    "period": "FY2025Q3YTD",
+    "printed": "233,287",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_Q3_10Q",
+    "page": 4,
+    "label": "Services",
+    "period": "FY2026Q3",
+    "printed": "30,739",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_Q3_10Q",
+    "page": 4,
+    "label": "Services",
+    "period": "FY2025Q3",
+    "printed": "27,423",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_Q3_10Q",
+    "page": 4,
+    "label": "Services",
+    "period": "FY2026Q3YTD",
+    "printed": "91,728",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_Q3_10Q",
+    "page": 4,
+    "label": "Services",
+    "period": "FY2025Q3YTD",
+    "printed": "80,408",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_Q3_10Q",
+    "page": 4,
+    "label": "Products",
+    "period": "FY2026Q3",
+    "printed": "47,153",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_Q3_10Q",
+    "page": 4,
+    "label": "Products",
+    "period": "FY2025Q3",
+    "printed": "43,620",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_Q3_10Q",
+    "page": 4,
+    "label": "Products",
+    "period": "FY2026Q3YTD",
+    "printed": "163,810",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_Q3_10Q",
+    "page": 4,
+    "label": "Products",
+    "period": "FY2025Q3YTD",
+    "printed": "147,097",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_Q3_10Q",
+    "page": 4,
+    "label": "Services",
+    "period": "FY2026Q3",
+    "printed": "7,494",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_Q3_10Q",
+    "page": 4,
+    "label": "Services",
+    "period": "FY2025Q3",
+    "printed": "6,698",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_Q3_10Q",
+    "page": 4,
+    "label": "Services",
+    "period": "FY2026Q3YTD",
+    "printed": "21,765",
+    "status": "verified"
+   }
+  ],
+  "wrong_period_or_duration": [
+   {
+    "doc": "AAPL_FY2026_10K",
+    "page": 39,
+    "label": "Cash, cash equivalents, and restricted cash and cash equivalents, begi",
+    "period": "FY2026",
+    "printed": "35,934",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_10K",
+    "page": 39,
+    "label": "Cash, cash equivalents, and restricted cash and cash equivalents, begi",
+    "period": "FY2025",
+    "printed": "29,943",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_10K",
+    "page": 39,
+    "label": "Cash, cash equivalents, and restricted cash and cash equivalents, begi",
+    "period": "FY2024",
+    "printed": "30,737",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2025_10K",
+    "page": 36,
+    "label": "Cash, cash equivalents, and restricted cash and cash equivalents, begi",
+    "period": "FY2025",
+    "printed": "29,943",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2025_10K",
+    "page": 36,
+    "label": "Cash, cash equivalents, and restricted cash and cash equivalents, begi",
+    "period": "FY2024",
+    "printed": "30,737",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2025_10K",
+    "page": 36,
+    "label": "Cash, cash equivalents, and restricted cash and cash equivalents, begi",
+    "period": "FY2023",
+    "printed": "24,977",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_Q3_10Q",
+    "page": 4,
+    "label": "Products",
+    "period": "FY2026Q3",
+    "printed": "78,678",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_Q3_10Q",
+    "page": 8,
+    "label": "Cash, cash equivalents, and restricted cash and cash equivalents, begi",
+    "period": "FY2026Q3YTD",
+    "printed": "35,934",
+    "status": "verified"
+   },
+   {
+    "doc": "AAPL_FY2026_Q3_10Q",
+    "page": 8,
+    "label": "Cash, cash equivalents, and restricted cash and cash equivalents, begi",
+    "period": "FY2025Q3YTD",
+    "printed": "29,943",
+    "status": "verified"
+   },
+   {
+    "doc": "ADBE_FY2025_10K",
+    "page": 48,
+    "label": "Subscription",
+    "period": "FY2024",
+    "printed": "20,521",
+    "status": "verified"
+   },
+   {
+    "doc": "ADBE_FY2025_10K",
+    "page": 48,
+    "label": "Product",
+    "period": "FY2025",
+    "printed": "325",
+    "status": "verified"
+   },
+   {
+    "doc": "ADBE_FY2025_10K",
+    "page": 48,
+    "label": "Product",
+    "period": "FY2024",
+    "printed": "386",
+    "status": "verified"
+   },
+   {
+    "doc": "ADBE_FY2025_10K",
+    "page": 48,
+    "label": "Product",
+    "period": "FY2023",
+    "printed": "460",
+    "status": "verified"
+   },
+   {
+    "doc": "ADBE_FY2025_10K",
+    "page": 48,
+    "label": "Services and other",
+    "period": "FY2025",
+    "printed": "540",
+    "status": "verified"
+   },
+   {
+    "doc": "ADBE_FY2025_10K",
+    "page": 48,
+    "label": "Services and other",
+    "period": "FY2024",
+    "printed": "598",
+    "status": "verified"
+   },
+   {
+    "doc": "ADBE_FY2025_10K",
+    "page": 48,
+    "label": "Subscription",
+    "period": "FY2025",
+    "printed": "2,027",
+    "status": "verified"
+   },
+   {
+    "doc": "ADBE_FY2025_10K",
+    "page": 48,
+    "label": "Subscription",
+    "period": "FY2023",
+    "printed": "1,822",
+    "status": "verified"
+   },
+   {
+    "doc": "ADBE_FY2025_10K",
+    "page": 48,
+    "label": "Product",
+    "period": "FY2025",
+    "printed": "23",
+    "status": "verified"
+   },
+   {
+    "doc": "ADBE_FY2025_10K",
+    "page": 48,
+    "label": "Product",
+    "period": "FY2024",
+    "printed": "25",
+    "status": "verified"
+   },
+   {
+    "doc": "ADBE_FY2025_10K",
+    "page": 48,
+    "label": "Services and other",
+    "period": "FY2025",
+    "printed": "501",
+    "status": "verified"
+   },
+   {
+    "doc": "ADBE_FY2025_10K",
+    "page": 48,
+    "label": "Services and other",
+    "period": "FY2024",
+    "printed": "534",
+    "status": "verified"
+   },
+   {
+    "doc": "ADBE_FY2025_10K",
+    "page": 48,
+    "label": "Services and other",
+    "period": "FY2023",
+    "printed": "503",
+    "status": "verified"
+   },
+   {
+    "doc": "ADBE_FY2025_10K",
+    "page": 48,
+    "label": "Amortization of intangibles",
+    "period": "FY2025",
+    "printed": "157",
+    "status": "verified"
+   },
+   {
+    "doc": "ADBE_FY2025_10K",
+    "page": 48,
+    "label": "Amortization of intangibles",
+    "period": "FY2023",
+    "printed": "168",
+    "status": "verified"
+   },
+   {
+    "doc": "ADBE_FY2025_10K",
+    "page": 51,
+    "label": "Cash and cash equivalents at beginning of year",
+    "period": "FY2025",
+    "printed": "7,613",
+    "status": "verified"
+   },
+   {
+    "doc": "ADBE_FY2025_10K",
+    "page": 51,
+    "label": "Cash and cash equivalents at beginning of year",
+    "period": "FY2024",
+    "printed": "7,141",
+    "status": "verified"
+   },
+   {
+    "doc": "ADBE_FY2025_10K",
+    "page": 51,
+    "label": "Cash and cash equivalents at beginning of year",
+    "period": "FY2023",
+    "printed": "4,236",
+    "status": "verified"
+   },
+   {
+    "doc": "AMD_FY2025_10K",
+    "page": 61,
+    "label": "Amortization of acquisition-related intangibles",
+    "period": "FY2025",
+    "printed": "1,031",
+    "status": "verified"
+   },
+   {
+    "doc": "AMD_FY2025_10K",
+    "page": 61,
+    "label": "Amortization of acquisition-related intangibles",
+    "period": "FY2025",
+    "printed": "1,223",
+    "status": "verified"
+   },
+   {
+    "doc": "AMD_FY2025_10K",
+    "page": 61,
+    "label": "Amortization of acquisition-related intangibles",
+    "period": "FY2024",
+    "printed": "1,448",
+    "status": "verified"
+   },
+   {
+    "doc": "AMD_FY2025_10K",
+    "page": 65,
+    "label": "Inventory loss at (recovery from) contract manufacturer",
+    "period": "FY2025",
+    "printed": "(67)",
+    "status": "verified"
+   },
+   {
+    "doc": "AMD_FY2025_10K",
+    "page": 65,
+    "label": "Acquisitions, net of cash acquired",
+    "period": "FY2024",
+    "printed": "(548)",
+    "status": "verified"
+   },
+   {
+    "doc": "AMD_FY2025_10K",
+    "page": 65,
+    "label": "Acquisitions, net of cash acquired",
+    "period": "FY2023",
+    "printed": "(131)",
+    "status": "verified"
+   },
+   {
+    "doc": "AMD_FY2025_10K",
+    "page": 65,
+    "label": "Cash, cash equivalents and restricted cash at beginning of year",
+    "period": "FY2025",
+    "printed": "3,811",
+    "status": "verified"
+   },
+   {
+    "doc": "AMD_FY2025_10K",
+    "page": 65,
+    "label": "Cash, cash equivalents and restricted cash at beginning of year",
+    "period": "FY2024",
+    "printed": "3,933",
+    "status": "verified"
+   },
+   {
+    "doc": "AMD_FY2025_10K",
+    "page": 65,
+    "label": "Cash, cash equivalents and restricted cash at beginning of year",
+    "period": "FY2023",
+    "printed": "4,835",
+    "status": "verified"
+   },
+   {
+    "doc": "AMZN_FY2025_10K",
+    "page": 36,
+    "label": "CASH, CASH EQUIVALENTS, AND RESTRICTED CASH, BEGINNING OF PERIOD",
+    "period": "FY2023",
+    "printed": "54,253",
+    "status": "verified"
+   },
+   {
+    "doc": "AMZN_FY2025_10K",
+    "page": 36,
+    "label": "CASH, CASH EQUIVALENTS, AND RESTRICTED CASH, BEGINNING OF PERIOD",
+    "period": "FY2024",
+    "printed": "73,890",
+    "status": "verified"
+   },
+   {
+    "doc": "AMZN_FY2025_10K",
+    "page": 36,
+    "label": "CASH, CASH EQUIVALENTS, AND RESTRICTED CASH, BEGINNING OF PERIOD",
+    "period": "FY2025",
+    "printed": "82,312",
+    "status": "verified"
+   },
+   {
+    "doc": "AMZN_FY2025_10K",
+    "page": 36,
+    "label": "Proceeds from property and equipment sales and incentives",
+    "period": "FY2025",
+    "printed": "3,499",
+    "status": "verified"
+   }
+  ]
+ }
+}

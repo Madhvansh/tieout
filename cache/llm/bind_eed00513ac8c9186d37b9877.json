@@ -1,0 +1,10 @@
+{
+ "model": "gemini:gemini-3.5-flash-lite",
+ "system": "You map one financial concept to one row of a company's financial statement.\nYou are shown the printed row labels of the statement with their section headings and structural\nroles. You are never shown values. Pick the single row that reports the concept for the whole\ncompany (consolidated, attributable to the parent company where the statement separates it),\nor answer null if no row reports it. Do not pick a component of the concept or a per-share row.\nAnswer as JSON: {\"row\": <row number or null>, \"reason\": \"<one short sentence>\"}",
+ "user": "Company: Johnson & Johnson (JNJ)\nStatement: IS\nConcept: OperatingIncome: operating income / income from operations / earnings from operations\n\nRows (number: label (section) <role>):\n0: Sales to customers  <operand> [already: Revenue]\n1: Cost of products sold  <operand> [already: CostOfRevenue]\n2: Gross profit  <total> [already: GrossProfit]\n3: Selling, marketing and administrative expenses  <operand> [already: SellingGeneralAdmin]\n4: Research and development expense  <operand> [already: ResearchAndDevelopment]\n5: In-process research and development impairments  <operand>\n6: Interest income  <operand>\n7: Interest expense, net of portion capitalized (Note  <operand>\n8: Other (income) expense, net  <operand>\n9: Restructuring (Note  <operand>\n10: Earnings before provision for taxes on income  <total> [already: PretaxIncome]\n11: Provision for taxes on income (Note  <operand> [already: IncomeTax]\n12: Net earnings from continuing operations  <total>\n13: Net earnings from discontinued operations, net of tax (Note  <operand>\n14: Net earnings  <total> [already: NetIncome]\n15: Net earnings per share (Notes 1 and Continuing operations - basic  <loose>\n17: Total net earnings per share - basic  <loose>\n20: Total net earnings per share - diluted  <loose>\n21: Average shares outstanding (Notes 1 and Basic  <loose>",
+ "answer": {
+  "row": null,
+  "reason": "Johnson & Johnson does not report an explicit operating income row on this income statement."
+ },
+ "seconds": 0.95
+}

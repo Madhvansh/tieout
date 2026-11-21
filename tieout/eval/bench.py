@@ -100,7 +100,7 @@ def is_correct(q: dict, pred: dict, companies: dict) -> bool:
             return bool(pred["value"]) and pred["value"][0][0] == want
         return company_to_ticker(pred["value"], companies) == want
     g, p = _norm_text(gold), _norm_text(pred["value"])
-    return bool(g) and (g == p or g in p or p in g)
+    return bool(g) and bool(p) and (g == p or g in p or p in g)
 
 
 def fact_match(q: dict, retrieved: list, companies: dict) -> dict:
@@ -109,19 +109,31 @@ def fact_match(q: dict, retrieved: list, companies: dict) -> dict:
     gold_keys = []
     for gf in gold:
         ticker = gf["doc"].split("_")[0]
-        gold_keys.append((ticker, _vkey(gf.get("value", gf.get("printed"))), gf["doc"], gf.get("page")))
+        v = gf.get("value")
+        gold_keys.append((ticker, _vkey(v if v is not None else gf.get("printed")), gf["doc"], gf.get("page")))
     used = set()
     matched_ret = page_exact = 0
     for rf in retrieved:
         key = (rf["ticker"], _vkey(rf["value"]))
-        hit = next((i for i, gk in enumerate(gold_keys) if (gk[0], gk[1]) == key), None)
+        hit = next((i for i, gk in enumerate(gold_keys) if gk[0] == key[0] and _same(gk[1], key[1])), None)
         if hit is not None:
             matched_ret += 1
             used.add(hit)
-            if any(gk[2] == rf["doc"] and gk[3] == rf["page"] and (gk[0], gk[1]) == key for gk in gold_keys):
+            if any(gk[2] == rf["doc"] and gk[3] == rf["page"] and gk[0] == key[0] and _same(gk[1], key[1])
+                   for gk in gold_keys):
                 page_exact += 1
     return {"retrieved": len(retrieved), "matched_retrieved": matched_ret, "gold": len(gold_keys),
             "matched_gold": len(used), "page_exact": page_exact}
+
+
+def _same(a, b) -> bool:
+    """Numbers must be equal; text matches when one normalised string contains the other
+    ("/s/ KPMG LLP" on the page and "KPMG" in the graph are the same fact)."""
+    if a == b:
+        return True
+    if isinstance(a, tuple) and isinstance(b, tuple) and a[0] == b[0] == "t":
+        return bool(a[1]) and bool(b[1]) and (a[1] in b[1] or b[1] in a[1])
+    return False
 
 
 def _vkey(v):

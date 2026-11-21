@@ -123,9 +123,22 @@ def group_lines(words: list, tol: float = 2.5) -> list:
             lines[-1].append(w)
         else:
             lines.append([w])
+    # Some filings set the numbers a few points above or below the label on the
+    # same row (a different font or baseline). Two neighbouring "lines" closer
+    # than half a line pitch whose words do not overlap sideways are one row.
+    merged: list = []
     for ln in lines:
+        if merged:
+            prev = merged[-1]
+            dy = abs(prev[0].yc - ln[0].yc)
+            apart = max(w.x1 for w in prev) < min(w.x0 for w in ln) or max(w.x1 for w in ln) < min(w.x0 for w in prev)
+            if dy < 5.0 and apart:
+                prev.extend(ln)
+                continue
+        merged.append(list(ln))
+    for ln in merged:
         ln.sort(key=lambda w: w.x0)
-    return lines
+    return merged
 
 
 def is_numeric(tok: str) -> bool:
@@ -268,8 +281,11 @@ def _parse_header(header_lines: list, cols: list, context: str = "") -> str:
                 # a date or a year sits over exactly one column: the nearest one
                 # Headers are right-aligned with the numbers or centred over them, so
                 # compare right edges and centres with the column's own values.
-                near = min(range(len(cols)), key=lambda i: min(abs(x1 - cols[i].x_right),
-                                                               abs(centre - (cols[i].x_right - 14))))
+                def gap(i):
+                    return min(abs(x1 - cols[i].x_right), abs(centre - (cols[i].x_right - 14)))
+                near = min(range(len(cols)), key=gap)
+                if gap(near) > 30 and not (bands[near][0] <= centre <= bands[near][1]):
+                    continue        # a year over a column that is not there (cut off at the page edge)
                 per_col[near].append(text)
             else:
                 hit = [i for i, (l, r) in enumerate(bands) if not (x1 < l or x0 > r)]

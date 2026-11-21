@@ -34,6 +34,7 @@ class ConceptDef:
     labels: list
     structure: dict = field(default_factory=dict)
     section: Optional[str] = None
+    prefer_section: Optional[str] = None
 
 
 @dataclass
@@ -73,7 +74,8 @@ def load_seed() -> list:
         _SEED_CACHE = [ConceptDef(name=c["name"], statement=c["statement"], unit=c["unit"],
                                   nature=c["nature"], pick=c.get("pick", "first"),
                                   labels=[re.compile(p) for p in c["labels"]],
-                                  structure=c.get("structure", {}) or {}, section=c.get("section"))
+                                  structure=c.get("structure", {}) or {}, section=c.get("section"),
+                                  prefer_section=c.get("prefer_section"))
                        for c in raw]
     return _SEED_CACHE
 
@@ -103,6 +105,10 @@ def propose(st, defs: Optional[list] = None) -> dict:
                 hits.append(r.idx)
         if not hits:
             continue
+        if c.prefer_section:
+            # the same label under two headings ("Preferred stock" / "Common stock"): take the preferred heading
+            pref = [h for h in hits if re.search(c.prefer_section, t.rows[h].section, re.I)]
+            hits = pref or hits
         if c.pick == "total":
             tot = [h for h in hits if h in totals]
             out[c.name] = tot[0] if tot else hits[0]
@@ -147,6 +153,11 @@ def gate(doc: str, statements: dict, proposals: dict) -> tuple:
                 confirmed = row in by_total
                 if confirmed:
                     evidence.append(f"is the total of a recovered formula over {len(by_total[row].operands)} rows")
+            if s.get("operand_of"):
+                inside = _within(by_total, prop.get(s["operand_of"]), row)
+                confirmed = bool(confirmed) and inside if s.get("total_of") else inside
+                if inside:
+                    evidence.append(f"is an operand of the formula for {s['operand_of']}")
             if s.get("ties_with"):
                 other = prop.get(s["ties_with"])
                 confirmed = other is not None and _same_values(t, row, other)
@@ -202,6 +213,18 @@ def _eps_identity(t, prop: dict):
             return None
         cols.append(c)
     return {"rows": tuple(rows), "cols": cols} if cols else None
+
+
+def _within(by_total: dict, top, row: int, depth: int = 2) -> bool:
+    """Is `row` an operand of the formula for `top`, directly or one level down?
+
+    Total liabilities and equity = liabilities + total equity, and total equity =
+    shareholders' equity + noncontrolling interests: shareholders' equity is two levels down.
+    """
+    check = by_total.get(top)
+    if check is None or depth == 0:
+        return False
+    return any(op == row or _within(by_total, op, row, depth - 1) for op, _ in check.operands)
 
 
 def _same_values(t, a: int, b: int) -> bool:

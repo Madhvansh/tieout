@@ -17,7 +17,7 @@ from typing import Optional
 from .llm import ask_json
 from .plan import validate, vocabulary
 
-PROMPT_VERSION = "p3"
+PROMPT_VERSION = "p6"
 
 RULES = """You translate a question about US public companies into a query plan over a knowledge graph
 of facts taken from their SEC filings. Output JSON only: {"steps": [...], "answer": "<step id>"}.
@@ -51,8 +51,19 @@ RULES
 6. If no year is given use {"fy": "latest"}. "Fiscal 2025", "FY2025" and "in 2025" all mean {"fy": 2025}.
 7. Amounts in the question (thresholds) are written in full units: 10 billion dollars is 10000000000.
    Percent thresholds are fractions: 20 percent is 0.2.
-8. To compare two companies, get each value and finish with calc (difference) or rank over the two tickers.
+8. "How much more/less was A's X than B's" asks for an amount: get each value and finish with calc.
+   "Which of A or B had the higher X" (with or without "and by how much") asks for a company:
+   rank over the two tickers with k = 2, so the answer names the winner and shows both values.
 9. Balance-sheet items use the same {"fy": N}: the graph takes the value at the end of that fiscal year.
+10. You may use general knowledge to work out WHICH listed company a question means (a brand it owns, a
+    product, a nickname, "Google's parent"). You may not use general knowledge for any figure or fact.
+11. Choose the closest listed concept even when the question words it differently (for example
+    "depreciation, amortization and other" is DepreciationAmortization; "bottom line" is NetIncome).
+    Use "cannot" only when nothing listed is close.
+12. Use a metric only when the question asks for exactly what the metric means. When the question
+    names the line items itself ("dividends as a share of earnings", "R&D relative to gross profit"),
+    get each item and combine them with calc. "Cash dividends" alone is DividendsPaid, never the
+    dividends-plus-buybacks metric.
 """
 
 EXAMPLES = [
@@ -66,6 +77,8 @@ EXAMPLES = [
      {"steps": [{"id": "s1", "op": "get", "company": "JPM", "concept": "TotalAssets", "period": {"fy": 2025}},
                 {"id": "s2", "op": "get", "company": "BAC", "concept": "TotalAssets", "period": {"fy": 2025}},
                 {"id": "s3", "op": "calc", "expr": "s1 - s2"}], "answer": "s3"}),
+    ("Which was more profitable in fiscal 2025, Visa or Mastercard, and by how much?",
+     {"steps": [{"id": "s1", "op": "rank", "over": ["V", "MA"], "by": {"concept": "NetIncome"}, "period": {"fy": 2025}, "order": "desc", "k": 2}], "answer": "s1"}),
     ("Which bank or financial company had the highest net income in fiscal 2025?",
      {"steps": [{"id": "s1", "op": "rank", "over": {"cluster": "banks_finance"}, "by": {"concept": "NetIncome"}, "period": {"fy": 2025}, "order": "desc", "k": 1}], "answer": "s1"}),
     ("Who audits the company with the largest research and development spending among the big tech companies?",
@@ -92,7 +105,7 @@ def system_prompt(graph) -> str:
     v = vocabulary(graph)
     parts = [RULES, "COMPANIES (ticker: name)\n" + "\n".join(f"{t}: {n}" for t, n in v["companies"].items()),
              "CLUSTERS: " + ", ".join(v["clusters"]),
-             "CONCEPTS (name: statement, kind)\n" + "\n".join(f"{c}: {d}" for c, d in v["concepts"].items()),
+             "CONCEPTS (name: meaning)\n" + "\n".join(f"{c}: {d}" for c, d in v["concepts"].items()),
              "METRICS (name: meaning)\n" + "\n".join(f"{m}: {d}" for m, d in v["metrics"].items()),
              "ATTRIBUTES: " + ", ".join(v["attributes"]),
              "EXAMPLES\n" + "\n".join(f"Q: {q}\nA: {json.dumps(p, separators=(',', ':'))}" for q, p in EXAMPLES)]

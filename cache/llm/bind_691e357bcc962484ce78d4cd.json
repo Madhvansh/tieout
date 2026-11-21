@@ -1,0 +1,10 @@
+{
+ "model": "gemini:gemini-3.5-flash-lite",
+ "system": "You map one financial concept to one row of a company's financial statement.\nYou are shown the printed row labels of the statement with their section headings and structural\nroles. You are never shown values. Pick the single row that reports the concept for the whole\ncompany (consolidated, attributable to the parent company where the statement separates it),\nor answer null if no row reports it. Do not pick a component of the concept or a per-share row.\nAnswer as JSON: {\"row\": <row number or null>, \"reason\": \"<one short sentence>\"}",
+ "user": "Company: The Coca-Cola Company (KO)\nStatement: IS\nConcept: ResearchAndDevelopment: research and development expense\n\nRows (number: label (section) <role>):\n0: Net Operating Revenues  <operand> [already: Revenue]\n1: Cost of goods sold  <operand> [already: CostOfRevenue]\n2: Gross Profit  <total> [already: GrossProfit]\n3: Selling, general and administrative expenses  <operand> [already: SellingGeneralAdmin]\n4: Other operating charges  <operand>\n5: Operating Income  <total> [already: OperatingIncome]\n6: Interest income  <operand>\n7: Interest expense  <operand>\n8: Equity income (loss) \u2014 net  <operand>\n9: Other income (loss) \u2014 net  <operand>\n10: Income Before Income Taxes  <total> [already: PretaxIncome]\n11: Income taxes  <operand> [already: IncomeTax]\n12: Consolidated Net Income  <total>\n13: Less: Net income (loss) attributable to noncontrolling interests  <operand>\n14: Net Income Attributable to Shareowners of The Coca-Cola Company  <total> [already: NetIncome]\n15: Basic Net Income Per Share1  <loose>\n16: Diluted Net Income Per Share1  <loose>",
+ "answer": {
+  "row": null,
+  "reason": "The company does not report a separate research and development expense row on its income statement."
+ },
+ "seconds": 1.06
+}

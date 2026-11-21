@@ -52,12 +52,17 @@ def metric_defs() -> dict:
     return _METRICS
 
 
+def _says() -> dict:
+    from .living import SAYS                         # one-line meaning of each concept
+    return SAYS
+
+
 def vocabulary(graph) -> dict:
     """Everything a planner is allowed to name. This, not the data, is what the LLM sees."""
     return {
         "companies": {t: c["name"] for t, c in sorted(graph.companies.items())},
         "clusters": list(CLUSTERS),
-        "concepts": {n: f"{d.statement}, {d.nature}" for n, d in concept_defs().items()},
+        "concepts": {n: _says().get(n, f"{d.statement}, {d.nature}") for n, d in concept_defs().items()},
         "metrics": {n: m["says"] for n, m in metric_defs().items()},
         "attributes": list(TEXT_ATTRS),
         "ops": list(OPS),

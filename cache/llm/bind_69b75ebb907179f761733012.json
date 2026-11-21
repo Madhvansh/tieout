@@ -1,0 +1,10 @@
+{
+ "model": "gemini:gemini-3.5-flash-lite",
+ "system": "You map one financial concept to one row of a company's financial statement.\nYou are shown the printed row labels of the statement with their section headings and structural\nroles. You are never shown values. Pick the single row that reports the concept for the whole\ncompany (consolidated, attributable to the parent company where the statement separates it),\nor answer null if no row reports it. Do not pick a component of the concept or a per-share row.\nAnswer as JSON: {\"row\": <row number or null>, \"reason\": \"<one short sentence>\"}",
+ "user": "Company: Target Corp (TGT)\nStatement: IS\nConcept: ResearchAndDevelopment: research and development expense\n\nRows (number: label (section) <role>):\n0: Net sales  <operand> [already: Revenue]\n1: Cost of sales  <operand> [already: CostOfRevenue]\n2: Selling, general, and administrative expenses  <operand>\n3: Depreciation and amortization (exclusive of depreciation included in cost of sales)  <operand>\n4: Operating income  <total> [already: OperatingIncome]\n5: Net interest expense  <operand>\n6: Net other income  <operand>\n7: Earnings before income taxes  <total> [already: PretaxIncome]\n8: Provision for income taxes  <operand> [already: IncomeTax]\n9: Net earnings  <total> [already: NetIncome]\n10: Basic earnings per share  <loose>\n11: Diluted earnings per share  <loose>\n12: Basic  (under: Weighted average common shares outstanding)  <loose>\n13: Diluted  (under: Weighted average common shares outstanding)  <loose>\n14: Antidilutive shares  (under: Weighted average common shares outstanding)  <loose>\n15: TARGET CORPORATION 2025 Form 10-K  (under: See accompanying Notes to Consolidated Financial S)  <loose>",
+ "answer": {
+  "row": null,
+  "reason": "Target Corporation does not report research and development expenses as a separate line item on its income statement."
+ },
+ "seconds": 0.87
+}

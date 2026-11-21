@@ -1,0 +1,855 @@
+{
+ "readings_checked": 11077,
+ "confirmed": 9751,
+ "confirmed_share": 0.8802924979687641,
+ "by_status": {
+  "verified": {
+   "confirmed": 9566,
+   "not_confirmed": 1222
+  },
+  "unverified": {
+   "confirmed": 185,
+   "not_confirmed": 104
+  },
+  "failed": {
+   "confirmed": 0,
+   "not_confirmed": 0
+  }
+ },
+ "period_not_in_xbrl": 672,
+ "bindings_compared": 2149,
+ "bindings_agree": 2118,
+ "bindings_agree_share": 0.9855746859004187,
+ "by_concept": {
+  "Revenue": {
+   "agree": 133,
+   "disagree": 5,
+   "no_xbrl_value": 5
+  },
+  "CostOfRevenue": {
+   "agree": 92,
+   "no_xbrl_value": 1,
+   "disagree": 0
+  },
+  "GrossProfit": {
+   "agree": 49,
+   "no_xbrl_value": 1,
+   "disagree": 0
+  },
+  "ResearchAndDevelopment": {
+   "agree": 48,
+   "no_xbrl_value": 9,
+   "disagree": 3
+  },
+  "OperatingIncome": {
+   "agree": 95,
+   "no_xbrl_value": 1,
+   "disagree": 0
+  },
+  "IncomeTax": {
+   "agree": 136,
+   "no_xbrl_value": 5,
+   "disagree": 0
+  },
+  "NetIncome": {
+   "agree": 125,
+   "disagree": 8,
+   "no_xbrl_value": 5
+  },
+  "TotalAssets": {
+   "agree": 88,
+   "no_xbrl_value": 3,
+   "disagree": 0
+  },
+  "TotalCurrentAssets": {
+   "agree": 74,
+   "disagree": 0
+  },
+  "TotalLiabilities": {
+   "agree": 69,
+   "no_xbrl_value": 3,
+   "disagree": 0
+  },
+  "TotalCurrentLiabilities": {
+   "agree": 74,
+   "disagree": 0
+  },
+  "TotalEquity": {
+   "agree": 75,
+   "disagree": 11,
+   "no_xbrl_value": 3
+  },
+  "TotalLiabilitiesAndEquity": {
+   "agree": 84,
+   "no_xbrl_value": 3,
+   "disagree": 0
+  },
+  "Cash": {
+   "agree": 82,
+   "no_xbrl_value": 9,
+   "disagree": 0
+  },
+  "OperatingCashFlow": {
+   "agree": 127,
+   "disagree": 1,
+   "no_xbrl_value": 8
+  },
+  "InvestingCashFlow": {
+   "agree": 124,
+   "disagree": 1,
+   "no_xbrl_value": 8
+  },
+  "FinancingCashFlow": {
+   "agree": 119,
+   "no_xbrl_value": 7,
+   "disagree": 0
+  },
+  "CapitalExpenditures": {
+   "agree": 113,
+   "no_xbrl_value": 11,
+   "disagree": 0
+  },
+  "StockBasedCompensation": {
+   "agree": 104,
+   "no_xbrl_value": 6,
+   "disagree": 0
+  },
+  "DividendsPaid": {
+   "agree": 95,
+   "no_xbrl_value": 23,
+   "disagree": 0
+  },
+  "ShareRepurchases": {
+   "agree": 109,
+   "no_xbrl_value": 12,
+   "disagree": 0
+  },
+  "Goodwill": {
+   "agree": 69,
+   "disagree": 2
+  },
+  "NetInterestIncome": {
+   "agree": 22,
+   "no_xbrl_value": 4,
+   "disagree": 0
+  },
+  "Deposits": {
+   "agree": 12,
+   "no_xbrl_value": 3,
+   "disagree": 0
+  }
+ },
+ "disagreements": [
+  {
+   "ticker": "AMD",
+   "concept": "OperatingCashFlow",
+   "period": "FY2025",
+   "graph": 6493000000,
+   "xbrl": [
+    7709000000
+   ],
+   "label": "Net cash provided by operating activities of continuing operations",
+   "doc": "AMD_FY2025_10K",
+   "page": 65,
+   "binding": "active"
+  },
+  {
+   "ticker": "AMD",
+   "concept": "InvestingCashFlow",
+   "period": "FY2025",
+   "graph": -6851000000,
+   "xbrl": [
+    -5533000000
+   ],
+   "label": "Net cash used in investing activities of continuing operations",
+   "doc": "AMD_FY2025_10K",
+   "page": 65,
+   "binding": "active"
+  },
+  {
+   "ticker": "AXP",
+   "concept": "Revenue",
+   "period": "FY2025",
+   "graph": 72229000000,
+   "xbrl": [
+    41304000000
+   ],
+   "label": "Total revenues net of interest expense",
+   "doc": "AXP_FY2025_10K",
+   "page": 95,
+   "binding": "active"
+  },
+  {
+   "ticker": "AXP",
+   "concept": "Revenue",
+   "period": "FY2024",
+   "graph": 65949000000,
+   "xbrl": [
+    38825000000,
+    38825000000
+   ],
+   "label": "Total revenues net of interest expense",
+   "doc": "AXP_FY2025_10K",
+   "page": 95,
+   "binding": "active"
+  },
+  {
+   "ticker": "AXP",
+   "concept": "Revenue",
+   "period": "FY2023",
+   "graph": 60515000000,
+   "xbrl": [
+    37218000000,
+    37218000000,
+    37218000000
+   ],
+   "label": "Total revenues net of interest expense",
+   "doc": "AXP_FY2025_10K",
+   "page": 95,
+   "binding": "active"
+  },
+  {
+   "ticker": "BLK",
+   "concept": "Revenue",
+   "period": "FY2024",
+   "graph": 20407000000,
+   "xbrl": [
+    12794000000
+   ],
+   "label": "Total revenue",
+   "doc": "BLK_FY2025_10K",
+   "page": 80,
+   "binding": "active"
+  },
+  {
+   "ticker": "BLK",
+   "concept": "Revenue",
+   "period": "FY2023",
+   "graph": 17859000000,
+   "xbrl": [
+    11012000000
+   ],
+   "label": "Total revenue",
+   "doc": "BLK_FY2025_10K",
+   "page": 80,
+   "binding": "active"
+  },
+  {
+   "ticker": "CAT",
+   "concept": "NetIncome",
+   "period": "FY2025",
+   "graph": 8882000000,
+   "xbrl": [
+    8884000000
+   ],
+   "label": "Profit of consolidated and affiliated companies",
+   "doc": "CAT_FY2025_10K",
+   "page": 61,
+   "binding": "active"
+  },
+  {
+   "ticker": "CAT",
+   "concept": "NetIncome",
+   "period": "FY2024",
+   "graph": 10788000000,
+   "xbrl": [
+    10792000000
+   ],
+   "label": "Profit of consolidated and affiliated companies",
+   "doc": "CAT_FY2025_10K",
+   "page": 61,
+   "binding": "active"
+  },
+  {
+   "ticker": "CAT",
+   "concept": "NetIncome",
+   "period": "FY2023",
+   "graph": 10332000000,
+   "xbrl": [
+    10335000000
+   ],
+   "label": "Profit of consolidated and affiliated companies",
+   "doc": "CAT_FY2025_10K",
+   "page": 61,
+   "binding": "active"
+  },
+  {
+   "ticker": "CAT",
+   "concept": "NetIncome",
+   "period": "FY2022",
+   "graph": 6704000000,
+   "xbrl": [
+    6705000000
+   ],
+   "label": "Profit of consolidated and affiliated companies",
+   "doc": "CAT_FY2024_10K",
+   "page": 60,
+   "binding": "active"
+  },
+  {
+   "ticker": "F",
+   "concept": "NetIncome",
+   "period": "FY2025",
+   "graph": -8182000000,
+   "xbrl": [
+    -8162000000
+   ],
+   "label": "Net income/(loss) attributable to Ford Motor Company",
+   "doc": "F_FY2025_10K",
+   "page": 115,
+   "binding": "active"
+  },
+  {
+   "ticker": "F",
+   "concept": "TotalEquity",
+   "period": "FY2024@end",
+   "graph": 44858000000,
+   "xbrl": [
+    44835000000,
+    44835000000,
+    44835000000
+   ],
+   "label": "Total equity",
+   "doc": "F_FY2025_10K",
+   "page": 116,
+   "binding": "active"
+  },
+  {
+   "ticker": "F",
+   "concept": "TotalEquity",
+   "period": "FY2025@end",
+   "graph": 35980000000,
+   "xbrl": [
+    35952000000,
+    35952000000,
+    35952000000
+   ],
+   "label": "Total equity",
+   "doc": "F_FY2025_10K",
+   "page": 116,
+   "binding": "active"
+  },
+  {
+   "ticker": "GM",
+   "concept": "Goodwill",
+   "period": "FY2025@end",
+   "graph": 4366000000,
+   "xbrl": [
+    1900000000
+   ],
+   "label": "Goodwill and intangible assets, net (Note",
+   "doc": "GM_FY2025_10K",
+   "page": 58,
+   "binding": "active"
+  },
+  {
+   "ticker": "GM",
+   "concept": "Goodwill",
+   "period": "FY2024@end",
+   "graph": 4551000000,
+   "xbrl": [
+    1900000000,
+    1900000000,
+    1900000000
+   ],
+   "label": "Goodwill and intangible assets, net (Note",
+   "doc": "GM_FY2025_10K",
+   "page": 58,
+   "binding": "active"
+  },
+  {
+   "ticker": "JNJ",
+   "concept": "ResearchAndDevelopment",
+   "period": "FY2025",
+   "graph": 14665000000,
+   "xbrl": [
+    109000000
+   ],
+   "label": "Research and development expense",
+   "doc": "JNJ_FY2025_10K",
+   "page": 50,
+   "binding": "active"
+  },
+  {
+   "ticker": "JNJ",
+   "concept": "ResearchAndDevelopment",
+   "period": "FY2024",
+   "graph": 17232000000,
+   "xbrl": [
+    1841000000,
+    1841000000
+   ],
+   "label": "Research and development expense",
+   "doc": "JNJ_FY2025_10K",
+   "page": 50,
+   "binding": "active"
+  },
+  {
+   "ticker": "JNJ",
+   "concept": "ResearchAndDevelopment",
+   "period": "FY2023",
+   "graph": 15085000000,
+   "xbrl": [
+    483000000,
+    483000000,
+    483000000
+   ],
+   "label": "Research and development expense",
+   "doc": "JNJ_FY2025_10K",
+   "page": 50,
+   "binding": "active"
+  },
+  {
+   "ticker": "KO",
+   "concept": "TotalEquity",
+   "period": "FY2025@end",
+   "graph": 34275000000,
+   "xbrl": [
+    32169000000,
+    32169000000,
+    32169000000
+   ],
+   "label": "Total Equity",
+   "doc": "KO_FY2025_10K",
+   "page": 65,
+   "binding": "active"
+  },
+  {
+   "ticker": "KO",
+   "concept": "TotalEquity",
+   "period": "FY2024@end",
+   "graph": 26372000000,
+   "xbrl": [
+    24856000000,
+    24856000000,
+    24856000000
+   ],
+   "label": "Total Equity",
+   "doc": "KO_FY2025_10K",
+   "page": 65,
+   "binding": "active"
+  },
+  {
+   "ticker": "KO",
+   "concept": "TotalEquity",
+   "period": "FY2023@end",
+   "graph": 27480000000,
+   "xbrl": [
+    25941000000,
+    25941000000,
+    25941000000
+   ],
+   "label": "Total Equity",
+   "doc": "KO_FY2024_10K",
+   "page": 66,
+   "binding": "active"
+  },
+  {
+   "ticker": "KO",
+   "concept": "TotalEquity",
+   "period": "FY2025Q3@end",
+   "graph": 33267000000,
+   "xbrl": [
+    31247000000
+   ],
+   "label": "Total Equity",
+   "doc": "KO_FY2025_Q3_10Q",
+   "page": 7,
+   "binding": "active"
+  },
+  {
+   "ticker": "MA",
+   "concept": "TotalEquity",
+   "period": "FY2025@end",
+   "graph": 7746000000,
+   "xbrl": [
+    7737000000,
+    7737000000,
+    7737000000
+   ],
+   "label": "Total Equity",
+   "doc": "MA_FY2025_10K",
+   "page": 71,
+   "binding": "active"
+  },
+  {
+   "ticker": "MA",
+   "concept": "TotalEquity",
+   "period": "FY2024@end",
+   "graph": 6515000000,
+   "xbrl": [
+    6485000000,
+    6485000000,
+    6485000000
+   ],
+   "label": "Total Equity",
+   "doc": "MA_FY2025_10K",
+   "page": 71,
+   "binding": "active"
+  },
+  {
+   "ticker": "UNH",
+   "concept": "NetIncome",
+   "period": "FY2025",
+   "graph": 12807000000,
+   "xbrl": [
+    12056000000
+   ],
+   "label": "Net earnings................................................................................................................",
+   "doc": "UNH_FY2025_10K",
+   "page": 44,
+   "binding": "active"
+  },
+  {
+   "ticker": "UNH",
+   "concept": "NetIncome",
+   "period": "FY2024",
+   "graph": 15242000000,
+   "xbrl": [
+    14405000000,
+    14405000000
+   ],
+   "label": "Net earnings................................................................................................................",
+   "doc": "UNH_FY2025_10K",
+   "page": 44,
+   "binding": "active"
+  },
+  {
+   "ticker": "UNH",
+   "concept": "NetIncome",
+   "period": "FY2023",
+   "graph": 23144000000,
+   "xbrl": [
+    22381000000,
+    22381000000,
+    22381000000
+   ],
+   "label": "Net earnings................................................................................................................",
+   "doc": "UNH_FY2025_10K",
+   "page": 44,
+   "binding": "active"
+  },
+  {
+   "ticker": "XOM",
+   "concept": "TotalEquity",
+   "period": "FY2025@end",
+   "graph": 266626000000,
+   "xbrl": [
+    259386000000,
+    259386000000
+   ],
+   "label": "Total Equity",
+   "doc": "XOM_FY2025_10K",
+   "page": 75,
+   "binding": "active"
+  },
+  {
+   "ticker": "XOM",
+   "concept": "TotalEquity",
+   "period": "FY2024@end",
+   "graph": 270606000000,
+   "xbrl": [
+    263705000000,
+    263705000000,
+    263705000000
+   ],
+   "label": "Total Equity",
+   "doc": "XOM_FY2025_10K",
+   "page": 75,
+   "binding": "active"
+  },
+  {
+   "ticker": "XOM",
+   "concept": "TotalEquity",
+   "period": "FY2023@end",
+   "graph": 212538000000,
+   "xbrl": [
+    204802000000,
+    204802000000,
+    204802000000
+   ],
+   "label": "Total Equity",
+   "doc": "XOM_FY2024_10K",
+   "page": 81,
+   "binding": "active"
+  }
+ ],
+ "per_company": {
+  "AAPL": {
+   "not_confirmed": 52,
+   "not_confirmed_verified": 52,
+   "confirmed": 489,
+   "confirmed_verified": 484,
+   "confirmed_unverified": 5
+  },
+  "ADBE": {
+   "not_confirmed": 22,
+   "not_confirmed_verified": 22,
+   "confirmed": 201,
+   "confirmed_verified": 195,
+   "confirmed_unverified": 6
+  },
+  "AMD": {
+   "confirmed": 199,
+   "confirmed_verified": 199,
+   "not_confirmed": 11,
+   "not_confirmed_verified": 11
+  },
+  "AMZN": {
+   "not_confirmed": 26,
+   "not_confirmed_verified": 26,
+   "confirmed": 164,
+   "confirmed_verified": 164
+  },
+  "AXP": {
+   "not_confirmed": 39,
+   "not_confirmed_verified": 39,
+   "confirmed": 181,
+   "confirmed_verified": 181
+  },
+  "BAC": {
+   "confirmed": 602,
+   "confirmed_verified": 596,
+   "not_confirmed": 179,
+   "not_confirmed_verified": 174,
+   "confirmed_unverified": 6,
+   "not_confirmed_unverified": 5
+  },
+  "BLK": {
+   "not_confirmed": 53,
+   "not_confirmed_verified": 49,
+   "confirmed": 225,
+   "confirmed_verified": 212,
+   "confirmed_unverified": 13,
+   "not_confirmed_unverified": 4
+  },
+  "C": {
+   "confirmed": 211,
+   "confirmed_verified": 211,
+   "not_confirmed": 27,
+   "not_confirmed_verified": 27
+  },
+  "CAT": {
+   "not_confirmed": 80,
+   "not_confirmed_verified": 80,
+   "confirmed": 420,
+   "confirmed_verified": 420
+  },
+  "COST": {
+   "not_confirmed": 13,
+   "not_confirmed_verified": 13,
+   "confirmed": 166,
+   "confirmed_verified": 157,
+   "confirmed_unverified": 9
+  },
+  "CRM": {
+   "not_confirmed": 37,
+   "not_confirmed_verified": 18,
+   "confirmed": 187,
+   "confirmed_verified": 185,
+   "not_confirmed_unverified": 19,
+   "confirmed_unverified": 2
+  },
+  "CSCO": {
+   "not_confirmed": 29,
+   "not_confirmed_verified": 23,
+   "confirmed": 217,
+   "confirmed_verified": 217,
+   "not_confirmed_unverified": 6
+  },
+  "CVX": {
+   "confirmed": 125,
+   "confirmed_verified": 125,
+   "not_confirmed": 7,
+   "not_confirmed_verified": 7,
+   "period_not_in_xbrl": 61
+  },
+  "F": {
+   "not_confirmed": 35,
+   "not_confirmed_verified": 23,
+   "confirmed": 207,
+   "confirmed_verified": 207,
+   "not_confirmed_unverified": 12
+  },
+  "GM": {
+   "confirmed": 185,
+   "confirmed_verified": 175,
+   "not_confirmed": 38,
+   "not_confirmed_verified": 32,
+   "not_confirmed_unverified": 6,
+   "confirmed_unverified": 10
+  },
+  "GOOGL": {
+   "confirmed": 510,
+   "confirmed_verified": 507,
+   "not_confirmed": 38,
+   "not_confirmed_verified": 38,
+   "confirmed_unverified": 3
+  },
+  "GS": {
+   "period_not_in_xbrl": 539
+  },
+  "HD": {
+   "confirmed": 152,
+   "confirmed_verified": 147,
+   "period_not_in_xbrl": 43,
+   "not_confirmed": 2,
+   "not_confirmed_verified": 2,
+   "confirmed_unverified": 5
+  },
+  "JNJ": {
+   "confirmed": 420,
+   "confirmed_verified": 390,
+   "not_confirmed": 45,
+   "not_confirmed_verified": 31,
+   "not_confirmed_unverified": 14,
+   "confirmed_unverified": 30,
+   "period_not_in_xbrl": 29
+  },
+  "JPM": {
+   "confirmed": 231,
+   "confirmed_verified": 222,
+   "not_confirmed": 59,
+   "not_confirmed_verified": 57,
+   "confirmed_unverified": 9,
+   "not_confirmed_unverified": 2
+  },
+  "KO": {
+   "confirmed": 564,
+   "confirmed_verified": 564,
+   "not_confirmed": 46,
+   "not_confirmed_verified": 46
+  },
+  "MA": {
+   "confirmed": 217,
+   "confirmed_verified": 217,
+   "not_confirmed": 21,
+   "not_confirmed_verified": 21
+  },
+  "MCD": {},
+  "META": {
+   "confirmed": 177,
+   "confirmed_verified": 177,
+   "not_confirmed": 14,
+   "not_confirmed_verified": 14
+  },
+  "MRK": {
+   "confirmed": 207,
+   "confirmed_verified": 207,
+   "not_confirmed": 8,
+   "not_confirmed_verified": 8
+  },
+  "MS": {
+   "confirmed": 232,
+   "confirmed_verified": 226,
+   "not_confirmed": 27,
+   "not_confirmed_verified": 27,
+   "confirmed_unverified": 6
+  },
+  "MSFT": {
+   "not_confirmed": 54,
+   "not_confirmed_verified": 54,
+   "confirmed": 367,
+   "confirmed_verified": 367
+  },
+  "NKE": {
+   "confirmed": 169,
+   "confirmed_verified": 158,
+   "not_confirmed": 5,
+   "not_confirmed_unverified": 2,
+   "confirmed_unverified": 11,
+   "not_confirmed_verified": 3
+  },
+  "NVDA": {
+   "confirmed": 191,
+   "confirmed_verified": 188,
+   "not_confirmed": 6,
+   "not_confirmed_verified": 6,
+   "confirmed_unverified": 3
+  },
+  "ORCL": {
+   "not_confirmed": 44,
+   "not_confirmed_verified": 38,
+   "confirmed": 186,
+   "confirmed_verified": 177,
+   "not_confirmed_unverified": 6,
+   "confirmed_unverified": 9
+  },
+  "PEP": {
+   "confirmed": 188,
+   "confirmed_verified": 188,
+   "not_confirmed": 8,
+   "not_confirmed_verified": 8
+  },
+  "PFE": {
+   "not_confirmed": 25,
+   "not_confirmed_verified": 25,
+   "confirmed": 214,
+   "confirmed_verified": 214
+  },
+  "PG": {
+   "confirmed": 179,
+   "confirmed_verified": 176,
+   "not_confirmed": 8,
+   "not_confirmed_verified": 8,
+   "confirmed_unverified": 3
+  },
+  "TGT": {
+   "confirmed": 146,
+   "confirmed_verified": 137,
+   "not_confirmed": 6,
+   "not_confirmed_unverified": 3,
+   "not_confirmed_verified": 3,
+   "confirmed_unverified": 9
+  },
+  "TSLA": {
+   "not_confirmed": 60,
+   "not_confirmed_verified": 60,
+   "confirmed": 184,
+   "confirmed_verified": 178,
+   "confirmed_unverified": 6
+  },
+  "UNH": {
+   "confirmed": 213,
+   "confirmed_verified": 207,
+   "not_confirmed": 23,
+   "not_confirmed_verified": 23,
+   "confirmed_unverified": 6
+  },
+  "V": {
+   "confirmed": 200,
+   "confirmed_verified": 173,
+   "not_confirmed": 55,
+   "not_confirmed_unverified": 18,
+   "confirmed_unverified": 27,
+   "not_confirmed_verified": 37
+  },
+  "WFC": {
+   "confirmed": 256,
+   "confirmed_verified": 253,
+   "not_confirmed": 53,
+   "not_confirmed_verified": 47,
+   "not_confirmed_unverified": 6,
+   "confirmed_unverified": 3
+  },
+  "WMT": {
+   "confirmed": 401,
+   "confirmed_verified": 397,
+   "not_confirmed": 13,
+   "not_confirmed_verified": 13,
+   "confirmed_unverified": 4
+  },
+  "XOM": {
+   "not_confirmed": 58,
+   "not_confirmed_verified": 57,
+   "confirmed": 368,
+   "confirmed_verified": 368,
+   "not_confirmed_unverified": 1
+  }
+ },
+ "disagreements_by_origin": {
+  "seed": 28,
+  "learned": 3,
+  "human": 0
+ }
+}

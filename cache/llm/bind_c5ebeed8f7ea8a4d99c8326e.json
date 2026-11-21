@@ -1,0 +1,10 @@
+{
+ "model": "gemini:gemini-3.5-flash-lite",
+ "system": "You map one financial concept to one row of a company's financial statement.\nYou are shown the printed row labels of the statement with their section headings and structural\nroles. You are never shown values. Pick the single row that reports the concept for the whole\ncompany (consolidated, attributable to the parent company where the statement separates it),\nor answer null if no row reports it. Do not pick a component of the concept or a per-share row.\nAnswer as JSON: {\"row\": <row number or null>, \"reason\": \"<one short sentence>\"}",
+ "user": "Company: Procter & Gamble Co. (PG)\nStatement: IS\nConcept: ResearchAndDevelopment: research and development expense\n\nRows (number: label (section) <role>):\n0: NET SALES  <operand> [already: Revenue]\n1: Cost of products sold  <operand> [already: CostOfRevenue]\n2: Selling, general and administrative expense  <operand> [already: SellingGeneralAdmin]\n3: Indefinite-lived intangible asset impairment charge  <operand>\n4: OPERATING INCOME  <total> [already: OperatingIncome]\n5: Interest expense  <operand>\n6: Interest income  <operand>\n7: Other non-operating income/(expense), net  <operand>\n8: EARNINGS BEFORE INCOME TAXES  <total> [already: PretaxIncome]\n9: Income taxes  <operand> [already: IncomeTax]\n10: NET EARNINGS  <total>\n11: Less: Net earnings attributable to noncontrolling interests  <operand>\n12: NET EARNINGS ATTRIBUTABLE TO PROCTER & GAMBLE  <total> [already: NetIncome]\n13: Basic  (under: NET EARNINGS PER COMMON SHARE)  <loose>\n14: Diluted  (under: NET EARNINGS PER COMMON SHARE)  <loose>",
+ "answer": {
+  "row": null,
+  "reason": "Research and development expense is not separately listed as a line item on the income statement."
+ },
+ "seconds": 0.96
+}
