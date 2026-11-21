@@ -101,6 +101,28 @@ class Store:
         for m in mentions:
             self.mentions_by_ticker[m["ticker"]].append(m)
             self.by_id[m["id"]] = m
+        self.by_heading: dict = defaultdict(list)     # rows under one heading of one table
+        for r in rows:
+            if r.get("section"):
+                self.by_heading[(r["doc"], r["page"], r["table"], r["section"])].append(r)
+
+    def parts(self, total: dict) -> tuple:
+        """(lines that make up a subtotal, how they are known).
+
+        The operands of its recovered formula when there is one ("formula"). Otherwise, when the
+        subtotal closes a heading of its table (segments listed above a consolidated line, where
+        formula recovery failed on a nested subtotal), the other amount lines under that heading
+        ("heading"): a weaker grouping, so answers built on it are flagged.
+        """
+        kids = [self.by_id[i] for i in total.get("children", []) if i in self.by_id]
+        if len(kids) >= 2:
+            return kids, "formula"
+        if not total.get("section"):
+            return [], ""
+        same = self.by_heading.get((total["doc"], total["page"], total["table"], total["section"]), [])
+        kids = [r for r in same if r["id"] != total["id"] and r["unit"] == total["unit"]
+                and not norm_label(r["label"]).startswith(("total", "consolidated"))]
+        return (kids, "heading") if len(kids) >= 2 else ([], "")
 
 
 _STORE: Optional[Store] = None
@@ -530,7 +552,8 @@ def breakdown(g: Graph, ticker: str, phrase: str) -> Optional[list]:
     total = store().by_id.get(total_id) if total_id else None
     if total is None:
         return None
-    return [_line(store().by_id[i]) for i in total.get("children", []) if i in store().by_id]
+    kids, how = store().parts(total)
+    return [dict(_line(k), grouped_by=how) for k in kids]
 
 
 def _line(row: dict) -> dict:
@@ -550,7 +573,7 @@ def learn_breakdown(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year
     want = set(tokens(phrase))
     scored = []
     for r in st.rows_by_ticker.get(ticker, []):
-        kids = [st.by_id[i] for i in r.get("children", []) if i in st.by_id]
+        kids, _how = st.parts(r)
         if len(kids) < 2:
             continue
         words = set(tokens(" ".join([r["label"], r["section"], r["title"], r.get("context", "")]

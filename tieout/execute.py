@@ -443,9 +443,11 @@ class Executor:
         for pid in (self._pid(ticker, spec, "flow"), self._pid(ticker, spec, "stock")):
             cell = line["cells"].get(pid)
             if cell:
-                leaf = Leaf(cell["id"], ticker, line["label"], pid, line["doc"], line["page"], line["label"],
+                leaf = Leaf(cell["id"], ticker, "line:" + line["label"], pid, line["doc"], line["page"], line["label"],
                             cell["text"], "verified" if cell["ok"] else "unverified", cell["value"])
-                return Result("number", cell["value"], line["unit"], [leaf])
+                notes = ([f"the parts of this total were grouped by their heading on page {line['page']}, "
+                          "not by a recovered formula"] if line.get("grouped_by") == "heading" else [])
+                return Result("number", cell["value"], line["unit"], [leaf], notes)
         return abstain(f"'{line['label']}' has no value for {self._pid(ticker, spec, 'flow')}")
 
     # ---------------------------------------------------------------- ops
@@ -605,16 +607,17 @@ class Executor:
         if lines is None:
             return abstain(f"no breakdown linked yet for '{s['of']}' at {ticker}",
                            missing=[(ticker, "members:" + s["of"], s["period"])])
-        rows, leaves = [], []
+        rows, leaves, notes = [], [], []
         for line in lines:
             r = self._line_value(line, s["period"])
             leaves.extend(r.leaves)
+            notes.extend(r.notes)
             if r.ok:
                 rows.append((line["label"], r.value))
         if not rows:
             return abstain(f"the parts of '{s['of']}' have no values for {self._pid(ticker, s['period'], 'flow')}", leaves)
-        return Result("lines", rows, lines[0]["unit"], leaves, [], {"op": "members", "what": s["of"], "value": rows},
-                      extra={"lines": lines, "period": s["period"]})
+        return Result("lines", rows, lines[0]["unit"], leaves, list(dict.fromkeys(notes)),
+                      {"op": "members", "what": s["of"], "value": rows}, extra={"lines": lines, "period": s["period"]})
 
     def _set_period(self, over, env: dict) -> Optional[dict]:
         """The period of the members step a set of lines came from (a filter over lines may omit it)."""
@@ -692,7 +695,7 @@ def trust(r: Result) -> tuple:
         return "ABSTAIN", list(r.notes[:3])
     reasons = []
     for lf in r.leaves:
-        if str(lf.what).startswith(("item:", "said:")):
+        if str(lf.what).startswith(("item:", "said:", "line:")):
             reasons.append(f"{lf.ticker}: the line was chosen by the linker from its words; the arithmetic confirms "
                            f"the number, not that it is the line asked for ({lf.doc} page {lf.page})")
             continue
