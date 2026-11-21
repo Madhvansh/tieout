@@ -616,62 +616,74 @@ def _location_lines(f: Flow, li: int) -> Optional[tuple]:
     return None
 
 
+# "We have served as the Company's auditor since 2009." / "we or our predecessor
+# firms have served as the Company's auditor since at least 1942."
+SINCE_RE = re.compile(r"\b[Ww]e\b[^.]{0,60}?served\s+as\s+the\s+[\w’'.\s]{0,40}?auditors?\s+since\s+(at\s+least\s+)?(\d{4})\.?")
+SIG_RE = re.compile(r"/\s*s\s*/\s*(" + FIRM_RE + r"|[A-Z][A-Za-z&.' ]{2,40}?)\s*,?\s*LLP", re.I)
+BARE_FIRM_RE = re.compile(r"^\s*(" + FIRM_RE + r")\s*,?\s*LLP\s*$", re.I)
+# "(PCAOB ID 238)", "PCAOB Firm ID No. 00042", "PCAOB ID # 185", "Auditor Firm ID: 185"
+PCAOB_RE = re.compile(r"(?:PCAOB|Auditor)\s+(?:Firm\s+)?ID(?:\s+No\.?)?\s*[:#]?\s*(\d{1,5})", re.I)
+# Item 14 / index form: "KPMG LLP, Seattle, WA, Auditor Firm ID: 185"
+FIRM_CITY_RE = re.compile(r"(" + FIRM_RE + r")\s*,?\s*LLP,\s+([A-Z][A-Za-z.' ]{1,30}),\s+(" + STATE_TOKEN +
+                          r")\.?,?\s+(?:\(?PCAOB|Auditor)", re.I)
+
+
 def rule_auditor(c: Collector, flows: list):
-    # "We have served as the Company's auditor since 2009." / "we or our predecessor
-    # firms have served as the Company's auditor since at least 1942."
-    since_rx = re.compile(r"\b[Ww]e\b[^.]{0,60}?served\s+as\s+the\s+[\w’'.\s]{0,40}?auditors?\s+since\s+(at\s+least\s+)?(\d{4})\.?")
-    sig_rx = re.compile(r"/\s*s\s*/\s*(" + FIRM_RE + r"|[A-Z][A-Za-z&.' ]{2,40}?)\s*,?\s*LLP", re.I)
-    bare_rx = re.compile(r"^\s*(" + FIRM_RE + r")\s*,?\s*LLP\s*$", re.I)
-    id_rx = re.compile(r"(?:PCAOB|Auditor)\s+(?:Firm\s+)?ID(?:\s+No\.?)?\s*[:#]?\s*(\d{1,5})", re.I)
-    loc_rx = re.compile(r"(" + FIRM_RE + r")\s*,?\s*LLP,\s+([A-Z][A-Za-z.' ]{1,30}),\s+(" + STATE_TOKEN +
-                        r")\.?,?\s+(?:\(?PCAOB|Auditor)", re.I)
-
-    tenure = [(f, m) for f in flows for m in since_rx.finditer(f.text)]
-    ids = [(f, m, PCAOB_IDS.get(int(m.group(1)))) for f in flows for m in id_rx.finditer(f.text)]
+    tenure = [(f, m) for f in flows for m in SINCE_RE.finditer(f.text)]
+    ids = [(f, m, PCAOB_IDS.get(int(m.group(1)))) for f in flows for m in PCAOB_RE.finditer(f.text)]
     ids = [x for x in ids if x[2]]
+    _auditor_since(c, tenure)
+    sig = _auditor_signature(flows, tenure[0]) if tenure else None
     id_firms = Counter(x[2] for x in ids)
-
-    # auditor_since: the tenure sentence only appears in the opinion on the financial statements
-    if tenure:
-        years = Counter(m.group(2) for _, m in tenure)
-        f, m = tenure[0]
-        y = m.group(2)
-        conf = "high" if len(years) == 1 and not m.group(1) and 1850 <= int(y) <= 2026 else "low"
-        if 1850 <= int(y) <= 2026:
-            c.from_flow("auditor_since", y, f, m.start(), m.end(), conf, quote=m.group(0))
-
-    # auditor: the "/s/ Firm LLP" signature nearest the tenure sentence (same page, then
-    # neighbours); a bare "Firm LLP" line there if the /s/ is an image; else PCAOB IDs.
-    sig = None  # (flow, start, end, printed firm)
-    if tenure:
-        tf, tm = tenure[0]
-        near = sorted((g for g in flows if abs(g.page - tf.page) <= 1), key=lambda g: abs(g.page - tf.page))
-        for g in near:
-            hits = [(h.start(), h.end(), h.group(1)) for h in sig_rx.finditer(g.text)]
-            if not hits:  # signature printed as an image: a bare "Firm LLP" line (MRK)
-                for li in range(len(g.lines)):
-                    b = bare_rx.match(g.line_text(li))
-                    if b:
-                        s = g.line_start[li]
-                        hits.append((s, s + len(b.group(0).strip()), b.group(1)))
-            if hits:
-                ref = tm.start() if g is tf else (0 if g.page > tf.page else len(g.text))
-                s, e, printed = min(hits, key=lambda h: abs(h[0] - ref))
-                sig = (g, s, e, printed)
-                break
     if sig:
         g, s, e, printed = sig
         name = _firm_name(printed)
         agrees = not id_firms or id_firms.most_common(1)[0][0] == name
         c.from_flow("auditor", name, g, s, e, "high" if agrees else "low", quote=g.text[s:e].strip())
-    elif ids:
+    elif ids:  # signature printed as an image: the PCAOB firm ID names the firm (BAC, JPM)
         f, m, name = ids[0]
         c.from_flow("auditor", name, f, m.start(), m.end(), "high" if len(id_firms) == 1 else "low")
+    _auditor_location(c, flows, sig, tenure, bool(ids))
 
-    # auditor_location: city line under the signature (or near the tenure sentence when
-    # the signature is an image), else the Item 14 form "KPMG LLP, Seattle, WA, Auditor Firm ID: 185"
+
+def _auditor_since(c: Collector, tenure: list):
+    """The tenure sentence appears only in the opinion on the financial statements."""
+    if not tenure:
+        return
+    years = Counter(m.group(2) for _, m in tenure)
+    f, m = tenure[0]
+    y = m.group(2)
+    if 1850 <= int(y) <= 2026:
+        conf = "high" if len(years) == 1 and not m.group(1) else "low"  # "since at least 1920" is low
+        c.from_flow("auditor_since", y, f, m.start(), m.end(), conf, quote=m.group(0))
+
+
+def _auditor_signature(flows: list, first_tenure: tuple) -> Optional[tuple]:
+    """'/s/ Ernst & Young LLP' nearest the tenure sentence (same page, then the pages
+    either side); a bare 'PricewaterhouseCoopers LLP' line if the /s/ is an image (MRK).
+    Returns (flow, start, end, printed firm)."""
+    tf, tm = first_tenure
+    near = sorted((g for g in flows if abs(g.page - tf.page) <= 1), key=lambda g: abs(g.page - tf.page))
+    for g in near:
+        hits = [(h.start(), h.end(), h.group(1)) for h in SIG_RE.finditer(g.text)]
+        if not hits:
+            for li in range(len(g.lines)):
+                b = BARE_FIRM_RE.match(g.line_text(li))
+                if b:
+                    s = g.line_start[li]
+                    hits.append((s, s + len(b.group(0).strip()), b.group(1)))
+        if hits:
+            ref = tm.start() if g is tf else (0 if g.page > tf.page else len(g.text))
+            s, e, printed = min(hits, key=lambda h: abs(h[0] - ref))
+            return g, s, e, printed
+    return None
+
+
+def _auditor_location(c: Collector, flows: list, sig, tenure: list, have_ids: bool):
+    """City line under the signature (low confidence when the signature is an image and
+    the city is read next to the tenure sentence), else the Item 14 'Firm LLP, City, ST' form."""
     anchor = (sig[0], sig[1]) if sig else ((tenure[0][0], tenure[0][1].start()) if tenure else None)
-    if anchor and (sig or ids):
+    if anchor and (sig or have_ids):
         g, pos = anchor
         loc = _location_lines(g, g.line_index(pos))
         if loc:
@@ -679,7 +691,7 @@ def rule_auditor(c: Collector, flows: list):
             c.add("auditor_location", value, g.page, g.line_text(j), g.lines[j], "high" if sig else "low")
             return
     for f in flows:
-        m = loc_rx.search(f.text)
+        m = FIRM_CITY_RE.search(f.text)
         if m:
             st = m.group(3)
             value = f"{m.group(2).strip()}, {'DC' if st == 'D.C.' else STATES.get(st, st)}"
