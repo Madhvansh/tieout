@@ -573,7 +573,7 @@ def apply_link(g: Graph, entry: dict) -> int:
                     if c.get("col", "") != entry["column"] or not same_row:
                         continue
                     pid = TIMELESS
-                elif _cell_pid(row, j):
+                elif _cell_pid(row, j) and j == period_cells(row).get(_cell_pid(row, j)):
                     pid = _cell_pid(row, j)
                 else:
                     continue
@@ -606,10 +606,25 @@ def breakdown(g: Graph, ticker: str, phrase: str) -> Optional[list]:
     return [dict(_line(k), grouped_by=how) for k in kids]
 
 
+def period_cells(row: dict) -> dict:
+    """{period id: the cell index that stands for the row in that period}.
+
+    A period printed over several columns (a year over U.S., Non-U.S. and Total) is one figure for the
+    row: the column headed "total", or else the last of the group, where tables put their totals."""
+    out: dict = {}
+    for j, c in enumerate(row["cells"]):
+        pid = _cell_pid(row, j)
+        if not pid:
+            continue
+        if pid not in out or "total" in (c.get("col") or "").lower()                 or "total" not in (row["cells"][out[pid]].get("col") or "").lower():
+            out[pid] = j
+    return out
+
+
 def _line(row: dict) -> dict:
-    cells = {_cell_pid(row, j): {"id": c.get("rid") or f"{row['id']}:c{j}", "value": c["value"], "text": c["text"],
-                                 "ok": c.get("ok")}
-             for j, c in enumerate(row["cells"]) if _cell_pid(row, j)}
+    cells = {pid: {"id": row["cells"][j].get("rid") or f"{row['id']}:c{j}", "value": row["cells"][j]["value"],
+                   "text": row["cells"][j]["text"], "ok": row["cells"][j].get("ok")}
+             for pid, j in period_cells(row).items()}
     return {"ticker": row["ticker"], "doc": row["doc"], "page": row["page"], "label": row["label"],
             "unit": row["unit"], "cells": cells}
 
