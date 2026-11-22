@@ -1,0 +1,18 @@
+{
+  "same_page": true,
+  "numeric_supporting_facts": 247,
+  "addressable": 247,
+  "first_kind": {
+    "statement": 196,
+    "raw": 42,
+    "mention": 9
+  },
+  "carried_by_kind": {
+    "statement": 196,
+    "raw": 42,
+    "mention": 9
+  },
+  "outside_primary_statements": 51,
+  "outside_addressable": 51,
+  "misses": []
+}

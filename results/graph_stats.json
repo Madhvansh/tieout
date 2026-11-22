@@ -1,0 +1,47 @@
+{
+  "filings": 55,
+  "companies": 40,
+  "readings": 13314,
+  "readings_verified": 12613,
+  "checks": 2708,
+  "checks_by_type": {
+    "SUM": 991,
+    "TIE": 358,
+    "RATIO": 89,
+    "CARRY": 1270
+  },
+  "checks_by_type_and_status": {
+    "SUM:pass": 942,
+    "TIE:pass": 358,
+    "RATIO:pass": 89,
+    "SUM:fail": 3,
+    "SUM:rounded": 46,
+    "CARRY:pass": 1238,
+    "CARRY:restated": 32
+  },
+  "facts": 4158,
+  "bindings": 1828,
+  "bindings_active": 1774,
+  "text_facts": 750,
+  "raw_rows": 51438,
+  "raw_cells": 188073,
+  "raw_cells_with_value": 188073,
+  "mentions": 14759,
+  "mention_numbers": 46775,
+  "decoded_font_filings_verified_and_total_readings_by_statement": {
+    "MCD_FY2025_10K": {
+      "IS": [
+        57,
+        73
+      ],
+      "BS": [
+        70,
+        71
+      ],
+      "CF": [
+        93,
+        96
+      ]
+    }
+  }
+}

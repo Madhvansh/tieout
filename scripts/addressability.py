@@ -11,7 +11,7 @@ full units with a compatible unit:
 Prints recall overall and by the kind of node that carries the fact, then every
 miss. Text-valued facts (names, places) are out of scope.
 
-    python scripts/addressability.py [--same-page] [--show-near]
+    python scripts/addressability.py [--same-page] [--show-near] [--out results/addressability.json]
 """
 from __future__ import annotations
 
@@ -112,6 +112,7 @@ def main():
     ap.add_argument("--raw", help="raw layer file to measure (default graph/raw.json.gz)")
     ap.add_argument("--mentions", help="mentions file to measure (default graph/mentions.json.gz)")
     ap.add_argument("--show-near", action="store_true", help="for misses, show nodes with the value in another unit")
+    ap.add_argument("--out", help="also write the counts and the misses as JSON to this path")
     args = ap.parse_args()
     facts, nodes = load_facts(), load_nodes(args.raw, args.mentions)
     by_kind, hit_any, misses = Counter(), 0, []
@@ -152,6 +153,13 @@ def main():
         extra = f"   value found with unit {sorted(set(wrong))[:3]}" if wrong and args.show_near else ""
         print(f"  {f['qid']:4s} {f['doc']:22s} p{f['page']!s:4s} {str(f['printed'])[:28]!r:30s} "
               f"{f['value']:>20,.2f} {f['unit']}{extra}")
+    if args.out:
+        record = {"same_page": args.same_page, "numeric_supporting_facts": n, "addressable": hit_any,
+                  "first_kind": {k: by_kind[k] for k in KINDS}, "carried_by_kind": {k: anywhere[k] for k in KINDS},
+                  "outside_primary_statements": outside, "outside_addressable": outside_hit,
+                  "misses": [{"qid": f["qid"], "doc": f["doc"], "page": f["page"], "printed": f["printed"],
+                              "value": f["value"], "unit": f["unit"]} for f, _ in misses]}
+        pathlib.Path(args.out).write_text(json.dumps(record, indent=2) + chr(10), encoding="utf-8")
 
 
 if __name__ == "__main__":
