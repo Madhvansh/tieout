@@ -684,6 +684,10 @@ _BASIS = re.compile(r"\b(?:non[- ]?)?(?:u\.?\s?s\.?\s+)?gaap\b", re.I)
 _TOTAL = re.compile(r"\btotal\b", re.I)
 
 
+_SCALE_STEMS = frozenset(stem(w) for w in ("million", "millions", "billion", "billions", "thousand", "thousands",
+                                           "dollars", "usd"))
+
+
 def named_columns(spans: list, phrase: str) -> list:
     """The columns of a period's group that the phrase names in their own words ("North America
     revenue", "total earnings"). An accounting basis names how a figure is measured, not a column:
@@ -692,17 +696,22 @@ def named_columns(spans: list, phrase: str) -> list:
     U.S. column although both pickers chose the Total."""
     text = _BASIS.sub(" ", phrase)
     asked = set(tokens(text))
-    named = []
+    totals, specific = [], []
     for n, name in enumerate(spans):
         bare = name.replace(" (the sum of the others)", "")
         if _TOTAL.fullmatch(bare.strip()):
             if _TOTAL.search(text):
-                named.append(n)
+                totals.append(n)
             continue
-        words = set(tokens(bare))
+        words = set(tokens(bare)) - _SCALE_STEMS      # "(millions of oil-equivalent barrels)": the unit names it
         if words and words <= asked:
-            named.append(n)
-    return named
+            specific.append((len(words), n))
+    if specific:
+        # a column the phrase names in its own words outranks "total": Exxon's reserves table prints a
+        # Total of gas by region beside "(millions of oil-equivalent barrels)", the total of all products
+        most = max(k for k, _ in specific)
+        return [n for k, n in specific if k == most]
+    return totals
 
 
 def pick_yields(g: Graph, cands: list, ans: dict, phrase: str, wanted: set) -> Optional[tuple]:
@@ -1244,7 +1253,7 @@ def members(row: dict) -> list:
     total = _sum_of_others(row, js)
     names = []
     for k, j in enumerate(js):
-        names.append(_column_name(row, j, k)[:32] + (" (the sum of the others)" if j == total else ""))
+        names.append(_column_name(row, j, k)[:60] + (" (the sum of the others)" if j == total else ""))
     return names
 
 

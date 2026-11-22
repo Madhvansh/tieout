@@ -20,7 +20,13 @@ def test_a_region_or_the_total_named_in_the_phrase():
 
 def test_nothing_named_leaves_the_choice_to_the_pickers():
     assert named_columns(SPANS, "earnings") == []
-    assert len(named_columns(SPANS, "Non-U.S. earnings")) == 2     # ambiguous: the pickers' column decides
+
+
+def test_the_longer_name_wins_and_a_named_column_outranks_total():
+    assert named_columns(SPANS, "Non-U.S. earnings") == [1]        # "Non-U.S." contains "U.S."; the fuller name is meant
+    gas = ["United States", "Asia", "Total (the sum of the others)", "(millions of oil-equivalent barrels)"]
+    assert named_columns(gas, "total proved reserves in billions of oil-equivalent barrels") == [3]
+    assert named_columns(gas, "total proved reserves") == [2]
 
 
 def test_sentence_amounts_with_no_printed_scale_are_read_in_the_statements_scale_and_flagged():
