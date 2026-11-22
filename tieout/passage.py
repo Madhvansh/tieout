@@ -13,10 +13,15 @@ road. Its mistakes are different ones, and that is what makes it a witness:
   measured on rounds 7 to 9 (23 Nov, dev_scripts/fable/two_roads_sim.py): a FLAGGED answer the
   passage reader repeats was right 28 times of 30, one it does not repeat 31 of 53.
 
-readers.second_road uses it three ways and never serves it as verified:
-  the plan road has no answer and no planner says the filings lack it  ->  the passage answer, FLAGGED
+readers.second_road and readers._disputed use it, and never serve it as verified:
+  the plan road has no answer and no planner says the filings lack it  ->  the passage answer, FLAGGED, or a
+                                                                           planner's plan run on passage facts
   a reading no second planner shares, which the passage reader repeats ->  that reading, CORROBORATED
   a FLAGGED answer the passage reader repeats                          ->  CORROBORATED
+  the passage reader and the served plan run on passage facts agree    ->  the graph's figure is overruled, FLAGGED
+  against the graph's figure (FLAGGED or WITNESSED answers)
+  a VERIFIED or WITNESSED answer the passage reader disputes           ->  the arbiter plans it too
+One passage reading alone never replaces an answer the plan road served.
 
 Every reply is kept under cache/passage/ keyed by the question, so a run replays with no index, no
 embedding model and no key.
@@ -44,12 +49,13 @@ TOLERANCE = 0.005                # two roads round differently: figures within h
                                  # (the benchmark's own tolerance for a computed answer). One percent was too
                                  # wide: round 8 V07, 182,186 and 183,417 dollars per employee rest on two
                                  # different head-counts and were called the same
+ROUNDED_TOLERANCE = 0.01         # ... one percent when one side is a figure of two or three digits (_a_round_figure)
 SCALES = (1.0, 1e3, 1e6, 1e9, 1e12)
 UNITS = {"usd": "USD", "ratio": "ratio", "shares": "shares", "count": "count", "usd/share": "USD/share"}
 
 
 def _path(question: str, model: Optional[str]) -> pathlib.Path:
-    key = hashlib.sha1(f"{VERSION}|{model or ''}|{question}".encode("utf-8")).hexdigest()[:24]
+    key = hashlib.sha1(f"{VERSION}|{BUDGET}|{model or ''}|{question}".encode("utf-8")).hexdigest()[:24]
     return DIR / f"{key}.json"
 
 
@@ -58,8 +64,13 @@ def read(question: str, model: Optional[str] = None, offline: bool = False) -> O
     or None when this road is not available (offline with no saved reply, no index, no quota)."""
     path = _path(question, model)
     if path.exists():
-        _log(path)
-        return json.loads(path.read_text(encoding="utf-8"))
+        try:
+            saved = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):                 # a reply another run is still writing: ask again
+            saved = None
+        if isinstance(saved, dict) and isinstance(saved.get("pred"), dict):
+            _log(path)
+            return saved
     if offline:
         return None
     try:
@@ -89,14 +100,30 @@ def read(question: str, model: Optional[str] = None, offline: bool = False) -> O
                     break
         f["printed"] = bool(f.get("in_context")) and _printed(f.get("value"), texts.get((f.get("doc"), f.get("page")), ""))
         facts.append(f)
-    pred = out["pred"]
-    reply = {"version": VERSION, "model": model, "question": question, "abstain": pred.get("kind") == "abstain",
-             "answer": out.get("answer", ""), "pred": pred, "unit": out.get("unit"), "facts": facts,
+    pred = _numeric(out["pred"])
+    reply = {"version": VERSION, "budget": BUDGET, "model": model, "question": question,
+             "abstain": pred.get("kind") == "abstain", "answer": out.get("answer", ""), "pred": pred,
+             "unit": out.get("unit"), "facts": facts,
              "facts_ok": bool(facts) and all(f.get("in_context") and f["printed"] for f in facts)}
     DIR.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(reply, indent=1, default=str), encoding="utf-8")
+    scratch = path.with_suffix(f".{os.getpid()}.tmp")  # written whole, then moved: two runs may share a question
+    scratch.write_text(json.dumps(reply, indent=1, default=str), encoding="utf-8")
+    os.replace(scratch, path)
     _log(path)
     return reply
+
+
+def _numeric(pred: dict) -> dict:
+    """A figure the reader wrote as words ("33.8 billion", unit text) is a figure."""
+    if pred.get("kind") == "text" and isinstance(pred.get("value"), str):
+        try:
+            from baseline.answer import to_number
+            x = to_number(pred["value"])
+        except Exception:  # noqa: BLE001
+            x = None
+        if x is not None:
+            return {"kind": "number", "value": x}
+    return pred
 
 
 def _log(path: pathlib.Path) -> None:
@@ -136,9 +163,8 @@ def _ticker(name: str, companies: dict) -> str:
 
 
 def same(result: Result, shown: Optional[tuple]) -> bool:
-    """Does the plan's result say what the passage reader says? A figure within one percent, also when
-    the reader left the page's scale on it (23,545 for $23.545 billion) or wrote a percentage for a
-    fraction; for a ranking or a list, the same first name."""
+    """Does the plan's result say what the passage reader says? For a figure see _same_figures; for a
+    choice between two, the same winner; for a ranking of three or more, the same order throughout."""
     if shown is None or not result.ok:
         return False
     if shown[0] == "s":
@@ -154,30 +180,41 @@ def same(result: Result, shown: Optional[tuple]) -> bool:
         result.value[0][1] if result.kind == "lines" and result.value else None)
     if isinstance(figure, bool) or not isinstance(figure, (int, float)):
         return False
-    x, y = abs(float(figure)), abs(shown[1])
-    factors = SCALES + ((100.0,) if result.unit in ("ratio", "percent", "percent_points", "") else ())
+    return _same_figures(float(figure), shown[1], result.unit)
+
+
+def _same_figures(x: float, y: float, unit: str) -> bool:
+    """The comparison behind same() and same_number(), red-teamed on 23 Nov (research/19):
+      the sign counts, except for a dollar amount (an outflow is printed with or without its minus);
+      a factor of 100 is forgiven only for a rate (a percentage written for a fraction);
+      a scale of thousands is forgiven (the reader leaves the page's "in millions" on a figure);
+      the tolerance is half a percent, one percent when one side is a figure a sentence would round
+      to two or three digits ("$6.7 billion" for 6,661 million), never more."""
+    if unit == "USD":
+        x, y = abs(x), abs(y)
+    elif (x < 0) != (y < 0) and x != 0 and y != 0:
+        return False
+    factors = SCALES + ((100.0,) if unit in ("ratio", "percent", "percent_points") else ())
     for k in factors:
         for a, b in ((x, y * k), (x * k, y)):
-            if abs(a - b) <= TOLERANCE * max(a, b, 1e-12) or _rounds_to(a, b) or _rounds_to(b, a):
+            slack = ROUNDED_TOLERANCE if _a_round_figure(a) or _a_round_figure(b) else TOLERANCE
+            if abs(a - b) <= slack * max(abs(a), abs(b), 1e-12):
                 return True
     return False
 
 
-def _rounds_to(exact: float, coarse: float) -> bool:
-    """Is `coarse` the figure `exact` rounded to two or three significant digits, the way a sentence
-    states a table's figure ("$6.7 billion" for 6,661 million)? A figure with one significant digit
-    (50, 0.3) is too coarse to say, and one with more than three is not a rounding."""
-    if exact <= 0 or coarse <= 0:
+def _a_round_figure(x: float) -> bool:
+    """Two or three significant digits, the way a sentence states a table's figure. One digit
+    (50, 0.3) says too little to count as a rounding of anything."""
+    x = abs(x)
+    if x == 0:
         return False
     from math import floor, log10
-    for digits in (2, 3):
-        step = 10 ** (floor(log10(coarse)) - digits + 1)
-        if abs(coarse / step - round(coarse / step)) > 1e-6:      # coarse itself has more digits than this
-            continue
-        if digits == 2 and abs(coarse / (step * 10) - round(coarse / (step * 10))) <= 1e-6:
-            return False                                           # one significant digit only
-        return abs(round(exact / step) * step - coarse) <= 1e-6 * coarse
-    return False
+    top = floor(log10(x))
+    three = x / 10 ** (top - 2)                       # the figure as a number between 100 and 999.99
+    if abs(three - round(three)) > 1e-6:
+        return False                                  # more than three significant digits
+    return round(three) % 100 != 0                    # not a single digit followed by zeros
 
 
 # ----------------------------------------------------------------- the same plan, on facts read from passages
@@ -200,13 +237,13 @@ def fact_question(g, ex, ticker: str, words: str, spec: dict) -> Optional[str]:
         return None
     try:
         year = ex._fy(ticker, spec)
-    except Exception:  # noqa: BLE001 - a period the executor cannot resolve
+        quarter = int(spec["q"]) if spec.get("q") else None
+    except Exception:  # noqa: BLE001 - a period the executor cannot resolve, a quarter that is not a number
         return None
-    quarter = spec.get("q")
     if quarter and spec.get("ytd"):
-        when = f"the first {3 * int(quarter)} months of fiscal year {year} (year to date)"
+        when = f"the first {3 * quarter} months of fiscal year {year} (year to date)"
     elif quarter:
-        when = f"the {ORDINALS.get(int(quarter), str(quarter))} quarter of fiscal year {year}"
+        when = f"the {ORDINALS.get(quarter, str(quarter))} quarter of fiscal year {year}"
     else:
         when = f"fiscal year {year} (for a balance: at the end of fiscal year {year})"
     return f"What was {words} of {g.companies[ticker]['name']} for {when}? Give the one figure the filing prints for it."
@@ -297,7 +334,7 @@ def run_plan(plan: dict, g, ex, model: Optional[str] = None, offline: bool = Fal
                 leaves += fact_reply.get("facts") or []
             if op == "get":
                 v = got[0]
-            elif s.get("mode") == "pct":
+            elif s.get("mode", "pct") == "pct":           # the executor's default for a change is the rate
                 v = (got[1] - got[0]) / abs(got[0]) if got[0] else None
             else:
                 v = got[1] - got[0]
@@ -310,10 +347,11 @@ def run_plan(plan: dict, g, ex, model: Optional[str] = None, offline: bool = Fal
 
 
 def same_number(x, y) -> bool:
-    """Two figures of the passage road, or one of each road, to the tolerance of same()."""
+    """Two figures of the passage road (the reader's own answer and a plan run on facts it read):
+    the same sign, a scale of thousands forgiven, no factor of 100."""
     if isinstance(x, bool) or isinstance(y, bool) or not isinstance(x, (int, float)) or not isinstance(y, (int, float)):
         return False
-    return same(Result("number", float(x), ""), ("n", float(y)))
+    return _same_figures(float(x), float(y), "")
 
 
 def cited(reply: dict) -> str:
@@ -326,17 +364,23 @@ def cited(reply: dict) -> str:
 
 def _leaves(facts: list) -> list:
     """The passage reader's cited facts as proof leaves (unverified: nothing in the graph ties them)."""
+    def page(f):
+        try:
+            return int(f.get("page") or 0)
+        except (TypeError, ValueError):
+            return 0
     return [Leaf(id=f"{f.get('doc')}:p{f.get('page')}:passage{i}", ticker=str(f.get("ticker") or ""),
                  what="passage:" + str(f.get("label") or "")[:60], period="", doc=str(f.get("doc") or ""),
-                 page=int(f.get("page") or 0), label=str(f.get("label") or ""), printed=str(f.get("value")),
+                 page=page(f), label=str(f.get("label") or ""), printed=str(f.get("value")),
                  status="unverified", value=f.get("value"))
-            for i, f in enumerate(facts or [])]
+            for i, f in enumerate(facts or []) if isinstance(f, dict)]
 
 
 def plan_answer(ran: dict, plan: dict) -> dict:
-    """The answer of a plan run on facts read from passages (run_plan), in the shape ask.answer returns."""
+    """The answer of a plan run on facts read from passages (run_plan), in the shape ask.answer returns.
+    The unit is left open unless the answering step is a rate: the figure is what is scored."""
     last = next((s for s in plan.get("steps") or [] if isinstance(s, dict) and s.get("id") == plan.get("answer")), {})
-    a_rate = last.get("mode") == "pct" or (last.get("op") == "calc" and "/" in str(last.get("expr")))
+    a_rate = last.get("op") == "change" and last.get("mode", "pct") == "pct"
     res = Result("number", float(ran["value"]), "ratio" if a_rate else "", _leaves(ran.get("leaves")))
     res.tier = "FLAGGED"
     res.tier_reasons = ["the graph had no line for this plan; each line the plan names was read from passages of the "
@@ -345,19 +389,21 @@ def plan_answer(ran: dict, plan: dict) -> dict:
             "repaired": False}
 
 
-def as_answer(reply: dict, companies: dict) -> dict:
+def as_answer(reply: dict, companies: dict) -> Optional[dict]:
     """The passage answer in the shape ask.answer returns, FLAGGED: one model read it from passages,
-    nothing in the graph vouches for it."""
-    pred = reply["pred"]
+    nothing in the graph vouches for it. None when the reply holds nothing that can be served."""
+    pred = reply.get("pred") or {}
     kind, value = pred.get("kind"), pred.get("value")
     leaves = _leaves(reply.get("facts"))
-    if kind == "number":
+    if kind == "number" and isinstance(value, (int, float)) and not isinstance(value, bool):
         res = Result("number", float(value), UNITS.get(str(reply.get("unit") or "").lower(), ""), leaves)
-    elif kind == "companies":
+    elif kind == "companies" and isinstance(value, (list, tuple)) and value:
         names = [str(v[0] if isinstance(v, (list, tuple)) else v) for v in value]
         res = Result("companies", [(_ticker(n, companies), None) for n in names], "", leaves)
-    else:
+    elif kind == "text" and value:
         res = Result("text", str(value), "", leaves)
+    else:
+        return None
     res.tier = "FLAGGED"
     res.tier_reasons = ["no line of the graph answered this; one model read it from passages of the filing "
                         f"({cited(reply)}), where the figure is printed. It is not tied by arithmetic"]

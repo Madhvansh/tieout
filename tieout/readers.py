@@ -56,9 +56,10 @@ def answer(question: str, g, readers: Readers, **kw) -> dict:
 
 
 def second_road(question: str, g, served: dict, readers: Readers, kw: dict) -> dict:
-    """A passage reader as a witness of another kind (tieout/passage.py). It is asked only when the
-    plan road did not end VERIFIED or WITNESSED, and it changes the served answer in two cases only,
-    both measured before they were built (rounds 7 to 9, 23 Nov: 139 of 178 right without it, 144 with):
+    """A passage reader as a witness of another kind (tieout/passage.py). This function handles an
+    answer the plan road did not end VERIFIED or WITNESSED (those go to _disputed below). The first two
+    rules were simulated on saved results before they were built (rounds 7 to 9, 23 Nov,
+    dev_scripts/fable/two_roads_sim.py: 139 of 178 question-runs right without them, 144 with):
 
       the plan road has no answer, and no arbiter and no two planners say the filings lack it
           -> the passage answer, FLAGGED (it is one model reading text; nothing ties it out)
@@ -103,13 +104,16 @@ def second_road(question: str, g, served: dict, readers: Readers, kw: dict) -> d
         """The plan's answer on facts read from passages, or None."""
         if kw.get("executor") is None or not isinstance(plan, dict):
             return None
-        return passage.run_plan(plan, g, kw["executor"], model=readers.passage, offline=offline)
+        try:
+            return passage.run_plan(plan, g, kw["executor"], model=readers.passage, offline=offline)
+        except Exception:  # noqa: BLE001 - a planner's plan the executor itself refused can be malformed
+            return None
 
     if not res.ok:
         if lacking:
             return served
-        if answers:
-            out = passage.as_answer(reply, g.companies)
+        out = passage.as_answer(reply, g.companies) if answers else None
+        if out is not None:
             reading["passage"]["used"] = PASSAGE_ALONE
             return {**out, "reading": {**reading, "case": PASSAGE_ALONE, "witnessed": False}}
         for s in seen:                                # no whole answer: a planner's plan on passage facts
@@ -149,8 +153,8 @@ def second_road(question: str, g, served: dict, readers: Readers, kw: dict) -> d
     ran = on_passages(served["plan"]) if shown is not None and shown[0] == "n" else None
     if ran is not None:
         reading["passage"]["plan_on_passages"] = ran["value"]
-        if passage.same_number(ran["value"], shown[1]):   # two passage readings against the graph's line
-            out = passage.as_answer(reply, g.companies)
+        out = passage.as_answer(reply, g.companies) if passage.same_number(ran["value"], shown[1]) else None
+        if out is not None:                               # two passage readings against the graph's line
             out["result"].tier_reasons = [
                 f"the graph's line gives {served['answer']}; the same plan on facts read from passages and the passage "
                 f"reader's own reading both give this figure ({passage.cited(reply)}). Served on the passages, not tied by arithmetic"]
@@ -200,11 +204,14 @@ def _disputed(question: str, g, served: dict, readers: Readers, kw: dict) -> dic
         # passages is the test of those lines: if it gives the passage reader's figure, the shortlist
         # led both pickers to a wrong line (round 8, W02: Exxon's reserves, a row in millions of barrels
         # that three planners' plans all reached)
-        ran = passage.run_plan(served["plan"], g, kw["executor"], model=readers.passage, offline=kw.get("offline", False))
+        try:
+            ran = passage.run_plan(served["plan"], g, kw["executor"], model=readers.passage, offline=kw.get("offline", False))
+        except Exception:  # noqa: BLE001
+            ran = None
         if ran is not None:
             reading["passage"]["plan_on_passages"] = ran["value"]
-            if passage.same_number(ran["value"], shown[1]):
-                out = passage.as_answer(reply, g.companies)
+            out = passage.as_answer(reply, g.companies) if passage.same_number(ran["value"], shown[1]) else None
+            if out is not None:
                 out["result"].tier_reasons = [
                     f"the graph's line gives {served['answer']}; the same plan on facts read from passages and the passage "
                     f"reader's own reading both give this figure ({passage.cited(reply)}). Served on the passages, not tied by arithmetic"]

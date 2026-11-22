@@ -244,6 +244,19 @@ def test_a_ranking_is_repeated_only_in_full():
     assert passage.same(two, passage.head(reply(["General Motors"]), COMPANIES))  # which of two: the winner
 
 
+def test_the_agreement_test_is_not_looser_than_it_says():
+    # each of these was called "the same" before the red team of 23 Nov (research/19_redteam_second_road.md)
+    assert not passage.same(Result("number", 0.1149, "ratio"), ("n", 0.11))       # "about 11%" is not 11.49%
+    assert not passage.same(Result("number", -0.05, "ratio"), ("n", 0.05))        # a fall is not a rise
+    assert not passage.same(Result("number", 12.0, "count"), ("n", 1200.0))       # a count is not a percentage
+    assert not passage.same_number(5.0, 500.0)
+    assert not passage.same_number(-0.2, 0.2)
+    assert passage.same(Result("number", -9.941e9, "USD"), ("n", 9941.0))         # an outflow, the page's millions left on
+    assert passage.same_number(0.4894, 0.4885)                                    # two sums of the same printed figures
+    assert passage.as_answer({"pred": {"kind": "number", "value": None}}, COMPANIES) is None
+    assert passage.as_answer({}, COMPANIES) is None
+
+
 def test_same_figure_across_roads():
     assert passage.same(Result("number", 0.9115, "ratio"), ("n", 0.9113))        # rounded differently
     assert passage.same(Result("number", 0.1332, "ratio"), ("n", 13.32))         # a percentage for a fraction
