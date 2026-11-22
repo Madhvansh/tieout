@@ -1,0 +1,602 @@
+{
+ "judge_model": "ollama:phi4-mini",
+ "proposals_keyed": 70,
+ "rules": {
+  "self": {
+   "admitted": 70,
+   "right": 66,
+   "precision": 0.943,
+   "ci95": [
+    0.862,
+    0.978
+   ],
+   "right_kept_of_all_right": "66/66"
+  },
+  "model_judge": {
+   "admitted": 33,
+   "right": 32,
+   "precision": 0.97,
+   "ci95": [
+    0.847,
+    0.995
+   ],
+   "right_kept_of_all_right": "32/66"
+  },
+  "structure": {
+   "admitted": 66,
+   "right": 62,
+   "precision": 0.939,
+   "ci95": [
+    0.854,
+    0.976
+   ],
+   "right_kept_of_all_right": "62/66"
+  }
+ },
+ "both_structure_and_judge": {
+  "admitted": 33,
+  "right": 32
+ },
+ "rows": [
+  {
+   "ticker": "C",
+   "concept": "NetIncome",
+   "label": "Citigroup\u2019s net income",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "GM",
+   "concept": "NetIncome",
+   "label": "Net income (loss) attributable to stockholders",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "WFC",
+   "concept": "NetIncome",
+   "label": "Wells Fargo net income",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "GM",
+   "concept": "Revenue",
+   "label": "Total net sales and revenue (Note",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "BAC",
+   "concept": "TotalAssets",
+   "label": "Total assets",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "C",
+   "concept": "TotalAssets",
+   "label": "Total assets",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "V",
+   "concept": "TotalAssets",
+   "label": "Total assets",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "JPM",
+   "concept": "OperatingCashFlow",
+   "label": "Net cash (used in)/provided by operating activities",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "NKE",
+   "concept": "OperatingCashFlow",
+   "label": "Cash provided (used) by operations",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "PG",
+   "concept": "OperatingCashFlow",
+   "label": "TOTAL OPERATING ACTIVITIES",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "NKE",
+   "concept": "Cash",
+   "label": "Cash and equivalents",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "F",
+   "concept": "IncomeTax",
+   "label": "Provision for/(Benefit from) income taxes (Note",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "PFE",
+   "concept": "IncomeTax",
+   "label": "Provision/(benefit) for taxes on income",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "F",
+   "concept": "OperatingIncome",
+   "label": "Operating income/(loss)",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "UNH",
+   "concept": "OperatingIncome",
+   "label": "Earnings from operations .......................................................",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "COST",
+   "concept": "CostOfRevenue",
+   "label": "Merchandise costs",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "JNJ",
+   "concept": "InvestingCashFlow",
+   "label": "Net cash (used by)/from investing activities",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "MSFT",
+   "concept": "InvestingCashFlow",
+   "label": "Net cash used in investing",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "MSFT",
+   "concept": "FinancingCashFlow",
+   "label": "Net cash used in financing",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "PG",
+   "concept": "FinancingCashFlow",
+   "label": "TOTAL FINANCING ACTIVITIES",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "AXP",
+   "concept": "CapitalExpenditures",
+   "label": "Purchase of premises and equipment, net of sales: 2025, $1; 2024, $6; 2023, $2",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "NVDA",
+   "concept": "CapitalExpenditures",
+   "label": "Purchases related to property and equipment and intangible assets",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "COST",
+   "concept": "DividendsPaid",
+   "label": "Cash dividend payments",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "CVX",
+   "concept": "DividendsPaid",
+   "label": "Cash dividends - common stock",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "F",
+   "concept": "DividendsPaid",
+   "label": "Cash payments for dividends and dividend equivalents",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "GOOGL",
+   "concept": "DividendsPaid",
+   "label": "Dividend payments",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "GS",
+   "concept": "DividendsPaid",
+   "label": "Dividends and dividend equivalents paid on common stock, preferred stock and sha",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "NKE",
+   "concept": "DividendsPaid",
+   "label": "Dividends \u2014 common and preferred",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "XOM",
+   "concept": "DividendsPaid",
+   "label": "Cash dividends to ExxonMobil shareholders",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "AXP",
+   "concept": "ShareRepurchases",
+   "label": "Repurchase of American Express common shares and other",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "CAT",
+   "concept": "ShareRepurchases",
+   "label": "Payments to purchase common stock",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "CVX",
+   "concept": "ShareRepurchases",
+   "label": "Net sales (purchases) of treasury shares",
+   "right": false,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "GM",
+   "concept": "ShareRepurchases",
+   "label": "Payments to purchase common stock (Note",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "JPM",
+   "concept": "ShareRepurchases",
+   "label": "Treasury stock repurchased",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "NVDA",
+   "concept": "ShareRepurchases",
+   "label": "Payments related to repurchases of common stock",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "PG",
+   "concept": "ShareRepurchases",
+   "label": "Treasury stock purchases",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "WFC",
+   "concept": "ShareRepurchases",
+   "label": "Repurchased",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "WMT",
+   "concept": "ShareRepurchases",
+   "label": "Purchase of Company stock",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "XOM",
+   "concept": "ShareRepurchases",
+   "label": "Common stock acquired",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "CVX",
+   "concept": "TotalLiabilities",
+   "label": "Total Liabilities2",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "BAC",
+   "concept": "StockBasedCompensation",
+   "label": "Amortization of stock-based compensation",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "F",
+   "concept": "StockBasedCompensation",
+   "label": "Stock compensation (Note",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "JNJ",
+   "concept": "StockBasedCompensation",
+   "label": "Stock based compensation",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "MS",
+   "concept": "NetInterestIncome",
+   "label": "Net interest",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "GM",
+   "concept": "Goodwill",
+   "label": "Goodwill and intangible assets, net (Note",
+   "right": false,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "AXP",
+   "concept": "PropertyPlantEquipment",
+   "label": "Premises and equipment, less accumulated depreciation and amortization: 2025, $1",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "BAC",
+   "concept": "PropertyPlantEquipment",
+   "label": "Premises and equipment, net",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "CVX",
+   "concept": "CostOfRevenue",
+   "label": "Purchased crude oil and products",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "F",
+   "concept": "ConsolidatedNetIncome",
+   "label": "Net income/(loss)",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "F",
+   "concept": "InterestExpense",
+   "label": "Interest expense on Company debt excluding Ford Credit",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "GM",
+   "concept": "AccountsPayable",
+   "label": "Accounts payable (principally trade)",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "GM",
+   "concept": "Goodwill",
+   "label": "Goodwill and intangible assets, net (Note",
+   "right": false,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "JNJ",
+   "concept": "AccountsReceivable",
+   "label": "Accounts receivable trade, less allowances $183 (2024, $167)",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "JNJ",
+   "concept": "RetainedEarnings",
+   "label": "Retained earnings and Additional-paid-in-capital",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "KO",
+   "concept": "AccountsReceivable",
+   "label": "Trade accounts receivable, less allowances of $495 and $506, respectively",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "MA",
+   "concept": "PropertyPlantEquipment",
+   "label": "Property, equipment and right-of-use assets, net",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "MCD",
+   "concept": "Cash",
+   "label": "Cash and equivalents",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "MCD",
+   "concept": "DividendsPaid",
+   "label": "Common stock dividends",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "MCD",
+   "concept": "ShareRepurchases",
+   "label": "Treasury stock purchases",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "MCD",
+   "concept": "InterestExpense",
+   "label": "Interest expense-net of capitalized interest of $29, $22 and $14",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "NKE",
+   "concept": "RetainedEarnings",
+   "label": "Retained earnings (deficit)",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "PG",
+   "concept": "InvestingCashFlow",
+   "label": "TOTAL INVESTING ACTIVITIES",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "TGT",
+   "concept": "InterestExpense",
+   "label": "Net interest expense",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "UNH",
+   "concept": "PropertyPlantEquipment",
+   "label": "Property, equipment and capitalized software, net of accumulated depreciation an",
+   "right": true,
+   "gate": true,
+   "judge": false
+  },
+  {
+   "ticker": "V",
+   "concept": "PropertyPlantEquipment",
+   "label": "Property, equipment and technology, net",
+   "right": true,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "XOM",
+   "concept": "AccountsReceivable",
+   "label": "Notes and accounts receivable \u2013 net",
+   "right": false,
+   "gate": true,
+   "judge": true
+  },
+  {
+   "ticker": "CVX",
+   "concept": "NetIncome",
+   "label": "Net Income (Loss) Attributable to Chevron Corporation",
+   "right": true,
+   "gate": false,
+   "judge": false
+  },
+  {
+   "ticker": "NKE",
+   "concept": "TotalEquity",
+   "label": "Total shareholders' equity",
+   "right": true,
+   "gate": false,
+   "judge": false
+  },
+  {
+   "ticker": "NKE",
+   "concept": "TotalLiabilitiesAndEquity",
+   "label": "TOTAL LIABILITIES AND SHAREHOLDERS' EQUITY",
+   "right": true,
+   "gate": false,
+   "judge": false
+  },
+  {
+   "ticker": "JNJ",
+   "concept": "ShareRepurchases",
+   "label": "Repurchase of common stock",
+   "right": true,
+   "gate": false,
+   "judge": false
+  }
+ ]
+}
