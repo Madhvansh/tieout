@@ -144,3 +144,29 @@ def test_a_question_that_names_the_companies_ranks_exactly_those():
                    "period": {"fy": 2025}, "order": "desc", "k": 1})
     assert shape_misfit(q2, plan2, res) and fix_named_set(q2, plan2)["steps"][0]["k"] == 3
     assert named_companies("Which bank had the highest net income in 2025?") == []
+
+
+def test_thresholds_must_be_amounts_the_question_states():
+    from tieout.ask import fix_from_words
+    q = "How many companies ended their latest fiscal year with more than $1 trillion of total assets?"
+    plan = _plan({"op": "filter", "over": "all", "where": {"by": {"concept": "TotalAssets"}, "period": {"fy": "latest"},
+                                                           "gt": 100000000000}},
+                 {"op": "count", "of": "$s1"})
+    res = Result("number", 31, "count")
+    assert "threshold" in shape_misfit(q, plan, res)
+    assert fix_from_words(q, plan)["steps"][0]["where"]["gt"] == 1e12
+
+
+def test_a_question_about_the_auditor_gets_the_auditor_step():
+    from tieout.ask import fix_from_words
+    q = "Of Visa, Mastercard and BlackRock, which had the largest total assets, and which accounting firm audits it?"
+    plan = _plan({"op": "rank", "over": ["V", "MA", "BLK"], "by": {"concept": "TotalAssets"}, "period": {"fy": "latest"}, "k": 1})
+    assert "audits" in shape_misfit(q, plan, Result("companies", [("V", 1.0)]))
+    fixed = fix_from_words(q, plan)
+    assert fixed["steps"][-1] == {"id": "s2", "op": "attr", "company": "$s1", "attr": "auditor"} and fixed["answer"] == "s2"
+
+
+def test_divided_by_needs_a_division():
+    q = "Using year-end inventory divided by the year's cost of sales, rank Walmart, Costco and Target."
+    plan = _plan({"op": "rank", "over": ["WMT", "COST", "TGT"], "by": {"concept": "Inventory"}, "period": {"fy": 2025}, "k": 3})
+    assert "divides" in shape_misfit(q, plan, Result("companies", [("WMT", 1.0)]))

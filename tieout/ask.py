@@ -18,6 +18,7 @@ question that taught it.
 """
 from __future__ import annotations
 
+import json
 import re
 import time
 from typing import Optional
@@ -49,8 +50,9 @@ def answer(question: str, g: Graph, model: Optional[str] = None, allow_learning:
     res, learned = _execute(plan, g, ex, **learn_args)
     repaired = False
     misfit = shape_misfit(question, plan, res)
-    if planned_here and misfit and ("quarter" in misfit or "part of the year" in misfit or "named" in misfit):
-        fixed = fix_named_set(question, fix_periods(question, plan), g)   # set from the words, no model call
+    if planned_here and misfit and any(w in misfit for w in ("quarter", "part of the year", "named", "threshold",
+                                                              "audits")):
+        fixed = fix_from_words(question, fix_named_set(question, fix_periods(question, plan), g))   # no model call
         if fixed != plan:
             res2, learned2 = _execute(fixed, g, ex, **learn_args)
             learned += learned2
@@ -108,6 +110,50 @@ _HOW_MANY = re.compile(r"(?<!by )(?<!by roughly )(?<!by about )(?<!by approximat
 _SHARE = re.compile(r"\b(what|which) (share|fraction|percentage|proportion|portion)\b|\bas a (share|percentage|fraction)\b"
                     r"|\bmargin\b|\bratio\b|\bpercent of\b|\bslice of\b", re.I)
 _EITHER = re.compile(r"\b(which|who)\b[^?]*\bor\b", re.I)
+_AUDITOR = re.compile(r"\b(audits?|auditor|accounting firm)\b", re.I)
+_DIVIDED = re.compile(r"\bdivided by\b|\bdividing\b", re.I)
+_SCALE = {"thousand": 1e3, "million": 1e6, "billion": 1e9, "trillion": 1e12}
+_AMOUNT = re.compile(r"(\$)?\s*(\d[\d,]*\.?\d*)\s*(%|percent\b|thousand\b|million\b|billion\b|trillion\b)?", re.I)
+
+
+def stated_amounts(question: str) -> list:
+    """Every amount the question states, in full units ($10 billion -> 1e10, 20 percent -> 0.2).
+    Years and counts written without a unit are left out: they are not thresholds."""
+    out = []
+    for m in _AMOUNT.finditer(question):
+        dollar, number, unit = m.group(1), m.group(2).replace(",", ""), (m.group(3) or "").lower()
+        if not (dollar or unit) or not number.replace(".", "", 1).isdigit():
+            continue
+        v = float(number)
+        if unit in ("%", "percent"):
+            out.append(v / 100)
+        else:
+            out.append(v * _SCALE.get(unit, 1.0))
+    return out
+
+
+def _same_kind(x: float, stated: list) -> list:
+    """The stated amounts a threshold can be compared with: shares and ratios (at most 1.5) with
+    percentages, money (a million or more) with money. Counts are never checked: questions state
+    them without a unit, and a count of 1,000 must not be read as a dollar amount."""
+    if abs(x) <= 1.5:
+        return [v for v in stated if abs(v) <= 1.5]
+    if abs(x) >= 1e6:
+        return [v for v in stated if abs(v) >= 1e6]
+    return []
+
+
+def _thresholds(step: dict) -> list:
+    w = step.get("where") if isinstance(step.get("where"), dict) else {}
+    return [float(w[k]) for k in ("gt", "lt", "ge", "le") if isinstance(w.get(k), (int, float))
+            and not isinstance(w.get(k), bool) and w[k] != 0]
+
+
+def _divides(plan: dict) -> bool:
+    text = json.dumps(plan)
+    return '"/' in text or "/ " in text or '"ratio"' in text or '"metric"' in text
+
+
 _QUARTER = re.compile(r"\b(first|second|third|fourth|1st|2nd|3rd|4th)\s+(fiscal\s+)?quarter\b|\bQ[1-4]\b", re.I)
 _SO_FAR = re.compile(r"\b(nine|six|three)\s+months\b|\byear[- ]to[- ]date\b|\bfirst (half|nine months)\b", re.I)
 
@@ -121,6 +167,16 @@ def shape_misfit(question: str, plan: dict, res: Result) -> str:
     """
     if not res.ok or not plan.get("steps"):
         return ""
+    for s in plan["steps"]:
+        for x in _thresholds(s):
+            same_kind = _same_kind(x, stated_amounts(question))
+            if same_kind and not any(abs(x - v) <= 1e-9 * max(1.0, abs(v)) for v in same_kind):
+                return (f"the threshold {x:g} is not an amount the question states; the question states "
+                        + ", ".join(f"{v:g}" for v in same_kind))
+    if _AUDITOR.search(question) and not any(s.get("op") == "attr" and s.get("attr") == "auditor" for s in plan["steps"]):
+        return "the question asks which firm audits: end with an attr step for the auditor of the company found"
+    if _DIVIDED.search(question) and not _divides(plan):
+        return "the question divides one figure by another: use a ratio measure or a calc with /"
     last = next((s for s in plan["steps"] if s.get("id") == plan.get("answer")), {})
     if _HOW_MANY.search(question) and res.kind in ("companies", "lines") and last.get("op") != "count":
         return "the question asks how many: end the plan with a count step over the set"
@@ -197,6 +253,30 @@ def fix_named_set(question: str, plan: dict, g=None) -> dict:
             done = True
         steps.append(s)
     return {**plan, "steps": steps}
+
+
+def fix_from_words(question: str, plan: dict) -> dict:
+    """Two repairs read straight from the question: a single threshold the plan got wrong becomes the one
+    amount the question states (in the same direction), and a question asking who audits the company a
+    ranking or filter finds gets that hop appended."""
+    steps = []
+    for s in plan.get("steps", []):
+        s = dict(s)
+        w = s.get("where")
+        if isinstance(w, dict) and len(_thresholds(s)) == 1:
+            same_kind = _same_kind(_thresholds(s)[0], stated_amounts(question))
+            if len(same_kind) == 1:
+                k = next(k for k in ("gt", "lt", "ge", "le") if isinstance(w.get(k), (int, float)) and w[k] != 0)
+                s["where"] = {**w, k: same_kind[0]}
+        steps.append(s)
+    plan = {**plan, "steps": steps}
+    if _AUDITOR.search(question) and not any(s.get("op") == "attr" and s.get("attr") == "auditor" for s in steps):
+        finder = next((s for s in reversed(steps) if s.get("op") in ("rank", "filter")), None)
+        if finder is not None:
+            sid = f"s{len(steps) + 1}"
+            plan = {**plan, "steps": steps + [{"id": sid, "op": "attr", "company": "$" + finder["id"], "attr": "auditor"}],
+                    "answer": sid}
+    return plan
 
 
 _QWORD = {"first": 1, "1st": 1, "second": 2, "2nd": 2, "third": 3, "3rd": 3, "fourth": 4, "4th": 4}
