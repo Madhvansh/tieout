@@ -53,7 +53,19 @@ Exact plan match on the 600 held-out phrasings (synthetic):
 | Qwen3-4B-Instruct-2507 | 29 min, L4 | 88.2% | 100% | 2.5 GB |
 
 End to end on TieOut's 87 development questions (written by people reading the PDFs, not from the
-training frames), with the graph and the local linker: [filled from results/a_t_*.json].
+training frames), with the graph and the fine-tuned 4B as the local linker, on a laptop CPU, no key
+(`results/g_*.json`, `results/a_planner_table.json`):
+
+| planner | round-2 dev (39) | round 1 (30) | round-1 dev (18) | all 87 |
+|---|---|---|---|---|
+| hand-written plans (the ceiling the graph allows) | 37 | 28 | 18 | 83 |
+| fine-tuned Qwen3-4B | 28 | 24 | 16 | 68 |
+| fine-tuned Qwen3-1.7B | 26 | 23 | 15 | 64 |
+| fine-tuned Qwen3-0.6B (earlier graph) | 21 | 18 | 11 | 50 |
+
+The gap between 88% on synthetic phrasings and about 78% on people's questions is the honest
+measure of what frame-generated data teaches: the plan language, the vocabulary and the common
+shapes, but not every way an analyst words a question.
 
 ## Limits
 
