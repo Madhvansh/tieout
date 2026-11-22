@@ -1,0 +1,1829 @@
+{
+ "name": "f_oracle_r1",
+ "args": {
+  "bench": "benchmark/questions.jsonl",
+  "oracle": "benchmark/oracle_plans.json",
+  "ablate": null,
+  "strict": false,
+  "noise": 0.0,
+  "seed": 1,
+  "offline": false,
+  "no_learning": false,
+  "model": null,
+  "name": "f_oracle_r1",
+  "ids": null,
+  "no_repair": false,
+  "persist": true
+ },
+ "complete": true,
+ "score": {
+  "overall": {
+   "n": 30,
+   "correct": 28,
+   "accuracy": 0.9333333333333333,
+   "accuracy_ci95": [
+    0.7868,
+    0.9815
+   ],
+   "precision_macro": 0.9658333333333334,
+   "recall_macro": 0.943452380952381,
+   "precision_micro": 0.978494623655914,
+   "recall_micro": 0.9680851063829787,
+   "page_exact_share": 0.967032967032967,
+   "abstained": 2,
+   "by_tier": {
+    "VERIFIED": {
+     "n": 20,
+     "correct": 20
+    },
+    "FLAGGED": {
+     "n": 8,
+     "correct": 6
+    },
+    "ABSTAIN": {
+     "n": 2,
+     "correct": 2
+    }
+   },
+   "silent_wrong": 0,
+   "answered_accuracy": 0.9285714285714286
+  },
+  "single_fact": {
+   "n": 10,
+   "correct": 9,
+   "accuracy": 0.9,
+   "accuracy_ci95": [
+    0.5958,
+    0.9821
+   ],
+   "precision_macro": 0.9,
+   "recall_macro": 0.9,
+   "precision_micro": 0.9,
+   "recall_micro": 0.9,
+   "page_exact_share": 1.0,
+   "abstained": 0,
+   "by_tier": {
+    "VERIFIED": {
+     "n": 8,
+     "correct": 8
+    },
+    "FLAGGED": {
+     "n": 2,
+     "correct": 1
+    },
+    "ABSTAIN": {
+     "n": 0,
+     "correct": 0
+    }
+   },
+   "silent_wrong": 0,
+   "answered_accuracy": 0.9
+  },
+  "multi_hop": {
+   "n": 10,
+   "correct": 10,
+   "accuracy": 1.0,
+   "accuracy_ci95": [
+    0.7225,
+    1.0
+   ],
+   "precision_macro": 1.0,
+   "recall_macro": 1.0,
+   "precision_micro": 1.0,
+   "recall_micro": 1.0,
+   "page_exact_share": 0.8888888888888888,
+   "abstained": 1,
+   "by_tier": {
+    "VERIFIED": {
+     "n": 7,
+     "correct": 7
+    },
+    "FLAGGED": {
+     "n": 2,
+     "correct": 2
+    },
+    "ABSTAIN": {
+     "n": 1,
+     "correct": 1
+    }
+   },
+   "silent_wrong": 0,
+   "answered_accuracy": 1.0
+  },
+  "cross_filing": {
+   "n": 10,
+   "correct": 9,
+   "accuracy": 0.9,
+   "accuracy_ci95": [
+    0.5958,
+    0.9821
+   ],
+   "precision_macro": 0.9974999999999999,
+   "recall_macro": 0.9351851851851851,
+   "precision_micro": 0.9846153846153847,
+   "recall_micro": 0.9696969696969697,
+   "page_exact_share": 0.984375,
+   "abstained": 1,
+   "by_tier": {
+    "VERIFIED": {
+     "n": 5,
+     "correct": 5
+    },
+    "FLAGGED": {
+     "n": 4,
+     "correct": 3
+    },
+    "ABSTAIN": {
+     "n": 1,
+     "correct": 1
+    }
+   },
+   "silent_wrong": 0,
+   "answered_accuracy": 0.8888888888888888
+  }
+ },
+ "rows": [
+  {
+   "id": "C01",
+   "type": "single_fact",
+   "question": "What was Apple's top line for fiscal 2026?",
+   "gold": "$478,834 million",
+   "answer": "$478.834 billion",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 1,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "AAPL",
+      "concept": "Revenue",
+      "period": {
+       "fy": 2026
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "AAPL FY2026 ends 2026-09-26"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "fiscal_year_trap"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C03",
+   "type": "single_fact",
+   "question": "What net income did Costco report for fiscal 2026?",
+   "gold": "$9,226 million",
+   "answer": "$9.226 billion",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 1,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "COST",
+      "concept": "NetIncome",
+      "period": {
+       "fy": 2026
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "COST FY2026 ends 2026-08-30"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "fiscal_year_trap"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C04",
+   "type": "single_fact",
+   "question": "How much cash did Cisco generate from operations in fiscal 2026?",
+   "gold": "$14,177 million",
+   "answer": "$14.177 billion",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 1,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "CSCO",
+      "concept": "OperatingCashFlow",
+      "period": {
+       "fy": 2026
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "CSCO FY2026 ends 2026-07-25"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "fiscal_year_trap"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C07",
+   "type": "single_fact",
+   "question": "What did Procter & Gamble pay out in dividends in fiscal 2026?",
+   "gold": "$10,232 million",
+   "answer": "$10.232 billion",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 1,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "PG",
+      "concept": "DividendsPaid",
+      "period": {
+       "fy": 2026
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "PG FY2026 ends 2026-06-30"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "fiscal_year_trap"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C08",
+   "type": "single_fact",
+   "question": "How much did Home Depot spend on capital expenditures in fiscal 2025?",
+   "gold": "$3,679 million",
+   "answer": "$3.679 billion",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 1,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "HD",
+      "concept": "CapitalExpenditures",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "HD FY2025 ends 2026-02-01"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "fiscal_year_trap"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C09",
+   "type": "single_fact",
+   "question": "What was Tesla's total revenue for 2025?",
+   "gold": "$94,827 million",
+   "answer": "$94.827 billion",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 1,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "TSLA",
+      "concept": "Revenue",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "TSLA FY2025 ends 2025-12-31"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C11",
+   "type": "single_fact",
+   "question": "In which state is Nike incorporated?",
+   "gold": "Oregon",
+   "answer": "Oregon",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 1,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "attr",
+      "company": "NKE",
+      "attr": "state_of_incorporation"
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "text_fact"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C12",
+   "type": "single_fact",
+   "question": "Which firm audits UnitedHealth Group?",
+   "gold": "Deloitte & Touche LLP",
+   "answer": "Deloitte",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 1,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "attr",
+      "company": "UNH",
+      "attr": "auditor"
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "text_fact"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C14",
+   "type": "single_fact",
+   "question": "How many Class A shares did Facebook's parent have outstanding per the cover of its 2025 annual report?",
+   "gold": "2,187,177,748 Class A shares (as of January 23, 2026)",
+   "answer": "2,187,177,748 shares",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 1,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "attr",
+      "company": "META",
+      "attr": "shares_outstanding"
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "text_fact"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "META shares_outstanding: stated in a sentence only (META_FY2025_10K page 1)"
+   ],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C15",
+   "type": "single_fact",
+   "question": "What revenue did Microsoft's Intelligent Cloud segment bring in for fiscal 2026?",
+   "gold": "$137,791 million",
+   "answer": "$25.741 billion",
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 0,
+    "gold": 1,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "MSFT",
+      "item": "Intelligent Cloud revenue",
+      "period": {
+       "fy": 2026
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "MSFT FY2026 ends 2026-06-30"
+   ],
+   "learned": [
+    {
+     "ticker": "MSFT",
+     "concept": null,
+     "state": "active",
+     "label": "Intelligent Cloud"
+    }
+   ],
+   "seconds": 0.06,
+   "system": "f_oracle_r1",
+   "tags": [
+    "segment_vs_consolidated",
+    "fiscal_year_trap"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "MSFT: the line was chosen by the linker from its words; the arithmetic confirms the number, not that it is the line asked for (MSFT_FY2026_10K page 70)"
+   ],
+   "llm_calls": 1,
+   "llm_live": 0,
+   "tokens_in": 1686,
+   "tokens_out": 36,
+   "llm_seconds": 58.97,
+   "models": [
+    "ollama:tieout-planner-4b"
+   ],
+   "calls_by_kind": {
+    "link": 1
+   }
+  },
+  {
+   "id": "C17",
+   "type": "multi_hop",
+   "question": "What were Apple's net sales in its fourth fiscal quarter of 2026?",
+   "gold": "$114,477 million",
+   "answer": "$114.477 billion",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "AAPL",
+      "concept": "Revenue",
+      "period": {
+       "fy": 2026,
+       "q": 4
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "AAPL FY2026 ends 2026-09-26",
+    "AAPL FY2026Q3YTD ends 2026-06-27",
+    "AAPL Revenue for the fourth quarter is not printed; derived as the full year minus the nine months"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "quarter_derived",
+    "fiscal_year_trap",
+    "derived_metric"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C19",
+   "type": "multi_hop",
+   "question": "How much revenue did Coca-Cola bring in during the fourth quarter of 2025?",
+   "gold": "$11,822 million",
+   "answer": "$11.822 billion",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "KO",
+      "concept": "Revenue",
+      "period": {
+       "fy": 2025,
+       "q": 4
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "KO FY2025 ends 2025-12-31",
+    "KO FY2025Q3YTD ends 2025-09-26",
+    "KO Revenue for the fourth quarter is not printed; derived as the full year minus the nine months"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "quarter_derived",
+    "derived_metric"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C20",
+   "type": "multi_hop",
+   "question": "What was Microsoft's operating margin in fiscal 2026?",
+   "gold": "46.78%",
+   "answer": "46.78%",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "metric",
+      "company": "MSFT",
+      "metric": "operating_margin",
+      "period": {
+       "fy": 2026
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "MSFT FY2026 ends 2026-06-30"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "derived_metric",
+    "fiscal_year_trap"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C21",
+   "type": "multi_hop",
+   "question": "By what percentage did Nvidia grow revenue in fiscal 2026 over fiscal 2025?",
+   "gold": "65.47%",
+   "answer": "65.47%",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "NVDA",
+      "concept": "Revenue",
+      "from": {
+       "fy": 2025
+      },
+      "to": {
+       "fy": 2026
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "NVDA FY2025 ends 2025-01-26",
+    "NVDA FY2026 ends 2026-01-25"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "derived_metric",
+    "fiscal_year_trap"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C24",
+   "type": "multi_hop",
+   "question": "What share of its 2025 revenue did Meta spend on research and development?",
+   "gold": "28.55%",
+   "answer": "28.55%",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "metric",
+      "company": "META",
+      "metric": "rnd_intensity",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "META FY2025 ends 2025-12-31"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "derived_metric"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C25",
+   "type": "multi_hop",
+   "question": "What was Pfizer's R&D spend as a percentage of total revenues in 2025?",
+   "gold": "16.68%",
+   "answer": "16.68%",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "metric",
+      "company": "PFE",
+      "metric": "rnd_intensity",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "PFE FY2025 ends 2025-12-31"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "derived_metric"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C27",
+   "type": "multi_hop",
+   "question": "Dividing fiscal 2026 membership fee revenue by year-end paid members, what did Costco earn per paid member?",
+   "gold": "About $70.24 per paid member",
+   "answer": "70.2378 USD per count",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "COST",
+      "item": "Membership fees",
+      "period": {
+       "fy": 2026
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "COST",
+      "item": "Paid members",
+      "period": {
+       "fy": 2026
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 / s2"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "COST FY2026 ends 2026-08-30"
+   ],
+   "learned": [
+    {
+     "ticker": "COST",
+     "concept": null,
+     "state": "active",
+     "label": "Membership fees"
+    },
+    {
+     "ticker": "COST",
+     "concept": null,
+     "state": "active",
+     "label": "Paid members"
+    }
+   ],
+   "seconds": 21.61,
+   "system": "f_oracle_r1",
+   "tags": [
+    "scale_trap",
+    "derived_metric",
+    "fiscal_year_trap"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "COST: the line was chosen by the linker from its words; the arithmetic confirms the number, not that it is the line asked for (COST_FY2026_10K page 38)",
+    "COST: the line was chosen by the linker from its words; the arithmetic confirms the number, not that it is the line asked for (COST_FY2026_10K page 6)"
+   ],
+   "llm_calls": 2,
+   "llm_live": 2,
+   "tokens_in": 1569,
+   "tokens_out": 64,
+   "llm_seconds": 21.54,
+   "models": [
+    "ollama:tieout-planner-4b"
+   ],
+   "calls_by_kind": {
+    "link": 2
+   }
+  },
+  {
+   "id": "C29",
+   "type": "multi_hop",
+   "question": "What was Mastercard's net profit margin in 2025?",
+   "gold": "45.65%",
+   "answer": "45.65%",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "metric",
+      "company": "MA",
+      "metric": "net_margin",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "MA FY2025 ends 2025-12-31"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "derived_metric",
+    "bank"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C31",
+   "type": "multi_hop",
+   "question": "What share of Amazon's 2025 operating income came from AWS?",
+   "gold": "57.03%",
+   "answer": "57.03%",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 0
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "AMZN",
+      "item": "AWS operating income",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "AMZN",
+      "concept": "OperatingIncome",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 / s2"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "AMZN FY2025 ends 2025-12-31"
+   ],
+   "learned": [
+    {
+     "ticker": "AMZN",
+     "concept": null,
+     "state": "active",
+     "label": "AWS"
+    }
+   ],
+   "seconds": 26.69,
+   "system": "f_oracle_r1",
+   "tags": [
+    "segment_vs_consolidated",
+    "derived_metric"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "AMZN: the line was chosen by the linker from its words; the arithmetic confirms the number, not that it is the line asked for (AMZN_FY2025_10K page 27)"
+   ],
+   "llm_calls": 1,
+   "llm_live": 1,
+   "tokens_in": 1667,
+   "tokens_out": 37,
+   "llm_seconds": 26.54,
+   "models": [
+    "ollama:tieout-planner-4b"
+   ],
+   "calls_by_kind": {
+    "link": 1
+   }
+  },
+  {
+   "id": "C32",
+   "type": "multi_hop",
+   "question": "What was Netflix's operating margin in 2025?",
+   "gold": "Not answerable: Netflix is not one of the companies in this filing set.",
+   "answer": "ABSTAIN: planner: Netflix is not among the listed companies",
+   "correct": true,
+   "abstained": true,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 0,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "plan": {
+    "steps": [],
+    "answer": null,
+    "cannot": "Netflix is not among the listed companies"
+   },
+   "notes": [
+    "planner: Netflix is not among the listed companies"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "unanswerable"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "ABSTAIN",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C34",
+   "type": "cross_filing",
+   "question": "Rank JPMorgan, Bank of America, Citigroup and Wells Fargo by deposits at the end of 2025, largest first.",
+   "gold": "JPMorgan ($2,559,320M) > Bank of America ($2,018,729M) > Wells Fargo ($1,426,207M) > Citigroup ($1,403,573M)",
+   "answer": "JPM ($2,559.320 billion), BAC ($2,018.729 billion), WFC ($1,426.207 billion), C ($1,403.573 billion)",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 4,
+    "matched_retrieved": 4,
+    "gold": 4,
+    "matched_gold": 4,
+    "page_exact": 4
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "rank",
+      "over": [
+       "JPM",
+       "BAC",
+       "C",
+       "WFC"
+      ],
+      "by": {
+       "concept": "Deposits"
+      },
+      "period": {
+       "fy": 2025
+      },
+      "order": "desc",
+      "k": 4
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "ranking",
+    "bank"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C35",
+   "type": "cross_filing",
+   "question": "Rank the six big banks in the set (JPMorgan, Bank of America, Citi, Wells Fargo, Goldman Sachs, Morgan Stanley) by 2025 net income attributable to the company.",
+   "gold": "JPMorgan (57,048) > Bank of America (30,509) > Wells Fargo (21,338) > Goldman Sachs (17,176) > Morgan Stanley (16,861) > Citigroup (14,306), $ millions",
+   "answer": "JPM ($57.048 billion), BAC ($30.509 billion), WFC ($21.338 billion), GS ($17.176 billion), MS ($16.861 billion), C ($14.306 billion)",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 6,
+    "matched_retrieved": 6,
+    "gold": 6,
+    "matched_gold": 6,
+    "page_exact": 6
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "rank",
+      "over": [
+       "JPM",
+       "BAC",
+       "C",
+       "WFC",
+       "GS",
+       "MS"
+      ],
+      "by": {
+       "concept": "NetIncome"
+      },
+      "period": {
+       "fy": 2025
+      },
+      "order": "desc",
+      "k": 6
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "ranking",
+    "bank"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C36",
+   "type": "cross_filing",
+   "question": "Which carmaker had the larger workforce at the end of 2025, Ford or GM, and by roughly how many people?",
+   "gold": "Ford, about 169,000 vs about 155,000 (14,000 more)",
+   "answer": "14,000 employees",
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 1
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "attr",
+      "company": "F",
+      "attr": "employees"
+     },
+     {
+      "id": "s2",
+      "op": "attr",
+      "company": "GM",
+      "attr": "employees"
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 - s2"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "scale_trap"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "F employees: stated in a sentence only (F_FY2025_10K page 5)",
+    "GM employees: stated in a sentence only (GM_FY2025_10K page 10)"
+   ],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C37",
+   "type": "cross_filing",
+   "question": "Among Merck, J&J and Pfizer, who spent the most on R&D in 2025? Rank all three.",
+   "gold": "Merck ($15,789M) > J&J ($14,665M) > Pfizer ($10,437M)",
+   "answer": "MRK ($15.789 billion), JNJ ($14.665 billion), PFE ($10.437 billion)",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 3,
+    "matched_retrieved": 3,
+    "gold": 3,
+    "matched_gold": 3,
+    "page_exact": 3
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "rank",
+      "over": [
+       "MRK",
+       "JNJ",
+       "PFE"
+      ],
+      "by": {
+       "concept": "ResearchAndDevelopment"
+      },
+      "period": {
+       "fy": 2025
+      },
+      "order": "desc",
+      "k": 3
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "ranking"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C40",
+   "type": "cross_filing",
+   "question": "Comparing each network's latest annual report in the set, did Visa or Mastercard earn more, and by how much?",
+   "gold": "Visa, by $8,536 million (23,504 for fiscal 2026 vs 14,968 for calendar 2025)",
+   "answer": "V ($23.504 billion), MA ($14.968 billion); difference $8.536 billion",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "rank",
+      "over": [
+       "V",
+       "MA"
+      ],
+      "by": {
+       "concept": "NetIncome"
+      },
+      "period": {
+       "fy": "latest"
+      },
+      "order": "desc",
+      "k": 2
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "fiscal_year_trap",
+    "bank",
+    "derived_metric"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C42",
+   "type": "cross_filing",
+   "question": "How many of the 39 readable companies in the set ended their latest fiscal year with more than $1 trillion of total assets, and which are they?",
+   "gold": "Six: JPMorgan, Bank of America, Citigroup, Wells Fargo, Goldman Sachs and Morgan Stanley",
+   "answer": "6: BAC, C, GS, JPM, MS, WFC",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 40,
+    "matched_retrieved": 39,
+    "gold": 39,
+    "matched_gold": 39,
+    "page_exact": 39
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "filter",
+      "over": "all",
+      "where": {
+       "by": {
+        "concept": "TotalAssets"
+       },
+       "period": {
+        "fy": "latest"
+       },
+       "gt": 1000000000000
+      }
+     },
+     {
+      "id": "s2",
+      "op": "count",
+      "of": "$s1"
+     }
+    ],
+    "answer": "s2"
+   },
+   "notes": [],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "ranking",
+    "bank"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C44",
+   "type": "cross_filing",
+   "question": "What 2024 net income did Bank of America originally report, what does its 2025 annual report now show for 2024, and why the difference?",
+   "gold": "Originally $27,132 million; the 2025 10-K shows $26,973 million, $159 million lower, because BofA changed its accounting for tax-related equity investments (proportional amortization) and applied it retrospectively.",
+   "answer": "Changed by $-159.0 million: first reported $27.132 billion (BAC_FY2024_10K), now $26.973 billion (BAC_FY2025_10K). Net income (27,132 -> 26,973) (IS FY2024, BAC_FY2024_10K -> BAC_FY2025_10K): a restatement; totals moved and 7 lines of the statement changed.",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 3,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "restated",
+      "company": "BAC",
+      "concept": "NetIncome",
+      "period": {
+       "fy": 2024
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "BAC FY2024 ends 2024-12-31",
+    "BAC NetIncome FY2024 was restated; first-reported value used",
+    "second reading: ConsolidatedNetIncome is $26.973 billion (BAC_FY2025_10K page 93, 'Net income')",
+    "BAC NetIncome FY2024 was restated; latest-reported value used"
+   ],
+   "learned": [],
+   "seconds": 0.04,
+   "system": "f_oracle_r1",
+   "tags": [
+    "restated",
+    "bank"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "second reading: ConsolidatedNetIncome is $26.973 billion (BAC_FY2025_10K page 93, 'Net income')"
+   ],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  },
+  {
+   "id": "C45",
+   "type": "cross_filing",
+   "question": "Apple's September 2025 balance sheet appears in both of its last two annual reports. Did the 'other non-current assets' figure for that date change, and if so by how much and why?",
+   "gold": "Yes. It fell from $83,727 million to $72,634 million (down $11,093 million) because intangible assets, net ($11,093 million) are now shown on their own line; total assets are unchanged at $359,241 million.",
+   "answer": "Changed by $-11.093 billion: first reported $83.727 billion (AAPL_FY2025_10K), now $72.634 billion (AAPL_FY2026_10K). Other non-current assets (83,727 -> 72,634) (BS FY2025@end, AAPL_FY2025_10K -> AAPL_FY2026_10K): a reclassification; the amount moved to or from Intangible assets, net (not printed -> 11,093), while Total non-current assets 211,284 and Total assets 359,241 did not change.",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 3,
+    "matched_retrieved": 3,
+    "gold": 4,
+    "matched_gold": 3,
+    "page_exact": 3
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "restated",
+      "company": "AAPL",
+      "item": "Other non-current assets",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "AAPL FY2025@end ends 2025-09-27",
+    "AAPL item:other-non-current-assets@non-current-assets FY2025@end was restated; first-reported value used",
+    "AAPL item:other-non-current-assets@non-current-assets FY2025@end was restated; latest-reported value used"
+   ],
+   "learned": [
+    {
+     "ticker": "AAPL",
+     "concept": null,
+     "state": "active",
+     "label": "Other non-current assets"
+    }
+   ],
+   "seconds": 27.2,
+   "system": "f_oracle_r1",
+   "tags": [
+    "restated",
+    "fiscal_year_trap"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "AAPL: the line was chosen by the linker from its words; the arithmetic confirms the number, not that it is the line asked for (AAPL_FY2025_10K page 34)",
+    "AAPL: the line was chosen by the linker from its words; the arithmetic confirms the number, not that it is the line asked for (AAPL_FY2026_10K page 37)"
+   ],
+   "llm_calls": 1,
+   "llm_live": 1,
+   "tokens_in": 1713,
+   "tokens_out": 32,
+   "llm_seconds": 27.05,
+   "models": [
+    "ollama:tieout-planner-4b"
+   ],
+   "calls_by_kind": {
+    "link": 1
+   }
+  },
+  {
+   "id": "C46",
+   "type": "cross_filing",
+   "question": "Did Coca-Cola's latest 10-K change the year-end 2024 balance for prepaid expenses and other current assets versus what it first reported?",
+   "gold": "Yes. It went from $3,129 million to $2,998 million (down $131 million); the $131 million now appears as a separate Assets held for sale line. Total current assets stay $25,997 million.",
+   "answer": "Changed by $-131.0 million: first reported $3.129 billion (KO_FY2024_10K), now $2.998 billion (KO_FY2025_10K). Prepaid expenses and other current assets (3,129 -> 2,998) (BS FY2024@end, KO_FY2024_10K -> KO_FY2025_10K): a reclassification; the amount moved to or from Assets held for sale (not printed -> 131), while Total Current Assets 25,997 and Total Assets 100,549 did not change.",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 3,
+    "matched_retrieved": 3,
+    "gold": 3,
+    "matched_gold": 3,
+    "page_exact": 3
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "restated",
+      "company": "KO",
+      "item": "Prepaid expenses and other current assets",
+      "period": {
+       "fy": 2024
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "KO FY2024@end ends 2024-12-31",
+    "KO item:prepaid-expenses-and-other-current-assets@current-assets FY2024@end was restated; first-reported value used",
+    "KO item:prepaid-expenses-and-other-current-assets@current-assets FY2024@end was restated; latest-reported value used"
+   ],
+   "learned": [
+    {
+     "ticker": "KO",
+     "concept": null,
+     "state": "active",
+     "label": "Prepaid expenses and other current assets"
+    }
+   ],
+   "seconds": 31.92,
+   "system": "f_oracle_r1",
+   "tags": [
+    "restated"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "KO: the line was chosen by the linker from its words; the arithmetic confirms the number, not that it is the line asked for (KO_FY2024_10K page 66)",
+    "KO: the line was chosen by the linker from its words; the arithmetic confirms the number, not that it is the line asked for (KO_FY2025_10K page 65)"
+   ],
+   "llm_calls": 1,
+   "llm_live": 1,
+   "tokens_in": 1901,
+   "tokens_out": 36,
+   "llm_seconds": 31.57,
+   "models": [
+    "ollama:tieout-planner-4b"
+   ],
+   "calls_by_kind": {
+    "link": 1
+   }
+  },
+  {
+   "id": "C48",
+   "type": "cross_filing",
+   "question": "How did Intel's 2025 revenue compare with AMD's?",
+   "gold": "Not answerable: Intel is not in this filing set. AMD's 2025 net revenue was $34,639 million, but no Intel figures are available.",
+   "answer": "ABSTAIN: planner: Intel is not among the listed companies, so the comparison cannot be made (AMD alone is listed)",
+   "correct": true,
+   "abstained": true,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 0,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "plan": {
+    "steps": [],
+    "answer": null,
+    "cannot": "Intel is not among the listed companies, so the comparison cannot be made (AMD alone is listed)"
+   },
+   "notes": [
+    "planner: Intel is not among the listed companies, so the comparison cannot be made (AMD alone is listed)"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "f_oracle_r1",
+   "tags": [
+    "unanswerable"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "ABSTAIN",
+   "tier_reasons": [],
+   "llm_calls": 0,
+   "llm_live": 0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "llm_seconds": 0,
+   "models": [],
+   "calls_by_kind": {}
+  }
+ ],
+ "llm": {
+  "live": 5,
+  "cached": 1,
+  "seconds": 106.69546794891357,
+  "tokens_in": 6850,
+  "tokens_out": 169
+ },
+ "graph": {
+  "filings": 55,
+  "companies": 40,
+  "tables": 164,
+  "readings": 13421,
+  "reading_status": {
+   "verified": 12698,
+   "unverified": 709,
+   "failed": 10,
+   "text": 4
+  },
+  "checks": {
+   "SUM:pass": 942,
+   "TIE:pass": 358,
+   "RATIO:pass": 89,
+   "SUM:fail": 3,
+   "SUM:rounded": 46,
+   "CARRY:pass": 1238,
+   "CARRY:restated": 32
+  },
+  "facts": 4247,
+  "bindings": 1828,
+  "bindings_active": 1767,
+  "textfacts": 750
+ }
+}

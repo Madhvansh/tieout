@@ -1,0 +1,18 @@
+{
+ "model": "ollama:tieout-planner-4b",
+ "system": "You say how an SEC filing would label a financial item. Given an item phrase from a question\nand the company, list up to 4 other labels the company's annual or quarterly report might print for the\nsame item: its own term for it, a synonym, an abbreviation spelled out or the reverse. Never a number.\nAnswer as JSON: {\"labels\": [\"...\", \"...\"]}",
+ "user": "Company: The Home Depot Inc. (HD)\nItem: store-based Primary segment net sales",
+ "answer": {
+  "labels": [
+   "store-based primary segment sales",
+   "primary segment revenue",
+   "primary segment net sales",
+   "primary segment gross sales"
+  ]
+ },
+ "seconds": 4.74,
+ "usage": {
+  "in": 109,
+  "out": 24
+ }
+}

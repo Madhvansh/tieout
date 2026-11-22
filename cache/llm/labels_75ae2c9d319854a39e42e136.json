@@ -1,0 +1,18 @@
+{
+ "model": "ollama:tieout-planner-4b",
+ "system": "You say how an SEC filing would label a financial item. Given an item phrase from a question\nand the company, list up to 4 other labels the company's annual or quarterly report might print for the\nsame item: its own term for it, a synonym, an abbreviation spelled out or the reverse. Never a number.\nAnswer as JSON: {\"labels\": [\"...\", \"...\"]}",
+ "user": "Company: Visa Inc. (V)\nItem: client incentive share of gross revenue",
+ "answer": {
+  "labels": [
+   "client incentive share of gross revenue",
+   "client incentive share of gross revenues",
+   "client incentive share of gross revenue",
+   "client incentive share of gross revenue"
+  ]
+ },
+ "seconds": 4.6,
+ "usage": {
+  "in": 107,
+  "out": 32
+ }
+}
