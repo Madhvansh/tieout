@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import datetime
 import gzip
+import hashlib
 import json
 import os
 import pathlib
@@ -732,7 +733,31 @@ def pick_yields(g: Graph, cands: list, ans: dict, phrase: str, wanted: set) -> O
     return figures or None
 
 
+_QUESTION: dict = {"budget": None, "seen": None}   # no memory of picks until a question starts
+
+
+def start_question(arbiter_budget: Optional[int] = None) -> None:
+    """Begin one question: no memory of another question's picks, and at most `arbiter_budget` calls to
+    the arbiter for disputed picks (None: no limit). The strong free models allow about twenty calls a
+    day each, and the readings of questions need them first; a dispute past the budget is served from
+    the first picker, flagged. (22 Nov: one round-6 question asked the arbiter 76 times.)"""
+    _QUESTION["budget"], _QUESTION["seen"] = arbiter_budget, {}
+
+
 def _pick(system: str, user: str, tag: str, model: Optional[str], offline: bool, yields=None) -> tuple:
+    """A pick made once per question: the same prompt asked again (another learning round, another
+    reader) gets the same answer without new calls or arbitration."""
+    seen = _QUESTION["seen"]
+    if seen is None:
+        return _pick_once(system, user, tag, model, offline, yields)
+    key = (tag, model, os.environ.get("TIEOUT_LINK_CHECKER", ""), os.environ.get("TIEOUT_LINK_ARBITER", ""),
+           hashlib.sha1((system + "\n" + user).encode("utf-8")).hexdigest())
+    if key not in seen:
+        seen[key] = _pick_once(system, user, tag, model, offline, yields)
+    return seen[key]
+
+
+def _pick_once(system: str, user: str, tag: str, model: Optional[str], offline: bool, yields=None) -> tuple:
     """(the pick as the model's JSON answer, or None; the case). One picker by default. With
     TIEOUT_LINK_CHECKER set, the pick is made under the four-eyes rule: a second, independent
     picker, and an arbiter (TIEOUT_LINK_ARBITER, strongest first) when the two differ. `yields(pick)`
@@ -764,7 +789,12 @@ def _pick(system: str, user: str, tag: str, model: Optional[str], offline: bool,
     if not checker:
         return ask(maker), ""
     arbiters = tuple(m for m in os.environ.get("TIEOUT_LINK_ARBITER", "").split(",") if m)
-    ans, case, _seen = choose(ask, Panel(maker, checker, arbiters), same)
+    budget = _QUESTION["budget"]
+    if budget is not None and budget <= 0:
+        arbiters = ()                                 # spent for this question: a dispute stays flagged
+    ans, case, seen = choose(ask, Panel(maker, checker, arbiters), same)
+    if budget is not None and len(seen) > 2:
+        _QUESTION["budget"] = budget - 1
     return ans, case
 
 

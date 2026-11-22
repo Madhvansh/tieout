@@ -23,8 +23,12 @@ lets a thirty-question run fit one free key in one day, and every answer says wh
 """
 from __future__ import annotations
 
+import os
+from typing import Optional
+
 from . import ask
 from .execute import Result, same_name
+from .link import start_question
 from .llm import DailyLimit
 from .witness import (AGREE, AGREE_ON_ORDER, ARBITER_ALONE, ARBITER_AND_READER, ONE_READER,  # noqa: F401 - re-exported
                       WITNESSED, Panel as Readers)
@@ -36,6 +40,7 @@ FIGURES_DIFFER = "two readers rank these in the same order but do not compute ev
 def answer(question: str, g, readers: Readers, **kw) -> dict:
     """`ask.answer` under the four-eyes rule. Returns the served answer's dict with "reading":
     the case, and what each reader answered."""
+    start_question(pick_arbiter_budget())             # this question's arbiter calls for disputed row picks
     first = ask.answer(question, g, model=readers.maker, **kw)
     second = ask.answer(question, g, model=readers.checker, **kw)
     seen = [_seen("maker", readers.maker, first), _seen("checker", readers.checker, second)]
@@ -62,6 +67,13 @@ def answer(question: str, g, readers: Readers, **kw) -> dict:
     if answered:                                     # the arbiter's plan did not run; a reader's did
         return _serve(_prefer(*answered), ONE_READER, seen)
     return _serve(third, ARBITER_ALONE, seen)
+
+
+def pick_arbiter_budget() -> Optional[int]:
+    """Arbiter calls allowed per question for disputed row picks (TIEOUT_PICK_ARBITER_MAX, default 3;
+    "none" for no limit). Readings come first: a thirty-question run must fit one free key's day."""
+    raw = os.environ.get("TIEOUT_PICK_ARBITER_MAX", "3").strip().lower()
+    return None if raw in ("", "none") else int(raw)
 
 
 def same_answer(a: Result, b: Result) -> bool:

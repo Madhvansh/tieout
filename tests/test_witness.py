@@ -51,3 +51,25 @@ def test_row_picks_are_witnessed_when_a_second_picker_is_set(monkeypatch):
     monkeypatch.setenv("TIEOUT_LINK_ARBITER", "strong")
     answers["strong"] = {"pick": 4}
     assert link._pick("s", "u", "link", None, False) == ({"pick": 4}, ARBITER_AND_READER)
+
+
+def test_a_question_asks_each_pick_once_and_caps_its_arbiter_calls(monkeypatch):
+    # 22 Nov: one round-6 question asked the arbiter 76 times (the same disputes, round after round)
+    calls = []
+
+    def fake(system, user, model=None, tag="", offline=False):
+        calls.append((model, user))
+        return {"maker-picker": {"pick": 1}, "second-picker": {"pick": 2}, "strong": {"pick": 2}}[model]
+    monkeypatch.setattr(link, "link_model", lambda model, offline: "maker-picker")
+    monkeypatch.setattr(link, "ask_json", fake)
+    monkeypatch.setenv("TIEOUT_LINK_CHECKER", "second-picker")
+    monkeypatch.setenv("TIEOUT_LINK_ARBITER", "strong")
+    link.start_question(arbiter_budget=1)
+    try:
+        assert link._pick("s", "u1", "link", None, False) == ({"pick": 2}, ARBITER_AND_READER)
+        assert link._pick("s", "u1", "link", None, False) == ({"pick": 2}, ARBITER_AND_READER)   # asked once
+        assert len(calls) == 3
+        assert link._pick("s", "u2", "link", None, False) == ({"pick": 1}, ONE_READER)          # budget spent
+        assert [m for m, _ in calls[3:]] == ["maker-picker", "second-picker"]
+    finally:
+        link._QUESTION.update(budget=None, seen=None)

@@ -41,7 +41,7 @@ from tieout.concepts import audit_bindings, norm_label
 from tieout.eval.bench import load_benchmark, run_graph_system, score
 from tieout.execute import Executor
 from tieout.graph import Graph, build
-from tieout.link import load_links
+from tieout.link import load_links, start_question
 from tieout.living import load_absent, load_learned
 from tieout.llm import CALL_LOG, CALLS, DailyLimit
 
@@ -141,6 +141,7 @@ def main():
         if panel and not a.oracle:
             out = readers.answer(q["question"], g, panel, **common)
         else:
+            start_question(readers.pick_arbiter_budget())
             out = answer(q["question"], g, model=a.model, plan=oracle.get(q["id"]) if a.oracle else None, **common)
         served.append(out)
         return out
@@ -221,14 +222,17 @@ def call_totals(calls: list) -> dict:
     """Model calls one question made, live or replayed, with the tokens and seconds of the original call."""
     by_kind: dict = {}
     by_model: dict = {}                               # the arbiter's daily quota is counted per model and key
+    live_by_model: dict = {}                          # what a first run spends (a repeat is served from the cache)
     for c in calls:                                   # plan, link, labels, breakdown, bind ...
         kind = c["tag"].split("_")[0] if c["tag"] else "other"
         by_kind[kind] = by_kind.get(kind, 0) + 1
         by_model[c["model"]] = by_model.get(c["model"], 0) + 1
+        if not c["cached"]:
+            live_by_model[c["model"]] = live_by_model.get(c["model"], 0) + 1
     return {"llm_calls": len(calls), "llm_live": sum(1 for c in calls if not c["cached"]),
             "tokens_in": sum(c["prompt_tokens"] for c in calls), "tokens_out": sum(c["completion_tokens"] for c in calls),
             "llm_seconds": round(sum(c["seconds"] for c in calls), 2), "models": sorted({c["model"] for c in calls}),
-            "calls_by_kind": by_kind, "calls_by_model": by_model}
+            "calls_by_kind": by_kind, "calls_by_model": by_model, "live_by_model": live_by_model}
 
 
 def error_row(q: dict, label: str, e: Exception) -> dict:
