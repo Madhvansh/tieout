@@ -32,7 +32,7 @@ import os
 import pathlib
 
 from tieout.ask import answer
-from tieout.concepts import norm_label
+from tieout.concepts import audit_bindings, norm_label
 from tieout.eval.bench import load_benchmark, run_graph_system, score
 from tieout.execute import Executor
 from tieout.graph import Graph, build
@@ -104,6 +104,8 @@ def main():
         g = build(verbose=False, learned=not fresh_store, corrupt=(a.noise, a.seed))
     else:
         g = Graph.load()
+        if a.ablate != "checks":
+            audit_bindings(g)                         # the arithmetic vetoes wrong bindings (off with the checks)
         if not fresh_store:
             load_learned(g)
             load_links(g)

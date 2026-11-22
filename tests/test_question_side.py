@@ -113,3 +113,16 @@ def test_periods_named_in_words_are_set_without_a_model():
     ytd = _plan({"op": "get", "company": "KO", "concept": "OperatingIncome", "period": {"fy": 2025, "q": 3, "ytd": True}})
     assert fix_periods("What operating income did Coca-Cola report for the third quarter of 2025?", ytd)["steps"][0]["period"] == {"fy": 2025, "q": 3}
     assert fix_periods("How much cash in the first nine months of fiscal 2025?", year)["steps"][0]["period"] == {"fy": 2025, "q": 3, "ytd": True}
+
+
+def test_the_binding_audit_drops_only_rows_the_arithmetic_contradicts():
+    from tieout.concepts import audit_bindings
+    g = Graph.load()
+    dropped = audit_bindings(g)
+    assert dropped, "the audit should find the known contradictions"
+    for d in dropped:
+        assert d["why"]
+        assert not any(b.state == "active" and b.doc == d["doc"] and b.concept == d["concept"] and b.label == d["label"]
+                       for b in g.bindings)
+    # a net line is never dropped as the gross one
+    assert not any(d["concept"] == "PropertyPlantEquipment" and ", net" in d["label"].lower() for d in dropped)

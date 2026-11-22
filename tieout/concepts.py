@@ -350,3 +350,87 @@ def load_overrides() -> list:
     if not OVERRIDES.exists():
         return []
     return yaml.safe_load(OVERRIDES.read_text(encoding="utf-8")) or []
+
+
+# ------------------------------------------------------------------ the binding audit
+
+def audit_bindings(g) -> list:
+    """Drop bindings that the statement's own arithmetic contradicts. Returns what was dropped, with why.
+
+    Run after a graph is loaded. Each rule is an equation or a place in a formula, never a company:
+      1. total liabilities and equity equals total assets on the same balance sheet;
+      2. the non-current part of debt is not one of the lines that add up to total current liabilities;
+      3. a "net" asset is not the line from which accumulated depreciation or amortization is subtracted;
+      4. one row cannot be both the basic and the diluted share count, and a row printed as one of the
+         two is not the other.
+    A dropped binding's facts are removed, so a question needing it abstains or finds the line through
+    the linker (and is then flagged) instead of being answered silently from the wrong row.
+    """
+    by_doc_concept = {}
+    for b in g.bindings:
+        if b.state == "active":
+            by_doc_concept.setdefault((b.doc, b.concept), []).append(b)
+    rows = {}
+    for r in g.readings.values():
+        rows.setdefault((r.doc, r.kind, r.row), []).append(r)
+    dropped = []
+
+    def readings_of(b):
+        return rows.get((b.doc, b.kind, b.row), [])
+
+    def operand_totals(b):
+        """(total reading, the other operands) of every passing formula this row is an operand of."""
+        out = []
+        for r in readings_of(b):
+            for cid in r.checks:
+                ch = g.checks.get(cid)
+                if ch is None or ch.type != "SUM" or ch.status == "fail":
+                    continue
+                roles = {rid: role for rid, role in ch.members}
+                if roles.get(r.id) == "total":
+                    continue
+                total = next((g.readings[rid] for rid, role in ch.members if role == "total" and rid in g.readings), None)
+                others = [g.readings[rid] for rid, role in ch.members if rid != r.id and rid in g.readings and role != "total"]
+                if total is not None:
+                    out.append((total, others))
+        return out
+
+    def bound_row(doc, concept):
+        bs = by_doc_concept.get((doc, concept))
+        return (bs[0].kind, bs[0].row) if bs else None
+
+    for (doc, concept), bs in by_doc_concept.items():
+        for b in bs:
+            why = ""
+            if concept == "TotalLiabilitiesAndEquity":
+                assets = bound_row(doc, "TotalAssets")
+                if assets:
+                    have = {r.period: r.value for r in rows.get((doc, assets[0], assets[1]), [])}
+                    if any(r.period in have and abs(r.value - have[r.period]) > max(1.0, 0.0005 * abs(have[r.period]))
+                           for r in readings_of(b)):
+                        why = "it does not equal total assets on the same balance sheet"
+            elif concept == "LongTermDebt":
+                current = bound_row(doc, "TotalCurrentLiabilities")
+                if current and any((t.kind, t.row) == current for t, _ in operand_totals(b)):
+                    why = "it is one of the lines that add up to total current liabilities"
+            elif concept in ("PropertyPlantEquipment", "IntangibleAssets"):
+                # the contra line itself: "Accumulated depreciation", "Less accumulated amortization"
+                contra = re.compile(r"^\W*(less\W*)?accumulated (depreciation|amortization)", re.I)
+                if any(contra.search(o.label or "") for _, others in operand_totals(b) for o in others):
+                    why = "accumulated depreciation or amortization is subtracted from it: it is the gross line"
+            elif concept in ("SharesDiluted", "SharesBasic"):
+                word = "basic" if concept == "SharesDiluted" else "diluted"
+                if re.search(rf"\b{word}\b", b.label or "", re.I):
+                    why = f"the row is printed as the {word} share count"
+            if why:
+                b.state = "rejected"
+                b.evidence = list(b.evidence) + [f"audit: {why}"]
+                ids = {r.id for r in readings_of(b)}
+                ticker = g.filings[doc]["ticker"]
+                for key in [k for k in g.facts if k.startswith(f"{ticker}|{concept}|")]:
+                    f = g.facts[key]
+                    f.readings = [i for i in f.readings if i not in ids]
+                    if not f.readings:
+                        del g.facts[key]
+                dropped.append({"doc": doc, "concept": concept, "label": b.label, "why": why})
+    return dropped

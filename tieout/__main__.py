@@ -23,8 +23,10 @@ def load_graph():
     """The shipped graph with everything learned so far applied on top."""
     from .graph import Graph
     from .link import load_links
+    from .concepts import audit_bindings
     from .living import load_absent, load_learned
     g = Graph.load()
+    audit_bindings(g)                                 # drop bindings the statements' own arithmetic contradicts
     load_learned(g)
     load_links(g)
     load_absent(g)
