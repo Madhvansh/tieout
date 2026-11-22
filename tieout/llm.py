@@ -82,6 +82,9 @@ def ask_json(system: str, user: str, schema: Optional[dict] = None, model: Optio
     model = model or (os.environ.get("TIEOUT_LLM") or REPLAY_MODEL if offline else default_model())
     key = hashlib.sha256(json.dumps([model, system, user, schema], sort_keys=True).encode()).hexdigest()
     path = CACHE / f"{tag + '_' if tag else ''}{key[:24]}.json"
+    if os.environ.get("TIEOUT_CACHE_LOG"):            # which cached calls a run rests on (for shipping exactly those)
+        with open(os.environ["TIEOUT_CACHE_LOG"], "a", encoding="utf-8") as f:
+            f.write(path.name + "\n")
     if path.exists():
         CALLS["cached"] += 1
         rec = json.loads(path.read_text(encoding="utf-8"))
