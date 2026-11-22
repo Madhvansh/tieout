@@ -81,7 +81,9 @@ def column_heads(lines: list, table_rows: list, top: float, others: list) -> dic
               and not any(o_top - 1 <= ln[0] and ln[1] <= o_bottom + 1 for o_top, o_bottom in others)][-HEAD_LINES:]
     names: dict = defaultdict(list)
     for _t, _b, parts in header:
-        if sum(1 for x0, x1, text in parts if (x0 + x1) / 2 <= strips[0][0] and any(ch.isalpha() for ch in text)) > 6:
+        wording = [text for _x0, _x1, text in parts if any(ch.isalpha() for ch in text)]
+        over_labels = sum(1 for x0, x1, text in parts if (x0 + x1) / 2 <= strips[0][0] and any(ch.isalpha() for ch in text))
+        if over_labels > 6 or (len(wording) >= 8 and over_labels >= 3) or (len(wording) >= 6 and wording[-1][-1] in ":."):
             continue                                  # a sentence or a caption, not a header row
         for x0, x1, text in parts:
             if not any(ch.isalpha() for ch in text):
@@ -145,6 +147,7 @@ def main() -> None:
             on_page[page].append((tid, top, bottom))
         heading: dict = {}
         heads: dict = {}
+        own: dict = {}
         rows_of: dict = defaultdict(list)
         for r in doc_rows:
             rows_of[r["table_id"]].append(r)
@@ -157,12 +160,19 @@ def main() -> None:
             first_heads: dict = {}
             for tid, top, _bottom in sorted(tables, key=lambda t: t[1]):
                 others = [(t, b) for other, t, b in tables if other != tid and b <= top + 1]
-                # blocks of one table stacked on a page (one per year) share the caption of the first
-                heading[tid] = first_of.setdefault(title_of.get(tid, tid), above(lines, top, others))
+                # blocks of one table stacked on a page (one per year) share the caption of the first;
+                # what is printed directly over a later block (its year) is kept beside it as `own`
+                mine = above(lines, top, others)
+                heading[tid] = first_of.setdefault(title_of.get(tid, tid), mine)
+                if mine != heading[tid]:
+                    own[tid] = mine
                 heads[tid] = first_heads.setdefault(title_of.get(tid, tid), column_heads(wlines, rows_of[tid], top, others))
         for r in doc_rows:
             if r.get("context") != "primary financial statement":
                 r["above"] = heading.get(r["table_id"], "")
+                r.pop("own", None)
+                if own.get(r["table_id"]):
+                    r["own"] = own[r["table_id"]]
                 done += bool(r["above"])
                 for c in r["cells"]:
                     name = heads.get(r["table_id"], {}).get(c.get("ci"))

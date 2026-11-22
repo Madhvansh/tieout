@@ -198,9 +198,12 @@ def shape_misfit(question: str, plan: dict, res: Result) -> str:
     periods = [p for s in plan["steps"] for p in (s.get("period"), s.get("from"), s.get("to"),
                                                    (s.get("where") or {}).get("period")) if isinstance(p, dict)]
     quarter, so_far = _QUARTER.search(question), _SO_FAR.search(question)
-    if quarter and not so_far and not any(p.get("q") for p in periods):
+    # a plan that takes the year and subtracts the year to date has worked the quarter out itself
+    derived = (any(p.get("ytd") for p in periods) and any(not p.get("q") for p in periods)
+               and any(s.get("op") == "calc" for s in plan["steps"]))
+    if quarter and not so_far and not derived and not any(p.get("q") for p in periods):
         return "the question asks for one quarter: give the period as {\"fy\": Y, \"q\": Q}"
-    if quarter and not so_far and any(p.get("ytd") for p in periods):
+    if quarter and not so_far and not derived and any(p.get("ytd") for p in periods):
         return "the question asks for one quarter, not the year to date: drop \"ytd\""
     if so_far and not any(p.get("ytd") or p.get("q") for p in periods):
         return "the question asks for a part of the year (nine or six months): use {\"fy\": Y, \"q\": Q, \"ytd\": true}"
@@ -342,11 +345,11 @@ def _printed_lines(g: Graph, ex: Executor, res: Result, shown: int = 8) -> str:
         spec = dict(spec) if isinstance(spec, tuple) else {}
         wanted = {ex._pid(ticker, spec, "flow"), ex._pid(ticker, spec, "stock")}
         found = candidates(store(), g, ticker, what[len("item:"):], wanted, f"FY{ex._fy(ticker, spec)}")[:shown]
-        rows = [c for c in found if c["kind"] == "row"]
-        if rows:
-            out.append(f" {ticker} prints no line called '{what[len('item:'):]}'. Lines it does print near those "
-                       "words (use one of these labels as the item, or compute the figure from several):\n"
-                       + "\n".join(_show(i, c, g).split(" | note ")[0] for i, c in enumerate(rows)))
+        if found:
+            out.append(f" {ticker} prints no line called '{what[len('item:'):]}'. What it does print near those "
+                       "words (name one of these as the item in its own words, or compute the figure from "
+                       "several: a part that is not printed is the total minus the part that is):\n"
+                       + "\n".join(_show(i, c, g).split(" | note ")[0] for i, c in enumerate(found)))
     return "".join(out)[:2400]
 
 

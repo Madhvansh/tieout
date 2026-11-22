@@ -28,6 +28,7 @@ recovered formula.
 """
 from __future__ import annotations
 
+import datetime
 import gzip
 import json
 import os
@@ -78,7 +79,8 @@ the total of the others, unless the item names one of the columns (a region, "as
 For a SENTENCE, give the slot that holds the item's figure for the period asked (a count for "number of",
 an amount for revenue or spending, a percentage only when a percentage is asked).
 For a figure of the whole company, prefer the consolidated statements' row to a row of a segment
-table. A sentence slot that holds a change (an increase or a decrease) is not the item itself.
+table. When a ROW and a SENTENCE both report the item, pick the ROW: it holds every period, exactly.
+A sentence slot that holds a change (an increase or a decrease) is not the item itself.
 Answer null only if no candidate reports the item.
 Answer as JSON: {"pick": <candidate number or null>, "column": <column number or null>,
 "slot": "<slot or null>", "reason": "<one short sentence>"}"""
@@ -249,9 +251,10 @@ def _inferred_pid(row: dict, j: int) -> Optional[str]:
         years = _heading_years(row.get("above", ""))
         # two or three reported years, none after the filing's own: a longer run, or later years,
         # is a maturity schedule or loans by year of origination, not reporting periods
-        if not 2 <= len(years) <= 3 or max(years) > limit or len(years) > len(cells):
-            return None
-        return f"FY{years[j]}" if j < len(years) else None
+        if 2 <= len(years) <= 3 and max(years) <= limit and len(years) <= len(cells):
+            return f"FY{years[j]}" if j < len(years) else None
+        year = _block_year(row)                       # one year over the whole block: every column is that year
+        return f"FY{year}" if year and limit - 6 <= year <= limit else None
     known = [(k, _PID.match(c.get("pid") or "")) for k, c in enumerate(cells)]
     known = [(k, int(m.group(1)), m.group(2) or "") for k, m in known if m]
     if len(known) < 2:
@@ -269,6 +272,18 @@ def _inferred_pid(row: dict, j: int) -> Optional[str]:
     else:
         return None
     return f"FY{year}{suffix}" if year <= limit else None
+
+
+def _block_year(row: dict) -> Optional[int]:
+    """The one year printed directly over a block of a table: "2024" over the second block of a
+    segment table whose columns are the segments, "At December 31, 2025" over a schedule. None
+    unless the last line above the block that names a year is short and names exactly one."""
+    text = row.get("own") or row.get("above") or ""
+    for line in reversed(text.split(" | ")):
+        years = set(_YEAR_IN_HEADER.findall(line))
+        if years:
+            return int(next(iter(years))) if len(years) == 1 and len(line.split()) <= 7 else None
+    return None
 
 
 def _heading_years(above: str) -> list:
@@ -295,16 +310,88 @@ _QUARTERLY_DOC = re.compile(r"_FY(\d{4})_Q(\d)_10Q$")
 _QUARTER_PID = re.compile(r"^FY(\d{4})Q(\d)")
 
 
+_SPAN_WORD = re.compile(r"\b(three|six|nine)\b|\bquarter\b", re.I)
+_SPANNED = re.compile(r"\bmonths?\b|\bquarter", re.I)
+_FLOW_QUARTER = re.compile(r"^FY(\d{4})Q(\d)(YTD)?$")
+_YEAR_IN_HEADER = re.compile(r"\b((?:19|20)\d\d)\b")
+
+
 def _cell_pid(row: dict, j: int) -> Optional[str]:
-    """The period of cell j: read from its header, or inferred. In a quarterly report a column cannot
-    be a full fiscal year of flows or a quarter after the report's own, so such an id is dropped."""
-    pid = row["cells"][j].get("pid") or _inferred_pid(row, j)
+    """The period of cell j: read from its header, or inferred.
+
+    In a quarterly report a column cannot be a full fiscal year of flows or a quarter after the
+    report's own, so such an id is dropped, and a column headed "Nine Months Ended" is the year
+    to date whatever the builder made of its split header (see `_quarterly_pids`). In an annual
+    report a column dated as the fourth quarter whose header names no span of months is the
+    balance at the year end ("At December 31, 2025").
+    """
+    cell = row["cells"][j]
+    pid = cell.get("pid") or _inferred_pid(row, j)
     filed = _QUARTERLY_DOC.search(str(row.get("doc") or ""))
-    if pid and filed and not pid.endswith("@end"):
-        quarter = _QUARTER_PID.match(pid)
-        if quarter is None or (quarter.group(1), quarter.group(2)) > (filed.group(1), filed.group(2)):
-            return None
+    if filed:
+        pid = _quarterly_pids(row, filed).get(j, pid)
+        if pid and not pid.endswith("@end"):
+            quarter = _QUARTER_PID.match(pid)
+            if quarter is None or (quarter.group(1), quarter.group(2)) > (filed.group(1), filed.group(2)):
+                return None
+        return pid
+    if pid and pid.endswith("Q4") and not _SPANNED.search(f"{cell.get('col') or ''} {cell.get('head') or ''}"):
+        return pid[:-2] + "@end"
     return pid
+
+
+def _quarterly_pids(row: dict, filed: "re.Match") -> dict:
+    """{cell index: period id} for the cells of a quarterly report's row that the column heads date
+    better than the builder did. Empty when the builder's dates are consistent.
+
+    A quarterly table prints "Three Months Ended" and "Nine Months Ended" once each, above the two
+    columns they span. The words above each column (`head`, read from the page geometry) say where
+    each span starts; a column without a span word belongs to the span that started to its left.
+    Used only where the builder left a cell undated or gave two cells of one row the same period,
+    and only if the result dates every cell differently.
+    """
+    if "_quarterly" in row:
+        return row["_quarterly"]
+    cells, fixed = row["cells"], {}
+    built = [c.get("pid") for c in cells]
+    flows = [p for p in built if p and _FLOW_QUARTER.match(p)]
+    if all(built) and len(flows) == len(set(flows)):
+        row["_quarterly"] = fixed
+        return fixed
+    spans, current = [], None
+    for c in cells:                                   # the span each column sits under
+        said = _SPAN_WORD.search(c.get("head") or "")
+        if said:
+            current = "quarter" if said.group(0).lower() in ("three", "quarter") else "to date"
+        spans.append(current)
+    if spans and spans[0] is None:                    # the first column's span word fell on its neighbour
+        first = next((s for s in spans if s), None)
+        spans = [s or first for s in spans] if first and all(s in (None, first) for s in spans) else spans
+    years = [_YEAR_IN_HEADER.findall(f"{c.get('col') or ''}") for c in cells]
+    newest = max((int(y[-1]) for y in years if y), default=None)
+    fiscal_year, quarter = int(filed.group(1)), int(filed.group(2))
+    for k, c in enumerate(cells):
+        if spans[k] is None or not isinstance(c.get("value"), (int, float)):
+            continue
+        was = _FLOW_QUARTER.match(built[k] or "")
+        if was:
+            year = int(was.group(1))                  # the builder read the year; only the span was in doubt
+        elif built[k] is None and years[k] and newest is not None:
+            year = fiscal_year - (newest - int(years[k][-1]))   # the newest column is the report's own period
+        else:
+            continue
+        fixed[k] = f"FY{year}Q{quarter}" + ("YTD" if spans[k] == "to date" and quarter > 1 else "")
+    def clashes(pids: list) -> int:
+        dated = [p for p in pids if p]
+        return len(dated) - len(set(dated))
+
+    after = [fixed.get(k, built[k]) for k in range(len(cells))]
+    fewer_clashes = clashes(after) < clashes(built)
+    more_dated = sum(1 for p in after if p) > sum(1 for p in built if p) and clashes(after) <= clashes(built)
+    if not (fewer_clashes or more_dated):             # the heads explain nothing the builder missed
+        fixed = {}
+    row["_quarterly"] = fixed
+    return fixed
 
 
 def heading_key(row: dict) -> str:
@@ -330,8 +417,8 @@ def candidates(st: Store, g: Graph, ticker: str, phrase: str, wanted: set, fisca
     want_unit = expected_unit(phrase)
     scored = []
     for r in st.rows_by_ticker.get(ticker, []):
-        if any(c.get("pid") for c in r["cells"]) and not any(c.get("pid") in wanted for c in r["cells"]) \
-                and not any(_inferred_pid(r, j) in wanted for j in range(len(r["cells"]))):
+        periods = {_cell_pid(r, j) for j in range(len(r["cells"]))} - {None}
+        if periods and not periods & wanted:
             continue                                  # prints other periods only
         label = set(tokens(r["label"]))
         ctx_text = " ".join((r["section"], r["title"], r.get("context", ""), r.get("above", ""),
@@ -343,7 +430,7 @@ def candidates(st: Store, g: Graph, ticker: str, phrase: str, wanted: set, fisca
             continue
         covered = len(hit_label | hit_context) == len(core)
         score = (3.0 * len(hit_label) + 1.0 * len(hit_context) - 0.15 * len(label - want)
-                 + (1.5 if any(c.get("pid") in wanted for c in r["cells"]) else 0.0) + (0.5 if r["verified"] else 0.0)
+                 + (1.5 if periods & wanted else 0.0) + (0.5 if r["verified"] else 0.0)
                  + (0.5 if r.get("anchor") or r.get("ties_to") else 0.0)
                  + (0.75 if g.filings[r["doc"]]["fiscal_year"] == fiscal_year else 0.0)
                  + (1.0 if any(c.get("rid") for c in r["cells"]) else 0.0)     # a line of a primary statement
@@ -356,15 +443,17 @@ def candidates(st: Store, g: Graph, ticker: str, phrase: str, wanted: set, fisca
             continue
         units = {n.get("unit") for n in m["numbers"]}
         fit = max((_unit_fit(u, want_unit) for u in units), default=0.0)
+        stated = {stated_period(g, m, n["slot"].strip("<>")) for n in m["numbers"] if not _is_time(n)} - {None}
+        timely = 1.5 if stated & wanted else (-1.5 if stated else 0.0)   # states its figures for the period asked
         score = (2.0 * len(hit) - 0.03 * len(words - want) + (0.5 if m.get("ties") else 0.0)
                  + (0.75 if g.filings[m["doc"]]["fiscal_year"] == fiscal_year else 0.0)
-                 + 2.0 * (len(hit) == len(core)) + fit)
+                 + 2.0 * (len(hit) == len(core)) + fit + timely)
         scored.append((score, "sentence", m, len(hit) == len(core)))
     scored.sort(key=lambda x: -x[0])
     seen, out = set(), []
     for score, kind, ref, covered in scored:         # the same row reprinted in an older filing adds nothing
         sig = (kind, norm_label(ref.get("label") or ref.get("masked", "")), norm_label(ref.get("section", "")),
-               g.filings[ref["doc"]]["fiscal_year"] if kind == "sentence" else heading_key(ref))
+               ref["doc"] if kind == "sentence" else heading_key(ref))
         if sig in seen:
             continue
         seen.add(sig)
@@ -456,6 +545,64 @@ def shown_sentence(m: dict) -> str:
     return text
 
 
+def _is_time(n: dict) -> bool:
+    return n.get("unit") in ("date", "year")
+
+
+def stated_period(g: Graph, m: dict, slot: str) -> Optional[str]:
+    """The period a sentence states for one of its figures, as a period id; None when it states none.
+
+    "... was $30.0 billion at December 31, 2024 and $27.5 billion at December 31, 2023": each figure
+    is followed by its own date. A sentence with one date or year dates every figure in it. A
+    figure the builder already paired with a year of a list ("... in 2026, 2025 and 2024") keeps
+    that. Anything less clear is left undated."""
+    numbers = m["numbers"]
+    at = next((i for i, n in enumerate(numbers) if n["slot"].strip("<>") == slot), None)
+    if at is None or _is_time(numbers[at]):
+        return None
+    if numbers[at].get("pid"):
+        return numbers[at]["pid"]
+    times = [n for n in numbers if _is_time(n)]
+    if not times:
+        return None
+    if len({str(n["value"]) for n in times}) == 1:
+        return _time_pid(g, m["doc"], times[0])
+    figures = [i for i, n in enumerate(numbers) if not _is_time(n)]
+    own = {i: numbers[i + 1] for i in figures if i + 1 < len(numbers) and _is_time(numbers[i + 1])}
+    if len(own) == len(figures):                      # every figure is followed by its own date
+        return _time_pid(g, m["doc"], own[at])
+    return None
+
+
+def _time_pid(g: Graph, doc: str, n: dict) -> Optional[str]:
+    """A date or year printed in a sentence of `doc`, as a period id of that company.
+
+    A bare year is the fiscal year the filing calls by that number. A date that ends one of the
+    company's filed periods is that period's end; a date one or more whole years away from a
+    fiscal year end is the end of that earlier or later fiscal year."""
+    filing = g.filings[doc]
+    if n.get("unit") == "year":
+        year, filed = int(n["value"]), int(filing["fiscal_year"][2:])
+        return f"FY{year}" if filed - 6 <= year <= filed else None
+    try:
+        day = datetime.date.fromisoformat(str(n["value"]))
+    except ValueError:
+        return None
+    ends = [(d, f) for d, f in g.filings.items() if f["ticker"] == filing["ticker"] and f.get("period_end")]
+    for d, f in ends:
+        if f["period_end"] == day.isoformat():
+            quarter = _QUARTERLY_DOC.search(d)
+            return f"{f['fiscal_year']}Q{quarter.group(2)}@end" if quarter else f"{f['fiscal_year']}@end"
+    for d, f in ends:
+        if f["form"] != "10-K":
+            continue
+        end = datetime.date.fromisoformat(f["period_end"])
+        for shift in (-4, -3, -2, -1, 1):             # a 52/53-week year ends within a few days of the same date
+            if abs((day - end).days - 365.25 * shift) <= 8:
+                return f"FY{int(f['fiscal_year'][2:]) + shift}@end"
+    return None
+
+
 # ------------------------------------------------------------------ the gate
 
 def gate(cand: dict) -> tuple:
@@ -538,6 +685,13 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
     ends = sorted({f["period_end"] for f in g.filings.values()
                    if f["ticker"] == ticker and f["fiscal_year"] == fiscal_year and f.get("period_end")})
     period = fiscal_year + (f" (fiscal year ending {ends[-1]})" if ends else "")
+    quarter = next((m for m in map(_QUARTER_PID.match, sorted(wanted)) if m), None)
+    if quarter:                                       # a quarter is asked: say so, with the date it ends
+        report = next((f for d, f in g.filings.items() if f["ticker"] == ticker and f["fiscal_year"] == fiscal_year
+                       and d.endswith(f"_Q{quarter.group(2)}_10Q")), None)
+        period = (f"{fiscal_year}, quarter {quarter.group(2)}"
+                  + (", the year to date" if any(p.endswith("YTD") for p in wanted) else "")
+                  + (f" (ending {report['period_end']})" if report and report.get("period_end") else ""))
     user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nItem asked for: {phrase}\nPeriod asked: {period}\n"
             f"Question: {question}\n\nCandidates:\n" + "\n".join(_show(i, c, g, phrase) for i, c in enumerate(cands)))
     ans, case = _pick(SYSTEM, user, "link", model, offline)
@@ -553,6 +707,9 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
         fitting = [n["slot"].strip("<>") for n in ref["numbers"]
                    if n.get("unit") not in ("date", "year") and _unit_fit(n.get("unit"), expected_unit(phrase)) >= 0]
         slot = said.group(0) if said else (fitting[0] if len(fitting) == 1 else "")   # one figure of the right unit
+        dated = [s for s in fitting if stated_period(g, ref, s) in wanted]
+        if len(dated) == 1:                           # the sentence itself says which figure is for the period asked
+            slot = dated[0]
         if slot not in {n["slot"].strip("<>") for n in ref["numbers"]}:
             entry["objections"] = ["proposer named no number slot of the sentence"]
             return entry
@@ -563,12 +720,17 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
         tied = _tied_row(st, ref, slot, wanted)
         if tied is None:
             entry.update(kind="mention", item=f"said:{ref['id']}:{slot}", ref_id=ref["id"], slot=slot,
-                         label=ref["masked"][:160], page=ref["page"], doc=ref["doc"])
+                         label=ref["masked"][:160], page=ref["page"], doc=ref["doc"],
+                         period=stated_period(g, ref, slot))
         else:                                         # the same figure, printed exactly, in a table of the filing
-            sentence_page, ref = ref["page"], tied
+            sentence_page, (ref, j) = ref["page"], tied
             cand = {"kind": "row", "ref": ref}
             key = f"item:{_slug(ref['label'])}@{_slug(ref['section'] or ref['title'])}"
-            entry.update(item=key, ref_id=ref["id"], row_id=ref["id"], column=None, label=ref["label"],
+            group = next((js for js in column_groups(ref).values() if j in js), [j])
+            member = group.index(j) if len(group) > 1 and j != default_cell(ref, group) else None
+            if member is not None:                    # the figure sits in one named column of its period
+                key += f"#{_slug(members(ref)[member], 32)}"
+            entry.update(item=key, ref_id=ref["id"], row_id=ref["id"], column=None, member=member, label=ref["label"],
                          title=ref["title"], section=ref["section"], page=ref["page"], doc=ref["doc"],
                          tied_from=f"the sentence on page {sentence_page} states this figure")
     else:
@@ -585,6 +747,11 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
         if spans:                                     # the proposer may name one column of a period's group
             k = _as_int(ans.get("column"))
             default = [j for js in column_groups(ref).values() if len(js) == len(spans) for j in [js.index(default_cell(ref, js))]]
+            asked = set(tokens(phrase))
+            named = [i for i, name in enumerate(spans)
+                     if tokens(name.replace(" (the sum of the others)", "")) and set(tokens(name.replace(" (the sum of the others)", ""))) <= asked]
+            if len(named) == 1:                       # the phrase itself names one column ("North America ...")
+                k = named[0]
             if k is not None and 0 <= k < len(spans) and (not default or k != default[0]):
                 member, key = k, key + f"#{_slug(spans[k], 32)}"
         entry.update(item=key, ref_id=ref["id"], row_id=ref["id"], column=column, member=member, label=ref["label"],
@@ -625,8 +792,8 @@ def _same_line(first: Optional[dict], row: dict, namesakes: list, member: Option
     return len(rivals) == 1
 
 
-def _tied_row(st: Store, mention: dict, slot: str, wanted: set) -> Optional[dict]:
-    """The table row that prints the chosen sentence figure exactly, for the period asked, if one does.
+def _tied_row(st: Store, mention: dict, slot: str, wanted: set) -> Optional[tuple]:
+    """(row, cell index) of the table cell that prints the chosen sentence figure exactly, for the period asked.
 
     Sentences round ("$16.6 billion"); the table cell the sentence ties to holds the exact amount and
     sits in the table's arithmetic. The match is by value, in code; the model never sees either number.
@@ -644,7 +811,7 @@ def _tied_row(st: Store, mention: dict, slot: str, wanted: set) -> Optional[dict
         cell = row["cells"][j]
         if (_cell_pid(row, j) in wanted and isinstance(cell.get("value"), (int, float))
                 and abs(abs(cell["value"]) - abs(v)) <= max(1.0, 0.006 * abs(v))):
-            return row
+            return row, j
     return None
 
 
@@ -667,11 +834,12 @@ def apply_link(g: Graph, entry: dict) -> int:
         if number is None:
             return 0
         rid = f"{m['id']}:{entry['slot']}"
+        pid = entry.get("period") or TIMELESS         # the period the sentence states for the figure, if it states one
         g.readings.setdefault(rid, Reading(
             id=rid, doc=m["doc"], ticker=ticker, page=m["page"], bbox=[], table=f"{m['doc']}:text", kind="TEXT",
             row=0, col=0, label=m["sentence"][:200], section="", text=number["text"], value=number["value"],
-            unit=number["unit"], period=TIMELESS, period_end="", status="verified" if m.get("ties") else "text"))
-        fact = g.facts.setdefault(f"{ticker}|{key}|{TIMELESS}", Fact(ticker, key, TIMELESS, [], "active"))
+            unit=number["unit"], period=pid, period_end="", status="verified" if m.get("ties") else "text"))
+        fact = g.facts.setdefault(f"{ticker}|{key}|{pid}", Fact(ticker, key, pid, [], "active"))
         if rid not in fact.readings:
             fact.readings.append(rid)
             added += 1

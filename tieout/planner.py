@@ -30,7 +30,7 @@ from .llm import ask_json
 from .plan import metric_defs, normalize, validate, vocabulary
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-PROMPT_VERSION = "p13"
+PROMPT_VERSION = "p14"
 N_EXAMPLES = 6
 
 RULES = """Translate a question about US public companies into a query plan over a knowledge graph of their
@@ -43,6 +43,8 @@ get      {"op":"get","company":T,"concept":C,"period":P}; instead of "concept": 
 calc     {"op":"calc","expr":"s1 / s2"}  + - * / ( ) abs() over earlier steps
 change   {"op":"change","company":T,"concept":C,"from":P,"to":P,"mode":"pct"|"abs"}
 rank     {"op":"rank","over":SET,"by":MEASURE,"period":P,"order":"desc"|"asc","k":N}
+compare  {"op":"compare","of":["s3","s6"],"order":"desc"|"asc"}  orders figures worked out in earlier steps,
+         one per side; like rank it gives the winner, every side's figure and the gap
 filter   {"op":"filter","over":SET,"where":{"by":MEASURE,"period":P,"gt"|"lt"|"ge"|"le":X}} or
          {"op":"filter","over":SET,"where":{"attr":A,"eq":"text"}}
 count    {"op":"count","of":"$sN"}  how many step sN kept, and which
@@ -77,11 +79,14 @@ RULES
    means exactly what is asked, otherwise get the parts and calc, or a growth, delta or ratio measure.
 4. "Which company has the highest X": rank, k=1. "Rank A, B and C": rank over them, k = their number.
 5. "Which of A or B had more X (and by how much)": rank over [A,B], k=2; it gives both values, the winner
-   and the gap. Also when X is a growth rate or a ratio.
+   and the gap. Also when X is a growth rate or a ratio. When each side needs its own words or its own
+   arithmetic (one company's segment margin against another's, or a line each company labels
+   differently), work each side out with get and calc, then end with compare over those steps.
 6. "How many ...": filter then count. Do not end on count unless the question asks how many.
 7. A hop (find a company or line, then ask about it) names the earlier step as "$sN".
-8. "Which segment/product/region/business ...": members, then rank or filter over "$sN" by {"value":true}
-   or {"growth":{"value":true}}. A ratio per line (a segment's margin) is
+8. "Which segment/product/region/business ...": members, then rank or filter over "$sN" by {"value":true},
+   {"growth":{"value":true}} (fastest growing, largest percentage change) or {"delta":{"value":true}}
+   (largest increase or decline in dollars). A ratio per line (a segment's margin) is
    {"ratio":[{"value":true},{"item":"revenue"}]}: an item inside a measure over lines is that line's own
    other figure. For a figure of the chosen line add get with "company":"$sN" and the period (its own
    value) or with "item":"words" (another figure of that line, such as its revenue). The figure of one
@@ -204,6 +209,17 @@ EXAMPLES = [
                 {"id": "s3", "op": "get", "company": "$s2", "period": {"fy": 2025}},
                 {"id": "s4", "op": "get", "company": "$s2", "item": "net sales", "period": {"fy": 2025}},
                 {"id": "s5", "op": "calc", "expr": "s3 / s4"}], "answer": "s5"}),
+    ("Which of Walmart's segments lost the most net sales in dollars between fiscal 2024 and fiscal 2025, and how much?",
+     {"steps": [{"id": "s1", "op": "members", "company": "WMT", "of": "net sales by segment", "period": {"fy": 2025}},
+                {"id": "s2", "op": "rank", "over": "$s1", "by": {"delta": {"value": True}}, "period": {"fy": 2025}, "order": "asc", "k": 1}], "answer": "s2"}),
+    ("Which turned more of its segment revenue into operating income in 2025, Microsoft's More Personal Computing or Meta's Family of Apps, and by how many points?",
+     {"steps": [{"id": "s1", "op": "get", "company": "MSFT", "item": "More Personal Computing operating income", "period": {"fy": 2025}},
+                {"id": "s2", "op": "get", "company": "MSFT", "item": "More Personal Computing revenue", "period": {"fy": 2025}},
+                {"id": "s3", "op": "calc", "expr": "s1 / s2"},
+                {"id": "s4", "op": "get", "company": "META", "item": "Family of Apps income from operations", "period": {"fy": 2025}},
+                {"id": "s5", "op": "get", "company": "META", "item": "Family of Apps revenue", "period": {"fy": 2025}},
+                {"id": "s6", "op": "calc", "expr": "s4 / s5"},
+                {"id": "s7", "op": "compare", "of": ["s3", "s6"], "order": "desc"}], "answer": "s7"}),
     ("What was Target's operating margin in the fourth quarter of fiscal 2025, worked out from the annual report and the nine-month figures?",
      {"steps": [{"id": "s1", "op": "metric", "company": "TGT", "metric": "operating_margin", "period": {"fy": 2025, "q": 4}}], "answer": "s1"}),
     ("How many more people did Cisco employ at the end of fiscal 2025 than at the end of fiscal 2023?",

@@ -35,6 +35,17 @@ EXPENSES = {"CostOfRevenue", "ResearchAndDevelopment", "SellingGeneralAdmin", "S
             "GeneralAndAdministrative", "InterestExpense", "IncomeTax", "NoninterestExpense",
             "ProvisionForCreditLosses", "DepreciationAmortization", "StockBasedCompensation"}
 TIMELESS = "*"                                    # period id of a figure whose source prints no period
+_PAYMENT = re.compile(r"^(purchases?|additions?|payments?|repurchases?|repayments?|acquisitions?|capital expenditures|"
+                      r"(cash )?dividends? paid|cash paid|expenditures?)\b", re.I)
+_CASH_FLOW = re.compile(r"\b(investing|financing)\b|cash flows?", re.I)
+
+
+def _is_payment(reading) -> bool:
+    """A payment line of the cash-flow statement ("Purchases of property and equipment (9,251)"). Its
+    minus sign is the statement's way of printing cash going out; a question asks for its size, as
+    for the concepts in OUTFLOW."""
+    on_cash_flow = reading.kind == "CF" or _CASH_FLOW.search(reading.section or "")
+    return bool(on_cash_flow and _PAYMENT.search(reading.label or ""))
 
 
 @dataclass
@@ -268,7 +279,31 @@ class Executor:
         return None
 
     def _item(self, ticker: str, phrase: str, spec: dict, first: bool = False) -> Result:
-        """A line of any table, or a figure stated in a sentence, linked on demand by the living layer."""
+        """A line of any table, or a figure stated in a sentence, linked on demand by the living layer.
+
+        A fourth quarter that no filing prints is solved the way `_derive` solves it for a concept:
+        the line's full year minus its nine months. Each of the two is read (and, if need be,
+        linked) for its own period, so the annual report and the quarterly report may print the
+        line in differently laid-out tables.
+        """
+        printed = self._item_printed(ticker, phrase, spec, first)
+        fourth_quarter = spec.get("q") and int(spec["q"]) == 4 and not spec.get("ytd")
+        if printed.ok or not (fourth_quarter and self.use_derivations and self.use_solving):
+            return printed
+        year_spec = {k: v for k, v in spec.items() if k != "q"}
+        year = self._item_printed(ticker, phrase, year_spec, first)
+        ytd = self._item_printed(ticker, phrase, {**year_spec, "q": 3, "ytd": True}, first)
+        if not (year.ok and ytd.ok):
+            return _merge_abstain(year, ytd)
+        value = year.value - ytd.value
+        return Result("number", value, year.unit, year.leaves + ytd.leaves,
+                      year.notes + ytd.notes + [f"{ticker} '{phrase}' for the fourth quarter is not printed; "
+                                                "derived as the full year minus the nine months"],
+                      {"op": "solve", "what": f"{ticker} '{phrase}' Q4 = year - nine months", "value": value,
+                       "children": [year.tree, ytd.tree]})
+
+    def _item_printed(self, ticker: str, phrase: str, spec: dict, first: bool = False) -> Result:
+        """The linked line's figure for one period, as a filing prints it."""
         from .link import resolve
         if not self.use_links:
             return abstain(f"linking is switched off; '{phrase}' is not a shared concept")
@@ -286,7 +321,8 @@ class Executor:
                     said_in = {self.g.filings[self.g.readings[i].doc]["fiscal_year"] for i in f.readings}
                     if asked not in said_in or spec.get("q"):
                         continue
-                res = self._from_fact(f, ticker, key, pid, first, self.g.readings[f.readings[0]].unit, False)
+                source = self.g.readings[f.readings[0]]
+                res = self._from_fact(f, ticker, key, pid, first, source.unit, _is_payment(source))
                 if pid == TIMELESS and res.ok:
                     res.notes.append(f"{ticker} '{phrase}': the source prints no period column for this figure")
                 return res
@@ -599,6 +635,39 @@ class Executor:
         return Result("companies" if kind == "companies" else "lines", [(name, v) for name, v, _ in top], top[0][2],
                       leaves, notes, {"op": "rank", "what": f"{_name(m)} over {len(rows)}", "value": top}, missing, extra)
 
+    def _op_compare(self, s: dict, env: dict) -> Result:
+        """Order figures that earlier steps worked out, one per side of the comparison.
+
+        Each side is named by the company its figures were read from. When two sides are the same
+        company (two of its segments), the plan's own names for them are used, or the step ids."""
+        ids = [i.lstrip("$") for i in s["of"]]
+        names = s.get("names") if isinstance(s.get("names"), list) and len(s["names"]) == len(ids) else [None] * len(ids)
+        sides, leaves, notes = [], [], []
+        for i, name in zip(ids, names):
+            r = env[i]
+            if r.kind == "abstain":
+                raise Abstained(r)
+            if r.kind != "number":
+                raise PlanTypeError(f"{i} is not a number, so it cannot be compared")
+            sides.append({"id": i, "value": r.value, "unit": r.unit, "tickers": sorted({lf.ticker for lf in r.leaves}),
+                          "name": str(name) if name else i})
+            leaves += r.leaves
+            notes += r.notes
+        units = {side["unit"] for side in sides if side["unit"]}
+        if len(units) > 1:
+            raise PlanTypeError("cannot compare " + " with ".join(sorted(units)))
+        by_company = (all(len(side["tickers"]) == 1 for side in sides)
+                      and len({side["tickers"][0] for side in sides}) == len(sides))
+        sides.sort(key=lambda side: side["value"], reverse=s.get("order", "desc") == "desc")
+        top = sides[:int(s.get("k", len(sides)))]
+        value = [(side["tickers"][0] if by_company else side["name"], side["value"]) for side in top]
+        extra = {"ranked": len(sides)}
+        if len(top) >= 2:
+            extra["gap"] = abs(top[0]["value"] - top[1]["value"])
+        return Result("companies" if by_company else "lines", value, top[0]["unit"], leaves, notes,
+                      {"op": "compare", "what": " against ".join(side["name"] for side in sides), "value": value,
+                       "children": [env[i].tree for i in ids]}, extra=extra)
+
     def _op_filter(self, s: dict, env: dict) -> Result:
         w = s["where"]
         if "attr" in w and "eq" in w:
@@ -858,7 +927,8 @@ def render(r: Result) -> str:
                 f"now {_fmt(b, r.unit)} ({r.extra['latest_doc']})" + (f". {why}" if why else ""))
     if r.kind in ("companies", "lines", "series"):
         shown = ", ".join(f"{name} ({v})" if isinstance(v, str) else f"{name} ({_fmt(v, r.unit)})" for name, v in r.value)
-        if r.kind == "companies" and len(r.value) == 2 and all(not isinstance(v, str) for _, v in r.value):
+        two_sides = r.kind == "companies" or r.tree.get("op") == "compare"
+        if two_sides and len(r.value) == 2 and all(not isinstance(v, str) for _, v in r.value):
             shown += f"; difference {_fmt(abs(r.value[0][1] - r.value[1][1]), r.unit)}"
         return shown or "none"
     if r.unit == "count" and r.extra.get("names"):

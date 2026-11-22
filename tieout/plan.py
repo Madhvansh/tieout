@@ -25,6 +25,8 @@ Operations
     change    growth of a measure between two named periods (pct or abs)
     rank      order a set by a measure, keep the top k; over two named companies the
               answer also carries the gap between them
+    compare   order figures worked out in earlier steps (one company's segment margin against
+              another's): the same answer as rank, for sides that each need their own steps
     filter    keep the members of a set that meet a condition
     agg       sum, average, median, minimum or maximum of a measure over a set
     count     size of a set
@@ -58,7 +60,8 @@ import yaml
 from .concepts import concept_defs
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-OPS = ("get", "metric", "calc", "change", "rank", "filter", "agg", "count", "series", "members", "attr", "restated")
+OPS = ("get", "metric", "calc", "change", "rank", "compare", "filter", "agg", "count", "series", "members", "attr",
+       "restated")
 TEXT_ATTRS = ("auditor", "auditor_since", "auditor_location", "state_of_incorporation", "fiscal_year_end",
               "hq_city", "hq_state", "exchange", "trading_symbol", "employees", "shares_outstanding",
               "public_float_usd", "ceo", "cfo", "cluster")
@@ -265,6 +268,9 @@ def validate(plan: dict, graph) -> list:
             errs.append(f"{sid}: refers to {ref} before it is defined")
 
     for s in steps:
+        if not isinstance(s, dict) or not isinstance(s.get("id"), str):
+            errs.append("every step is an object with a string id such as \"s1\"")
+            continue
         sid, op = s.get("id"), s.get("op")
         if not sid or sid in seen:
             errs.append(f"step id missing or repeated: {sid}")
@@ -285,7 +291,11 @@ def validate(plan: dict, graph) -> list:
         if isinstance(over, dict) and over.get("cluster") not in CLUSTERS:
             errs.append(f"{sid}: unknown cluster {over.get('cluster')}")
         if isinstance(over, list):
-            errs.extend(f"{sid}: unknown company {t}" for t in over if t not in graph.companies)
+            if not all(isinstance(t, str) for t in over):
+                errs.append(f"{sid}: a set lists tickers, such as [\"AMZN\", \"GOOGL\"]; to compare figures "
+                            "worked out in earlier steps use compare")
+            else:
+                errs.extend(f"{sid}: unknown company {t}" for t in over if t not in graph.companies)
         measure = step_measure(s)
         line_ref = op == "get" and measure is None and isinstance(company, str) and company.startswith("$")
         if op in ("get", "metric", "change", "rank", "agg", "series", "restated") and not line_ref:
@@ -319,6 +329,13 @@ def validate(plan: dict, graph) -> list:
             errs.append(f"{sid}: unknown attribute {s.get('attr')}")
         if op == "calc":
             errs.extend(calc_errors(s.get("expr"), seen, sid))
+        if op == "compare":
+            of = s.get("of")
+            if not (isinstance(of, list) and len(of) >= 2 and all(isinstance(i, str) for i in of)):
+                errs.append(f"{sid}: compare needs of, a list of two or more earlier step ids")
+            else:
+                errs.extend(f"{sid}: compares {i}, which is not a step defined before it"
+                            for i in of if i.lstrip("$") not in seen)
         if op == "count":
             ref_ok(s.get("of"), sid)
             if not s.get("of"):
