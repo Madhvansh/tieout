@@ -30,6 +30,7 @@ labels, and admits the binding only on that structural evidence.
 """
 from __future__ import annotations
 
+import calendar
 import gzip
 import json
 import pathlib
@@ -61,6 +62,9 @@ DOLLAR_RE = re.compile(r"\$|\bdollars?\b|\bUSD\b")
 RATIO_LABEL_RE = re.compile(r"\bratios?\b|\(to 1\)|\btimes\b|margin|\byields?\b|\brates?\b|return on|leverage|"
                             r"\bbps\b|basis points|\bdays\b|percent|%|multiple|coverage", re.I)
 COUNT_RE = re.compile(r"\b(?:stores?|store counts?|warehouses?|clubs|locations|retail units|unit counts?|"
+                      # "Wholesale Units (000) (a) 2,862 2,728" (F p53, read as USD billions once the marker chain let
+                      # the row be read): units a maker sells or ships are counted
+                      r"wholesale units|units (?:sold|shipped|delivered|produced)|"
                       r"employees|employed|employment|"
                       r"headcount|staff|associates|members|cardholders|vehicles|deliveries|square (?:feet|footage)|"
                       r"sq\.?\s*ft|(?:distribution|fulfillment|supply chain|manufacturing) (?:centers|facilities)|"
@@ -70,7 +74,8 @@ COUNT_RE = re.compile(r"\b(?:stores?|store counts?|warehouses?|clubs|locations|r
 # $4.09 billion before), "Active digital banking users (in thousands)"
 ROW_COUNT_RE = re.compile(r"\bnumber of\b|\bcounts?\b|headcount|\bemployees\b|direct staff|\bstaff \(|\(actual\)|"
                           r"square feet|\bmembers\b|cardholders|\bprocessed transactions\b|\(\s*#\s*[,)]|"
-                          r"\b(?:banking|mobile|digital|active) users\b", re.I)
+                          r"\b(?:banking|mobile|digital|active) users\b|"
+                          r"\bwholesale units\b|\bunits (?:sold|shipped|delivered|produced)\b", re.I)    # F p53
 # a table titled with money words holds money even when it prints no dollar sign
 MONEY_TITLE_RE = re.compile(r"expenditure|capital|revenue|\bcosts?\b|expense|income|earnings|cash|dollars|price|fees|"
                             r"compensation|amounts?\b", re.I)
@@ -85,7 +90,7 @@ MONEY_WORD_RE = re.compile(r"sales|revenue|cost|expense|income|earnings|asset|li
 SCALE_NAMES = {"thousand": 1e3, "thousands": 1e3, "million": 1e6, "millions": 1e6, "billion": 1e9, "billions": 1e9,
                "trillion": 1e12, "trillions": 1e12}
 PAREN_RE = re.compile(r"\(([^()]{1,60})\)")
-PAREN_SCALE_RE = re.compile(r"\b(thousands|millions|billions|trillions)\b|\b000['’]?s\b", re.I)
+PAREN_SCALE_RE = re.compile(r"\b(thousands|millions|billions|trillions)\b|\b000['’]?s\b|^\s*000\s*$", re.I)    # "(000)"
 PAREN_DOLLARS_RE = re.compile(r"^\s*(?:in\s+)?(?:US\s*)?(?:\$|dollars?|usd)\s*$", re.I)
 NOT_SCALE_RE = re.compile(r"%|percent|\bper\b|/\s*share|\bbps\b|basis point|\brate\b|\bratio\b", re.I)
 DOLLAR_MM_RE = re.compile(r"\$\s?(MM|BN|B|K)\b")             # Chevron's "Earnings $MM"
@@ -245,13 +250,98 @@ class _Profile:
             not MONEY_SCALE_RE.search(cap + " " + (getattr(t, "intro", "") or "")) else None
         # "(in millions, except employees)": a whole count is one of the exceptions
         self.scale_except = bool(re.search(r"\bexcept", cap, re.I))
+        # an award or option activity table: a column of share counts ("Shares", "Number of Options", "RSUs")
+        # printed without "$" beside prices ("$ 331.62"), remaining lives and intrinsic values (CAT p74, JNJ
+        # p87, XOM p113, BLK p115). The dollar signs of the price column made every cell USD in the money scale
+        # (299,523 options read as $299.5 billion)
+        # A column counts shares when its header says so ("Shares", "Treasury Common Shares", BLK p115), or, in a
+        # table about shares, units or options that also prints a price column, when it prints no "$" and its
+        # header names no value (XOM p113: "Shares (thousands)" read as the column "2025")
+        self.share_cols = set()
+        if AWARD_TABLES and not self.shares:
+            about = SHARE_COL_RE.search(" ".join([t.title or "", t.caption or "", t.header_text or "",
+                                                  getattr(t, "intro", "") or ""]))
+            priced = any(PRICE_COL_RE.search(c.header or "") for c in t.columns)
+            for c in t.columns:
+                h = c.header or ""
+                if VALUE_COL_RE.search(h) or not (SHARE_COL_RE.search(h) or about and priced):
+                    continue
+                vals = [r.cells[c.idx] for r in t.rows if c.idx in r.cells and r.cells[c.idx].value is not None]
+                if vals and not any(v.has_dollar or "$" in v.text or v.is_percent for v in vals):
+                    self.share_cols.add(c.idx)
+        # a share count takes a scale only when the page says it of shares ("(Shares in Thousands)", "Shares
+        # (thousands)"); a money caption ("(Dollars in Millions)", "Amounts are in millions of dollars") is not
+        # said about them, nor is the money scale a table inherits from the statements
+        words = " ".join([t.title or "", t.caption or "", t.header_text or "", getattr(t, "intro", "") or ""])
+        m = SHARE_SCALE_RE.search(words)
+        if m:                                   # "(Shares in Thousands)", "Shares (thousands)"
+            self.award_share_scale = SCALES[next(g for g in m.groups() if g).lower().rstrip("s")]
+        elif getattr(t, "scale_source", "") in ("caption", "intro") and not MONEY_SCALE_RE.search(words):
+            self.award_share_scale = t.share_scale      # "(in millions, except per share data)" said of everything
+        else:
+            self.award_share_scale = 1.0                # a money-only or an inherited scale says nothing of shares
+
+
+# OFF in handback 4 (23 Nov 00:35): the red team (train_lab/REDTEAM_B5.md, findings 1 to 11) found the share scale lost
+# or wrong wherever it comes from a footnote ("(a) In thousands."), from "(in millions)" in a statement of equity or from
+# a mixed "(Thousands) ... (Millions)" header (PFE p98 19,621 thousand options read as 19.6 billion), and the linker
+# serves a row in the row's unit. A plausible wrong number is worse than the old absurd one, so the rule waits for
+# branch build-next, with those findings as its tests.
+AWARD_TABLES = False
+SHARE_COL_RE = re.compile(r"\bshares\b|\bnumber of (?:shares|options|units|awards|rsus|psus|prsus)\b|\boptions\b|"
+                          r"\brsus?\b|\bpsus?\b|\bprsus?\b|\bunits\b|\bawards\b", re.I)
+VALUE_COL_RE = re.compile(r"price|value|\$|dollars|per share|intrinsic|fair|cost|amount|\blife\b|years|\bterm\b", re.I)
+SHARE_SCALE_RE = re.compile(r"\(\s*shares\s+in\s+(thousands|millions)\s*\)|shares\s+in\s+(thousands|millions)|"
+                            r"(thousands|millions)\s+of\s+shares|shares\W+(?:[\w-]+\W+){0,2}\(\s*(thousands|millions)\s*\)|"
+                            # a stacked header: "Options Price Term Value" over "(in millions) (in years) (in millions)",
+                            # "Units Fair Value Value" over "(in millions) (in millions)" (MA p97, p98)
+                            r"\b(?:options|units|awards|rsus|psus|prsus)\b[^()]{0,40}?\(\s*(?:in\s+)?(thousands|millions)\s*\)",
+                            re.I)
+AGGREGATE_COL_RE = re.compile(r"aggregate|intrinsic|total (?:fair )?value|in millions|in thousands|in billions", re.I)
+LIFE_COL_RE = re.compile(r"\blife\b|\(years\)|\bin years\b|\bterm\b", re.I)
+
+
+def _award_cell(t, ci: int, cell, prof: _Profile):
+    """(unit, scale) of one cell of a row that holds a share count, or None for the share count itself."""
+    own = t.columns[ci].header or ""
+    if ci in prof.share_cols:
+        return None
+    if LIFE_COL_RE.search(own) and not cell.has_dollar:
+        return "ratio", 1.0                                     # "Weighted-Average Remaining Contractual Life (Years)"
+    dollar = cell.has_dollar or "$" in cell.text
+    if PRICE_COL_RE.search(own) or dollar and "." in cell.text and not AGGREGATE_COL_RE.search(own):
+        return "USD/share", 1.0                                 # "Weighted-Average Exercise Price", "$ 331.62"
+    # an amount: "Aggregate Intrinsic Value $ 1,063", or the "Amount" beside "Shares" in a statement of equity
+    # ("$ 1,031" with no cents is money, not a price: V p64)
+    return "USD", prof.col_scale.get(ci, prof.money_scale)
+
+
+def _award_row(t, r, prof: _Profile) -> bool:
+    """A row of an option or award table: it holds a share count, and every other figure is a price, a remaining
+    life or an aggregate value. A row with a plain amount beside its shares (a statement of equity: "Shares |
+    Amount", GOOGL Q3 p9, V p64) is not one: there the share count is marked on its own cell and the row keeps
+    its money unit, so the amounts keep theirs."""
+    if not prof.share_cols or MONEY_WORD_RE.search(r.label) or PER_SHARE_RE.search(r.label):
+        return False
+    share = [ci for ci in r.cells if ci in prof.share_cols and r.cells[ci].value is not None]
+    if not share:
+        return False
+    for ci, cell in r.cells.items():
+        if ci in prof.share_cols or cell.value is None:
+            continue
+        kind = _award_cell(t, ci, cell, prof)[0]
+        if kind == "USD" and not AGGREGATE_COL_RE.search(t.columns[ci].header or ""):
+            return False
+    return True
 
 
 def row_unit(t, r, prof: _Profile) -> str:
     """One of UNITS for a table row, from its own printing and its table's evidence."""
     cells = list(r.cells.values())
+    if _award_row(t, r, prof):
+        return "shares"                                         # a row of an award table: its count is shares
     pool = row_pool(t, r)
-    row_dollar = any(c.has_dollar for c in cells)
+    row_dollar = any(c.has_dollar or "$" in c.text for c in cells)     # "$90.56" glued is a dollar sign too
     counted = prof.count or (ROW_COUNT_RE.search(r.label) and not MONEY_WORD_RE.search(r.label) and not row_dollar)
     amount = "shares" if prof.shares else ("count" if counted and not row_dollar else "USD")
     if pool == "shares":
@@ -369,7 +459,9 @@ def unit_plans(t, prof: _Profile, base: dict) -> dict:
     cap_phys = physical(cap, strong_only=True) if not cell_dollar and len(caps) == 1 else None
     carrier = None                                  # (row, plan) whose scale the next rows may take
     for r in t.rows:
-        row_dollar = any(c.has_dollar for c in r.cells.values())
+        # a dollar sign glued to the figure ("$90.56") is a dollar sign too: without it "Average ticket $90.56"
+        # took the "(in millions)" count scale of "Customer transactions" above it (HD p37, red team 12)
+        row_dollar = any(c.has_dollar or "$" in c.text for c in r.cells.values())
         if carrier is not None:
             cr = carrier[0]
             if r.section != cr.section or r.indent < cr.indent - 3:
@@ -491,7 +583,18 @@ def table_rows(doc: str, ticker: str, k: int, t, periods: list, anchors: dict, c
             if unit in ("count", "shares") and (cell.has_dollar or "." in cell.text and
                                                 PRICE_COL_RE.search(t.columns[ci].header + " " + t.header_text)):
                 cunit = "USD/share"                     # "Weighted-average grant date fair value" beside a count
-            if plan and cunit == plan["unit"] and plan["scale"] is not None:
+            award = unit == "shares" and bool(prof.share_cols) and not cell.is_percent
+            if award:
+                how = _award_cell(t, ci, cell, prof)
+                if how is None:                         # the share count: the scale the page prints, else none
+                    cunit, value = "shares", _full(cell.value, prof.col_scale.get(ci) or prof.award_share_scale)
+                else:
+                    cunit = how[0]
+                    value = _full(cell.value, how[1]) if cunit == "USD" else cell.value
+            elif ci in prof.share_cols and unit == "USD" and not cell.is_percent and not cell.has_dollar:
+                # the share count of a statement of equity ("Shares | Amount"): its own cell, its own scale
+                cunit, value = "shares", _full(cell.value, prof.col_scale.get(ci) or prof.award_share_scale)
+            elif plan and cunit == plan["unit"] and plan["scale"] is not None:
                 value = _full(cell.value, plan["scale"])     # the scale the label (or its group) states
             elif plan and cunit == plan["unit"] == "count":
                 value = _full(cell.value, _cell_scale(t, r, ci, "count", prof))     # never the money scale
@@ -581,8 +684,9 @@ def build_raw(g, docs: Optional[list] = None, verbose: bool = True) -> list:
             else:
                 k, base, extra = base, base + 1, 0
             buckets = _maturity_columns(t, fiscal_year)
+            quarterly = _names_quarters(t)
             periods = [(None, None) if c.idx in buckets or _comparison(c.header)
-                       else _period(cal, c, f["form"], f["period_end"], _heading(t)) for c in t.columns]
+                       else _period(cal, c, f["form"], f["period_end"], _heading(t), quarterly) for c in t.columns]
             rows.extend(table_rows(doc, ticker, k, t, periods, anchors, cal, f["form"], f["period_end"]))
         rows.extend(_primary_rows(g, doc))
         if verbose:
@@ -733,9 +837,58 @@ def _comparison(header: str) -> bool:
     return bool(COMPARISON_RE.search((header or "").split("|")[-1]))
 
 
-def _period(cal, col, form: str, filing_end: Optional[str] = None, heading: str = "") -> tuple:
-    """(period id, ISO end date) of one column: periods.column_period, as a flow."""
+def _period(cal, col, form: str, filing_end: Optional[str] = None, heading: str = "",
+            quarterly: bool = False) -> tuple:
+    """(period id, ISO end date) of one column: periods.column_period, as a flow; in a table whose columns
+    name two or more quarters, a column named by a quarter's ordinal is that quarter (_quarter_word_period)."""
+    q = _quarter_word_period(cal, col, filing_end, heading) if quarterly else None
+    if q is not None:
+        return q
     return column_period(cal, col, form, instant=False, filing_end=filing_end, heading=heading)
+
+
+def _names_quarters(t) -> bool:
+    """The table's columns name at least two different quarters ("Fourth Third Second First"): a quarterly
+    table. One column that mentions "fourth quarter" (a buyback table by month, GS p64, MSFT p32) is not."""
+    found = set()
+    for c in t.columns:
+        for m in ORDINAL_QUARTER_RE.finditer(c.header or ""):
+            found.add(ORDINALS[m.group(1).lower()] if m.group(1) else int(m.group(2) or m.group(3)))
+    return len(found) >= 2
+
+
+ORDINAL_QUARTER_RE = re.compile(r"\b(first|second|third|fourth|1st|2nd|3rd|4th)\b|\bq([1-4])\b|\b([1-4])q(?:\d\d)?\b",
+                                re.I)
+ORDINALS = {"first": 1, "1st": 1, "second": 2, "2nd": 2, "third": 3, "3rd": 3, "fourth": 4, "4th": 4}
+ORDINAL_NAMES = {1: "First", 2: "Second", 3: "Third", 4: "Fourth"}
+
+
+def _quarter_word_period(cal, col, filing_end: Optional[str], heading: str) -> Optional[tuple]:
+    """A column headed by one quarter's ordinal under a year ("2025 Quarters" over "Fourth Third Second First",
+    BAC p35; "Fourth Quarter 2024"; "Q3 2025") is that fiscal quarter: three months ending 3, 6, 9 or 12 months
+    into the fiscal year labelled by the year. Read only when the header or the table's heading says
+    "quarter", the column prints one ordinal and a year, and no full date (a printed date wins). Without this
+    rule the year alone dated all four quarters as the full fiscal year. The column name gets the words
+    "<ordinal> quarter <year>", so the column reads as a span of months, not a balance at the year end."""
+    head = col.header or ""
+    if col.end_date or not col.year or not re.search(r"quarter|\bq[1-4]\b|\b[1-4]q", head + " " + heading, re.I):
+        return None
+    found = set()
+    for m in ORDINAL_QUARTER_RE.finditer(head):
+        found.add(ORDINALS[m.group(1).lower()] if m.group(1) else int(m.group(2) or m.group(3)))
+    if len(found) != 1:
+        return None
+    q = found.pop()
+    fye = cal.end_of_label(col.year)
+    month, year = fye.month - 3 * (4 - q), fye.year
+    while month <= 0:
+        month, year = month + 12, year - 1
+    last = calendar.monthrange(year, month)[1]
+    end = date(year, month, last if fye.day >= 28 else min(fye.day, last))
+    if filing_end and (end - date.fromisoformat(filing_end)).days > 14:
+        return None, None                            # a quarter after the filing's own period: nothing to date
+    col.header = f"{head} | {ORDINAL_NAMES[q]} quarter {col.year}"[:120]
+    return cal.period_id(end, 3, False), end.isoformat()
 
 
 def _heading(t) -> str:

@@ -1,0 +1,63 @@
+{
+ "stats": {
+  "checks": 7689,
+  "failing": 64,
+  "gap under 10": 13,
+  "control ambiguous": 1
+ },
+ "recovered": [
+  {
+   "doc": "JPM_FY2025_10K",
+   "page": 66,
+   "table_title": "Segment & Corporate Results \u2013 Managed Basis",
+   "total": "Pre-provision profit",
+   "gaps": [
+    24073
+   ],
+   "line": "Total net revenue $ 76,029 $ 71,507 $ 70,148 $ 78,454 $ 70,114 $ 64,353 $ 24,073 $ 21,578 $ 19,827",
+   "line_page": 66,
+   "class": "partial_row",
+   "read_by": "residue+arithmetic"
+  },
+  {
+   "doc": "JPM_FY2025_10K",
+   "page": 244,
+   "table_title": "As of or for the year ended December 31, 2025",
+   "total": "Total retained loans",
+   "gaps": [
+    300960
+   ],
+   "line": "Current $ 21,179 $ 9,894 $ 14,334 $ 57,258 $ 74,916 $ 110,489 $ 6,644 $ 6,246 $ 300,960",
+   "line_page": 244,
+   "class": "partial_row",
+   "read_by": "residue+arithmetic"
+  },
+  {
+   "doc": "WFC_FY2025_10K",
+   "page": 26,
+   "table_title": "Table 9a: Consumer Banking and Lending \u2013 Income Statement and Selected Metrics",
+   "total": "Net income",
+   "gaps": [
+    11
+   ],
+   "line": "Income tax expense 2,620 2,357 263 11 2,657 (300) (11)",
+   "line_page": 26,
+   "class": "partial_row",
+   "read_by": "residue+arithmetic"
+  },
+  {
+   "doc": "WFC_FY2025_10K",
+   "page": 29,
+   "table_title": "Table 9c: Commercial Banking \u2013 Income Statement and Selected Metrics",
+   "total": "Total noninterest income",
+   "gaps": [
+    12
+   ],
+   "line": "Treasury management and payments 5,000 5,690 (690) (12) 6,214 (524) (8)",
+   "line_page": 29,
+   "class": "partial_row",
+   "read_by": "residue+arithmetic"
+  }
+ ],
+ "control": []
+}

@@ -473,6 +473,7 @@ def build_table(doc_name: str, page_no: int, lines: list, title: str = "", min_h
     # section labels ("Net sales:"); anything else ends the header (title, caption).
     header_idx: list = []
     i = first_num - 1
+    depth = 0           # ")" in the lines below line i that still lack their "(": a caption broken over lines
     while i >= 0 and first_num - i <= 14:
         ln = lines[i]
         text = " ".join(w.text for w in ln)
@@ -485,10 +486,12 @@ def build_table(doc_name: str, page_no: int, lines: list, title: str = "", min_h
             break                                   # statement title: nothing above belongs to the table
         elif CAPTION_RE.search(text):
             pass                                    # "(In millions, except ...)" above or below the header
-        elif header_idx:
+        elif header_idx and depth <= 0:
             break                                   # something else above the header
-        # else: a label between the header and the first numeric row
-        # ("ASSETS:", "Net sales:", first half of a wrapped label); keep climbing
+        # else: a label between the header and the first numeric row ("ASSETS:", "Net sales:", first half of
+        # a wrapped label), or the middle of a caption in parentheses that the header line closes ("(in
+        # billions, except ratios" / "and where otherwise" / "noted) 2025 2024 2023", JPM p70); keep climbing
+        depth += text.count(")") - text.count("(")
         i -= 1
     header_idx.sort()
     # only the words over the value columns are header; a caption on the same line is not

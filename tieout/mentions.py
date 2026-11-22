@@ -33,7 +33,7 @@ from collections import Counter, defaultdict
 from typing import Optional
 
 from . import pdfio
-from .textfacts import make_flow
+from .textfacts import find_gutter, make_flow
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 MENTIONS_PATH = ROOT / "graph" / "mentions.json.gz"
@@ -72,7 +72,7 @@ OF_TOTAL_RE = re.compile(rf"^\s+of\s+(?:the|our|its|these|those)\s+\d[\d,.]*\s+(
 # a currency sign other than the dollar right before the figure (the PDF text often garbles it)
 FOREIGN_MONEY = "€£¥₩₹�"
 # "Level 3 loans", "Note 5", "Tier 1": the number names something, it does not count
-REFERENCE_BEFORE_RE = re.compile(r"\b(?:note|notes|item|items|level|tier|table|part|section|topic|rule|form|series|class|"
+REFERENCE_BEFORE_RE = re.compile(r"\b(?:asc|asu|ias|ifrs|sfas|fasb|note|notes|item|items|level|tier|table|part|section|topic|rule|form|series|class|"
                                  r"stage|phase|schedule|exhibit|figure|page|chapter|article|title|regulation|scope|"
                                  r"category|group|step|no\.|number)\s*$", re.I)
 # "25 million euros": money in another currency is not a count
@@ -94,6 +94,11 @@ def _table_line(ln: list) -> bool:
         gap = b.x0 - a.x1
         if gap > 40 or gap > 14 and (_is_value(a.text) or _is_value(b.text)):
             return True
+    # the last line of a sentence that lists years ("2024 and 2023, respectively.", JPM p70) is short and holds
+    # two numbers, but it ends the sentence: dropped as a table line, it took with it the years that date the
+    # figures, and all three figures of "$63.4 billion, $47.4 billion and $41.4 billion" read as one year
+    if re.search(r"[A-Za-z]{5,}[.;]$", ln[-1].text):
+        return False
     return len(ln) <= 6 and sum(_is_value(w.text) for w in ln) >= 2
 
 
@@ -118,12 +123,44 @@ def paragraph_blocks(page: dict, page_no: int) -> list:
 
 
 def page_lines_of(page: dict, page_no: int) -> list:
-    """The text lines of a page, or [] for a table of contents or an index."""
+    """The text lines of a page, or [] for a table of contents or an index.
+
+    A page whose two columns the reading flow did not split (it finds no gutter when one column is a table
+    that runs on below the other: JPM p70, a metrics table on the left and its footnotes on the right) is
+    read column by column as the table reader splits it; read across, each footnote line was glued to a
+    table line, dropped with it, and the sentence "Firmwide mortgage origination volume was $63.4 billion,
+    $47.4 billion and $41.4 billion ..." never became a record."""
     lines = [ln for ln in make_flow(page_no, page).lines if ln]
+    if find_gutter(page["words"], page["w"]) is None:
+        from .alltables import _side_by_side, _streams          # alltables does not import mentions
+        from .statements import page_lines
+        raw = page_lines(page)
+        streams = [part for s in _streams(raw, page["w"]) for part in _side_by_side(s)]
+        if len(streams) >= 2 and _clean_split(raw, streams):
+            lines = [ln for s in streams for ln in s if ln]
     ends_in_number = sum(1 for ln in lines if re.fullmatch(r"\d{1,3}", ln[-1].text))
     if lines and ends_in_number >= max(8, 0.4 * len(lines)):
         return []
     return lines
+
+
+def _clean_split(raw: list, streams: list) -> bool:
+    """Every printed line the streams cut in two is cut at a wide gap (a gutter between two columns, JPM p70), never
+    between two words of one sentence: a full-width paragraph cut at a false gutter lost "billion" from "$19.9
+    billion" (XOM p64, GM p40, AMD p58: red team 15) and glued halves of two sentences (META p122)."""
+    where = {}
+    for k, s in enumerate(streams):
+        for ln in s:
+            for w in ln:
+                where[(round(w.x0, 1), round(w.y0, 1), w.text)] = k
+    for ln in raw:
+        words = sorted(ln, key=lambda w: w.x0)
+        for a, b in zip(words, words[1:]):
+            ka = where.get((round(a.x0, 1), round(a.y0, 1), a.text))
+            kb = where.get((round(b.x0, 1), round(b.y0, 1), b.text))
+            if ka is not None and kb is not None and ka != kb and b.x0 - a.x1 < 12:
+                return False
+    return True
 
 
 def _blocks(lines: list, footnotes: bool) -> list:
@@ -186,6 +223,8 @@ def numbers_of(sentence: str) -> tuple:
                 value = n * scale
             else:
                 noun = NOUN_AFTER_RE.match(after)
+                if noun and SCALE_BETWEEN_RE.search(after[:noun.start("noun")]):
+                    noun = None                           # "151 net thousands acres": a count whose scale is unclear
                 yearish = re.fullmatch(r"(19|20)\d\d", m.group("n")) and not m.group("scale")
                 if noun and yearish and (after[:noun.start("noun")].strip(" ,") or after.lstrip().startswith(",")):
                     noun = None                           # "fiscal 2026, we repurchased shares": a year
@@ -204,12 +243,24 @@ def numbers_of(sentence: str) -> tuple:
                 elif m.group("scale") and not foreign and not CURRENCY_AFTER_RE.match(after):
                     # "1,659 million adjusted scripts": a scale word with no dollar sign counts something
                     unit, value = "count", n * scale
+                elif not yearish and not labelled and not foreign and _open_noun(after):
+                    # any plural noun after a bare number counts it ("12 reportable segments", "1,700 suppliers"
+                    # with "suppliers" listed, "214 franchise partners" with "partners" not): NOUNS stays a
+                    # gazetteer, and a noun outside it is marked so the answer can say it was not on the list
+                    unit, value = "count", n * scale
                 else:
                     unit, value = ("year", n) if yearish else ("number", n * scale)
             text = text.strip()
         if isinstance(value, float):
             value = int(round(value)) if abs(value - round(value)) < 1e-6 * max(1.0, abs(value)) else round(value, 6)
         nums.append({"slot": f"<n{k}>", "text": text, "value": value, "unit": unit})
+        if unit == "count" and not m.group("date"):
+            counted = NOUN_AFTER_RE.match(sentence[m.end():m.end() + 160])
+            if counted and counted.group("noun").lower() != "shares":
+                nums[-1]["noun"] = counted.group("noun").lower()
+            elif _open_noun(sentence[m.end():m.end() + 160]):
+                nums[-1]["noun"] = _open_noun(sentence[m.end():m.end() + 160])
+                nums[-1]["noun_listed"] = False
         if unit not in CUED and unit not in ("date", "year", "number"):
             nums[-1]["unit_token"] = True
         # only the digits are masked: "$<n1> billion", "<n2>%" keep their unit words
@@ -218,6 +269,48 @@ def numbers_of(sentence: str) -> tuple:
         last = e
     parts.append(sentence[last:])
     return "".join(parts), nums
+
+
+OPEN_NOUN_RE = re.compile(rf"^{LIST_TAIL},?\s+(?:{GLUE}\s+){{0,2}}?(?P<noun>[a-z][a-z-]{{2,}}s)\b(?![-’'])", re.I)
+# plural-looking words that do not count anything after a number: spans of time, money, rates, repetitions, and
+# singular words that end in s ("gross", "basis", "status", "various", "across", "less")
+NOT_COUNTED = {"seconds", "minutes", "hours", "days", "weeks", "months", "quarters", "years", "decades", "periods",
+               "times", "basis", "points", "cents", "dollars", "euros", "pounds", "francs", "pesos", "rupees", "yen",
+               "votes", "percentages", "levels", "tiers", "notes", "items", "parts", "sections", "rules", "forms",
+               "pages", "exhibits", "schedules", "steps", "stages", "phases", "series", "classes", "grades",
+               "ratings", "basis-points", "bps", "x", "fold", "plus", "thus", "always", "versus", "whereas",
+               "perhaps", "unless", "across", "afterwards", "towards", "besides", "sometimes", "nevertheless",
+               "includes", "represents", "remains", "reflects", "requires", "results", "increases", "decreases",
+               "declines", "rises", "grows", "falls", "means", "consists", "contains", "operates", "owns", "has",
+               "was", "is", "as", "its", "this", "thus", "us", "lbs", "ms",
+               # money is never a count of things (red team 17: JNJ p40 "10.4 non-cash expenses" in billions)
+               "expenses", "costs", "charges", "revenues", "sales", "earnings", "losses", "gains", "assets",
+               "liabilities", "payments", "proceeds", "fees", "taxes", "savings", "receivables", "payables",
+               "dividends", "investments", "securities", "obligations", "commitments", "reserves", "impairments",
+               "contributions", "purchases", "repurchases", "credits", "debts", "returns", "borrowings", "deposits",
+               "benefits", "premiums", "royalties", "rents", "wages", "salaries", "bonuses", "awards-related",
+               # verbs in -s after a standard's number ("ASC 820 establishes", "ASU 2023-09 requires")
+               "establishes", "defines", "provides", "applies", "addresses", "amends", "clarifies", "eliminates",
+               "specifies", "permits", "allows", "governs", "relates", "describes", "sets", "expands", "modifies",
+               "supersedes", "simplifies", "replaces", "introduces", "removes", "improves", "enhances", "changes",
+               "affects", "covers", "states", "notes",
+               # scale words are not what is counted ("151 net thousands acres")
+               "thousands", "millions", "billions", "trillions", "hundreds", "dozens", "tens"}
+SCALE_BETWEEN_RE = re.compile(r"\b(?:thousands?|millions?|billions?|trillions?)\b", re.I)
+
+
+def _open_noun(after: str) -> Optional[str]:
+    """The plural noun a bare number counts ("12 reportable segments" -> "segments"), or None: a word that ends
+    in s but is no plural ("gross", "basis", "previous"), that measures time, money or a rate, or a verb is not
+    one; nor is a noun with a scale word before it ("151 net thousands acres": the count's scale is unclear)."""
+    m = OPEN_NOUN_RE.match(after)
+    if not m:
+        return None
+    noun = m.group("noun").lower()
+    if noun in NOT_COUNTED or noun.endswith(("ss", "us", "is", "ous", "as")) or \
+            SCALE_BETWEEN_RE.search(after[:m.start("noun")]):
+        return None
+    return noun
 
 
 def _iso(text: str) -> str:
@@ -295,6 +388,9 @@ def page_mentions(doc: str, ticker: str, page_no: int, page: dict, fiscal_year: 
 
 # ------------------------------------------------ figures listed for several years (buildfix 2)
 SEP_RE = re.compile(r"\s*,?\s*(?:and|or)?\s*")
+# a list of years may repeat "fiscal" before each: "in fiscal 2025, fiscal 2024, and fiscal 2023 respectively" (WMT
+# FY2025 p78: the three fuel-expense figures had no year)
+YEAR_SEP_RE = re.compile(r"\s*,?\s*(?:and|or)?\s*(?:fiscal\s+(?:years?\s+)?)?")
 YEAR_LEAD_RE = re.compile(r"\b(?:in|for|during|of|at|as of|through|fiscal|years?|end of|ended)\s+$", re.I)
 RESPECTIVELY_RE = re.compile(r"^\s*,?\s*respectively\b", re.I)
 SUBJECT_AFTER_RE = re.compile(rf"^\s+(?:of\s+)?(?:(?:total|the|our|its)\s+)?(?:{GLUE}\s+){{0,2}}?(?P<noun>shares|{NOUNS})\b",
@@ -308,9 +404,10 @@ def _runs(sentence: str, spans: list, nums: list, years: bool) -> list:
     """Lists of two or more tokens of one kind (years, or figures) joined only by commas and
     "and": "42,300, 38,700, and 35,400" -> [[i, i+1, i+2]]."""
     runs, cur = [], []
+    sep = YEAR_SEP_RE if years else SEP_RE
     for i, n in enumerate(nums):
         fits = n["unit"] != "date" and (n["unit"] == "year") == years
-        joined = bool(cur) and bool(SEP_RE.fullmatch(sentence[spans[cur[-1]][1]:spans[i][0]]))
+        joined = bool(cur) and bool(sep.fullmatch(sentence[spans[cur[-1]][1]:spans[i][0]]))
         if not fits or not joined:
             if len(cur) >= 2:
                 runs.append(cur)

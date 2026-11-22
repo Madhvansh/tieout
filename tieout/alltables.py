@@ -44,6 +44,12 @@ ITEM_RE = re.compile(r"^item\s+\d{1,2}[ABC]?\s*[.:\-–—]?\s+[A-Z][^\d]*$", re
 INTRO_RE = re.compile(r"^(?:the\s+)?(?:following|below)\s+tables?\s+(?:below\s+)?"
                       r"(?:shows?|presents?|summarizes?|sets?\s+forth|provides?|reflects?|details?|"
                       r"includes?|lists?|illustrates?|reconciles?|disaggregates?|contains?)\s+", re.I)
+# a sentence that introduces the next table ("A summary of option activity ... is presented below:", "A summary
+# of income taxes paid in 2025 is as follows:") ends the table above it, even when it is short enough to read as a
+# label line (JNJ p87, PEP p82: the next table's amounts lined up with the rates above and the two were one region)
+INTRODUCES_RE = re.compile(r"\b(?:is|are|was|were)\s+(?:as\s+follows|presented|shown|summarized|provided|set\s+forth|"
+                           r"detailed|outlined|disclosed)\b|\b(?:as\s+follows|presented\s+below|shown\s+below|"
+                           r"summarized\s+below|set\s+forth\s+below)\s*[:.]?\s*$", re.I)
 CONTINUED_RE = re.compile(r"^\(?\s*(table\s+)?continued\b|\bcontinued (from|on) (the )?(previous|next|following) page", re.I)
 SENTENCE_SPLIT =re.compile(r"(?<=[.!?])\s+(?=[A-Z(])")
 TITLE_MAX = 160
@@ -148,10 +154,17 @@ def _value_run(ln: list) -> int:
             break
     # a footnote marker glued to the label ("Beauty (b)   13,214", "Segment cost of sales (a)   10,564")
     # belongs to the label: counted as the first value it hid the gap before the values, the line read
-    # as prose and the table was cut there (TGT p57, PEP p68)
-    while 0 < j < len(ln) - 1 and MARKER_RE.match(ln[j].text) and ln[j].x0 - ln[j - 1].x1 < 6 and \
-            re.search(r"[A-Za-z]", ln[j - 1].text) and not MARKER_RE.match(ln[j - 1].text):
-        j += 1
+    # as prose and the table was cut there (TGT p57, PEP p68). So does a chain of them glued one to the
+    # next ("Average ticket (2) (3)   $90.56", "Comparable customer transactions (% change) (1) (2)"): with
+    # only the first passed over, the second hid the gap, the line read as a label or as prose, and the
+    # table lost that row and the rows under it (HD p37)
+    # (_bind_label_numbers has already made the first marker of such a chain label text: "(1)" + LABEL_MARK)
+    if 0 < j < len(ln) - 1 and (re.search(r"[A-Za-z]", ln[j - 1].text) and not MARKER_RE.match(ln[j - 1].text)
+                                or ln[j - 1].text.endswith(LABEL_MARK)):
+        k = j
+        while k < len(ln) - 1 and MARKER_RE.match(ln[k].text) and ln[k].x0 - ln[k - 1].x1 < 6:
+            k += 1
+        j = k
     return j
 
 
@@ -205,10 +218,33 @@ def _classify(ln: list, left: float, right: float) -> Line:
         return Line(ln, "colhdr", text)                 # "Year Ended December 31," over the columns
     if CAPTION_RE.search(text) and len(text) < 90:
         return Line(ln, "caption", text)                # "(In millions, except per share data)"
+    if _quarter_header(ln):
+        return Line(ln, "colhdr", text)                 # "(In millions ...) Fourth Third Second First Fourth ..."
     split = _right_split(ln, left, width)
     if not split and ln[-1].x1 - ln[0].x0 > 0.62 * width and len(ln) >= 7:
         return Line(ln, "prose", text)
     return Line(ln, "label", text, split=split)
+
+
+QUARTER_ORDINAL_RE = re.compile(r"^(?:first|second|third|fourth|1st|2nd|3rd|4th|q[1-4]|[1-4]q(?:\d\d)?)$", re.I)
+HEADER_WORD_RE = re.compile(r"^(?:quarters?|full|years?|total|ytd|change|vs\.?|%|fiscal|ended|months?)$", re.I)
+
+
+def _quarter_header(ln: list) -> bool:
+    """A line of column words that names quarters: "(In millions, except per share information) Fourth Third
+    Second First Fourth Third Second First" (BAC p35), "First Quarter Second Quarter ...". A caption in
+    parentheses may open it; every other word is a quarter's ordinal, a year, a month or a header word, and at
+    least two are ordinals. Long, it read as prose, and the table lost its header and its periods."""
+    words = [w.text.replace(LABEL_MARK, "").rstrip(",") for w in ln]
+    k = 0
+    if words and words[0].startswith("("):
+        while k < len(words) and not words[k].endswith(")"):
+            k += 1
+        k += 1
+    rest = words[k:]
+    ords = sum(1 for t in rest if QUARTER_ORDINAL_RE.match(t))
+    return ords >= 2 and all(QUARTER_ORDINAL_RE.match(t) or HEADER_WORD_RE.match(t) or YEAR_RE.match(t.lstrip("'"))
+                             or t.lower().rstrip(".") in MONTHS or t.lower()[:3] in MONTH_ABBR for t in rest)
 
 
 def _right_split(ln: list, left: float, width: float) -> int:
@@ -233,21 +269,27 @@ class Region:
     nnum: int = 0
     edges: list = field(default_factory=list)
     single: bool = False          # one value line: a table only if a year header is printed over it
+    alt: list = field(default_factory=list)       # where the "%" signs of its rate lines end
 
 
 def _big_gap(a: Line, b: Line) -> bool:
     return b.y0 - a.y1 > 2.6 * max(a.height, b.height)
 
 
-def _new_columns(reg: Region, ln: Line) -> bool:
+def _new_columns(reg: Region, ln: Line, adjacent: bool = False) -> bool:
     """A num line whose values share no column edge with the region so far
     starts another table (two tables with different layouts, no gap). A rate
     printed "0.9 %" may be aligned on its digits or on its sign, so both edges
-    count (TGT p5 sets the sign under the amounts, AXP p56 lets it hang)."""
+    count (TGT p5 sets the sign under the amounts, AXP p56 lets it hang). The same holds the other way
+    round, but only for an amount line printed directly under a rate line (`adjacent`): HD p37 prints three
+    "% change" lines and then "Customer transactions (in millions) 1,601.5" with no line between. With a
+    sentence or a column heading between them it is the next table (PEP p82: "A summary of income taxes
+    paid ..." / "Amount" under the tax-rate table)."""
     if reg.nnum < 2:
         return False
     mine = ln.edges + ln.alt
-    return not any(abs(e - f) <= 5 for e in mine for f in reg.edges)
+    return not any(abs(e - f) <= 5 for e in mine for f in reg.edges) and \
+        not (adjacent and any(abs(e - f) <= 5 for e in ln.edges for f in reg.alt))
 
 
 def _ends_label(prev: Line, ln: Line) -> bool:
@@ -275,13 +317,14 @@ def _segment(lines: list) -> list:
         if i > 0 and cur is not None and _big_gap(lines[i - 1], ln):
             close()                                     # whitespace ends a table (and a stray header)
         if ln.kind == "num":
-            if cur is not None and _new_columns(cur, ln):
+            if cur is not None and _new_columns(cur, ln, adjacent=i > 0 and lines[i - 1].kind == "num"):
                 close()
             if cur is None:
                 cur = Region(start=i)
             cur.nnum += 1
             cur.end = i
             cur.edges.extend(ln.edges)        # a sign edge only lets a rate line match; it never widens the table
+            cur.alt.extend(ln.alt)
         elif ln.kind == "hdr":
             if i and _ends_label(lines[i - 1], ln):
                 continue                                # "Balance as of December 31," / "2022": the end of a label
@@ -290,7 +333,7 @@ def _segment(lines: list) -> list:
                 close()
             if cur is None:
                 cur = Region(start=i)
-        elif ln.kind in ("prose", "note"):
+        elif ln.kind in ("prose", "note") or ln.kind == "label" and INTRODUCES_RE.search(ln.text):
             close()
         elif ln.kind == "colhdr" and cur is None:
             cur = Region(start=i)
@@ -304,14 +347,22 @@ def _extend_up(lines: list, start: int, floor: int) -> int:
     headers, the scale caption, and label-column header words such as
     "As of or for the year ended" / "December 31,"."""
     i = start
+    # a caption in parentheses broken over the label column's lines ("(in billions, except ratios" / "and where
+    # otherwise" / "noted) 2025 2024 2023", JPM p70): while a ")" below still lacks its "(", the lines above
+    # belong to the caption, and without them the table lost its scale (its amounts read as per-share)
+    # (only from a header line: a data row whose wrapped label closes a parenthesis, "accounts) 5,192 4,667", must not
+    # climb into the caption of the table above, C p42)
+    depth = lines[start].text.count(")") - lines[start].text.count("(") if lines[start].kind in ("hdr", "colhdr") else 0
     while i - 1 > floor and start - (i - 1) <= 8:
         ln = lines[i - 1]
         if _big_gap(ln, lines[i]):
             break
         ok = ln.kind in ("hdr", "colhdr", "caption", "mark") or (ln.kind == "label" and ln.split) or (
-            ln.kind == "label" and (ln.text.endswith(":") or HEADER_HINT.search(ln.text)) and len(ln.text) < 60)
+            ln.kind == "label" and (ln.text.endswith(":") or HEADER_HINT.search(ln.text)) and len(ln.text) < 60) or (
+            depth > 0 and ln.kind == "label" and len(ln.text) < 60)
         if not ok:
             break
+        depth += ln.text.count(")") - ln.text.count("(")
         i -= 1
     return i
 
@@ -1155,8 +1206,12 @@ def _stream_tables(doc_id: str, page_no: int, raw: list, default_scale: float,
     for reg in regions:
         start = _extend_up(lines, reg.start, floor)
         region = lines[start:reg.end + 1]
-        if reg.single and not any(ln.kind == "hdr" for ln in region[:-1]):
-            continue                      # one line of values with no year header over it: not a table
+        # one line of values with no year header over it is not a table; a caption that prints the years counts as
+        # one ("(Millions) 2026 2027 2028 2029 2030 After 5 years Total" over AXP p123's maturities of deposits, whose
+        # only row was lost once its footnote marker stopped gluing it to the table above)
+        if reg.single and not any(ln.kind == "hdr" or ln.kind == "caption" and
+                                  sum(1 for w in ln.words if YEAR_RE.match(w.text)) >= 2 for ln in region[:-1]):
+            continue
         title, intro = _title(lines, start, floor)
         context = ""
         if ctx is not None:
