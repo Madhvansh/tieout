@@ -1,0 +1,1693 @@
+{
+ "facts": 4158,
+ "usd_readings": 12634,
+ "grading": "each fact's best reading against the clean graph's own value",
+ "policies": {
+  "off": "every reading served as verified",
+  "on": "only verified readings trusted",
+  "on_plus": "verified and not contradicted by a sentence figure or a carried column"
+ },
+ "columns": "mean and sd over seeds",
+ "summary": [
+  {
+   "rate": 0.0,
+   "seeds": 1,
+   "damaged_cells": [
+    0.0,
+    0.0
+   ],
+   "off": {
+    "correct": [
+     4158.0,
+     0.0
+    ],
+    "silent_wrong": [
+     0.0,
+     0.0
+    ],
+    "flagged": [
+     0.0,
+     0.0
+    ],
+    "withheld": [
+     0.0,
+     0.0
+    ],
+    "facts": [
+     4158.0,
+     0.0
+    ],
+    "missing": [
+     0.0,
+     0.0
+    ],
+    "withheld_right": [
+     0.0,
+     0.0
+    ]
+   },
+   "on": {
+    "correct": [
+     4042.0,
+     0.0
+    ],
+    "silent_wrong": [
+     0.0,
+     0.0
+    ],
+    "flagged": [
+     0.0,
+     0.0
+    ],
+    "withheld": [
+     116.0,
+     0.0
+    ],
+    "facts": [
+     4158.0,
+     0.0
+    ],
+    "missing": [
+     0.0,
+     0.0
+    ],
+    "withheld_right": [
+     116.0,
+     0.0
+    ]
+   },
+   "on_plus": {
+    "correct": [
+     4042.0,
+     0.0
+    ],
+    "silent_wrong": [
+     0.0,
+     0.0
+    ],
+    "flagged": [
+     0.0,
+     0.0
+    ],
+    "withheld": [
+     116.0,
+     0.0
+    ],
+    "facts": [
+     4158.0,
+     0.0
+    ],
+    "missing": [
+     0.0,
+     0.0
+    ],
+    "withheld_right": [
+     116.0,
+     0.0
+    ]
+   }
+  },
+  {
+   "rate": 0.005,
+   "seeds": 5,
+   "damaged_cells": [
+    132.8,
+    9.15
+   ],
+   "off": {
+    "correct": [
+     4121.0,
+     4.3
+    ],
+    "silent_wrong": [
+     33.4,
+     3.65
+    ],
+    "flagged": [
+     0.0,
+     0.0
+    ],
+    "withheld": [
+     3.6,
+     1.34
+    ],
+    "facts": [
+     4158.0,
+     0.0
+    ],
+    "missing": [
+     3.6,
+     1.34
+    ],
+    "withheld_right": [
+     0.0,
+     0.0
+    ]
+   },
+   "on": {
+    "correct": [
+     3896.8,
+     26.54
+    ],
+    "silent_wrong": [
+     8.2,
+     4.09
+    ],
+    "flagged": [
+     25.2,
+     1.92
+    ],
+    "withheld": [
+     227.8,
+     28.18
+    ],
+    "facts": [
+     4158.0,
+     0.0
+    ],
+    "missing": [
+     3.6,
+     1.34
+    ],
+    "withheld_right": [
+     224.2,
+     27.78
+    ]
+   },
+   "on_plus": {
+    "correct": [
+     3891.2,
+     26.82
+    ],
+    "silent_wrong": [
+     7.8,
+     4.21
+    ],
+    "flagged": [
+     25.6,
+     2.07
+    ],
+    "withheld": [
+     233.4,
+     28.25
+    ],
+    "facts": [
+     4158.0,
+     0.0
+    ],
+    "missing": [
+     3.6,
+     1.34
+    ],
+    "withheld_right": [
+     229.8,
+     27.74
+    ]
+   }
+  },
+  {
+   "rate": 0.01,
+   "seeds": 5,
+   "damaged_cells": [
+    248.4,
+    24.67
+   ],
+   "off": {
+    "correct": [
+     4084.2,
+     9.6
+    ],
+    "silent_wrong": [
+     65.6,
+     7.3
+    ],
+    "flagged": [
+     0.0,
+     0.0
+    ],
+    "withheld": [
+     8.2,
+     2.77
+    ],
+    "facts": [
+     4158.0,
+     0.0
+    ],
+    "missing": [
+     8.2,
+     2.77
+    ],
+    "withheld_right": [
+     0.0,
+     0.0
+    ]
+   },
+   "on": {
+    "correct": [
+     3759.2,
+     39.59
+    ],
+    "silent_wrong": [
+     13.4,
+     3.36
+    ],
+    "flagged": [
+     52.2,
+     10.18
+    ],
+    "withheld": [
+     333.2,
+     34.56
+    ],
+    "facts": [
+     4158.0,
+     0.0
+    ],
+    "missing": [
+     8.2,
+     2.77
+    ],
+    "withheld_right": [
+     325.0,
+     32.7
+    ]
+   },
+   "on_plus": {
+    "correct": [
+     3750.6,
+     37.79
+    ],
+    "silent_wrong": [
+     12.6,
+     2.79
+    ],
+    "flagged": [
+     53.0,
+     9.92
+    ],
+    "withheld": [
+     341.8,
+     32.95
+    ],
+    "facts": [
+     4158.0,
+     0.0
+    ],
+    "missing": [
+     8.2,
+     2.77
+    ],
+    "withheld_right": [
+     333.6,
+     31.2
+    ]
+   }
+  },
+  {
+   "rate": 0.02,
+   "seeds": 5,
+   "damaged_cells": [
+    512.8,
+    28.3
+   ],
+   "off": {
+    "correct": [
+     4006.8,
+     6.61
+    ],
+    "silent_wrong": [
+     135.2,
+     7.76
+    ],
+    "flagged": [
+     0.0,
+     0.0
+    ],
+    "withheld": [
+     16.0,
+     1.87
+    ],
+    "facts": [
+     4158.0,
+     0.0
+    ],
+    "missing": [
+     16.0,
+     1.87
+    ],
+    "withheld_right": [
+     0.0,
+     0.0
+    ]
+   },
+   "on": {
+    "correct": [
+     3498.8,
+     24.04
+    ],
+    "silent_wrong": [
+     33.6,
+     6.19
+    ],
+    "flagged": [
+     101.6,
+     9.48
+    ],
+    "withheld": [
+     524.0,
+     24.69
+    ],
+    "facts": [
+     4158.0,
+     0.0
+    ],
+    "missing": [
+     16.0,
+     1.87
+    ],
+    "withheld_right": [
+     508.0,
+     25.46
+    ]
+   },
+   "on_plus": {
+    "correct": [
+     3483.4,
+     22.58
+    ],
+    "silent_wrong": [
+     30.6,
+     8.2
+    ],
+    "flagged": [
+     104.6,
+     10.24
+    ],
+    "withheld": [
+     539.4,
+     22.41
+    ],
+    "facts": [
+     4158.0,
+     0.0
+    ],
+    "missing": [
+     16.0,
+     1.87
+    ],
+    "withheld_right": [
+     523.4,
+     23.32
+    ]
+   }
+  },
+  {
+   "rate": 0.05,
+   "seeds": 5,
+   "damaged_cells": [
+    1235.0,
+    38.99
+   ],
+   "off": {
+    "correct": [
+     3776.6,
+     28.17
+    ],
+    "silent_wrong": [
+     342.2,
+     31.32
+    ],
+    "flagged": [
+     0.0,
+     0.0
+    ],
+    "withheld": [
+     39.2,
+     4.44
+    ],
+    "facts": [
+     4158.0,
+     0.0
+    ],
+    "missing": [
+     39.2,
+     4.44
+    ],
+    "withheld_right": [
+     0.0,
+     0.0
+    ]
+   },
+   "on": {
+    "correct": [
+     2785.8,
+     45.66
+    ],
+    "silent_wrong": [
+     64.4,
+     11.74
+    ],
+    "flagged": [
+     277.8,
+     21.0
+    ],
+    "withheld": [
+     1030.0,
+     34.99
+    ],
+    "facts": [
+     4158.0,
+     0.0
+    ],
+    "missing": [
+     39.2,
+     4.44
+    ],
+    "withheld_right": [
+     990.8,
+     37.78
+    ]
+   },
+   "on_plus": {
+    "correct": [
+     2760.4,
+     49.7
+    ],
+    "silent_wrong": [
+     58.8,
+     10.23
+    ],
+    "flagged": [
+     283.4,
+     21.21
+    ],
+    "withheld": [
+     1055.4,
+     34.73
+    ],
+    "facts": [
+     4158.0,
+     0.0
+    ],
+    "missing": [
+     39.2,
+     4.44
+    ],
+    "withheld_right": [
+     1016.2,
+     38.0
+    ]
+   }
+  },
+  {
+   "rate": 0.1,
+   "seeds": 5,
+   "damaged_cells": [
+    2405.0,
+    55.14
+   ],
+   "off": {
+    "correct": [
+     3435.2,
+     20.73
+    ],
+    "silent_wrong": [
+     650.2,
+     22.34
+    ],
+    "flagged": [
+     0.0,
+     0.0
+    ],
+    "withheld": [
+     72.6,
+     4.39
+    ],
+    "facts": [
+     4158.0,
+     0.0
+    ],
+    "missing": [
+     72.6,
+     4.39
+    ],
+    "withheld_right": [
+     0.0,
+     0.0
+    ]
+   },
+   "on": {
+    "correct": [
+     1951.0,
+     53.01
+    ],
+    "silent_wrong": [
+     95.8,
+     20.44
+    ],
+    "flagged": [
+     554.4,
+     25.26
+    ],
+    "withheld": [
+     1556.8,
+     46.32
+    ],
+    "facts": [
+     4158.0,
+     0.0
+    ],
+    "missing": [
+     72.6,
+     4.39
+    ],
+    "withheld_right": [
+     1484.2,
+     44.23
+    ]
+   },
+   "on_plus": {
+    "correct": [
+     1921.0,
+     58.65
+    ],
+    "silent_wrong": [
+     86.0,
+     17.79
+    ],
+    "flagged": [
+     564.2,
+     26.07
+    ],
+    "withheld": [
+     1586.8,
+     49.95
+    ],
+    "facts": [
+     4158.0,
+     0.0
+    ],
+    "missing": [
+     72.6,
+     4.39
+    ],
+    "withheld_right": [
+     1514.2,
+     48.19
+    ]
+   }
+  },
+  {
+   "rate": 0.2,
+   "seeds": 5,
+   "damaged_cells": [
+    4430.8,
+    122.31
+   ],
+   "off": {
+    "correct": [
+     2811.0,
+     82.77
+    ],
+    "silent_wrong": [
+     1206.6,
+     73.51
+    ],
+    "flagged": [
+     0.0,
+     0.0
+    ],
+    "withheld": [
+     140.4,
+     9.99
+    ],
+    "facts": [
+     4158.0,
+     0.0
+    ],
+    "missing": [
+     140.4,
+     9.99
+    ],
+    "withheld_right": [
+     0.0,
+     0.0
+    ]
+   },
+   "on": {
+    "correct": [
+     1007.6,
+     89.31
+    ],
+    "silent_wrong": [
+     102.8,
+     17.33
+    ],
+    "flagged": [
+     1103.8,
+     56.36
+    ],
+    "withheld": [
+     1943.8,
+     62.09
+    ],
+    "facts": [
+     4158.0,
+     0.0
+    ],
+    "missing": [
+     140.4,
+     9.99
+    ],
+    "withheld_right": [
+     1803.4,
+     62.49
+    ]
+   },
+   "on_plus": {
+    "correct": [
+     983.2,
+     88.47
+    ],
+    "silent_wrong": [
+     93.6,
+     12.16
+    ],
+    "flagged": [
+     1113.0,
+     62.06
+    ],
+    "withheld": [
+     1968.2,
+     59.77
+    ],
+    "facts": [
+     4158.0,
+     0.0
+    ],
+    "missing": [
+     140.4,
+     9.99
+    ],
+    "withheld_right": [
+     1827.8,
+     60.48
+    ]
+   }
+  }
+ ],
+ "runs": [
+  {
+   "rate": 0.0,
+   "seed": 1,
+   "damaged_cells": 0,
+   "off": {
+    "correct": 4158,
+    "silent_wrong": 0,
+    "flagged": 0,
+    "withheld": 0,
+    "facts": 4158,
+    "missing": 0,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 4042,
+    "silent_wrong": 0,
+    "flagged": 0,
+    "withheld": 116,
+    "facts": 4158,
+    "missing": 0,
+    "withheld_right": 116
+   },
+   "on_plus": {
+    "correct": 4042,
+    "silent_wrong": 0,
+    "flagged": 0,
+    "withheld": 116,
+    "facts": 4158,
+    "missing": 0,
+    "withheld_right": 116
+   }
+  },
+  {
+   "rate": 0.005,
+   "seed": 1,
+   "damaged_cells": 142,
+   "off": {
+    "correct": 4121,
+    "silent_wrong": 32,
+    "flagged": 0,
+    "withheld": 5,
+    "facts": 4158,
+    "missing": 5,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 3892,
+    "silent_wrong": 10,
+    "flagged": 22,
+    "withheld": 234,
+    "facts": 4158,
+    "missing": 5,
+    "withheld_right": 229
+   },
+   "on_plus": {
+    "correct": 3883,
+    "silent_wrong": 10,
+    "flagged": 22,
+    "withheld": 243,
+    "facts": 4158,
+    "missing": 5,
+    "withheld_right": 238
+   }
+  },
+  {
+   "rate": 0.005,
+   "seed": 2,
+   "damaged_cells": 124,
+   "off": {
+    "correct": 4124,
+    "silent_wrong": 31,
+    "flagged": 0,
+    "withheld": 3,
+    "facts": 4158,
+    "missing": 3,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 3903,
+    "silent_wrong": 5,
+    "flagged": 26,
+    "withheld": 224,
+    "facts": 4158,
+    "missing": 3,
+    "withheld_right": 221
+   },
+   "on_plus": {
+    "correct": 3901,
+    "silent_wrong": 4,
+    "flagged": 27,
+    "withheld": 226,
+    "facts": 4158,
+    "missing": 3,
+    "withheld_right": 223
+   }
+  },
+  {
+   "rate": 0.005,
+   "seed": 3,
+   "damaged_cells": 122,
+   "off": {
+    "correct": 4125,
+    "silent_wrong": 30,
+    "flagged": 0,
+    "withheld": 3,
+    "facts": 4158,
+    "missing": 3,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 3861,
+    "silent_wrong": 3,
+    "flagged": 27,
+    "withheld": 267,
+    "facts": 4158,
+    "missing": 3,
+    "withheld_right": 264
+   },
+   "on_plus": {
+    "correct": 3857,
+    "silent_wrong": 3,
+    "flagged": 27,
+    "withheld": 271,
+    "facts": 4158,
+    "missing": 3,
+    "withheld_right": 268
+   }
+  },
+  {
+   "rate": 0.005,
+   "seed": 4,
+   "damaged_cells": 137,
+   "off": {
+    "correct": 4121,
+    "silent_wrong": 35,
+    "flagged": 0,
+    "withheld": 2,
+    "facts": 4158,
+    "missing": 2,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 3935,
+    "silent_wrong": 10,
+    "flagged": 25,
+    "withheld": 188,
+    "facts": 4158,
+    "missing": 2,
+    "withheld_right": 186
+   },
+   "on_plus": {
+    "correct": 3930,
+    "silent_wrong": 9,
+    "flagged": 26,
+    "withheld": 193,
+    "facts": 4158,
+    "missing": 2,
+    "withheld_right": 191
+   }
+  },
+  {
+   "rate": 0.005,
+   "seed": 5,
+   "damaged_cells": 139,
+   "off": {
+    "correct": 4114,
+    "silent_wrong": 39,
+    "flagged": 0,
+    "withheld": 5,
+    "facts": 4158,
+    "missing": 5,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 3893,
+    "silent_wrong": 13,
+    "flagged": 26,
+    "withheld": 226,
+    "facts": 4158,
+    "missing": 5,
+    "withheld_right": 221
+   },
+   "on_plus": {
+    "correct": 3885,
+    "silent_wrong": 13,
+    "flagged": 26,
+    "withheld": 234,
+    "facts": 4158,
+    "missing": 5,
+    "withheld_right": 229
+   }
+  },
+  {
+   "rate": 0.01,
+   "seed": 1,
+   "damaged_cells": 224,
+   "off": {
+    "correct": 4094,
+    "silent_wrong": 59,
+    "flagged": 0,
+    "withheld": 5,
+    "facts": 4158,
+    "missing": 5,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 3805,
+    "silent_wrong": 14,
+    "flagged": 45,
+    "withheld": 294,
+    "facts": 4158,
+    "missing": 5,
+    "withheld_right": 289
+   },
+   "on_plus": {
+    "correct": 3796,
+    "silent_wrong": 14,
+    "flagged": 45,
+    "withheld": 303,
+    "facts": 4158,
+    "missing": 5,
+    "withheld_right": 298
+   }
+  },
+  {
+   "rate": 0.01,
+   "seed": 2,
+   "damaged_cells": 252,
+   "off": {
+    "correct": 4069,
+    "silent_wrong": 78,
+    "flagged": 0,
+    "withheld": 11,
+    "facts": 4158,
+    "missing": 11,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 3715,
+    "silent_wrong": 8,
+    "flagged": 70,
+    "withheld": 365,
+    "facts": 4158,
+    "missing": 11,
+    "withheld_right": 354
+   },
+   "on_plus": {
+    "correct": 3710,
+    "silent_wrong": 8,
+    "flagged": 70,
+    "withheld": 370,
+    "facts": 4158,
+    "missing": 11,
+    "withheld_right": 359
+   }
+  },
+  {
+   "rate": 0.01,
+   "seed": 3,
+   "damaged_cells": 226,
+   "off": {
+    "correct": 4082,
+    "silent_wrong": 65,
+    "flagged": 0,
+    "withheld": 11,
+    "facts": 4158,
+    "missing": 11,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 3732,
+    "silent_wrong": 17,
+    "flagged": 48,
+    "withheld": 361,
+    "facts": 4158,
+    "missing": 11,
+    "withheld_right": 350
+   },
+   "on_plus": {
+    "correct": 3726,
+    "silent_wrong": 14,
+    "flagged": 51,
+    "withheld": 367,
+    "facts": 4158,
+    "missing": 11,
+    "withheld_right": 356
+   }
+  },
+  {
+   "rate": 0.01,
+   "seed": 4,
+   "damaged_cells": 256,
+   "off": {
+    "correct": 4086,
+    "silent_wrong": 64,
+    "flagged": 0,
+    "withheld": 8,
+    "facts": 4158,
+    "missing": 8,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 3796,
+    "silent_wrong": 13,
+    "flagged": 51,
+    "withheld": 298,
+    "facts": 4158,
+    "missing": 8,
+    "withheld_right": 290
+   },
+   "on_plus": {
+    "correct": 3785,
+    "silent_wrong": 12,
+    "flagged": 52,
+    "withheld": 309,
+    "facts": 4158,
+    "missing": 8,
+    "withheld_right": 301
+   }
+  },
+  {
+   "rate": 0.01,
+   "seed": 5,
+   "damaged_cells": 284,
+   "off": {
+    "correct": 4090,
+    "silent_wrong": 62,
+    "flagged": 0,
+    "withheld": 6,
+    "facts": 4158,
+    "missing": 6,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 3748,
+    "silent_wrong": 15,
+    "flagged": 47,
+    "withheld": 348,
+    "facts": 4158,
+    "missing": 6,
+    "withheld_right": 342
+   },
+   "on_plus": {
+    "correct": 3736,
+    "silent_wrong": 15,
+    "flagged": 47,
+    "withheld": 360,
+    "facts": 4158,
+    "missing": 6,
+    "withheld_right": 354
+   }
+  },
+  {
+   "rate": 0.02,
+   "seed": 1,
+   "damaged_cells": 521,
+   "off": {
+    "correct": 4002,
+    "silent_wrong": 140,
+    "flagged": 0,
+    "withheld": 16,
+    "facts": 4158,
+    "missing": 16,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 3518,
+    "silent_wrong": 41,
+    "flagged": 99,
+    "withheld": 500,
+    "facts": 4158,
+    "missing": 16,
+    "withheld_right": 484
+   },
+   "on_plus": {
+    "correct": 3504,
+    "silent_wrong": 40,
+    "flagged": 100,
+    "withheld": 514,
+    "facts": 4158,
+    "missing": 16,
+    "withheld_right": 498
+   }
+  },
+  {
+   "rate": 0.02,
+   "seed": 2,
+   "damaged_cells": 524,
+   "off": {
+    "correct": 4005,
+    "silent_wrong": 135,
+    "flagged": 0,
+    "withheld": 18,
+    "facts": 4158,
+    "missing": 18,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 3521,
+    "silent_wrong": 38,
+    "flagged": 97,
+    "withheld": 502,
+    "facts": 4158,
+    "missing": 18,
+    "withheld_right": 484
+   },
+   "on_plus": {
+    "correct": 3501,
+    "silent_wrong": 38,
+    "flagged": 97,
+    "withheld": 522,
+    "facts": 4158,
+    "missing": 18,
+    "withheld_right": 504
+   }
+  },
+  {
+   "rate": 0.02,
+   "seed": 3,
+   "damaged_cells": 488,
+   "off": {
+    "correct": 4011,
+    "silent_wrong": 131,
+    "flagged": 0,
+    "withheld": 16,
+    "facts": 4158,
+    "missing": 16,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 3467,
+    "silent_wrong": 26,
+    "flagged": 105,
+    "withheld": 560,
+    "facts": 4158,
+    "missing": 16,
+    "withheld_right": 544
+   },
+   "on_plus": {
+    "correct": 3458,
+    "silent_wrong": 21,
+    "flagged": 110,
+    "withheld": 569,
+    "facts": 4158,
+    "missing": 16,
+    "withheld_right": 553
+   }
+  },
+  {
+   "rate": 0.02,
+   "seed": 4,
+   "damaged_cells": 481,
+   "off": {
+    "correct": 4016,
+    "silent_wrong": 125,
+    "flagged": 0,
+    "withheld": 17,
+    "facts": 4158,
+    "missing": 17,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 3508,
+    "silent_wrong": 34,
+    "flagged": 91,
+    "withheld": 525,
+    "facts": 4158,
+    "missing": 17,
+    "withheld_right": 508
+   },
+   "on_plus": {
+    "correct": 3494,
+    "silent_wrong": 29,
+    "flagged": 96,
+    "withheld": 539,
+    "facts": 4158,
+    "missing": 17,
+    "withheld_right": 522
+   }
+  },
+  {
+   "rate": 0.02,
+   "seed": 5,
+   "damaged_cells": 550,
+   "off": {
+    "correct": 4000,
+    "silent_wrong": 145,
+    "flagged": 0,
+    "withheld": 13,
+    "facts": 4158,
+    "missing": 13,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 3480,
+    "silent_wrong": 29,
+    "flagged": 116,
+    "withheld": 533,
+    "facts": 4158,
+    "missing": 13,
+    "withheld_right": 520
+   },
+   "on_plus": {
+    "correct": 3460,
+    "silent_wrong": 25,
+    "flagged": 120,
+    "withheld": 553,
+    "facts": 4158,
+    "missing": 13,
+    "withheld_right": 540
+   }
+  },
+  {
+   "rate": 0.05,
+   "seed": 1,
+   "damaged_cells": 1238,
+   "off": {
+    "correct": 3731,
+    "silent_wrong": 393,
+    "flagged": 0,
+    "withheld": 34,
+    "facts": 4158,
+    "missing": 34,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 2748,
+    "silent_wrong": 82,
+    "flagged": 311,
+    "withheld": 1017,
+    "facts": 4158,
+    "missing": 34,
+    "withheld_right": 983
+   },
+   "on_plus": {
+    "correct": 2714,
+    "silent_wrong": 75,
+    "flagged": 318,
+    "withheld": 1051,
+    "facts": 4158,
+    "missing": 34,
+    "withheld_right": 1017
+   }
+  },
+  {
+   "rate": 0.05,
+   "seed": 2,
+   "damaged_cells": 1190,
+   "off": {
+    "correct": 3792,
+    "silent_wrong": 324,
+    "flagged": 0,
+    "withheld": 42,
+    "facts": 4158,
+    "missing": 42,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 2820,
+    "silent_wrong": 51,
+    "flagged": 273,
+    "withheld": 1014,
+    "facts": 4158,
+    "missing": 42,
+    "withheld_right": 972
+   },
+   "on_plus": {
+    "correct": 2796,
+    "silent_wrong": 51,
+    "flagged": 273,
+    "withheld": 1038,
+    "facts": 4158,
+    "missing": 42,
+    "withheld_right": 996
+   }
+  },
+  {
+   "rate": 0.05,
+   "seed": 3,
+   "damaged_cells": 1202,
+   "off": {
+    "correct": 3802,
+    "silent_wrong": 312,
+    "flagged": 0,
+    "withheld": 44,
+    "facts": 4158,
+    "missing": 44,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 2839,
+    "silent_wrong": 59,
+    "flagged": 253,
+    "withheld": 1007,
+    "facts": 4158,
+    "missing": 44,
+    "withheld_right": 963
+   },
+   "on_plus": {
+    "correct": 2823,
+    "silent_wrong": 50,
+    "flagged": 262,
+    "withheld": 1023,
+    "facts": 4158,
+    "missing": 44,
+    "withheld_right": 979
+   }
+  },
+  {
+   "rate": 0.05,
+   "seed": 4,
+   "damaged_cells": 1281,
+   "off": {
+    "correct": 3769,
+    "silent_wrong": 348,
+    "flagged": 0,
+    "withheld": 41,
+    "facts": 4158,
+    "missing": 41,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 2790,
+    "silent_wrong": 69,
+    "flagged": 279,
+    "withheld": 1020,
+    "facts": 4158,
+    "missing": 41,
+    "withheld_right": 979
+   },
+   "on_plus": {
+    "correct": 2759,
+    "silent_wrong": 62,
+    "flagged": 286,
+    "withheld": 1051,
+    "facts": 4158,
+    "missing": 41,
+    "withheld_right": 1010
+   }
+  },
+  {
+   "rate": 0.05,
+   "seed": 5,
+   "damaged_cells": 1264,
+   "off": {
+    "correct": 3789,
+    "silent_wrong": 334,
+    "flagged": 0,
+    "withheld": 35,
+    "facts": 4158,
+    "missing": 35,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 2732,
+    "silent_wrong": 61,
+    "flagged": 273,
+    "withheld": 1092,
+    "facts": 4158,
+    "missing": 35,
+    "withheld_right": 1057
+   },
+   "on_plus": {
+    "correct": 2710,
+    "silent_wrong": 56,
+    "flagged": 278,
+    "withheld": 1114,
+    "facts": 4158,
+    "missing": 35,
+    "withheld_right": 1079
+   }
+  },
+  {
+   "rate": 0.1,
+   "seed": 1,
+   "damaged_cells": 2476,
+   "off": {
+    "correct": 3402,
+    "silent_wrong": 686,
+    "flagged": 0,
+    "withheld": 70,
+    "facts": 4158,
+    "missing": 70,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 1877,
+    "silent_wrong": 96,
+    "flagged": 590,
+    "withheld": 1595,
+    "facts": 4158,
+    "missing": 70,
+    "withheld_right": 1525
+   },
+   "on_plus": {
+    "correct": 1835,
+    "silent_wrong": 81,
+    "flagged": 605,
+    "withheld": 1637,
+    "facts": 4158,
+    "missing": 70,
+    "withheld_right": 1567
+   }
+  },
+  {
+   "rate": 0.1,
+   "seed": 2,
+   "damaged_cells": 2378,
+   "off": {
+    "correct": 3452,
+    "silent_wrong": 638,
+    "flagged": 0,
+    "withheld": 68,
+    "facts": 4158,
+    "missing": 68,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 1998,
+    "silent_wrong": 113,
+    "flagged": 525,
+    "withheld": 1522,
+    "facts": 4158,
+    "missing": 68,
+    "withheld_right": 1454
+   },
+   "on_plus": {
+    "correct": 1974,
+    "silent_wrong": 102,
+    "flagged": 536,
+    "withheld": 1546,
+    "facts": 4158,
+    "missing": 68,
+    "withheld_right": 1478
+   }
+  },
+  {
+   "rate": 0.1,
+   "seed": 3,
+   "damaged_cells": 2442,
+   "off": {
+    "correct": 3451,
+    "silent_wrong": 632,
+    "flagged": 0,
+    "withheld": 75,
+    "facts": 4158,
+    "missing": 75,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 1936,
+    "silent_wrong": 83,
+    "flagged": 549,
+    "withheld": 1590,
+    "facts": 4158,
+    "missing": 75,
+    "withheld_right": 1515
+   },
+   "on_plus": {
+    "correct": 1906,
+    "silent_wrong": 74,
+    "flagged": 558,
+    "withheld": 1620,
+    "facts": 4158,
+    "missing": 75,
+    "withheld_right": 1545
+   }
+  },
+  {
+   "rate": 0.1,
+   "seed": 4,
+   "damaged_cells": 2335,
+   "off": {
+    "correct": 3442,
+    "silent_wrong": 637,
+    "flagged": 0,
+    "withheld": 79,
+    "facts": 4158,
+    "missing": 79,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 1937,
+    "silent_wrong": 69,
+    "flagged": 568,
+    "withheld": 1584,
+    "facts": 4158,
+    "missing": 79,
+    "withheld_right": 1505
+   },
+   "on_plus": {
+    "correct": 1912,
+    "silent_wrong": 66,
+    "flagged": 571,
+    "withheld": 1609,
+    "facts": 4158,
+    "missing": 79,
+    "withheld_right": 1530
+   }
+  },
+  {
+   "rate": 0.1,
+   "seed": 5,
+   "damaged_cells": 2394,
+   "off": {
+    "correct": 3429,
+    "silent_wrong": 658,
+    "flagged": 0,
+    "withheld": 71,
+    "facts": 4158,
+    "missing": 71,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 2007,
+    "silent_wrong": 118,
+    "flagged": 540,
+    "withheld": 1493,
+    "facts": 4158,
+    "missing": 71,
+    "withheld_right": 1422
+   },
+   "on_plus": {
+    "correct": 1978,
+    "silent_wrong": 107,
+    "flagged": 551,
+    "withheld": 1522,
+    "facts": 4158,
+    "missing": 71,
+    "withheld_right": 1451
+   }
+  },
+  {
+   "rate": 0.2,
+   "seed": 1,
+   "damaged_cells": 4609,
+   "off": {
+    "correct": 2683,
+    "silent_wrong": 1320,
+    "flagged": 0,
+    "withheld": 155,
+    "facts": 4158,
+    "missing": 155,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 866,
+    "silent_wrong": 129,
+    "flagged": 1191,
+    "withheld": 1972,
+    "facts": 4158,
+    "missing": 155,
+    "withheld_right": 1817
+   },
+   "on_plus": {
+    "correct": 839,
+    "silent_wrong": 109,
+    "flagged": 1211,
+    "withheld": 1999,
+    "facts": 4158,
+    "missing": 155,
+    "withheld_right": 1844
+   }
+  },
+  {
+   "rate": 0.2,
+   "seed": 2,
+   "damaged_cells": 4272,
+   "off": {
+    "correct": 2914,
+    "silent_wrong": 1114,
+    "flagged": 0,
+    "withheld": 130,
+    "facts": 4158,
+    "missing": 130,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 1027,
+    "silent_wrong": 81,
+    "flagged": 1033,
+    "withheld": 2017,
+    "facts": 4158,
+    "missing": 130,
+    "withheld_right": 1887
+   },
+   "on_plus": {
+    "correct": 1003,
+    "silent_wrong": 76,
+    "flagged": 1038,
+    "withheld": 2041,
+    "facts": 4158,
+    "missing": 130,
+    "withheld_right": 1911
+   }
+  },
+  {
+   "rate": 0.2,
+   "seed": 3,
+   "damaged_cells": 4461,
+   "off": {
+    "correct": 2810,
+    "silent_wrong": 1203,
+    "flagged": 0,
+    "withheld": 145,
+    "facts": 4158,
+    "missing": 145,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 1047,
+    "silent_wrong": 105,
+    "flagged": 1098,
+    "withheld": 1908,
+    "facts": 4158,
+    "missing": 145,
+    "withheld_right": 1763
+   },
+   "on_plus": {
+    "correct": 1031,
+    "silent_wrong": 97,
+    "flagged": 1106,
+    "withheld": 1924,
+    "facts": 4158,
+    "missing": 145,
+    "withheld_right": 1779
+   }
+  },
+  {
+   "rate": 0.2,
+   "seed": 4,
+   "damaged_cells": 4387,
+   "off": {
+    "correct": 2818,
+    "silent_wrong": 1201,
+    "flagged": 0,
+    "withheld": 139,
+    "facts": 4158,
+    "missing": 139,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 992,
+    "silent_wrong": 102,
+    "flagged": 1099,
+    "withheld": 1965,
+    "facts": 4158,
+    "missing": 139,
+    "withheld_right": 1826
+   },
+   "on_plus": {
+    "correct": 972,
+    "silent_wrong": 97,
+    "flagged": 1104,
+    "withheld": 1985,
+    "facts": 4158,
+    "missing": 139,
+    "withheld_right": 1846
+   }
+  },
+  {
+   "rate": 0.2,
+   "seed": 5,
+   "damaged_cells": 4425,
+   "off": {
+    "correct": 2830,
+    "silent_wrong": 1195,
+    "flagged": 0,
+    "withheld": 133,
+    "facts": 4158,
+    "missing": 133,
+    "withheld_right": 0
+   },
+   "on": {
+    "correct": 1106,
+    "silent_wrong": 97,
+    "flagged": 1098,
+    "withheld": 1857,
+    "facts": 4158,
+    "missing": 133,
+    "withheld_right": 1724
+   },
+   "on_plus": {
+    "correct": 1071,
+    "silent_wrong": 89,
+    "flagged": 1106,
+    "withheld": 1892,
+    "facts": 4158,
+    "missing": 133,
+    "withheld_right": 1759
+   }
+  }
+ ]
+}
