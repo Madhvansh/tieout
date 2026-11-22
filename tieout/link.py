@@ -758,8 +758,15 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
         period = (f"{fiscal_year}, quarter {quarter.group(2)}"
                   + (", the year to date" if any(p.endswith("YTD") for p in wanted) else "")
                   + (f" (ending {report['period_end']})" if report and report.get("period_end") else ""))
+    # The question comes last and is marked as context: on 22 Nov the picker refused every candidate for
+    # the inputs of a derived fourth quarter (J&J Cardiovascular, full year and nine months) because the
+    # question asked for a quarter the filing never prints, though the system prompt says that is not its
+    # concern. The pick is judged for the item and period of this step only.
     user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nItem asked for: {phrase}\nPeriod asked: {period}\n"
-            f"Question: {question}\n\nCandidates:\n" + "\n".join(_show(i, c, g, phrase) for i, c in enumerate(cands)))
+            f"Question (context only: it may ask for another period, or for arithmetic that is done elsewhere "
+            f"with this figure as one input): {question}\n\nCandidates:\n"
+            + "\n".join(_show(i, c, g, phrase) for i, c in enumerate(cands))
+            + f"\n\nPick the candidate that reports '{phrase}' for {period}.")
     ans, case = _pick(SYSTEM, user, "link", model, offline,
                       yields=lambda pick: pick_yields(g, cands, pick, phrase, wanted))
     pick = _as_int(ans.get("pick")) if ans else None

@@ -132,6 +132,7 @@ class Executor:
         if errs:
             return abstain("plan rejected: " + "; ".join(errs))
         env: dict = {}
+        self._steps = {step["id"]: step for step in plan["steps"]}   # compare names its sides from these
         try:
             for step in plan["steps"]:
                 res = getattr(self, "_op_" + step["op"])(step, env)
@@ -647,9 +648,15 @@ class Executor:
         """Order figures that earlier steps worked out, one per side of the comparison.
 
         Each side is named by the company its figures were read from. When two sides are the same
-        company (two of its segments), the plan's own names for them are used, or the step ids."""
+        company (two of its segments or products), the plan's own names for them are used, else the
+        words of the line each side was worked out from (a fourth quarter computed as the year minus
+        nine months of TREMFYA is "TREMFYA"), and the step id only when those words cannot tell the
+        sides apart. (22 Nov: sides named "s6" and "s3" could not be scored or read.)"""
         ids = [i.lstrip("$") for i in s["of"]]
-        names = s.get("names") if isinstance(s.get("names"), list) and len(s["names"]) == len(ids) else [None] * len(ids)
+        names = s.get("names") if isinstance(s.get("names"), list) and len(s["names"]) == len(ids) else None
+        if names is None:
+            words = [self._step_words(i) for i in ids]
+            names = words if all(words) and len({_norm(w) for w in words}) == len(words) else [None] * len(ids)
         sides, leaves, notes = [], [], []
         for i, name in zip(ids, names):
             r = env[i]
@@ -675,6 +682,34 @@ class Executor:
         return Result("companies" if by_company else "lines", value, top[0]["unit"], leaves, notes,
                       {"op": "compare", "what": " against ".join(side["name"] for side in sides), "value": value,
                        "children": [env[i].tree for i in ids]}, extra=extra)
+
+    def _step_words(self, sid: str, seen: Optional[set] = None) -> str:
+        """The plan's words for what a step reads: its item, concept or metric; for a step that works
+        on earlier steps (a calc, a change), the words of the first of them that has any."""
+        seen = set() if seen is None else seen
+        step = getattr(self, "_steps", {}).get(sid)
+        if step is None or sid in seen:
+            return ""
+        seen.add(sid)
+        m = step_measure(step)
+        if m and not any(k in m for k in ("growth", "delta", "ratio")):
+            return str(next(iter(m.values())))
+        if m:
+            return _name(m)
+        refs = []
+        if isinstance(step.get("expr"), str):
+            try:
+                refs = [n.id for n in ast.walk(ast.parse(step["expr"], mode="eval")) if isinstance(n, ast.Name)]
+            except SyntaxError:
+                refs = []
+        for key in ("of", "over", "from", "company"):
+            v = step.get(key)
+            refs += [x.lstrip("$") for x in (v if isinstance(v, list) else [v]) if isinstance(x, str)]
+        for r in refs:
+            words = self._step_words(r, seen)
+            if words:
+                return words
+        return ""
 
     def _op_filter(self, s: dict, env: dict) -> Result:
         w = s["where"]

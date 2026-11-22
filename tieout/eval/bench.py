@@ -11,7 +11,9 @@ Accuracy     correct answers / questions.
                             winner and the gap. Against a company gold the winner must match; against
                             a numeric gold the gap or the winner's value must match. (Added 21 Nov
                             before the first round-2 run: two blind authors recorded different halves
-                            of such two-part questions.)
+                            of such two-part questions. On 22 Nov, before the held-out run, the same
+                            rule was applied to two lines of one company, such as two products: it
+                            had read only the winner's value.)
 
 Retrieved    every fact the system read to produce its answer: for the graph system, every
 facts        leaf of the proof tree, including every company scanned for a ranking. Nothing
@@ -98,8 +100,13 @@ def is_correct(q: dict, pred: dict, companies: dict) -> bool:
         return False
     unit = q.get("answer_unit", "")
     if pred["kind"] == "lines" and pred["value"]:
-        # the parts of a total (segments, products): the answer is the top line, by name or by value
+        # the parts of a total (segments, products): the answer is the top line, by name or by value;
+        # two lines compared ("which of the two products, and by how much") also carry the gap
         name, value = pred["value"][0]
+        gap = (pred.get("extra") or {}).get("gap")
+        if isinstance(gold, (int, float)) and not isinstance(gold, bool) and gap is not None:
+            return any(isinstance(v, (int, float)) and is_correct(q, {"kind": "number", "value": v}, companies)
+                       for v in (gap, value))
         pred = {"kind": "number", "value": value} if isinstance(gold, (int, float)) else {"kind": "text", "value": name}
     if isinstance(gold, (int, float)) and not isinstance(gold, bool):
         alt = pred.get("extra") or {}
