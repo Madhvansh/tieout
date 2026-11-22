@@ -340,6 +340,19 @@ def _cell_pid(row: dict, j: int) -> Optional[str]:
     return pid
 
 
+def _header_spans(row: dict) -> list:
+    """The spans the last header line over a quarterly table names, left to right:
+    "Three Months Ended ... Nine Months Ended" gives ["quarter", "to date"]."""
+    text = row.get("own") or row.get("above") or ""
+    line = next((ln for ln in reversed(text.split(" | ")) if _SPAN_WORD.search(ln)), "")
+    spans: list = []
+    for said in _SPAN_WORD.finditer(line):
+        span = "quarter" if said.group(0).lower() in ("three", "quarter") else "to date"
+        if not spans or spans[-1] != span:
+            spans.append(span)
+    return spans
+
+
 def _quarterly_pids(row: dict, filed: "re.Match") -> dict:
     """{cell index: period id} for the cells of a quarterly report's row that the column heads date
     better than the builder did. Empty when the builder's dates are consistent.
@@ -358,15 +371,17 @@ def _quarterly_pids(row: dict, filed: "re.Match") -> dict:
     if all(built) and len(flows) == len(set(flows)):
         row["_quarterly"] = fixed
         return fixed
-    spans, current = [], None
-    for c in cells:                                   # the span each column sits under
-        said = _SPAN_WORD.search(c.get("head") or "")
-        if said:
-            current = "quarter" if said.group(0).lower() in ("three", "quarter") else "to date"
-        spans.append(current)
-    if spans and spans[0] is None:                    # the first column's span word fell on its neighbour
-        first = next((s for s in spans if s), None)
-        spans = [s or first for s in spans] if first and all(s in (None, first) for s in spans) else spans
+    named = _header_spans(row)
+    if named and len(cells) % len(named) == 0:        # the header line names the spans, left to right,
+        width = len(cells) // len(named)              # and each covers the same number of columns
+        spans = [named[k // width] for k in range(len(cells))]
+    else:
+        spans, current = [], None
+        for c in cells:                               # else the span word printed over each column
+            said = _SPAN_WORD.search(c.get("head") or "")
+            if said:
+                current = "quarter" if said.group(0).lower() in ("three", "quarter") else "to date"
+            spans.append(current)
     years = [_YEAR_IN_HEADER.findall(f"{c.get('col') or ''}") for c in cells]
     newest = max((int(y[-1]) for y in years if y), default=None)
     fiscal_year, quarter = int(filed.group(1)), int(filed.group(2))
@@ -571,6 +586,10 @@ def stated_period(g: Graph, m: dict, slot: str) -> Optional[str]:
     own = {i: numbers[i + 1] for i in figures if i + 1 < len(numbers) and _is_time(numbers[i + 1])}
     if len(own) == len(figures):                      # every figure is followed by its own date
         return _time_pid(g, m["doc"], own[at])
+    if len(times) == len(figures) and max(figures) < min(i for i, n in enumerate(numbers) if _is_time(n)):
+        # a list of figures, then the list of their dates in the same order ("939, 914 and 890 ... at
+        # August 30, 2026, August 31, 2025 and September 1, 2024")
+        return _time_pid(g, m["doc"], times[figures.index(at)])
     return None
 
 
@@ -876,6 +895,10 @@ def apply_link(g: Graph, entry: dict) -> int:
                 if rid not in fact.readings:
                     fact.readings.append(rid)
                     added += 1
+    if entry.get("picked") in WITNESSED and entry["state"] == "active":
+        if not hasattr(g, "witnessed_links"):
+            g.witnessed_links = set()
+        g.witnessed_links.add((ticker, key))          # two models picked this line independently
     if added or f"{ticker}|{key}|{TIMELESS}" in g.facts or any(k.startswith(f"{ticker}|{key}|") for k in g.facts):
         keys = aliases(g).setdefault(_phrase_key(ticker, entry["phrase"]), [])
         if key in keys:
@@ -889,14 +912,14 @@ def apply_link(g: Graph, entry: dict) -> int:
 def breakdown(g: Graph, ticker: str, phrase: str) -> Optional[list]:
     """The lines that add up to a linked total, or None if the phrase is not linked yet: the rows
     under a subtotal, or the columns of a row that sum to its total column."""
-    total_id, by = getattr(g, "breakdown_alias", {}).get(_phrase_key(ticker, phrase), (None, "rows"))
+    total_id, by, witnessed = getattr(g, "breakdown_alias", {}).get(_phrase_key(ticker, phrase), (None, "rows", False))
     total = store().by_id.get(total_id) if total_id else None
     if total is None:
         return None
     if by == "columns":
-        return across(store(), total) or None
+        return [dict(line, witnessed=witnessed) for line in across(store(), total)] or None
     kids, how = store().parts(total)
-    return [dict(_line(k), grouped_by=how) for k in kids]
+    return [dict(_line(k), grouped_by=how, witnessed=witnessed) for k in kids]
 
 
 _ADJUSTED = re.compile(r"effect|impact|currenc|exchange|adjust|exclud|constant|prior year rates|change|increase|"
@@ -1117,7 +1140,8 @@ def learn_breakdown(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year
 def apply_breakdown(g: Graph, entry: dict) -> None:
     if not hasattr(g, "breakdown_alias"):
         g.breakdown_alias = {}
-    g.breakdown_alias[_phrase_key(entry["ticker"], entry["phrase"])] = (entry["ref_id"], entry.get("by", "rows"))
+    g.breakdown_alias[_phrase_key(entry["ticker"], entry["phrase"])] = (
+        entry["ref_id"], entry.get("by", "rows"), entry.get("picked") in WITNESSED and entry.get("state") == "active")
 
 
 # ------------------------------------------------------------------ persistence

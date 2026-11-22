@@ -78,6 +78,119 @@ MONEY_WORD_RE = re.compile(r"sales|revenue|cost|expense|income|earnings|asset|li
                            r"wage|salar(?:y|ies)\b|benefit|obligation|deposit|loan|rent", re.I)
 
 
+# ------------------------------------------------ scales and units stated in a row label (buildfix 2)
+SCALE_NAMES = {"thousand": 1e3, "thousands": 1e3, "million": 1e6, "millions": 1e6, "billion": 1e9, "billions": 1e9,
+               "trillion": 1e12, "trillions": 1e12}
+PAREN_RE = re.compile(r"\(([^()]{1,60})\)")
+PAREN_SCALE_RE = re.compile(r"\b(thousands|millions|billions|trillions)\b|\b000['’]?s\b", re.I)
+PAREN_DOLLARS_RE = re.compile(r"^\s*(?:in\s+)?(?:US\s*)?(?:\$|dollars?|usd)\s*$", re.I)
+NOT_SCALE_RE = re.compile(r"%|percent|\bper\b|/\s*share|\bbps\b|basis point|\brate\b|\bratio\b", re.I)
+DOLLAR_MM_RE = re.compile(r"\$\s?(MM|BN|B|K)\b")             # Chevron's "Earnings $MM"
+MONEY_SCALE_RE = re.compile(r"(?:\$|dollars?|usd)\s*(?:amounts\s+)?(?:in\s+)?(?:thousands|millions|billions)|"
+                            r"(?:thousands|millions|billions)\s+of\s+(?:u\.?s\.?\s+)?(?:\$|dollars|usd)", re.I)
+DOLLAR_WORD_RE = re.compile(r"\$|\bdollars?\b|\bUSD\b", re.I)
+# a money line states what it is: these words make a scaled row USD when it prints no dollar sign
+MONEY_LABEL_RE = re.compile(MONEY_WORD_RE.pattern + r"|balance|volumes?\b|\baum\b|assets under|spend|billed|"
+                            r"premiums?|commitments?|exposure|notional|borrowings|purchases|proceeds", re.I)
+
+# physical units: (pattern, what it measures, its built-in scale). The oil and gas abbreviations
+# carry their scale in the prefix: M = thousand, MM = million, B = billion, T = trillion.
+_ABBREV = [
+    (r"MBOE/?D|MBOED", "barrels of oil-equivalent per day", 1e3), (r"MMBOE/?D", "barrels of oil-equivalent per day", 1e6),
+    (r"MMBOE", "barrels of oil-equivalent", 1e6), (r"MBOE", "barrels of oil-equivalent", 1e3),
+    (r"BOE/?D|BOED", "barrels of oil-equivalent per day", 1.0), (r"BOE", "barrels of oil-equivalent", 1.0),
+    (r"MBD|MB/D|KBD|KB/D|MBBLS?/D|MBPD", "barrels per day", 1e3), (r"MMBBLS?/D", "barrels per day", 1e6),
+    (r"MMBBLS?", "barrels", 1e6), (r"MBBLS?", "barrels", 1e3), (r"BBLS?/D|BOPD|BPD", "barrels per day", 1.0),
+    (r"BBLS?", "barrels", 1.0),
+    (r"MMCFE?/?D|MMCFE?D", "cubic feet per day", 1e6), (r"BCFE?/?D", "cubic feet per day", 1e9),
+    (r"MCFE?/?D|MCFE?D", "cubic feet per day", 1e3), (r"MMCFE?", "cubic feet", 1e6), (r"BCFE?", "cubic feet", 1e9),
+    (r"TCFE?", "cubic feet", 1e12), (r"MCFE?", "cubic feet", 1e3),
+]
+ABBREV_RES = [(re.compile(rf"(?<![\w$/]){p}(?![\w/])", re.I), m, s) for p, m, s in _ABBREV]
+PHYS_NOUNS = (r"barrels?(?: of oil[- ]equivalent)?(?: (?:per day|daily|a day))?|cubic (?:feet|meters)(?: (?:per day|daily))?|"
+              r"megawatts?(?:[- ]hours?)?|gigawatts?(?:[- ]hours?)?|kilowatt[- ]hours?|(?:metric |short )?tons|tonnes|"
+              r"square (?:feet|footage)|sq\.? ?ft\.?|vehicles|deliveries|stores|warehouses|restaurants|employees|"
+              r"headcount|cards[- ]in[- ]force|cards|cardholders|members|subscribers|branches|ATMs|wells|"
+              r"(?:net |gross )?acres|aircraft|units sold|units delivered|housing units|processed transactions|"
+              r"transactions|accounts|customers|locations|clubs|pounds|ounces|gallons|passengers|rigs")
+PHYS_RE = re.compile(rf"\b(?:(?P<scale>thousands|millions|billions|trillions|thousand|million|billion)\s+(?:of\s+)?"
+                     rf"(?:[a-z-]+\s+){{0,2}}?)?(?P<noun>{PHYS_NOUNS})\b", re.I)
+# nouns that are a physical unit wherever they are printed; the others ("accounts", "transactions",
+# "customers", "members") count only when the row label itself says so, because "accounts payable"
+# or "transactions with related parties" are money
+STRONG_NOUN_RE = re.compile(r"barrel|cubic|watt|tons|tonnes|square|sq\.? ?ft|deliveries|employees|headcount|"
+                            r"cards[- ]in[- ]force|cardholders|acres|units sold|units delivered|housing units|"
+                            r"processed transactions|gallons|ounces|rigs|passengers", re.I)
+SCALED_ABBREV_RE = re.compile(r"\b(thousands|millions|billions|thousand|million|billion)\s+(?:of\s+)?"
+                              r"([A-Za-z]{2,6}(?:/D)?)\b", re.I)
+WEAK_NOUN_BLOCK_RE = re.compile(r"accounts? (?:payable|receivable)|receivables?|payables?|"
+                                r"transactions? (?:costs?|expenses?|with|related|gains?|losses?)|"
+                                r"customers? (?:deposits?|relationships?|contracts?|accounts?|liabilit)", re.I)
+PER_PHYS_RE = re.compile(rf"\bper\s+(?:[a-z]+\s+)?(?:barrel|bbl|boe|mcf|cubic|unit|ton|tonne|square foot|sq\.? ?ft|"
+                         rf"vehicle|store|employee|card|member|account|customer|gallon|ounce|megawatt|passenger|"
+                         rf"day of production)\b|\$\s*/|/\s*(?:bbl|boe|mcf|mmbtu|ton|unit)\b", re.I)
+
+
+def label_scale(label: str) -> Optional[tuple]:
+    """(scale, dollars stated) that a row label prints for its own row: "Cards-in-force (millions)",
+    "Network volumes (billions)", "($ in billions)", "Average spending (dollars)", "Earnings $MM",
+    "Direct staff (in thousands)". None when the label states no scale or the parenthesis is a rate
+    ("(% of sales)", "(per share)")."""
+    for m in PAREN_RE.finditer(label or ""):
+        inner = m.group(1)
+        if NOT_SCALE_RE.search(inner):
+            continue
+        dollars = bool(DOLLAR_WORD_RE.search(inner))
+        s = PAREN_SCALE_RE.search(inner)
+        if s:
+            return (SCALE_NAMES[s.group(1).lower()] if s.group(1) else 1e3), dollars
+        if PAREN_DOLLARS_RE.match(inner):
+            return 1.0, True
+    m = DOLLAR_MM_RE.search(label or "")
+    if m:
+        return {"MM": 1e6, "BN": 1e9, "B": 1e9, "K": 1e3}[m.group(1).upper()], True
+    s = _scale_of(label)
+    if s and not NOT_SCALE_RE.search(label):
+        return s, bool(DOLLAR_WORD_RE.search(label))
+    return None
+
+
+def physical(text: str, strong_only: bool = False) -> Optional[tuple]:
+    """(what is measured, scale or None) when the text states a physical unit: "MBOED" ->
+    ("barrels of oil-equivalent per day", 1e3), "Millions of barrels" -> ("barrels", 1e6),
+    "Natural Gas - Billions of cubic feet" -> ("cubic feet", 1e9), "Stores" -> ("stores", None).
+    A price per unit ("$/BBL", "per barrel") is not a quantity and returns None."""
+    text = text or ""
+    if PER_PHYS_RE.search(text):
+        return None
+    for m in SCALED_ABBREV_RE.finditer(text):       # "(Millions of BOE)"
+        for rx, measure, scale in ABBREV_RES:
+            if rx.fullmatch(m.group(2)):
+                return measure, SCALE_NAMES[m.group(1).lower()] * scale
+    for rx, measure, scale in ABBREV_RES:
+        if rx.search(text):
+            return measure, scale
+    for m in PHYS_RE.finditer(text):
+        noun = m.group("noun")
+        if strong_only and not STRONG_NOUN_RE.search(noun):
+            continue
+        if WEAK_NOUN_BLOCK_RE.search(text[m.start("noun"):m.start("noun") + 40]) or \
+                re.search(r"(?:stock|share|restricted|performance|partnership|LP|common)\s+$", text[:m.start("noun")], re.I):
+            continue
+        scale = SCALE_NAMES[m.group("scale").lower()] if m.group("scale") else None
+        return re.sub(r"\s+", " ", noun.lower()), scale
+    return None
+
+
+def counted_nouns(label: str) -> set:
+    """The counted nouns a label names, singular: "Proprietary basic cards-in-force" -> {"card"}."""
+    out = set()
+    for m in PHYS_RE.finditer(label or ""):
+        w = re.split(r"[- ]", m.group("noun").lower())[0]
+        out.add(w[:-1] if w.endswith("s") and len(w) > 3 else w)
+    return out
+
+
 def _scale_of(text: str) -> Optional[float]:
     m = SCALE_WORD_RE.search(text or "")
     if not m:
@@ -122,6 +235,13 @@ class _Profile:
         if self.exception and getattr(t, "scale_source", "") != "inherited" and self.own_scale:
             self.money_scale = self.own_scale     # build_table read the exception's scale as the table's
         self.share_scale = t.share_scale
+        # the scale a printed caption gives every number of the table, counts included: "(Millions,
+        # except percentages and where indicated)"; "Millions of dollars" is said of money only
+        cap = (t.caption or "") + " " + (t.header_text or "")
+        self.count_scale = t.scale if getattr(t, "scale_source", "") in ("caption", "intro") and \
+            not MONEY_SCALE_RE.search(cap + " " + (getattr(t, "intro", "") or "")) else None
+        # "(in millions, except employees)": a whole count is one of the exceptions
+        self.scale_except = bool(re.search(r"\bexcept", cap, re.I))
 
 
 def row_unit(t, r, prof: _Profile) -> str:
@@ -181,6 +301,160 @@ def _cell_scale(t, r, ci: int, unit: str, prof: _Profile) -> float:
     return 1.0
 
 
+def _fixed_row(t, r) -> bool:
+    """A row whose unit no label scale may change: printed percentages, per-share amounts,
+    share counts, ratios and rates, prices per physical unit ("$/BBL", "per barrel")."""
+    cells = list(r.cells.values())
+    if cells and sum(1 for c in cells if c.is_percent) * 2 >= len(cells):
+        return True
+    if PER_SHARE_RE.search(r.label) or PER_SHARE_RE.search(row_section(t, r)) or row_pool(t, r) == "shares":
+        return True
+    if PER_PHYS_RE.search(r.label) or re.search(r"\(actual\)", r.label, re.I):
+        return True                                     # "Branches (actual)" says it is not scaled
+    ph = physical(r.label)
+    return bool(RATIO_LABEL_RE.search(r.label)) and not (ph and ph[1] is not None)
+
+
+def _label_cue(label: str, row_dollar: bool, unit0: str) -> tuple:
+    """(unit the label's words state: "USD", "count" or None, physical measure or None).
+    A physical unit with its own scale ("MBOED", "millions of barrels") beats money words
+    ("Refined Product Sales MBD"); a bare counted noun does not ("Sales at company-operated
+    restaurants" is money). A noun that is often money ("Checking accounts", "Deferred
+    exploratory wells", "Municipal bond vehicles") counts only when the label also states a
+    scale or "number of", or the row was not read as money."""
+    ph = physical(label)
+    if ph and ph[1] is None and not STRONG_NOUN_RE.search(ph[0]) and unit0 == "USD" and \
+            not label_scale(label) and not re.search(r"\bnumber of\b", label, re.I):
+        ph = None
+    money = row_dollar or bool(DOLLAR_WORD_RE.search(label)) or bool(MONEY_LABEL_RE.search(label))
+    if ph and not row_dollar and (ph[1] is not None or not money):
+        return "count", ph
+    if money:
+        return "USD", None
+    if ROW_COUNT_RE.search(label) or COUNT_RE.search(label):
+        return "count", None
+    return None, None
+
+
+def unit_plans(t, prof: _Profile, base: dict) -> dict:
+    """Row idx -> {"unit", "scale", "measure", "from"} for rows whose unit or scale a label states.
+
+    1. A scale in the row label ("Cards-in-force (millions)", "Network volumes (billions)",
+       "Average spending (dollars)", "Earnings $MM") sets that row's scale. Its unit is USD when
+       the label states dollars or the row prints $ or names money; count when it names a counted
+       or physical noun; otherwise the row keeps USD if it already was USD, else count.
+    2. That scale carries to the following rows that state no unit of their own ("Proprietary
+       cards-in-force" under "Cards-in-force (millions)") until the group ends: another stated
+       unit, a fixed row (percent, per share, ratio), another section, an outdent, or a total
+       (which still takes it). A USD row already scaled by a scale the table prints is not touched.
+    3. A group header (the section) with a scale or physical unit does the same for its rows
+       ("Natural Gas - Billions of cubic feet").
+    4. A physical unit (barrels, MBOED, cubic feet, vehicles, stores ...) makes a row a count,
+       never USD and never multiplied by the money scale; it takes the scale attached to the unit
+       ("thousands of barrels per day" x1,000), else a count's own scale (old path).
+    """
+    plans: dict = {}
+    if prof.shares:
+        return plans
+    cell_dollar = any(c.has_dollar or "$" in c.text for r in t.rows for c in r.cells.values())
+    cap = " ".join([t.title or "", t.caption or "", t.header_text or ""])
+    caps = ({physical(m.group(0), strong_only=True) for m in PHYS_RE.finditer(cap)} |
+            {physical(m.group(0)) for rx, _, _ in ABBREV_RES for m in rx.finditer(cap)})
+    caps.discard(None)
+    # one physical unit for the whole table; a caption naming two ("thousands of barrels daily",
+    # "millions of metric tons per year") is said of different columns and is left to them
+    cap_phys = physical(cap, strong_only=True) if not cell_dollar and len(caps) == 1 else None
+    carrier = None                                  # (row, plan) whose scale the next rows may take
+    for r in t.rows:
+        row_dollar = any(c.has_dollar for c in r.cells.values())
+        if carrier is not None:
+            cr = carrier[0]
+            if r.section != cr.section or r.indent < cr.indent - 3:
+                carrier = None
+        if _fixed_row(t, r):
+            carrier = None
+            continue
+        unit0 = base[r.idx]
+        cue, ph = _label_cue(r.label, row_dollar, unit0)
+        own = label_scale(r.label)
+        if own:
+            if own[1] or row_dollar or cue == "USD":
+                unit = "USD"
+            elif cue == "count":
+                unit = "count"
+            else:
+                unit = unit0 if unit0 in ("USD", "count") else "count"
+            scale = ph[1] if unit == "count" and ph and ph[1] is not None else own[0]
+            if unit == "USD" and own == (1.0, True) and PRICE_COL_RE.search(r.label):
+                unit = "USD/share"                      # "Grant price (dollars)"
+            plans[r.idx] = {"unit": unit, "scale": scale, "measure": ph[0] if ph and unit == "count" else None,
+                            "from": "row label"}
+            carrier = (r, plans[r.idx])
+            continue
+        if ph and ph[1] is not None:
+            plans[r.idx] = {"unit": "count", "scale": ph[1], "measure": ph[0], "from": "row label"}
+            carrier = (r, plans[r.idx])
+            continue
+        if carrier is not None and _carries(r, cue, row_dollar, unit0, carrier):
+            cp = carrier[1]
+            plans[r.idx] = {"unit": cp["unit"], "scale": cp["scale"],
+                            "measure": (ph[0] if ph else cp["measure"]) if cp["unit"] == "count" else None,
+                            "from": f"carried from {carrier[0].label[:60]!r}"}
+            if r.label.lower().startswith("total"):
+                carrier = None
+            continue
+        carrier = None
+        if re.search(r"\bprices?\b", r.label, re.I):
+            continue                                    # a price beside the counts ("Price 3.46") is no count
+        sec = row_section(t, r)
+        sec_own, sec_ph = label_scale(sec), physical(sec, strong_only=True)
+        # a group header's physical unit makes a count of a row read as money, or one it gives a scale;
+        # a decimal under "... employees" with no scale is a share of them, not a number of them
+        if sec_ph and cue != "USD" and not row_dollar and (unit0 == "USD" or sec_ph[1] is not None or sec_own):
+            plans[r.idx] = {"unit": "count", "scale": sec_ph[1] if sec_ph[1] is not None else
+                            (sec_own[0] if sec_own else None), "measure": sec_ph[0], "from": f"group header {sec[:60]!r}"}
+            continue
+        if sec_own and not (unit0 == "USD" and cue != "count"):    # money rows keep the table's scale
+            unit = "USD" if sec_own[1] or row_dollar or cue == "USD" else "count"
+            plans[r.idx] = {"unit": unit, "scale": sec_own[0], "measure": ph[0] if ph and unit == "count" else None,
+                            "from": f"group header {sec[:60]!r}"}
+            continue
+        # a counted noun with no scale of its own: a row read as money becomes a count at the count's
+        # own scale; a decimal count ("Stores 244.7") takes the caption's scale when it is not a money scale
+        decimal = any("." in c.text for c in r.cells.values())
+        for found, where in ((ph if cue == "count" else None, "row label"),
+                             (cap_phys if cue != "USD" and not row_dollar else None, "table caption")):
+            if not found:
+                continue
+            if found[1] is not None:
+                plans[r.idx] = {"unit": "count", "scale": found[1], "measure": found[0], "from": where}
+            elif unit0 == "USD":
+                plans[r.idx] = {"unit": "count", "scale": None, "measure": found[0], "from": where}
+            elif prof.count_scale and (decimal or not prof.scale_except):
+                measure = cap_phys[0] if cap_phys and not STRONG_NOUN_RE.search(found[0]) else found[0]
+                plans[r.idx] = {"unit": "count", "scale": prof.count_scale, "measure": measure, "from": where}
+            break
+    for plan in plans.values():
+        if plan["measure"] and not STRONG_NOUN_RE.search(plan["measure"]):
+            plan["measure"] = None                      # "accounts", "locations": a count, not a unit
+    return plans
+
+
+def _carries(r, cue, row_dollar: bool, unit0: str, carrier: tuple) -> bool:
+    """Whether a row that states no scale takes the scale of the labelled row above it."""
+    cr, cp = carrier
+    if re.search(r"\bprices?\b", r.label, re.I):
+        return False
+    if cp["unit"] == "count":
+        if cue == "USD" or row_dollar or unit0 == "USD" and cue != "count":
+            return False
+        mine, theirs = counted_nouns(r.label), counted_nouns(cr.label)
+        return not mine or bool(mine & theirs)
+    # a row already read as money keeps the table's money scale ("Total segment assets" under
+    # "Average spending (dollars)"); only rows the table scale did not reach take the label's
+    return cue != "count" and unit0 != "USD"
+
+
 def table_rows(doc: str, ticker: str, k: int, t, periods: list, anchors: dict, cal=None, form: str = "",
                filing_end: Optional[str] = None) -> list:
     """Rows of one parsed table in the raw-layer shape. With the company's calendar, a date line
@@ -198,8 +472,11 @@ def table_rows(doc: str, ticker: str, k: int, t, periods: list, anchors: dict, c
     prof = _Profile(t)
     table_id = f"{doc}:p{t.page}:x{k}"
     out = {}
+    base = {r.idx: row_unit(t, r, prof) for r in t.rows}
+    plans = unit_plans(t, prof, base)
     for r in t.rows:
-        unit = row_unit(t, r, prof)
+        plan = plans.get(r.idx)
+        unit = plan["unit"] if plan else base[r.idx]
         cells, ties = [], defaultdict(int)
         row_periods = _marked_periods(cal, t, r, periods, form, filing_end) if cal is not None else periods
         for ci in sorted(r.cells):
@@ -211,7 +488,11 @@ def table_rows(doc: str, ticker: str, k: int, t, periods: list, anchors: dict, c
             if unit in ("count", "shares") and (cell.has_dollar or "." in cell.text and
                                                 PRICE_COL_RE.search(t.columns[ci].header + " " + t.header_text)):
                 cunit = "USD/share"                     # "Weighted-average grant date fair value" beside a count
-            if cunit in ("USD", "count", "shares"):
+            if plan and cunit == plan["unit"] and plan["scale"] is not None:
+                value = _full(cell.value, plan["scale"])     # the scale the label (or its group) states
+            elif plan and cunit == plan["unit"] == "count":
+                value = _full(cell.value, _cell_scale(t, r, ci, "count", prof))     # never the money scale
+            elif cunit in ("USD", "count", "shares"):
                 value = _full(cell.value, _cell_scale(t, r, ci, cunit, prof))
             else:
                 value = cell.value
@@ -236,6 +517,10 @@ def table_rows(doc: str, ticker: str, k: int, t, periods: list, anchors: dict, c
             "verified": any(c["ok"] for c in cells),
             "ties_to": max(ties, key=ties.get) if ties else None, "anchor": None,
             "parent": None, "cells": cells}
+        if plan:
+            out[r.idx]["unit_from"] = plan["from"]
+            if plan["measure"]:
+                out[r.idx]["measure"] = plan["measure"]
     for idx, row in out.items():
         if idx in parent and parent[idx] in out:
             row["parent"] = out[parent[idx]]["id"]

@@ -101,7 +101,13 @@ def main():
                          "learning history a held-out run starts from; a held-out run never persists")
     ap.add_argument("--checker", default=None, help="second, independent planner model (see tieout/readers.py)")
     ap.add_argument("--arbiter", default="", help="comma-separated arbiter models, strongest first")
+    ap.add_argument("--pick-checker", default=None,
+                    help="second, independent model for row picks (the four-eyes rule in tieout/link.py); the "
+                         "arbiters above settle its disagreements with the first picker")
     a = ap.parse_args()
+    if a.pick_checker:                                # read by tieout/link.py when a row is picked
+        os.environ["TIEOUT_LINK_CHECKER"] = a.pick_checker
+        os.environ["TIEOUT_LINK_ARBITER"] = a.arbiter
 
     questions = load_benchmark(pathlib.Path(a.bench))
     if a.ids:
@@ -173,7 +179,8 @@ def main():
     if "overall" in table:
         bt = table["overall"]["by_tier"]
         print("trust: " + ", ".join(f"{t} {v['correct']}/{v['n']}" for t, v in bt.items())
-              + f"; silent wrong (wrong while VERIFIED): {table['overall']['silent_wrong']}")
+              + f"; silent wrong (wrong while VERIFIED): {table['overall']['silent_wrong']}"
+              + f"; wrong while WITNESSED: {table['overall'].get('witnessed_wrong', 0)}")
     for r in rows:
         if not r["correct"]:
             print(f"  x {r['id']} [{r['type']}] [{r.get('tier', '')}] gold={str(r['gold'])[:40]!r} got={r['answer'][:70]!r}")

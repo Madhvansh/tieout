@@ -60,6 +60,7 @@ class Leaf:
     printed: str
     status: str               # verified | unverified | text
     value: Any = None
+    witnessed: bool = False   # a linked line that two models picked independently (see witness.py)
 
     def key(self) -> tuple:
         return (self.ticker, self.what, self.period)
@@ -323,6 +324,8 @@ class Executor:
                         continue
                 source = self.g.readings[f.readings[0]]
                 res = self._from_fact(f, ticker, key, pid, first, source.unit, _is_payment(source))
+                for leaf in res.leaves:
+                    leaf.witnessed = (ticker, key) in getattr(self.g, "witnessed_links", ())
                 if pid == TIMELESS and res.ok:
                     res.notes.append(f"{ticker} '{phrase}': the source prints no period column for this figure")
                 return res
@@ -366,6 +369,8 @@ class Executor:
             return self._item(ticker, m["item"], spec, first)
         if "metric" in m:
             return self._metric(ticker, m["metric"], spec, first)
+        if "concept" not in m:
+            raise PlanTypeError(f"{_name(m)} is not a measure of a company")
         return self._fact(ticker, m["concept"], spec, first)
 
     def _between(self, ticker: str, m: dict, start: dict, end: dict, mode: str, first: bool = False) -> Result:
@@ -537,7 +542,8 @@ class Executor:
             cell = line["cells"].get(pid)
             if cell:
                 leaf = Leaf(cell["id"], ticker, "line:" + line["label"], pid, line["doc"], line["page"], line["label"],
-                            cell["text"], "verified" if cell["ok"] else "unverified", cell["value"])
+                            cell["text"], "verified" if cell["ok"] else "unverified", cell["value"],
+                            witnessed=bool(line.get("witnessed")))
                 notes = ([f"the parts of this total were grouped by their heading on page {line['page']}, "
                           "not by a recovered formula"] if line.get("grouped_by") == "heading" else [])
                 if line["unit"] == "percent":                # printed percentages enter as fractions
@@ -612,8 +618,10 @@ class Executor:
         reads = [frozenset(lf.id for lf in env[i].leaves) for i in dict.fromkeys(used)]
         if len(reads) > 1 and reads[0] and all(r == reads[0] for r in reads):
             # two steps that read the very same printed cells: their difference or ratio says nothing
-            return abstain(f"the steps of '{s['expr']}' all read the same printed figure, so they cannot be "
-                           "compared: only one filing or one period prints it", leaves)
+            line = next((f" ('{lf.label[:60]}', {lf.doc} page {lf.page})" for lf in leaves), "")
+            return abstain(f"the steps of '{s['expr']}' all read the same printed figure{line}: one line holds what "
+                           "the plan asked for under different names or periods. Read it once; it cannot be added to "
+                           "or compared with itself", leaves)
         return Result("number", value, unit, leaves, notes, {"op": "calc", "what": s["expr"], "value": value, "children": children})
 
     def _op_rank(self, s: dict, env: dict) -> Result:
@@ -824,16 +832,26 @@ def trust(r: Result) -> tuple:
               every text fact is quoted from its page, and nothing was matched by wording alone,
               skipped, or left with a second defensible reading. A line the linker chose by its
               words is never VERIFIED: the arithmetic proves the number, not which line it is.
+    WITNESSED the same, except that some numbers are lines the linker chose by their words, and each
+              such line was picked independently by two models that agreed (the four-eyes rule of
+              witness.py). Arithmetic vouches for the numbers, two witnesses for each choice of line.
     FLAGGED   answered, with each weakness named.
     ABSTAIN   no answer.
     """
     if not r.ok:
         return "ABSTAIN", list(r.notes[:3])
-    reasons = []
+    reasons, linked = [], False
     for lf in r.leaves:
         if str(lf.what).startswith(("item:", "said:", "line:")):
-            reasons.append(f"{lf.ticker}: the line was chosen by the linker from its words; the arithmetic confirms "
-                           f"the number, not that it is the line asked for ({lf.doc} page {lf.page})")
+            linked = True
+            if lf.witnessed and lf.status == "verified":
+                continue
+            reasons.append(f"{lf.ticker}: the line was chosen by the linker from its words"
+                           + (" and one model alone" if not lf.witnessed else "")
+                           + "; the arithmetic confirms the number, not that it is the line asked for "
+                           f"({lf.doc} page {lf.page})" if lf.status == "verified" else
+                           f"{lf.ticker}: the line was chosen by the linker from its words and its number is not "
+                           f"inside a passing formula ({lf.doc} page {lf.page})")
             continue
         if lf.status == "verified":
             continue
@@ -843,7 +861,9 @@ def trust(r: Result) -> tuple:
                        f" ({lf.doc} page {lf.page})")
     reasons += [n for n in r.notes if any(w in n for w in _WEAK_NOTES)]
     reasons = list(dict.fromkeys(reasons))
-    return ("FLAGGED", reasons[:6]) if reasons else ("VERIFIED", [])
+    if reasons:
+        return "FLAGGED", reasons[:6]
+    return ("WITNESSED", []) if linked else ("VERIFIED", [])
 
 
 # ---------------------------------------------------------------- rendering

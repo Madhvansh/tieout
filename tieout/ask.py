@@ -48,9 +48,11 @@ def answer(question: str, g: Graph, model: Optional[str] = None, allow_learning:
         plan, errors = _plan(question, g, model, offline)
     learn_args = dict(allow_learning=allow_learning, question=question, question_id=question_id, model=model,
                       offline=offline, persist=persist)
+    word_rules = not os.environ.get("TIEOUT_NO_WORD_RULES")   # ablation: no check that reads the question's words
+    if planned_here and word_rules:
+        plan = year_end_not_quarter(question, plan)
     res, learned = _execute(plan, g, ex, **learn_args)
     repaired = False
-    word_rules = not os.environ.get("TIEOUT_NO_WORD_RULES")   # ablation: no check that reads the question's words
     misfit = shape_misfit(question, plan, res) if word_rules else ""
     if planned_here and misfit and any(w in misfit for w in ("quarter", "part of the year", "named", "threshold",
                                                               "audits")):
@@ -313,6 +315,26 @@ def fix_periods(question: str, plan: dict) -> dict:
                 else:
                     p.pop("ytd", None)
                 s[key] = p
+        steps.append(s)
+    return {**plan, "steps": steps}
+
+
+_ANY_QUARTER = re.compile(r"\bquarter|\bQ[1-4]\b|\bthree months\b|\b(13|14) weeks\b", re.I)
+
+
+def year_end_not_quarter(question: str, plan: dict) -> dict:
+    """A fourth quarter the question never asks for is the fiscal year. "At December 31, 2025" names a
+    year end, and a planner sometimes writes it as the fourth quarter; for a balance the two are the
+    same date, for anything else the question asked for the year."""
+    if _ANY_QUARTER.search(question) or not isinstance(plan.get("steps"), list):
+        return plan
+    steps = []
+    for s in plan["steps"]:
+        s = dict(s) if isinstance(s, dict) else s
+        for key in ("period", "from", "to"):
+            p = s.get(key) if isinstance(s, dict) else None
+            if isinstance(p, dict) and p.get("q") in (4, "4") and not p.get("ytd"):
+                s[key] = {k: v for k, v in p.items() if k != "q"}
         steps.append(s)
     return {**plan, "steps": steps}
 

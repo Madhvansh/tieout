@@ -112,8 +112,8 @@ def _close(x, y) -> bool:
 
 def _prefer(*outs: dict) -> dict:
     """Among unreconciled readers: an answer over none, then one whose every number ties out."""
-    rank = {"VERIFIED": 0, "FLAGGED": 1}
-    return min(outs, key=lambda o: (not o["result"].ok, rank.get(o["result"].tier, 2)))
+    rank = {"VERIFIED": 0, "WITNESSED": 1, "FLAGGED": 2}
+    return min(outs, key=lambda o: (not o["result"].ok, rank.get(o["result"].tier, 3)))
 
 
 def _arbitrate(question: str, g, arbiters: tuple, kw: dict) -> tuple:

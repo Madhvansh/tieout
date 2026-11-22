@@ -201,7 +201,16 @@ def normalize(plan: dict) -> dict:
         if s.get("id") and isinstance(s.get("period"), dict):
             period_of[s["id"]] = s["period"]
         steps.append(s)
-    return {**plan, "steps": steps}
+    answer = plan.get("answer")
+    last = steps[-1] if steps and isinstance(steps[-1], dict) else {}
+    if (last.get("op") == "compare" and isinstance(last.get("of"), list) and len(set(map(str, last["of"]))) == 1
+            and answer == last.get("id") and len(steps) > 1):
+        steps, answer = steps[:-1], str(last["of"][0]).lstrip("$")     # a ranking compared with itself: the ranking
+        last = steps[-1] if isinstance(steps[-1], dict) else {}
+    if isinstance(answer, str) and last.get("id") not in (None, answer) and f"${answer}" in (last.get("company"), last.get("of"),
+                                                                                             last.get("over")):
+        answer = last["id"]                           # the last step asks about what the answer step found: it is the answer
+    return {**plan, "steps": steps, "answer": answer}
 
 
 _CALC_NODES = (ast.Expression, ast.BinOp, ast.UnaryOp, ast.USub, ast.UAdd, ast.Add, ast.Sub, ast.Mult, ast.Div,
@@ -297,6 +306,10 @@ def validate(plan: dict, graph) -> list:
             else:
                 errs.extend(f"{sid}: unknown company {t}" for t in over if t not in graph.companies)
         measure = step_measure(s)
+        if (op in ("rank", "filter", "agg") and "value" in str(measure or (s.get("where") or {}).get("by") or "")
+                and not (isinstance(over, str) and over.startswith("$"))):
+            errs.append(f"{sid}: {{\"value\": true}} is the figure of a line from a members step; to order figures "
+                        "worked out in earlier steps use compare with \"of\": [their step ids]")
         line_ref = op == "get" and measure is None and isinstance(company, str) and company.startswith("$")
         if op in ("get", "metric", "change", "rank", "agg", "series", "restated") and not line_ref:
             errs.extend(measure_errors(measure, sid))
@@ -336,6 +349,10 @@ def validate(plan: dict, graph) -> list:
             else:
                 errs.extend(f"{sid}: compares {i}, which is not a step defined before it"
                             for i in of if i.lstrip("$") not in seen)
+                kinds = {x["id"]: x.get("op") for x in steps if isinstance(x, dict) and isinstance(x.get("id"), str)}
+                if len(set(of)) < len(of) or any(kinds.get(i.lstrip("$")) in ("rank", "filter", "members", "attr") for i in of):
+                    errs.append(f"{sid}: compare takes two or more different steps that each give one figure (get, "
+                                "metric, calc, change); a rank over the companies already compares them")
         if op == "count":
             ref_ok(s.get("of"), sid)
             if not s.get("of"):

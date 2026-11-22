@@ -219,8 +219,9 @@ def score(rows: list) -> dict:
             "abstained": sum(1 for r in subset if r["abstained"]),
             "by_tier": {t: {"n": sum(1 for r in subset if r.get("tier") == t),
                             "correct": sum(1 for r in subset if r.get("tier") == t and r["correct"])}
-                        for t in ("VERIFIED", "FLAGGED", "ABSTAIN")},
+                        for t in ("VERIFIED", "WITNESSED", "FLAGGED", "ABSTAIN")},
             "silent_wrong": sum(1 for r in subset if r.get("tier") == "VERIFIED" and not r["correct"]),
+            "witnessed_wrong": sum(1 for r in subset if r.get("tier") == "WITNESSED" and not r["correct"]),
             "answered_accuracy": (sum(1 for r in subset if r["correct"] and not r["abstained"]) /
                                   max(1, sum(1 for r in subset if not r["abstained"]))),
         }
