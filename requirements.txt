@@ -3,10 +3,17 @@ pdfplumber>=0.11
 PyYAML>=6.0
 requests>=2.31
 
-# baseline only (scripts/run_baseline.py)
+# baseline only (scripts/run_baseline.py, baseline/): v1 needs rank-bm25 + scikit-learn; v2 also onnxruntime + tokenizers
+# (model files are downloaded once into baseline/cache/ on first use)
 rank-bm25>=0.2.2
 scikit-learn>=1.4
 numpy>=1.26
+onnxruntime>=1.18
+tokenizers>=0.19
+psutil>=5.9
 
 # tests
 pytest>=8.0
+
+# this package itself, so scripts/*.py import tieout from a fresh clone
+-e .

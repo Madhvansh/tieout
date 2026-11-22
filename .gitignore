@@ -12,3 +12,4 @@ finetune/out/
 finetune/__pycache__/
 baseline/cache/
 .pytest_cache/
+*.egg-info/

@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tieout"
+version = "2.0.0"
+description = "A knowledge graph of SEC filings that puts each statement's formulas back and answers from them, with sources."
+requires-python = ">=3.10"
+license = { text = "MIT" }
+
+[tool.setuptools.packages.find]
+include = ["tieout*"]

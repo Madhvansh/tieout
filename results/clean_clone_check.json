@@ -1,0 +1,254 @@
+{
+ "command": "python scripts/clean_clone_check.py",
+ "url": "https://github.com/Madhvansh/tieout",
+ "branch": "v2",
+ "dest": "C:\\Users\\Administrator\\Downloads\\tieout_clean_check",
+ "clone_commit": "eaea64f6c911ac285b812c153507f6a4ee160b57",
+ "worktree_head": "eaea64f6c911ac285b812c153507f6a4ee160b57",
+ "worktree_modified_tracked_files": [
+  "M baseline/answer.py",
+  " M baseline/dense.py",
+  " M scripts/run_baseline.py",
+  " M scripts/run_faults.py",
+  " M tests/test_question_side.py",
+  " M tieout/eval/faults.py",
+  " M tieout/execute.py",
+  " M tieout/link.py",
+  " M tieout/llm.py",
+  " M tieout/plan.py",
+  " M tieout/planner.py",
+  " M tieout/textfacts.py"
+ ],
+ "seconds": 148.9,
+ "all_passed": false,
+ "steps": [
+  {
+   "step": "1 clone",
+   "ok": true,
+   "seconds": 5.6,
+   "detail": "commit eaea64f6c911ac285b812c153507f6a4ee160b57 (618 tracked files)"
+  },
+  {
+   "step": "2 venv + pip install",
+   "ok": true,
+   "seconds": 96.9,
+   "detail": "pip install -r requirements.txt: ok"
+  },
+  {
+   "step": "3 pytest -q",
+   "ok": true,
+   "seconds": 3.3,
+   "detail": "..............................................                           [100%]\n46 passed in 2.45s"
+  },
+  {
+   "step": "4a python -m tieout stats",
+   "ok": true,
+   "seconds": 0.6,
+   "detail": "stats keys: filings, companies, tables, readings, reading_status, checks"
+  },
+  {
+   "step": "4b python -m tieout ask (cached plan)",
+   "ok": false,
+   "seconds": 2.9,
+   "detail": "Q: What was Apple's top line for fiscal 2026? | ANSWER: ABSTAIN: planner: planner failed (KeyError: 'GEMINI_API_KEY')"
+  },
+  {
+   "step": "replay: round1 cached planner plans",
+   "ok": false,
+   "seconds": 8.7,
+   "detail": "round1 cached planner plans: clone 2/30 (working tree 2/30); README command fails: No module named 'tieout' (scripts/ is on sys.path, not the repo root)"
+  },
+  {
+   "step": "replay: round1 hand-written plans",
+   "ok": false,
+   "seconds": 7.2,
+   "detail": "round1 hand-written plans: clone 23/30 (working tree 23/30); README command fails: No module named 'tieout' (scripts/ is on sys.path, not the repo root)"
+  },
+  {
+   "step": "replay: round2-dev cached planner plans",
+   "ok": false,
+   "seconds": 6.0,
+   "detail": "round2-dev cached planner plans: clone 3/39 (working tree 3/39); README command fails: No module named 'tieout' (scripts/ is on sys.path, not the repo root)"
+  },
+  {
+   "step": "replay: round2-dev hand-written plans",
+   "ok": false,
+   "seconds": 9.2,
+   "detail": "round2-dev hand-written plans: clone crashed or missing input: benchmark/oracle_plans_r2dev.json is missing"
+  },
+  {
+   "step": "5 size and secrets",
+   "ok": true,
+   "seconds": 8.3,
+   "detail": "618 tracked files, largest 4440 KB, no secrets"
+  }
+ ],
+ "replays": [
+  {
+   "label": "round1 cached planner plans",
+   "bench": "benchmark/questions.jsonl",
+   "oracle": null,
+   "clone": {
+    "correct": 2,
+    "n": 30,
+    "complete": true,
+    "live": 0,
+    "cached": 0,
+    "ok_ids": [
+     "C32",
+     "C48"
+    ]
+   },
+   "needs_pythonpath_in_clone": true,
+   "worktree": {
+    "correct": 2,
+    "n": 30,
+    "complete": true,
+    "live": 0,
+    "cached": 0,
+    "ok_ids": [
+     "C32",
+     "C48"
+    ]
+   },
+   "clone_error": "",
+   "worktree_error": ""
+  },
+  {
+   "label": "round1 hand-written plans",
+   "bench": "benchmark/questions.jsonl",
+   "oracle": "benchmark/oracle_plans.json",
+   "clone": {
+    "correct": 23,
+    "n": 30,
+    "complete": true,
+    "live": 0,
+    "cached": 0,
+    "ok_ids": [
+     "C01",
+     "C03",
+     "C04",
+     "C07",
+     "C08",
+     "C09",
+     "C11",
+     "C12",
+     "C17",
+     "C19",
+     "C20",
+     "C21",
+     "C24",
+     "C25",
+     "C29",
+     "C32",
+     "C34",
+     "C35",
+     "C37",
+     "C40",
+     "C42",
+     "C44",
+     "C48"
+    ]
+   },
+   "needs_pythonpath_in_clone": true,
+   "worktree": {
+    "correct": 23,
+    "n": 30,
+    "complete": true,
+    "live": 0,
+    "cached": 0,
+    "ok_ids": [
+     "C01",
+     "C03",
+     "C04",
+     "C07",
+     "C08",
+     "C09",
+     "C11",
+     "C12",
+     "C17",
+     "C19",
+     "C20",
+     "C21",
+     "C24",
+     "C25",
+     "C29",
+     "C32",
+     "C34",
+     "C35",
+     "C37",
+     "C40",
+     "C42",
+     "C44",
+     "C48"
+    ]
+   },
+   "clone_error": "",
+   "worktree_error": ""
+  },
+  {
+   "label": "round2-dev cached planner plans",
+   "bench": "benchmark/round2/dev.jsonl",
+   "oracle": null,
+   "clone": {
+    "correct": 3,
+    "n": 39,
+    "complete": true,
+    "live": 0,
+    "cached": 0,
+    "ok_ids": [
+     "A18",
+     "A27",
+     "B20"
+    ]
+   },
+   "needs_pythonpath_in_clone": true,
+   "worktree": {
+    "correct": 3,
+    "n": 39,
+    "complete": true,
+    "live": 0,
+    "cached": 0,
+    "ok_ids": [
+     "A18",
+     "A27",
+     "B20"
+    ]
+   },
+   "clone_error": "",
+   "worktree_error": ""
+  },
+  {
+   "label": "round2-dev hand-written plans",
+   "bench": "benchmark/round2/dev.jsonl",
+   "oracle": "benchmark/oracle_plans_r2dev.json",
+   "clone": null,
+   "needs_pythonpath_in_clone": false,
+   "worktree": {
+    "correct": 14,
+    "n": 39,
+    "complete": true,
+    "live": 0,
+    "cached": 0,
+    "ok_ids": [
+     "A05",
+     "A13",
+     "A14",
+     "A15",
+     "A16",
+     "A17",
+     "A18",
+     "A27",
+     "B08",
+     "B12",
+     "B13",
+     "B14",
+     "B20",
+     "B22"
+    ]
+   },
+   "clone_error": "benchmark/oracle_plans_r2dev.json is missing",
+   "worktree_error": ""
+  }
+ ]
+}
