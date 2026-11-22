@@ -29,6 +29,11 @@ from .graph import Graph
 from .plan import COMPARATORS, NUMERIC_ATTRS, identity_defs, metric_defs, step_measure, validate
 
 OUTFLOW = {"CapitalExpenditures", "DividendsPaid", "ShareRepurchases"}   # printed negative, asked as amounts
+# costs whose printed sign is only presentation ("(263)" in a column of deductions): growth, changes and
+# ratios use their size, as the SEC's own data and every analyst do
+EXPENSES = {"CostOfRevenue", "ResearchAndDevelopment", "SellingGeneralAdmin", "SalesAndMarketing",
+            "GeneralAndAdministrative", "InterestExpense", "IncomeTax", "NoninterestExpense",
+            "ProvisionForCreditLosses", "DepreciationAmortization", "StockBasedCompensation"}
 TIMELESS = "*"                                    # period id of a figure whose source prints no period
 
 
@@ -103,6 +108,8 @@ class Executor:
         latest = {f["ticker"]: d for d, f in graph.filings.items() if f["role"] == "latest"}
         for t in graph.textfacts:
             tk = graph.filings[t["doc"]]["ticker"]
+            if t.get("primary") is False and (tk, t["attr"]) in self._text:
+                continue                              # a second share class never replaces the primary one
             if latest.get(tk) == t["doc"] or (tk, t["attr"]) not in self._text:
                 self._text[(tk, t["attr"])] = t
 
@@ -324,6 +331,10 @@ class Executor:
             return abstain(f"{ticker} {_name(m)}: both periods read the same printed figure, which has no period of "
                            "its own, so no change can be computed", a.leaves)
         leaves, notes = a.leaves + b.leaves, a.notes + b.notes
+        av, bv = a.value, b.value
+        if m.get("concept") in EXPENSES and av < 0 and bv < 0:      # both printed as deductions: use their size
+            av, bv = -av, -bv
+        a, b = Result(a.kind, av, a.unit), Result(b.kind, bv, b.unit)
         if mode == "abs":
             value, unit = b.value - a.value, a.unit
         elif not a.value:

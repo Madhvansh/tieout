@@ -258,7 +258,7 @@ def learn(g: Graph, ticker: str, concept: str, question_id: str = "", question: 
             f"Concept: {concept}: {SAYS.get(concept, '')}\n\nRows (number: label (section) <role>):\n"
             + describe(rows, bound))
     try:
-        ans = ask_json(SYSTEM, user, schema=None, model=link_model(model), tag="bind", offline=offline)
+        ans = ask_json(SYSTEM, user, schema=None, model=link_model(model, offline), tag="bind", offline=offline)
     except DailyLimit:
         raise
     except Exception as e:  # noqa: BLE001 - a failed proposal is recorded, not fatal
@@ -382,7 +382,7 @@ def propose_rows(g: Graph, ticker: str, kind: str, concepts: list, model: Option
     user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nStatement: {kind}\nConcepts:\n"
             + "\n".join(f"{c}: {SAYS.get(c, '')}" for c in concepts)
             + "\n\nRows (number: label (section) <role>):\n" + describe(rows, bound))
-    ans = ask_json(SYSTEM_MANY, user, model=link_model(model), tag="bindmany", offline=offline)
+    ans = ask_json(SYSTEM_MANY, user, model=link_model(model, offline), tag="bindmany", offline=offline)
     out = {}
     for c in concepts:
         row = ans.get(c) if isinstance(ans, dict) else None

@@ -4,6 +4,7 @@
     python -m tieout stats               what the shipped graph holds
     python -m tieout concepts            which companies each concept is bound for
     python -m tieout ask "question"      answer one question, with plan, sources and notes
+                         [--offline]     (from the cached model calls only)
     python -m tieout language            the plan language: rules, vocabulary, worked examples
     python -m tieout show "question"     the source page with the answer's cells and formula drawn on it
 """
@@ -41,7 +42,8 @@ def main() -> int:
         print(json.dumps(g.stats(), indent=1))
     elif cmd == "ask":
         from .ask import answer
-        out = answer(" ".join(sys.argv[2:]), load_graph(), question_id="cli")
+        words = [w for w in sys.argv[2:] if w != "--offline"]
+        out = answer(" ".join(words), load_graph(), question_id="cli", offline="--offline" in sys.argv[2:])
         result = out["result"]
         print("PLAN:  ", json.dumps(out["plan"]))
         print("ANSWER:", out["answer"])

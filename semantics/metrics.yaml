@@ -32,7 +32,7 @@ metrics:
     says: research and development spending as a share of revenue
 
   - name: effective_tax_rate
-    formula: IncomeTax / PretaxIncome
+    formula: abs(IncomeTax) / PretaxIncome
     unit: ratio
     says: income tax as a share of pre-tax income
 

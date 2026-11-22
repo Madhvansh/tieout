@@ -330,7 +330,7 @@ def other_labels(g: Graph, ticker: str, phrase: str, model: Optional[str] = None
     """Other wordings a filing may print for the phrase ("net new money" -> "net inflows"). One cached call."""
     user = f"Company: {g.companies[ticker]['name']} ({ticker})\nItem: {phrase}"
     try:
-        ans = ask_json(SYSTEM_LABELS, user, model=link_model(model), tag="labels", offline=offline)
+        ans = ask_json(SYSTEM_LABELS, user, model=link_model(model, offline), tag="labels", offline=offline)
     except DailyLimit:
         raise
     except Exception:  # noqa: BLE001 - no alternatives is a fine answer
@@ -453,7 +453,7 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
     user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nItem asked for: {phrase}\nPeriod asked: {period}\n"
             f"Question: {question}\n\nCandidates:\n" + "\n".join(_show(i, c, g, phrase) for i, c in enumerate(cands)))
     try:
-        ans = ask_json(SYSTEM, user, model=link_model(model), tag="link", offline=offline)
+        ans = ask_json(SYSTEM, user, model=link_model(model, offline), tag="link", offline=offline)
     except DailyLimit:
         raise
     except Exception as e:  # noqa: BLE001 - a failed proposal is recorded, not fatal
@@ -646,7 +646,7 @@ def learn_breakdown(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year
     user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nBreakdown asked for: {phrase}\n"
             f"Question: {question}\n\nCandidates:\n" + "\n".join(lines))
     try:
-        ans = ask_json(SYSTEM_BREAKDOWN, user, model=link_model(model), tag="breakdown", offline=offline)
+        ans = ask_json(SYSTEM_BREAKDOWN, user, model=link_model(model, offline), tag="breakdown", offline=offline)
     except DailyLimit:
         raise
     except Exception as e:  # noqa: BLE001

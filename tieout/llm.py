@@ -28,8 +28,10 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 CACHE = ROOT / "cache" / "llm"
 CALLS = {"live": 0, "cached": 0, "seconds": 0.0, "tokens_in": 0, "tokens_out": 0}
 CALL_LOG: list = []          # one record per call: provider, model, tag, tokens, seconds, cached
-REPLAY_MODEL = "gemini:gemini-3.5-flash-lite"      # the model the cached benchmark plans were written by
-LOCAL_MODEL = "ollama:tieout-planner"              # finetune/MODEL_CARD.md: plans, and links, with no key
+LOCAL_MODEL = "ollama:tieout-planner"              # finetune/MODEL_CARD.md: plans with no key
+LOCAL_LINKER = "ollama:tieout-planner-4b"          # the fine-tuned 4B also picks lines among labelled candidates
+REPLAY_MODEL = LOCAL_MODEL                         # offline replay: the models the shipped cache was recorded with
+REPLAY_LINKER = LOCAL_LINKER
 _USAGE: dict = {}                                  # token counts of the last live call
 
 
@@ -48,11 +50,16 @@ def load_env() -> None:
             os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
 
 
-def link_model(model: Optional[str] = None) -> Optional[str]:
-    """The model the linker uses: TIEOUT_LINK_LLM if set (it then draws on a separate quota),
-    else the planner's model."""
+def link_model(model: Optional[str] = None, offline: bool = False) -> Optional[str]:
+    """The model the linker uses: TIEOUT_LINK_LLM if set, else the local 4B linker when the planner is
+    local or no key is set (so nothing needs a key), else the planner's model."""
     load_env()
-    return os.environ.get("TIEOUT_LINK_LLM") or model
+    if os.environ.get("TIEOUT_LINK_LLM"):
+        return os.environ["TIEOUT_LINK_LLM"]
+    if offline:
+        return REPLAY_LINKER
+    planner = model or os.environ.get("TIEOUT_LLM") or default_model()
+    return LOCAL_LINKER if planner.startswith("ollama:") else planner
 
 
 def default_model() -> str:
