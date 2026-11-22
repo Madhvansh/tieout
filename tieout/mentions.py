@@ -43,7 +43,14 @@ MONTHS = ("January|February|March|April|May|June|July|August|September|October|N
 NOUNS = (r"employees|associates|team members|people|workers|stores|warehouses|clubs|locations|restaurants|"
          r"vehicles|cars|units|deliveries|customers|members|cardholders|subscribers|users|accounts|"
          r"square feet|countries|markets|facilities|branches|ATMs|patents|holders of record|stockholders of record|"
-         r"shareholders of record|barrels|wells|acres|aircraft|properties|offices|sites|households")
+         r"shareholders of record|barrels|wells|acres|aircraft|properties|offices|sites|households|"
+         # counted things a filing states in a sentence or a footnote (22 Nov: "136 of the 184 leases",
+         # "1,659 million adjusted scripts" had no record)
+         r"leases|scripts|prescriptions|transactions|cards|shipments|franchisees|dealers|dealerships|suppliers|"
+         r"patients|policies|loans|centers|plants|rooms|seats|merchants|sellers|developers|positions|engines|"
+         r"turbines|installations|orders|packages|flights|beds|hospitals|clinics|pharmacies|physicians|"
+         r"participants|beneficiaries|lawsuits|claims|states|cities|memberships|devices|servers|clients|"
+         r"investors|advisors|borrowers|passengers|students|hires|jobs|rigs|trucks|vessels|hotels|kiosks")
 TOKEN_RE = re.compile(
     rf"(?P<date>\b(?:{MONTHS})\s+\d{{1,2}},\s+(?:19|20)\d\d\b)"
     r"|(?<![\w.$-])(?P<dollar>\$\s?)?(?P<n>\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?)(?![\w]|-[A-Za-z]|\.\d)"
@@ -60,6 +67,17 @@ NOUN_AFTER_RE = re.compile(rf"^{LIST_TAIL},?\s+(?:{GLUE}\s+){{0,2}}?(?P<noun>sha
 COUNT_BEFORE_RE = re.compile(r"\b(?:count|headcount|number of [a-z ]{3,30}?)\s+(?:of|was|were|is|totaled|"
                              r"totaling|reached|increased to|decreased to)\s+(?:approximately\s+|about\s+)?$", re.I)
 PER_SHARE_AFTER_RE = re.compile(r"^\s+per\s+(?:[a-z]+\s+){0,2}share\b", re.I)
+# "136 of the 184 leases": a part of a counted whole
+OF_TOTAL_RE = re.compile(rf"^\s+of\s+(?:the|our|its|these|those)\s+\d[\d,.]*\s+(?:{GLUE}\s+){{0,2}}?(?:shares|{NOUNS})\b", re.I)
+# a currency sign other than the dollar right before the figure (the PDF text often garbles it)
+FOREIGN_MONEY = "€£¥₩₹�"
+# "Level 3 loans", "Note 5", "Tier 1": the number names something, it does not count
+REFERENCE_BEFORE_RE = re.compile(r"\b(?:note|notes|item|items|level|tier|table|part|section|topic|rule|form|series|class|"
+                                 r"stage|phase|schedule|exhibit|figure|page|chapter|article|title|regulation|scope|"
+                                 r"category|group|step|no\.|number)\s*$", re.I)
+# "25 million euros": money in another currency is not a count
+CURRENCY_AFTER_RE = re.compile(r"^\s+(?:of\s+)?(?:U\.S\.\s+)?(?:dollars|euros?|pounds|yen|yuan|renminbi|francs|pesos|rupees|"
+                               r"reais|won|EUR|GBP|JPY|CNY|CAD|CHF|MXN|INR)\b", re.I)
 BOUNDARY_RE = re.compile(r"(?<=[.!?])[\"”’)]?\s+(?=[A-Z(“\"$•])|\s+•\s+")
 ABBREV_RE = re.compile(r"(?:\b(?:Inc|Corp|Co|Ltd|No|Nos|Mr|Mrs|Ms|Dr|St|Jr|Sr|vs|approx|U\.S|D\.C|N\.A|L\.P)|"
                        r"(?<![\w-])[A-Z])\.[\"”’)]?$")
@@ -169,14 +187,23 @@ def numbers_of(sentence: str) -> tuple:
             else:
                 noun = NOUN_AFTER_RE.match(after)
                 yearish = re.fullmatch(r"(19|20)\d\d", m.group("n")) and not m.group("scale")
-                if noun and yearish and after[:noun.start("noun")].strip(" ,"):
+                if noun and yearish and (after[:noun.start("noun")].strip(" ,") or after.lstrip().startswith(",")):
                     noun = None                           # "fiscal 2026, we repurchased shares": a year
+                foreign = before.rstrip()[-1:] in FOREIGN_MONEY       # "€4.3 billion": money, not a count
+                labelled = REFERENCE_BEFORE_RE.search(before)        # "Level 3 loans", "Note 5": a name
+                if foreign or labelled:
+                    noun = None
                 if noun:
                     unit, value = ("shares" if noun.group("noun").lower() == "shares" else "count"), n * scale
                 elif COUNT_BEFORE_RE.search(before):
                     unit, value = "count", n * scale
                 elif not yearish and unit_token(after):
                     unit, value = unit_token(after), n * scale      # "46.7 GWh": the unit as printed
+                elif not yearish and not labelled and OF_TOTAL_RE.match(after):
+                    unit, value = "count", n * scale                # "136 of the 184 leases": a count of them
+                elif m.group("scale") and not foreign and not CURRENCY_AFTER_RE.match(after):
+                    # "1,659 million adjusted scripts": a scale word with no dollar sign counts something
+                    unit, value = "count", n * scale
                 else:
                     unit, value = ("year", n) if yearish else ("number", n * scale)
             text = text.strip()
