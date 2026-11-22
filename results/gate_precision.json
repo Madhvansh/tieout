@@ -1,0 +1,49 @@
+{
+ "gate": {
+  "admitted": {
+   "right": 62,
+   "keyed": 66,
+   "precision": 0.939,
+   "ci95": [
+    0.854,
+    0.976
+   ]
+  },
+  "held": {
+   "right": 9,
+   "keyed": 11,
+   "precision": 0.818,
+   "ci95": [
+    0.523,
+    0.949
+   ]
+  }
+ },
+ "seed_bindings": {
+  "keyed": 1162,
+  "right": 1152,
+  "precision": 0.9914
+ },
+ "audit": {
+  "dropped": 7,
+  "dropped_and_wrong_by_key": 3,
+  "dropped_unkeyed_or_right": 4
+ },
+ "wrong_admitted": [
+  "CVX ShareRepurchases: 'Net sales (purchases) of treasury shares'",
+  "GM Goodwill: 'Goodwill and intangible assets, net (Note'",
+  "GM Goodwill: 'Goodwill and intangible assets, net (Note'",
+  "XOM AccountsReceivable: 'Notes and accounts receivable \u2013 net'"
+ ],
+ "right_but_held": [
+  "CVX NetIncome: 'Net Income (Loss) Attributable to Chevron Corporation' held because values neither reappear on the cash-flow statement nor derive from a row that do",
+  "NKE TotalEquity: 'Total shareholders' equity' held because value is not covered by any check",
+  "NKE TotalLiabilitiesAndEquity: 'TOTAL LIABILITIES AND SHAREHOLDERS' EQUITY' held because in other companies this concept is the total of a formula; here it is not",
+  "JNJ ShareRepurchases: 'Repurchase of common stock' held because value is not covered by any check",
+  "C Cash: 'Cash and due from banks (including segregated cash and other' held because the line also holds other items ('and other'), so it is broader than the concept",
+  "CAT AccountsReceivable: 'Receivables \u2013 trade and other' held because the line also holds other items ('and other'), so it is broader than the concept",
+  "F AccountsReceivable: 'Trade and other receivables, less allowances of $84 and $108' held because the line also holds other items ('and other'), so it is broader than the concept",
+  "PEP InterestExpense: 'Net interest expense and other' held because the line also holds other items ('and other'), so it is broader than the concept",
+  "V RetainedEarnings: 'Accumulated income' held because value is not covered by any check"
+ ]
+}
