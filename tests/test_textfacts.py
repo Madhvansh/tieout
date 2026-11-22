@@ -43,20 +43,32 @@ def test_each_cover_class_is_a_fact_with_its_class():
     rule_exchange_symbol(c, flow)
     rule_shares_outstanding(c, [flow])
     got = {f.share_class: (int(f.value), f.primary) for f in _facts(c, "shares_outstanding")}
-    assert got == {"Class A": (2_187_177_748, True), "Class B": (342_377_716, False)}
+    assert got == {"Class A": (2_187_177_748, False), "Class B": (342_377_716, False),
+                   "All classes": (2_529_555_464, True)}
 
 
-def test_plain_shares_outstanding_is_the_primary_class_and_comes_last():
+def test_plain_shares_outstanding_is_all_classes_and_comes_last():
     c = Collector("D")
     flow = _flow(COVER_META)
     rule_exchange_symbol(c, flow)
     rule_shares_outstanding(c, [flow])
-    last = _facts(c, "shares_outstanding")[-1]      # a reader keeping the last fact gets Class A
-    assert (last.share_class, last.value, last.primary) == ("Class A", "2187177748", True)
-    assert last.quote.startswith("Class A: ")
+    last = _facts(c, "shares_outstanding")[-1]      # a reader keeping the last fact gets all classes
+    assert (last.share_class, last.value, last.primary, last.derived) == ("All classes", "2529555464", True, True)
+    assert last.quote.startswith("All classes (sum of Class A, Class B): ")
 
 
-def test_the_listed_class_is_primary_even_when_printed_second():
+def test_printed_total_under_class_rows_is_the_all_classes_fact():
+    rows = ["As of July 8, 2026, the number of shares of the Registrant's Common Stock outstanding were:",
+            "Class A 281,387,752", "Class B 1,202,110,951", "1,483,498,703",
+            "DOCUMENTS INCORPORATED BY REFERENCE:"]
+    c = Collector("D")
+    rule_shares_outstanding(c, [_flow(rows)])
+    primary = [f for f in _facts(c, "shares_outstanding") if f.primary]
+    assert [(f.share_class, f.value, f.derived) for f in primary] == [("All classes", "1483498703", False)]
+    assert {f.share_class for f in _facts(c, "shares_outstanding")} == {"Class A", "Class B", "All classes"}
+
+
+def test_the_listed_class_stays_selectable_by_class():
     # a company whose Class B is the traded one: symbol row names Class B
     rows = ["Securities registered pursuant to Section 12(b) of the Act:",
             "Class B Common Stock NKE New York Stock Exchange",
@@ -67,8 +79,10 @@ def test_the_listed_class_is_primary_even_when_printed_second():
     flow = _flow(rows)
     rule_exchange_symbol(c, flow)
     rule_shares_outstanding(c, [flow])
-    primary = [f for f in _facts(c, "shares_outstanding") if f.primary]
-    assert [(f.share_class, f.value) for f in primary] == [("Class B", "1202110951")]
+    facts = _facts(c, "shares_outstanding")
+    primary = [f for f in facts if f.primary]
+    assert [(f.share_class, f.value) for f in primary] == [("All classes", "1483498703")]
+    assert ("Class B", "1202110951") in [(f.share_class, f.value) for f in facts if not f.primary]
     assert _facts(c, "trading_symbol")[0].share_class == "Class B"
 
 

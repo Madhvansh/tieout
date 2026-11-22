@@ -29,7 +29,7 @@ import gzip
 import json
 import pathlib
 import re
-from collections import defaultdict
+from collections import Counter, defaultdict
 from typing import Optional
 
 from . import pdfio
@@ -238,6 +238,42 @@ def tie(m: dict, idx: dict, limit: int = 10) -> list:
     return ties[:limit]
 
 
+SCALE_WORD_RE = re.compile(r"\b(?:thousands?|millions?|billions?|trillions?)\b|\(in 000", re.I)
+BARE_DOLLARS_RE = re.compile(r"\$\s?\d{1,3}(?:,\d{3})+")
+SCALE_UNKNOWN = "USD_scale_unknown"
+
+
+def usd_values(idx: dict) -> set:
+    """Absolute values of the USD cells and readings of one filing (from _value_index)."""
+    return {abs(v) for v, _ in idx.get("USD", []) if isinstance(v, (int, float))}
+
+
+def settle_scale(m: dict, values: set, statement_scale: Optional[float]) -> None:
+    """Give a "$N,NNN" amount of a sentence that prints no scale word the scale it was written in.
+
+    On a page printed "in millions", "long-term debt with fixed rates was $6,175" means 6,175
+    million. The amount takes the scale under which it equals, exactly, a table cell or statement
+    reading of the same filing: first as printed, then the filing's statement scale, then
+    thousands, millions, billions. With no such tie its scale is unknown: the number is marked
+    (`scale_unknown`, unit USD_scale_unknown) so no reader serves it as a plain dollar amount.
+    A rescaled number records the factor in `rescaled`.
+    """
+    if SCALE_WORD_RE.search(m["sentence"]):
+        return
+    for n in m["numbers"]:
+        if n["unit"] != "USD" or not BARE_DOLLARS_RE.fullmatch(n["text"].strip()):
+            continue
+        v = abs(float(n["value"]))
+        tried = [1.0] + [s for s in (statement_scale, 1e3, 1e6, 1e9) if s and s != 1.0]
+        hit = next((s for s in dict.fromkeys(tried) if round(v * s) in values), None)
+        if hit is None:
+            n["scale_unknown"] = True
+            n["unit"] = SCALE_UNKNOWN
+        elif hit != 1.0:
+            n["value"] = int(round(n["value"] * hit))
+            n["rescaled"] = hit
+
+
 def build_mentions(g, raw: list, docs: Optional[list] = None, verbose: bool = True) -> list:
     out = []
     for doc, f in g.filings.items():
@@ -248,7 +284,11 @@ def build_mentions(g, raw: list, docs: Optional[list] = None, verbose: bool = Tr
         for i, page in enumerate(pages):
             found.extend(page_mentions(doc, f["ticker"], i + 1, page))
         idx = _value_index(g, raw, doc)
+        scales = Counter(t["scale"] for t in g.tables.values() if t["doc"] == doc and t.get("scale"))
+        statement_scale = scales.most_common(1)[0][0] if scales else None
+        values = usd_values(idx)
         for m in found:
+            settle_scale(m, values, statement_scale)
             m["ties"] = tie(m, idx)
         out.extend(found)
         if verbose:

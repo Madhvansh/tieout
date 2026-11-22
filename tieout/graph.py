@@ -31,9 +31,9 @@ from datetime import date
 from typing import Optional
 
 from . import pdfio
-from .calc import _ints, row_pool, verified_cells
+from .calc import _ints, row_pool, row_section, verified_cells
 from .concepts import Binding, concept_defs, gate, load_overrides, norm_label, propose
-from .periods import FiscalCalendar
+from .periods import FiscalCalendar, column_period
 from .statements import find_statements, readable
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -202,20 +202,10 @@ def build(doc_ids: Optional[list] = None, verbose: bool = True, learned: bool = 
     return g
 
 
-def _column_period(cal: FiscalCalendar, col, kind: str, form: str) -> tuple:
-    """(period id, ISO end date) for one table column, or (None, None)."""
-    instant = kind == "BS"
-    if col.end_date:
-        try:
-            end = date.fromisoformat(col.end_date)
-        except ValueError:
-            return None, None
-    elif col.year:
-        end = cal.end_of_label(col.year)              # header printed only a fiscal-year label
-    else:
-        return None, None
-    months = None if instant else (col.months or (12 if form == "10-K" else None))
-    return cal.period_id(end, months, instant), end.isoformat()
+def _column_period(cal: FiscalCalendar, col, kind: str, form: str, filing_end: Optional[str] = None,
+                   heading: str = "") -> tuple:
+    """(period id, ISO end date) for one statement column, or (None, None): periods.column_period."""
+    return column_period(cal, col, form, instant=kind == "BS", filing_end=filing_end, heading=heading)
 
 
 def _add_filing(g: Graph, m: dict, verbose: bool) -> None:
@@ -250,7 +240,8 @@ def _add_filing(g: Graph, m: dict, verbose: bool) -> None:
                          "verified": st.verified, "cells": st.cells}
         ok = verified_cells(t, st.checks)
         bad = {(row, c) for ch in st.checks if ch.status == "fail" for row in ch.rows for c in ch.failing_cols}
-        periods = [_column_period(cal, c, kind, m["form"]) for c in t.columns]
+        heading = " ".join([t.title or "", t.caption or "", t.header_text or ""])
+        periods = [_column_period(cal, c, kind, m["form"], m["period_end"], heading) for c in t.columns]
         for r in t.rows:
             pool = row_pool(t, r)
             for ci, cell in r.cells.items():
@@ -263,7 +254,8 @@ def _add_filing(g: Graph, m: dict, verbose: bool) -> None:
                     value, unit = int(round(cell.value * t.share_scale)), "shares"
                 else:
                     value = cell.value
-                    unit = "percent" if cell.is_percent else ("USD/share" if "share" in (r.section + r.label).lower() else "ratio")
+                    unit = "percent" if cell.is_percent else \
+                        ("USD/share" if "share" in (row_section(t, r) + " " + r.label).lower() else "ratio")
                 rid = f"{doc}:p{t.page}:{kind}:r{r.idx}:c{ci}"
                 status = "verified" if (r.idx, ci) in ok else ("failed" if (r.idx, ci) in bad else "unverified")
                 g.readings[rid] = Reading(id=rid, doc=doc, ticker=ticker, page=cell.page, bbox=[round(x, 1) for x in cell.bbox],

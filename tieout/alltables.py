@@ -204,6 +204,7 @@ class Region:
     end: int = -1                 # index of the last num line
     nnum: int = 0
     edges: list = field(default_factory=list)
+    single: bool = False          # one value line: a table only if a year header is printed over it
 
 
 def _big_gap(a: Line, b: Line) -> bool:
@@ -233,6 +234,9 @@ def _segment(lines: list) -> list:
     def close():
         nonlocal cur
         if cur is not None and cur.nnum >= 2:
+            regions.append(cur)
+        elif cur is not None and cur.nnum == 1:
+            cur.single = True             # judged by _stream_tables: kept only under a year header
             regions.append(cur)
         cur = None
 
@@ -569,16 +573,16 @@ def _defuse_titles(region: list) -> list:
     return out
 
 
-def _build(doc_id: str, page_no: int, region: list, title: str, pct: set) -> Optional[Table]:
+def _build(doc_id: str, page_no: int, region: list, title: str, pct: set, min_hits: int = 3) -> Optional[Table]:
     """build_table, then once more without the percent-change columns."""
     region = _defuse_titles(region)
-    t = build_table(doc_id, page_no, [ln.words for ln in region], title)
+    t = build_table(doc_id, page_no, [ln.words for ln in region], title, min_hits=min_hits)
     if t is None:
         return None
     _mark_percent_cells(t, pct)
     drop = _percent_columns(t)
     if drop:
-        t = build_table(doc_id, page_no, _without_columns(region, drop, t.columns), title)
+        t = build_table(doc_id, page_no, _without_columns(region, drop, t.columns), title, min_hits=min_hits)
         if t is None:
             return None
         _mark_percent_cells(t, pct)
@@ -784,11 +788,21 @@ def _looks_like_index(t: Table) -> bool:
     return len(vals) >= 2 and all(v == int(v) and 0 < v < 1000 for v in vals) and vals == sorted(vals)
 
 
-def _acceptable(t: Optional[Table]) -> bool:
-    """Precision over recall: drop anything that does not look like a table."""
+def _acceptable(t: Optional[Table], single: bool = False) -> bool:
+    """Precision over recall: drop anything that does not look like a table.
+
+    A one-line table ("Visa processed transactions  281,331  257,545  233,758" under a year header)
+    is kept only when its one row has a label and two or more values, and a column carries a year."""
     if t is None or not t.columns:
         return False
     numeric_rows = [r for r in t.rows if any(c.value is not None for c in r.cells.values())]
+    if single:
+        if len(numeric_rows) != 1 or not numeric_rows[0].label.strip() or len(numeric_rows[0].label) > 110:
+            return False
+        cells = [c for c in numeric_rows[0].cells.values() if c.value is not None]
+        if len(cells) < 2 or any(re.fullmatch(r"(?:19|20)\d\d", c.text) for c in cells):
+            return False                 # a year among the values: a date line or a schedule, not a row
+        return any(c.year or c.end_date for c in t.columns) and not _looks_like_index(t)
     if len(numeric_rows) < 2:
         return False
     labelled = [r for r in numeric_rows if r.label]
@@ -1062,6 +1076,8 @@ def _stream_tables(doc_id: str, page_no: int, raw: list, default_scale: float,
     for reg in regions:
         start = _extend_up(lines, reg.start, floor)
         region = lines[start:reg.end + 1]
+        if reg.single and not any(ln.kind == "hdr" for ln in region[:-1]):
+            continue                      # one line of values with no year header over it: not a table
         title, intro = _title(lines, start, floor)
         context = ""
         if ctx is not None:
@@ -1074,13 +1090,13 @@ def _stream_tables(doc_id: str, page_no: int, raw: list, default_scale: float,
                 if ln.kind == "label":
                     ctx.feed(ln)
         floor = reg.end
-        t = _build(doc_id, page_no, region, title, pct)
+        t = _build(doc_id, page_no, region, title, pct, min_hits=1 if reg.single else 3)
         if t is None:
             continue
         if not title:
             t.title = _fallback_title(t, region, start, prev_title, earlier + out)
         _clean_labels(t)
-        if not _acceptable(t):
+        if not _acceptable(t, single=reg.single):
             continue
         _repair_wrapped_labels(t)
         _group_headers(t, region)
@@ -1090,6 +1106,7 @@ def _stream_tables(doc_id: str, page_no: int, raw: list, default_scale: float,
         _column_scales(t, region, default_scale)
         t.intro = intro
         t.context = context
+        t.added_by = "one line" if reg.single else ""
         t.bbox_y = (region[0].y0, region[-1].y1)
         out.append(t)
     if ctx is not None:
@@ -1099,10 +1116,12 @@ def _stream_tables(doc_id: str, page_no: int, raw: list, default_scale: float,
 
 
 def find_all_tables(doc_id: str, pages: list, skip_pages: set | None = None,
-                    default_scale: float | None = None) -> list:
+                    default_scale: float | None = None, statement_cells: dict | None = None) -> list:
     """Every numeric table in a filing, page by page, in print order.
 
     skip_pages: 1-based page numbers to leave out (the primary statements).
+    statement_cells: {page: printed cell texts of the primary statements there}; when given, the other
+    tables of a skipped page are kept (those whose values are not the statement's).
     default_scale: scale for tables that print no unit and have no unit in
     the sentence introducing them. None means infer_default_scale(pages).
 
@@ -1118,6 +1137,17 @@ def find_all_tables(doc_id: str, pages: list, skip_pages: set | None = None,
     for i, page in enumerate(pages):
         page_no = i + 1
         if page_no in skip:
+            if statement_cells and page_no in statement_cells:
+                # a page of a primary statement can also print another table (comprehensive income under
+                # the income statement): keep the tables whose values are not the statement's own
+                own = statement_cells[page_no]
+                for t in page_tables(doc_id, page_no, page, default_scale, "", ctx):
+                    texts = [c.text for r in t.rows for c in r.cells.values() if c.value is not None]
+                    if texts and sum(1 for x in texts if x in own) <= 0.2 * len(texts):
+                        t.added_by = "statement page"
+                        out.append(t)
+                prev_title = ""
+                continue
             # still read the headings so the context stays right
             for ln in page_lines(page):
                 ctx.feed(Line(ln, "label", " ".join(w.text for w in ln)))

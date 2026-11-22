@@ -41,8 +41,9 @@ from typing import Optional
 
 from . import pdfio
 from .alltables import find_all_tables
-from .calc import PER_SHARE_RE, discover, row_pool, verified_cells
+from .calc import PER_SHARE_RE, discover, row_pool, row_section, verified_cells
 from .concepts import norm_label
+from .periods import column_period
 from .tables import duration, printed_date
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -66,7 +67,7 @@ COUNT_RE = re.compile(r"\b(?:stores?|store counts?|warehouses?|clubs|locations|r
                       r"branches|atms|restaurants|subscribers|barrels|wells|acres|number of)\b", re.I)
 # things that are counted, not paid; a row label needs a stronger cue than a table
 ROW_COUNT_RE = re.compile(r"\bnumber of\b|\bcounts?\b|headcount|\bemployees\b|direct staff|\bstaff \(|\(actual\)|"
-                          r"square feet|\bmembers\b|cardholders", re.I)
+                          r"square feet|\bmembers\b|cardholders|\bprocessed transactions\b", re.I)
 # a table titled with money words holds money even when it prints no dollar sign
 MONEY_TITLE_RE = re.compile(r"expenditure|capital|revenue|\bcosts?\b|expense|income|earnings|cash|dollars|price|fees|"
                             r"compensation|amounts?\b", re.I)
@@ -136,7 +137,7 @@ def row_unit(t, r, prof: _Profile) -> str:
         return amount
     if cells and sum(1 for c in cells if c.is_percent) * 2 >= len(cells):
         return "percent"
-    if PER_SHARE_RE.search(r.label) or PER_SHARE_RE.search(r.section):
+    if PER_SHARE_RE.search(r.label) or PER_SHARE_RE.search(row_section(t, r)):
         return "USD/share"
     if RATIO_LABEL_RE.search(r.label):
         return "ratio"
@@ -171,7 +172,8 @@ def _cell_scale(t, r, ci: int, unit: str, prof: _Profile) -> float:
     if unit == "count" or unit == "shares" and prof.shares:
         if ci in prof.col_scale:
             return prof.col_scale[ci]
-        return (prof.own_scale or 1.0) if prof.count else 1.0
+        # a one-line table is all count: its caption ("in millions") is said about that line
+        return (prof.own_scale or 1.0) if prof.count or len(t.rows) == 1 else 1.0
     if unit == "shares":
         return prof.share_scale
     if unit == "USD":
@@ -179,9 +181,12 @@ def _cell_scale(t, r, ci: int, unit: str, prof: _Profile) -> float:
     return 1.0
 
 
-def table_rows(doc: str, ticker: str, k: int, t, periods: list, anchors: dict, cal=None, form: str = "") -> list:
+def table_rows(doc: str, ticker: str, k: int, t, periods: list, anchors: dict, cal=None, form: str = "",
+               filing_end: Optional[str] = None) -> list:
     """Rows of one parsed table in the raw-layer shape. With the company's calendar, a date line
-    inside the table dates the rows below it (_marked_periods)."""
+    inside the table dates the rows below it (_marked_periods). When two or more cells of one row
+    share a period id (segment, region, gross and net columns), each of them also carries `member`:
+    its column header without the date words, so a reader can tell the cells apart."""
     checks = discover(t)
     ok = verified_cells(t, checks)
     passing = [ch for ch in checks if ch.status != "fail"]
@@ -196,7 +201,7 @@ def table_rows(doc: str, ticker: str, k: int, t, periods: list, anchors: dict, c
     for r in t.rows:
         unit = row_unit(t, r, prof)
         cells, ties = [], defaultdict(int)
-        row_periods = _marked_periods(cal, t, r, periods, form) if cal is not None else periods
+        row_periods = _marked_periods(cal, t, r, periods, form, filing_end) if cal is not None else periods
         for ci in sorted(r.cells):
             cell = r.cells[ci]
             if cell.value is None:
@@ -219,6 +224,10 @@ def table_rows(doc: str, ticker: str, k: int, t, periods: list, anchors: dict, c
                 ties[anchors[(end, value)]] += 1
         if not cells:
             continue
+        shared = Counter(c["pid"] for c in cells if c["pid"])
+        for c in cells:
+            if c["pid"] and shared[c["pid"]] > 1:
+                c["member"] = member_of(t.columns[c["ci"]].header)
         out[r.idx] = {
             "id": f"{table_id}:r{r.idx}", "doc": doc, "ticker": ticker, "page": r.page, "table": k,
             "table_id": table_id, "title": (t.title or "")[:160], "context": (getattr(t, "context", "") or "")[:120],
@@ -270,10 +279,23 @@ def build_raw(g, docs: Optional[list] = None, verbose: bool = True) -> list:
         default = scales.most_common(1)[0][0] if scales else None
         n0 = len(rows)
         fiscal_year = int(f["fiscal_year"].lstrip("FY"))
-        for k, t in enumerate(find_all_tables(doc, pages, skip_pages=skip, default_scale=default)):
+        own = defaultdict(set)                   # printed texts of the primary statements, by page
+        for r in g.readings.values():
+            if r.doc == doc:
+                own[r.page].add(r.text)
+        base, extra = 0, 0
+        for t in find_all_tables(doc, pages, skip_pages=skip, default_scale=default, statement_cells=own):
+            # tables the older reader also found keep their number; a one-line table or a table on a
+            # statement page is numbered after the table before it ("12e1"), so no older row id moves
+            if getattr(t, "added_by", ""):
+                extra += 1
+                k = f"{base - 1}e{extra}"
+            else:
+                k, base, extra = base, base + 1, 0
             buckets = _maturity_columns(t, fiscal_year)
-            periods = [(None, None) if c.idx in buckets else _period(cal, c, f["form"]) for c in t.columns]
-            rows.extend(table_rows(doc, ticker, k, t, periods, anchors, cal, f["form"]))
+            periods = [(None, None) if c.idx in buckets else _period(cal, c, f["form"], f["period_end"], _heading(t))
+                       for c in t.columns]
+            rows.extend(table_rows(doc, ticker, k, t, periods, anchors, cal, f["form"], f["period_end"]))
         rows.extend(_primary_rows(g, doc))
         if verbose:
             print(f"raw    {doc:22s} {len(rows) - n0:5d} rows", flush=True)
@@ -358,7 +380,7 @@ def _maturity_columns(t, fiscal_year: int) -> set:
 QUARTER_HEAD_RE = re.compile(r"quarter|\bq[1-4]\b|months|weeks|\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)", re.I)
 
 
-def _marked_periods(cal, t, r, periods: list, form: str) -> list:
+def _marked_periods(cal, t, r, periods: list, form: str, filing_end: Optional[str] = None) -> list:
     """The periods of one row's columns when a date line sits above the row inside the table.
 
     "As of December 2024" between two stacked blocks of the same columns dates the second
@@ -380,21 +402,44 @@ def _marked_periods(cal, t, r, periods: list, form: str) -> list:
             out.append(p)                       # a column the header leaves undated ("Total") stays so
             continue
         col = replace(c, year=year, end_date=printed_date(mark, year), months=duration(mark) or c.months)
-        out.append(_period(cal, col, form))
+        out.append(_period(cal, col, form, filing_end, _heading(t) + " " + mark))
     return out
 
 
-def _period(cal, col, form: str) -> tuple:
-    if col.end_date:
-        try:
-            end = date.fromisoformat(col.end_date)
-        except ValueError:
-            return None, None
-    elif col.year and 1995 <= col.year <= 2035:
-        end = cal.end_of_label(col.year)
-    else:
-        return None, None
-    return cal.period_id(end, col.months or (12 if form == "10-K" else None), False), end.isoformat()
+DATE_WORD_RE = re.compile(
+    r"\b(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sept?(?:ember)?|"
+    r"oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\.?(?:\s+\d{1,2}\b,?)?"
+    r"|\b(?:19|20)\d\d\b|\bq[1-4]\b|\b(?:first|second|third|fourth)\s+quarter\b"
+    r"|\b(?:three|six|nine|twelve|3|6|9|12|13|26|39|52|53)\s+(?:months|weeks)\b"
+    r"|\b(?:fiscal(?:\s+years?)?|(?:years?|quarters?|months|weeks|periods?)\s+(?:ended|ending)|ended|ending|"
+    r"ytd|year-to-date)\b",
+    re.I)
+EDGE_WORD_RE = re.compile(r"^(?:at|as\s+of|for\s+the|for|and|in|of)\b\s*|\s*\b(?:at|as\s+of|for\s+the|for|and|in|of)$",
+                          re.I)
+
+
+def member_of(header: str) -> str:
+    """A column header with its date and year words removed: what the column is a member of
+    ("Global Banking | 2025" -> "Global Banking", "September 30, 2025" -> "")."""
+    text = DATE_WORD_RE.sub(" ", header or "")
+    text = re.sub(r"[|,;:()\[\]⁠]+", " ", text)
+    text = re.sub(r"\s+", " ", text).strip(" -–—.")
+    while True:
+        cut = EDGE_WORD_RE.sub("", text).strip(" -–—.")
+        if cut == text:
+            break
+        text = cut
+    return text if re.search(r"[A-Za-z]", text) else ""
+
+
+def _period(cal, col, form: str, filing_end: Optional[str] = None, heading: str = "") -> tuple:
+    """(period id, ISO end date) of one column: periods.column_period, as a flow."""
+    return column_period(cal, col, form, instant=False, filing_end=filing_end, heading=heading)
+
+
+def _heading(t) -> str:
+    """What a table prints above its columns: title, caption, header lines and introducing sentence."""
+    return " ".join([t.title or "", t.caption or "", t.header_text or "", getattr(t, "intro", "") or ""])
 
 
 def save_raw(rows: list, path: pathlib.Path = RAW_PATH) -> None:

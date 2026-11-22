@@ -13,7 +13,8 @@
   python scripts/run_benchmark.py --offline             # replay from the cache only; no LLM call is made
   python scripts/run_benchmark.py --ids A01,A06         # only these questions
   python scripts/run_benchmark.py --no-repair           # no second planner call after an executor failure
-  python scripts/run_benchmark.py --persist             # development only: keep what was learned in the store
+  python scripts/run_benchmark.py --persist             # development only: keep in the store the links that
+                                                        # led to an answer its gold confirmed (outcome-gated)
   python scripts/run_benchmark.py --model M --checker C --arbiter A1,A2
                                                         # two readers and an arbiter (tieout/readers.py): M and C each
                                                         # plan every question; A1 (then A2 ...) is called on disagreement
@@ -95,8 +96,9 @@ def main():
     ap.add_argument("--ids", default=None, help="comma-separated question ids to run")
     ap.add_argument("--no-repair", action="store_true")
     ap.add_argument("--persist", action="store_true",
-                    help="save what the run learns to the learned store (development runs only: the store is "
-                         "the system's learning history, which a held-out run then starts from)")
+                    help="development runs only: save to the learned store the links behind answers that matched "
+                         "their gold. A link from a wrong or abstained answer is not kept. The store is the "
+                         "learning history a held-out run starts from; a held-out run never persists")
     ap.add_argument("--checker", default=None, help="second, independent planner model (see tieout/readers.py)")
     ap.add_argument("--arbiter", default="", help="comma-separated arbiter models, strongest first")
     a = ap.parse_args()
@@ -129,10 +131,16 @@ def main():
     def run(q):
         common = dict(question_id=q["id"], offline=a.offline, executor=ex,
                       allow_learning=not (a.no_learning or a.ablate == "living" or a.noise > 0),
-                      persist=a.persist and not a.ablate and a.noise == 0, repair=not a.no_repair)
+                      persist=False, repair=not a.no_repair)   # nothing is stored before its outcome is known
         if panel and not a.oracle:
-            return readers.answer(q["question"], g, panel, **common)
-        return answer(q["question"], g, model=a.model, plan=oracle.get(q["id"]) if a.oracle else None, **common)
+            out = readers.answer(q["question"], g, panel, **common)
+        else:
+            out = answer(q["question"], g, model=a.model, plan=oracle.get(q["id"]) if a.oracle else None, **common)
+        served.append(out)
+        return out
+
+    served: list = []
+    keep = a.persist and not a.ablate and a.noise == 0
 
     name = a.name or "_".join(x for x in ["tieout", "oracle" if a.oracle else "", f"no-{a.ablate}" if a.ablate else "",
                                           "strict" if a.strict else "", f"noise{a.noise}" if a.noise else ""] if x)
@@ -150,6 +158,8 @@ def main():
         except Exception as e:  # noqa: BLE001 - one question must never stop the run
             row = error_row(q, name, e)
         row.update(call_totals(CALL_LOG[start:]))
+        if keep and row.get("correct") and served:
+            row["kept_links"] = keep_links(served[-1], q["id"])
         rows.append(row)
         save(path, name, a, complete, rows, g)
     table = save(path, name, a, complete, rows, g)
@@ -183,6 +193,21 @@ def print_readings(rows: list) -> None:
         seen = [x for r in rows for x in r.get("readers", []) if x["role"] == role]
         if seen:
             print(f"  {role} alone: {sum(x['correct'] for x in seen)}/{len(seen)}")
+
+
+def keep_links(out: dict, question_id: str) -> int:
+    """Outcome gate: write to the store the links and bindings this answer learned, now that its gold
+    confirmed the answer. Returns how many were written."""
+    from tieout.link import save_link
+    from tieout.living import save_entry
+    kept = 0
+    for entry in out.get("learned", []):
+        if entry.get("state") not in ("active", "flagged"):
+            continue
+        entry = {**entry, "confirmed_by": f"the answer to {question_id} matched its gold"}
+        (save_link if entry.get("kind") in ("item", "mention", "breakdown") else save_entry)(entry)
+        kept += 1
+    return kept
 
 
 def call_totals(calls: list) -> dict:

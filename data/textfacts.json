@@ -13,7 +13,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2026_10K",
@@ -29,7 +30,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2026_10K",
@@ -45,7 +47,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2026_10K",
@@ -61,7 +64,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2026_10K",
@@ -77,7 +81,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2026_10K",
@@ -93,7 +98,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2026_10K",
@@ -109,7 +115,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2026_10K",
@@ -125,7 +132,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2026_10K",
@@ -141,7 +149,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2026_10K",
@@ -157,7 +166,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2026_10K",
@@ -173,7 +183,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2026_10K",
@@ -189,7 +200,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2026_10K",
@@ -205,7 +217,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2026_10K",
@@ -221,7 +234,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2026_10K",
@@ -237,7 +251,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2026_10K",
@@ -253,7 +268,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2026_10K",
@@ -269,7 +285,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2026_10K",
@@ -285,7 +302,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2026_10K",
@@ -301,7 +319,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2026_10K",
@@ -317,7 +336,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2026_10K",
@@ -333,7 +353,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2026_10K",
@@ -349,7 +370,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2026_10K",
@@ -365,7 +387,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2026_10K",
@@ -381,7 +404,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2026_10K",
@@ -397,7 +421,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2026_10K",
@@ -413,7 +438,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2026_10K",
@@ -429,7 +455,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2026_10K",
@@ -445,7 +472,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GOOGL_FY2025_10K",
@@ -461,151 +489,8 @@
   ],
   "confidence": "high",
   "share_class": "Class C",
-  "primary": false
- },
- {
-  "doc": "GOOGL_FY2025_10K",
-  "attr": "shares_outstanding",
-  "value": "837000000",
-  "page": 2,
-  "quote": "Class B: As of January 28, 2026, there were 5,822 million shares of Alphabet’s Class A stock outstanding, 837 million shares of Alphabet’s Class B stock outstanding, and 5,438 million shares of the Alphabet’s Class C stock outstanding. ___________________________________________ DOCUMENTS",
-  "bbox": [
-   439.82,
-   462.67,
-   483.48,
-   471.67
-  ],
-  "confidence": "high",
-  "share_class": "Class B",
-  "primary": false
- },
- {
-  "doc": "GOOGL_FY2025_10K",
-  "attr": "shares_outstanding",
-  "value": "5438000000",
-  "page": 2,
-  "quote": "Class C: there were 5,822 million shares of Alphabet’s Class A stock outstanding, 837 million shares of Alphabet’s Class B stock outstanding, and 5,438 million shares of the Alphabet’s Class C stock outstanding. ___________________________________________ DOCUMENTS INCORPORATED BY REFERENCE",
-  "bbox": [
-   169.17,
-   473.47,
-   219.69,
-   482.47
-  ],
-  "confidence": "high",
-  "share_class": "Class C",
-  "primary": false
- },
- {
-  "doc": "GOOGL_FY2025_10K",
-  "attr": "fiscal_year_end",
-  "value": "2025-12-31",
-  "page": 1,
-  "quote": "For the fiscal year ended December 31, 2025",
-  "bbox": [
-   215.79,
-   195.02,
-   396.28,
-   204.02
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "GOOGL_FY2025_10K",
-  "attr": "public_float_usd",
-  "value": "1900000000000",
-  "page": 2,
-  "quote": "As of June 30, 2025, the aggregate market value of shares held by non-affiliates of the registrant (based upon the closing sale prices of such shares on the Nasdaq Global Select Market on June 30, 2025) was approximately $1.9 trillion.",
-  "bbox": [
-   451.79,
-   359.47,
-   499.13,
-   368.47
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "GOOGL_FY2025_10K",
-  "attr": "state_of_incorporation",
-  "value": "Delaware",
-  "page": 1,
-  "quote": "Delaware 61-1767919 | (State or other jurisdiction of incorporation or organization) (I.R.S. Employer Identification No.)",
-  "bbox": [
-   154.63,
-   329.77,
-   194.15,
-   338.77
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "GOOGL_FY2025_10K",
-  "attr": "hq_city",
-  "value": "Mountain View",
-  "page": 1,
-  "quote": "Mountain View, CA 94043 | (Address of principal executive offices, including zip code)",
-  "bbox": [
-   251.79,
-   368.82,
-   360.23,
-   377.82
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "GOOGL_FY2025_10K",
-  "attr": "hq_state",
-  "value": "CA",
-  "page": 1,
-  "quote": "Mountain View, CA 94043 | (Address of principal executive offices, including zip code)",
-  "bbox": [
-   251.79,
-   368.82,
-   360.23,
-   377.82
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "GOOGL_FY2025_10K",
-  "attr": "trading_symbol",
-  "value": "GOOGL",
-  "page": 1,
-  "quote": "Class A Common Stock, $0.001 par value GOOGL Nasdaq Stock Market LLC",
-  "bbox": [
-   288.88,
-   435.68,
-   322.39,
-   444.68
-  ],
-  "confidence": "high",
-  "share_class": "Class A",
-  "primary": true
- },
- {
-  "doc": "GOOGL_FY2025_10K",
-  "attr": "exchange",
-  "value": "NASDAQ",
-  "page": 1,
-  "quote": "Class A Common Stock, $0.001 par value GOOGL Nasdaq Stock Market LLC",
-  "bbox": [
-   56.05,
-   435.68,
-   523.19,
-   444.68
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
+  "primary": false,
+  "derived": false
  },
  {
   "doc": "GOOGL_FY2025_10K",
@@ -621,7 +506,178 @@
   ],
   "confidence": "high",
   "share_class": "Class A",
-  "primary": true
+  "primary": false,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2025_10K",
+  "attr": "shares_outstanding",
+  "value": "837000000",
+  "page": 2,
+  "quote": "Class B: As of January 28, 2026, there were 5,822 million shares of Alphabet’s Class A stock outstanding, 837 million shares of Alphabet’s Class B stock outstanding, and 5,438 million shares of the Alphabet’s Class C stock outstanding. ___________________________________________ DOCUMENTS",
+  "bbox": [
+   439.82,
+   462.67,
+   483.48,
+   471.67
+  ],
+  "confidence": "high",
+  "share_class": "Class B",
+  "primary": false,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2025_10K",
+  "attr": "shares_outstanding",
+  "value": "5438000000",
+  "page": 2,
+  "quote": "Class C: there were 5,822 million shares of Alphabet’s Class A stock outstanding, 837 million shares of Alphabet’s Class B stock outstanding, and 5,438 million shares of the Alphabet’s Class C stock outstanding. ___________________________________________ DOCUMENTS INCORPORATED BY REFERENCE",
+  "bbox": [
+   169.17,
+   473.47,
+   219.69,
+   482.47
+  ],
+  "confidence": "high",
+  "share_class": "Class C",
+  "primary": false,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2025_10K",
+  "attr": "fiscal_year_end",
+  "value": "2025-12-31",
+  "page": 1,
+  "quote": "For the fiscal year ended December 31, 2025",
+  "bbox": [
+   215.79,
+   195.02,
+   396.28,
+   204.02
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2025_10K",
+  "attr": "public_float_usd",
+  "value": "1900000000000",
+  "page": 2,
+  "quote": "As of June 30, 2025, the aggregate market value of shares held by non-affiliates of the registrant (based upon the closing sale prices of such shares on the Nasdaq Global Select Market on June 30, 2025) was approximately $1.9 trillion.",
+  "bbox": [
+   451.79,
+   359.47,
+   499.13,
+   368.47
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2025_10K",
+  "attr": "state_of_incorporation",
+  "value": "Delaware",
+  "page": 1,
+  "quote": "Delaware 61-1767919 | (State or other jurisdiction of incorporation or organization) (I.R.S. Employer Identification No.)",
+  "bbox": [
+   154.63,
+   329.77,
+   194.15,
+   338.77
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2025_10K",
+  "attr": "hq_city",
+  "value": "Mountain View",
+  "page": 1,
+  "quote": "Mountain View, CA 94043 | (Address of principal executive offices, including zip code)",
+  "bbox": [
+   251.79,
+   368.82,
+   360.23,
+   377.82
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2025_10K",
+  "attr": "hq_state",
+  "value": "CA",
+  "page": 1,
+  "quote": "Mountain View, CA 94043 | (Address of principal executive offices, including zip code)",
+  "bbox": [
+   251.79,
+   368.82,
+   360.23,
+   377.82
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2025_10K",
+  "attr": "trading_symbol",
+  "value": "GOOGL",
+  "page": 1,
+  "quote": "Class A Common Stock, $0.001 par value GOOGL Nasdaq Stock Market LLC",
+  "bbox": [
+   288.88,
+   435.68,
+   322.39,
+   444.68
+  ],
+  "confidence": "high",
+  "share_class": "Class A",
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2025_10K",
+  "attr": "exchange",
+  "value": "NASDAQ",
+  "page": 1,
+  "quote": "Class A Common Stock, $0.001 par value GOOGL Nasdaq Stock Market LLC",
+  "bbox": [
+   56.05,
+   435.68,
+   523.19,
+   444.68
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2025_10K",
+  "attr": "shares_outstanding",
+  "value": "12097000000",
+  "page": 2,
+  "quote": "All classes (sum of Class A, Class B, Class C): As of January 28, 2026, there were 5,822 million shares of Alphabet’s Class A stock outstanding, 837 million shares of Alphabet’s Class B stock outstanding, and 5,438 million shares of the Alphabet’s Class C stock outstanding.",
+  "bbox": [
+   43.2,
+   462.67,
+   568.75,
+   482.47
+  ],
+  "confidence": "high",
+  "share_class": "All classes",
+  "primary": true,
+  "derived": true
  },
  {
   "doc": "GOOGL_FY2025_10K",
@@ -637,7 +693,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GOOGL_FY2025_10K",
@@ -653,7 +710,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GOOGL_FY2025_10K",
@@ -669,7 +727,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GOOGL_FY2025_10K",
@@ -685,7 +744,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GOOGL_FY2025_10K",
@@ -701,7 +761,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GOOGL_FY2025_10K",
@@ -717,7 +778,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMZN_FY2025_10K",
@@ -733,7 +795,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMZN_FY2025_10K",
@@ -749,7 +812,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMZN_FY2025_10K",
@@ -765,7 +829,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMZN_FY2025_10K",
@@ -781,7 +846,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMZN_FY2025_10K",
@@ -797,7 +863,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMZN_FY2025_10K",
@@ -813,7 +880,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMZN_FY2025_10K",
@@ -829,7 +897,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMZN_FY2025_10K",
@@ -845,7 +914,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMZN_FY2025_10K",
@@ -861,7 +931,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMZN_FY2025_10K",
@@ -877,7 +948,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMZN_FY2025_10K",
@@ -893,7 +965,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMZN_FY2025_10K",
@@ -909,7 +982,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMZN_FY2025_10K",
@@ -925,7 +999,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMZN_FY2025_10K",
@@ -941,135 +1016,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
- },
- {
-  "doc": "META_FY2025_10K",
-  "attr": "shares_outstanding",
-  "value": "342377716",
-  "page": 1,
-  "quote": "Class B: On January 23, 2026, the registrant had 2,187,177,748 shares of Class A common stock and 342,377,716 shares of Class B common stock outstanding.",
-  "bbox": [
-   97.97,
-   765.21,
-   133.95,
-   772.41
-  ],
-  "confidence": "high",
-  "share_class": "Class B",
-  "primary": false
- },
- {
-  "doc": "META_FY2025_10K",
-  "attr": "fiscal_year_end",
-  "value": "2025-12-31",
-  "page": 1,
-  "quote": "For the fiscal year ended December 31, 2025",
-  "bbox": [
-   229.85,
-   180.63,
-   382.37,
-   188.73
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "META_FY2025_10K",
-  "attr": "public_float_usd",
-  "value": "1600000000000",
-  "page": 1,
-  "quote": "registrant as of June 30, 2025, the last business day of the registrant's most recently completed second fiscal quarter, was approximately $1.6 trillion based upon the closing price reported for such date on the Nasdaq Global Select Market.",
-  "bbox": [
-   100.24,
-   757.11,
-   134.88,
-   764.31
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "META_FY2025_10K",
-  "attr": "state_of_incorporation",
-  "value": "Delaware",
-  "page": 1,
-  "quote": "Delaware 20-1665019 | (State or other jurisdiction of incorporation or organization) (I.R.S. Employer Identification Number)",
-  "bbox": [
-   148.14,
-   320.35,
-   180.83,
-   328.45
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "META_FY2025_10K",
-  "attr": "hq_city",
-  "value": "Menlo Park",
-  "page": 1,
-  "quote": "1 Meta Way, Menlo Park, California 94025 | (Address of principal executive offices and Zip Code)",
-  "bbox": [
-   231.94,
-   344.65,
-   380.28,
-   352.75
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "META_FY2025_10K",
-  "attr": "hq_state",
-  "value": "CA",
-  "page": 1,
-  "quote": "1 Meta Way, Menlo Park, California 94025 | (Address of principal executive offices and Zip Code)",
-  "bbox": [
-   231.94,
-   344.65,
-   380.28,
-   352.75
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "META_FY2025_10K",
-  "attr": "trading_symbol",
-  "value": "META",
-  "page": 1,
-  "quote": "Class A Common Stock, $0.000006 par value META The Nasdaq Stock Market LLC",
-  "bbox": [
-   294.96,
-   417.55,
-   317.26,
-   425.65
-  ],
-  "confidence": "high",
-  "share_class": "Class A",
-  "primary": true
- },
- {
-  "doc": "META_FY2025_10K",
-  "attr": "exchange",
-  "value": "NASDAQ",
-  "page": 1,
-  "quote": "Class A Common Stock, $0.000006 par value META The Nasdaq Stock Market LLC",
-  "bbox": [
-   63.09,
-   417.55,
-   526.39,
-   425.65
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "META_FY2025_10K",
@@ -1085,7 +1033,161 @@
   ],
   "confidence": "high",
   "share_class": "Class A",
-  "primary": true
+  "primary": false,
+  "derived": false
+ },
+ {
+  "doc": "META_FY2025_10K",
+  "attr": "shares_outstanding",
+  "value": "342377716",
+  "page": 1,
+  "quote": "Class B: On January 23, 2026, the registrant had 2,187,177,748 shares of Class A common stock and 342,377,716 shares of Class B common stock outstanding.",
+  "bbox": [
+   97.97,
+   765.21,
+   133.95,
+   772.41
+  ],
+  "confidence": "high",
+  "share_class": "Class B",
+  "primary": false,
+  "derived": false
+ },
+ {
+  "doc": "META_FY2025_10K",
+  "attr": "fiscal_year_end",
+  "value": "2025-12-31",
+  "page": 1,
+  "quote": "For the fiscal year ended December 31, 2025",
+  "bbox": [
+   229.85,
+   180.63,
+   382.37,
+   188.73
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "META_FY2025_10K",
+  "attr": "public_float_usd",
+  "value": "1600000000000",
+  "page": 1,
+  "quote": "registrant as of June 30, 2025, the last business day of the registrant's most recently completed second fiscal quarter, was approximately $1.6 trillion based upon the closing price reported for such date on the Nasdaq Global Select Market.",
+  "bbox": [
+   100.24,
+   757.11,
+   134.88,
+   764.31
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "META_FY2025_10K",
+  "attr": "state_of_incorporation",
+  "value": "Delaware",
+  "page": 1,
+  "quote": "Delaware 20-1665019 | (State or other jurisdiction of incorporation or organization) (I.R.S. Employer Identification Number)",
+  "bbox": [
+   148.14,
+   320.35,
+   180.83,
+   328.45
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "META_FY2025_10K",
+  "attr": "hq_city",
+  "value": "Menlo Park",
+  "page": 1,
+  "quote": "1 Meta Way, Menlo Park, California 94025 | (Address of principal executive offices and Zip Code)",
+  "bbox": [
+   231.94,
+   344.65,
+   380.28,
+   352.75
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "META_FY2025_10K",
+  "attr": "hq_state",
+  "value": "CA",
+  "page": 1,
+  "quote": "1 Meta Way, Menlo Park, California 94025 | (Address of principal executive offices and Zip Code)",
+  "bbox": [
+   231.94,
+   344.65,
+   380.28,
+   352.75
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "META_FY2025_10K",
+  "attr": "trading_symbol",
+  "value": "META",
+  "page": 1,
+  "quote": "Class A Common Stock, $0.000006 par value META The Nasdaq Stock Market LLC",
+  "bbox": [
+   294.96,
+   417.55,
+   317.26,
+   425.65
+  ],
+  "confidence": "high",
+  "share_class": "Class A",
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "META_FY2025_10K",
+  "attr": "exchange",
+  "value": "NASDAQ",
+  "page": 1,
+  "quote": "Class A Common Stock, $0.000006 par value META The Nasdaq Stock Market LLC",
+  "bbox": [
+   63.09,
+   417.55,
+   526.39,
+   425.65
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "META_FY2025_10K",
+  "attr": "shares_outstanding",
+  "value": "2529555464",
+  "page": 1,
+  "quote": "All classes (sum of Class A, Class B): On January 23, 2026, the registrant had 2,187,177,748 shares of Class A common stock and 342,377,716 shares of Class B common stock outstanding.",
+  "bbox": [
+   18.22,
+   757.11,
+   593.99,
+   772.41
+  ],
+  "confidence": "high",
+  "share_class": "All classes",
+  "primary": true,
+  "derived": true
  },
  {
   "doc": "META_FY2025_10K",
@@ -1101,7 +1203,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "META_FY2025_10K",
@@ -1117,7 +1220,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "META_FY2025_10K",
@@ -1133,7 +1237,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "META_FY2025_10K",
@@ -1149,7 +1254,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "META_FY2025_10K",
@@ -1165,7 +1271,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "META_FY2025_10K",
@@ -1181,7 +1288,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "NVDA_FY2026_10K",
@@ -1197,7 +1305,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "NVDA_FY2026_10K",
@@ -1213,7 +1322,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "NVDA_FY2026_10K",
@@ -1229,7 +1339,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "NVDA_FY2026_10K",
@@ -1245,7 +1356,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "NVDA_FY2026_10K",
@@ -1261,7 +1373,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "NVDA_FY2026_10K",
@@ -1277,7 +1390,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "NVDA_FY2026_10K",
@@ -1293,7 +1407,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "NVDA_FY2026_10K",
@@ -1309,7 +1424,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "NVDA_FY2026_10K",
@@ -1325,7 +1441,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "NVDA_FY2026_10K",
@@ -1341,7 +1458,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "NVDA_FY2026_10K",
@@ -1357,7 +1475,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "NVDA_FY2026_10K",
@@ -1373,7 +1492,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "NVDA_FY2026_10K",
@@ -1389,7 +1509,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "NVDA_FY2026_10K",
@@ -1405,7 +1526,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMD_FY2025_10K",
@@ -1421,7 +1543,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMD_FY2025_10K",
@@ -1437,7 +1560,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMD_FY2025_10K",
@@ -1453,7 +1577,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMD_FY2025_10K",
@@ -1469,7 +1594,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMD_FY2025_10K",
@@ -1485,7 +1611,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMD_FY2025_10K",
@@ -1501,7 +1628,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMD_FY2025_10K",
@@ -1517,7 +1645,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMD_FY2025_10K",
@@ -1533,7 +1662,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMD_FY2025_10K",
@@ -1549,7 +1679,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMD_FY2025_10K",
@@ -1565,7 +1696,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMD_FY2025_10K",
@@ -1581,7 +1713,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMD_FY2025_10K",
@@ -1597,7 +1730,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMD_FY2025_10K",
@@ -1613,7 +1747,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AMD_FY2025_10K",
@@ -1629,7 +1764,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ORCL_FY2026_10K",
@@ -1645,7 +1781,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ORCL_FY2026_10K",
@@ -1661,7 +1798,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ORCL_FY2026_10K",
@@ -1677,7 +1815,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ORCL_FY2026_10K",
@@ -1693,7 +1832,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ORCL_FY2026_10K",
@@ -1709,7 +1849,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ORCL_FY2026_10K",
@@ -1725,7 +1866,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ORCL_FY2026_10K",
@@ -1741,7 +1883,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ORCL_FY2026_10K",
@@ -1757,7 +1900,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ORCL_FY2026_10K",
@@ -1773,7 +1917,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ORCL_FY2026_10K",
@@ -1789,7 +1934,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ORCL_FY2026_10K",
@@ -1805,7 +1951,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ORCL_FY2026_10K",
@@ -1821,7 +1968,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ORCL_FY2026_10K",
@@ -1837,7 +1985,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CRM_FY2026_10K",
@@ -1853,7 +2002,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CRM_FY2026_10K",
@@ -1869,7 +2019,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CRM_FY2026_10K",
@@ -1885,7 +2036,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CRM_FY2026_10K",
@@ -1901,7 +2053,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CRM_FY2026_10K",
@@ -1917,7 +2070,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CRM_FY2026_10K",
@@ -1933,7 +2087,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CRM_FY2026_10K",
@@ -1949,7 +2104,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CRM_FY2026_10K",
@@ -1965,7 +2121,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CRM_FY2026_10K",
@@ -1981,7 +2138,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CRM_FY2026_10K",
@@ -1997,7 +2155,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CRM_FY2026_10K",
@@ -2013,7 +2172,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CRM_FY2026_10K",
@@ -2029,7 +2189,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CRM_FY2026_10K",
@@ -2045,7 +2206,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CRM_FY2026_10K",
@@ -2061,7 +2223,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ADBE_FY2025_10K",
@@ -2077,7 +2240,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ADBE_FY2025_10K",
@@ -2093,7 +2257,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ADBE_FY2025_10K",
@@ -2109,7 +2274,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ADBE_FY2025_10K",
@@ -2125,7 +2291,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ADBE_FY2025_10K",
@@ -2141,7 +2308,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ADBE_FY2025_10K",
@@ -2157,7 +2325,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ADBE_FY2025_10K",
@@ -2173,7 +2342,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ADBE_FY2025_10K",
@@ -2189,7 +2359,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ADBE_FY2025_10K",
@@ -2205,7 +2376,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ADBE_FY2025_10K",
@@ -2221,7 +2393,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ADBE_FY2025_10K",
@@ -2237,7 +2410,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ADBE_FY2025_10K",
@@ -2253,7 +2427,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ADBE_FY2025_10K",
@@ -2269,7 +2444,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "ADBE_FY2025_10K",
@@ -2285,7 +2461,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CSCO_FY2026_10K",
@@ -2301,7 +2478,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CSCO_FY2026_10K",
@@ -2317,7 +2495,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CSCO_FY2026_10K",
@@ -2333,7 +2512,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CSCO_FY2026_10K",
@@ -2349,7 +2529,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CSCO_FY2026_10K",
@@ -2365,7 +2546,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CSCO_FY2026_10K",
@@ -2381,7 +2563,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CSCO_FY2026_10K",
@@ -2397,7 +2580,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CSCO_FY2026_10K",
@@ -2413,7 +2597,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CSCO_FY2026_10K",
@@ -2429,7 +2614,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CSCO_FY2026_10K",
@@ -2445,7 +2631,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CSCO_FY2026_10K",
@@ -2461,7 +2648,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CSCO_FY2026_10K",
@@ -2477,7 +2665,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CSCO_FY2026_10K",
@@ -2493,7 +2682,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CSCO_FY2026_10K",
@@ -2509,7 +2699,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JPM_FY2025_10K",
@@ -2525,7 +2716,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JPM_FY2025_10K",
@@ -2541,7 +2733,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JPM_FY2025_10K",
@@ -2557,7 +2750,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JPM_FY2025_10K",
@@ -2573,7 +2767,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JPM_FY2025_10K",
@@ -2589,7 +2784,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JPM_FY2025_10K",
@@ -2605,7 +2801,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JPM_FY2025_10K",
@@ -2621,7 +2818,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JPM_FY2025_10K",
@@ -2637,7 +2835,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JPM_FY2025_10K",
@@ -2653,7 +2852,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JPM_FY2025_10K",
@@ -2669,7 +2869,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JPM_FY2025_10K",
@@ -2685,7 +2886,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JPM_FY2025_10K",
@@ -2701,7 +2903,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JPM_FY2025_10K",
@@ -2717,7 +2920,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JPM_FY2025_10K",
@@ -2733,7 +2937,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_10K",
@@ -2749,7 +2954,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_10K",
@@ -2765,7 +2971,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_10K",
@@ -2781,7 +2988,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_10K",
@@ -2797,7 +3005,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_10K",
@@ -2813,7 +3022,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_10K",
@@ -2829,7 +3039,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_10K",
@@ -2845,7 +3056,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_10K",
@@ -2861,7 +3073,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_10K",
@@ -2877,7 +3090,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_10K",
@@ -2893,7 +3107,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_10K",
@@ -2909,7 +3124,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_10K",
@@ -2925,7 +3141,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_10K",
@@ -2941,7 +3158,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_10K",
@@ -2957,7 +3175,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "C_FY2025_10K",
@@ -2973,7 +3192,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "C_FY2025_10K",
@@ -2989,7 +3209,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "C_FY2025_10K",
@@ -3005,7 +3226,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "C_FY2025_10K",
@@ -3021,7 +3243,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "C_FY2025_10K",
@@ -3037,7 +3260,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "C_FY2025_10K",
@@ -3053,7 +3277,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "C_FY2025_10K",
@@ -3069,7 +3294,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "C_FY2025_10K",
@@ -3085,7 +3311,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "C_FY2025_10K",
@@ -3101,7 +3328,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "C_FY2025_10K",
@@ -3117,7 +3345,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "C_FY2025_10K",
@@ -3133,7 +3362,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "C_FY2025_10K",
@@ -3149,7 +3379,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "C_FY2025_10K",
@@ -3165,7 +3396,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "C_FY2025_10K",
@@ -3181,7 +3413,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WFC_FY2025_10K",
@@ -3197,7 +3430,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WFC_FY2025_10K",
@@ -3213,7 +3447,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WFC_FY2025_10K",
@@ -3229,7 +3464,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WFC_FY2025_10K",
@@ -3245,7 +3481,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WFC_FY2025_10K",
@@ -3261,7 +3498,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WFC_FY2025_10K",
@@ -3277,7 +3515,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WFC_FY2025_10K",
@@ -3293,7 +3532,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WFC_FY2025_10K",
@@ -3309,7 +3549,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WFC_FY2025_10K",
@@ -3325,7 +3566,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WFC_FY2025_10K",
@@ -3341,7 +3583,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WFC_FY2025_10K",
@@ -3357,7 +3600,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WFC_FY2025_10K",
@@ -3373,7 +3617,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2025_10K",
@@ -3389,7 +3634,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2025_10K",
@@ -3405,7 +3651,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2025_10K",
@@ -3421,7 +3668,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2025_10K",
@@ -3437,7 +3685,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2025_10K",
@@ -3453,7 +3702,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2025_10K",
@@ -3469,7 +3719,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2025_10K",
@@ -3485,7 +3736,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2025_10K",
@@ -3501,7 +3753,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2025_10K",
@@ -3517,7 +3770,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2025_10K",
@@ -3533,7 +3787,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2025_10K",
@@ -3549,7 +3804,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2025_10K",
@@ -3565,7 +3821,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2025_10K",
@@ -3581,7 +3838,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2025_10K",
@@ -3597,7 +3855,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MS_FY2025_10K",
@@ -3613,7 +3872,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MS_FY2025_10K",
@@ -3629,7 +3889,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MS_FY2025_10K",
@@ -3645,7 +3906,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MS_FY2025_10K",
@@ -3661,7 +3923,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MS_FY2025_10K",
@@ -3677,7 +3940,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MS_FY2025_10K",
@@ -3693,7 +3957,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MS_FY2025_10K",
@@ -3709,7 +3974,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MS_FY2025_10K",
@@ -3725,7 +3991,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MS_FY2025_10K",
@@ -3741,7 +4008,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MS_FY2025_10K",
@@ -3757,7 +4025,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MS_FY2025_10K",
@@ -3773,7 +4042,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MS_FY2025_10K",
@@ -3789,7 +4059,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MS_FY2025_10K",
@@ -3805,7 +4076,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MS_FY2025_10K",
@@ -3821,183 +4093,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
- },
- {
-  "doc": "V_FY2026_10K",
-  "attr": "shares_outstanding",
-  "value": "2180148",
-  "page": 2,
-  "quote": "Class B-1: As of October 29, 2026, the registrant’s shares of common stock outstanding were as follows. | Class B-1 common stock 2,180,148",
-  "bbox": [
-   431.21,
-   220.38,
-   471.24,
-   229.38
-  ],
-  "confidence": "high",
-  "share_class": "Class B-1",
-  "primary": false
- },
- {
-  "doc": "V_FY2026_10K",
-  "attr": "shares_outstanding",
-  "value": "486669",
-  "page": 2,
-  "quote": "Class B-2: As of October 29, 2026, the registrant’s shares of common stock outstanding were as follows. | Class B-2 common stock 486,669",
-  "bbox": [
-   434.96,
-   232.53,
-   467.49,
-   241.53
-  ],
-  "confidence": "high",
-  "share_class": "Class B-2",
-  "primary": false
- },
- {
-  "doc": "V_FY2026_10K",
-  "attr": "shares_outstanding",
-  "value": "60589871",
-  "page": 2,
-  "quote": "Class B-3: As of October 29, 2026, the registrant’s shares of common stock outstanding were as follows. | Class B-3 common stock 60,589,871",
-  "bbox": [
-   428.71,
-   245.36,
-   473.74,
-   254.36
-  ],
-  "confidence": "high",
-  "share_class": "Class B-3",
-  "primary": false
- },
- {
-  "doc": "V_FY2026_10K",
-  "attr": "shares_outstanding",
-  "value": "9080220",
-  "page": 2,
-  "quote": "Class C: As of October 29, 2026, the registrant’s shares of common stock outstanding were as follows. | Class C common stock 9,080,220",
-  "bbox": [
-   431.21,
-   258.18,
-   471.24,
-   267.18
-  ],
-  "confidence": "high",
-  "share_class": "Class C",
-  "primary": false
- },
- {
-  "doc": "V_FY2026_10K",
-  "attr": "fiscal_year_end",
-  "value": "2026-09-30",
-  "page": 1,
-  "quote": "For the fiscal year ended September 30, 2026",
-  "bbox": [
-   209.84,
-   123.18,
-   402.38,
-   132.18
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "V_FY2026_10K",
-  "attr": "public_float_usd",
-  "value": "501700000000",
-  "page": 2,
-  "quote": "The aggregate market value of the registrant’s class A common stock, held by non-affiliates (using the New York Stock Exchange closing price as of March 31, 2026, the last business day of the registrant’s most recently completed second fiscal quarter) was approximately $501.7 billion.",
-  "bbox": [
-   18.22,
-   152.88,
-   594.0,
-   172.68
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "V_FY2026_10K",
-  "attr": "state_of_incorporation",
-  "value": "Delaware",
-  "page": 1,
-  "quote": "Delaware 26-0267673 | (State or other jurisdiction (IRS Employer",
-  "bbox": [
-   164.01,
-   267.63,
-   203.53,
-   276.63
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "V_FY2026_10K",
-  "attr": "hq_city",
-  "value": "San Francisco",
-  "page": 1,
-  "quote": "San Francisco, California | (Address of principal executive offices) (Zip Code)",
-  "bbox": [
-   118.91,
-   313.53,
-   226.2,
-   322.53
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "V_FY2026_10K",
-  "attr": "hq_state",
-  "value": "CA",
-  "page": 1,
-  "quote": "San Francisco, California | (Address of principal executive offices) (Zip Code)",
-  "bbox": [
-   118.91,
-   313.53,
-   226.2,
-   322.53
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "V_FY2026_10K",
-  "attr": "trading_symbol",
-  "value": "V",
-  "page": 1,
-  "quote": "Class A Common Stock, par value $0.0001 per share V New York Stock Exchange",
-  "bbox": [
-   316.74,
-   414.78,
-   322.75,
-   423.78
-  ],
-  "confidence": "high",
-  "share_class": "Class A",
-  "primary": true
- },
- {
-  "doc": "V_FY2026_10K",
-  "attr": "exchange",
-  "value": "NYSE",
-  "page": 1,
-  "quote": "Class A Common Stock, par value $0.0001 per share V New York Stock Exchange",
-  "bbox": [
-   19.12,
-   414.78,
-   525.13,
-   423.78
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "V_FY2026_10K",
@@ -4013,7 +4110,212 @@
   ],
   "confidence": "high",
   "share_class": "Class A",
-  "primary": true
+  "primary": false,
+  "derived": false
+ },
+ {
+  "doc": "V_FY2026_10K",
+  "attr": "shares_outstanding",
+  "value": "2180148",
+  "page": 2,
+  "quote": "Class B-1: As of October 29, 2026, the registrant’s shares of common stock outstanding were as follows. | Class B-1 common stock 2,180,148",
+  "bbox": [
+   431.21,
+   220.38,
+   471.24,
+   229.38
+  ],
+  "confidence": "high",
+  "share_class": "Class B-1",
+  "primary": false,
+  "derived": false
+ },
+ {
+  "doc": "V_FY2026_10K",
+  "attr": "shares_outstanding",
+  "value": "486669",
+  "page": 2,
+  "quote": "Class B-2: As of October 29, 2026, the registrant’s shares of common stock outstanding were as follows. | Class B-2 common stock 486,669",
+  "bbox": [
+   434.96,
+   232.53,
+   467.49,
+   241.53
+  ],
+  "confidence": "high",
+  "share_class": "Class B-2",
+  "primary": false,
+  "derived": false
+ },
+ {
+  "doc": "V_FY2026_10K",
+  "attr": "shares_outstanding",
+  "value": "60589871",
+  "page": 2,
+  "quote": "Class B-3: As of October 29, 2026, the registrant’s shares of common stock outstanding were as follows. | Class B-3 common stock 60,589,871",
+  "bbox": [
+   428.71,
+   245.36,
+   473.74,
+   254.36
+  ],
+  "confidence": "high",
+  "share_class": "Class B-3",
+  "primary": false,
+  "derived": false
+ },
+ {
+  "doc": "V_FY2026_10K",
+  "attr": "shares_outstanding",
+  "value": "9080220",
+  "page": 2,
+  "quote": "Class C: As of October 29, 2026, the registrant’s shares of common stock outstanding were as follows. | Class C common stock 9,080,220",
+  "bbox": [
+   431.21,
+   258.18,
+   471.24,
+   267.18
+  ],
+  "confidence": "high",
+  "share_class": "Class C",
+  "primary": false,
+  "derived": false
+ },
+ {
+  "doc": "V_FY2026_10K",
+  "attr": "fiscal_year_end",
+  "value": "2026-09-30",
+  "page": 1,
+  "quote": "For the fiscal year ended September 30, 2026",
+  "bbox": [
+   209.84,
+   123.18,
+   402.38,
+   132.18
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "V_FY2026_10K",
+  "attr": "public_float_usd",
+  "value": "501700000000",
+  "page": 2,
+  "quote": "The aggregate market value of the registrant’s class A common stock, held by non-affiliates (using the New York Stock Exchange closing price as of March 31, 2026, the last business day of the registrant’s most recently completed second fiscal quarter) was approximately $501.7 billion.",
+  "bbox": [
+   18.22,
+   152.88,
+   594.0,
+   172.68
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "V_FY2026_10K",
+  "attr": "state_of_incorporation",
+  "value": "Delaware",
+  "page": 1,
+  "quote": "Delaware 26-0267673 | (State or other jurisdiction (IRS Employer",
+  "bbox": [
+   164.01,
+   267.63,
+   203.53,
+   276.63
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "V_FY2026_10K",
+  "attr": "hq_city",
+  "value": "San Francisco",
+  "page": 1,
+  "quote": "San Francisco, California | (Address of principal executive offices) (Zip Code)",
+  "bbox": [
+   118.91,
+   313.53,
+   226.2,
+   322.53
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "V_FY2026_10K",
+  "attr": "hq_state",
+  "value": "CA",
+  "page": 1,
+  "quote": "San Francisco, California | (Address of principal executive offices) (Zip Code)",
+  "bbox": [
+   118.91,
+   313.53,
+   226.2,
+   322.53
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "V_FY2026_10K",
+  "attr": "trading_symbol",
+  "value": "V",
+  "page": 1,
+  "quote": "Class A Common Stock, par value $0.0001 per share V New York Stock Exchange",
+  "bbox": [
+   316.74,
+   414.78,
+   322.75,
+   423.78
+  ],
+  "confidence": "high",
+  "share_class": "Class A",
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "V_FY2026_10K",
+  "attr": "exchange",
+  "value": "NYSE",
+  "page": 1,
+  "quote": "Class A Common Stock, par value $0.0001 per share V New York Stock Exchange",
+  "bbox": [
+   19.12,
+   414.78,
+   525.13,
+   423.78
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "V_FY2026_10K",
+  "attr": "shares_outstanding",
+  "value": "1796810123",
+  "page": 2,
+  "quote": "All classes (sum of Class A, Class B-1, Class B-2, Class B-3, Class C): Class Shares outstanding Class A common stock 1,724,473,215 Class B-1 common stock 2,180,148 Class B-2 common stock 486,669 Class B-3 common stock 60,589,871 Class C common stock 9,080,220 DOCUMENTS INCORPORATED BY REFERENCE",
+  "bbox": [
+   111.14,
+   207.56,
+   480.0,
+   267.18
+  ],
+  "confidence": "high",
+  "share_class": "All classes",
+  "primary": true,
+  "derived": true
  },
  {
   "doc": "V_FY2026_10K",
@@ -4029,7 +4331,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "V_FY2026_10K",
@@ -4045,7 +4348,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "V_FY2026_10K",
@@ -4061,7 +4365,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "V_FY2026_10K",
@@ -4077,7 +4382,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "V_FY2026_10K",
@@ -4093,7 +4399,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "V_FY2026_10K",
@@ -4109,135 +4416,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
- },
- {
-  "doc": "MA_FY2025_10K",
-  "attr": "shares_outstanding",
-  "value": "6595925",
-  "page": 2,
-  "quote": "Class B: As of February 6, 2026, there were 885,216,386 shares outstanding of the registrant’s Class A common stock and 6,595,925 shares outstanding of the registrant’s Class B common stock.",
-  "bbox": [
-   99.42,
-   252.22,
-   131.8,
-   260.22
-  ],
-  "confidence": "high",
-  "share_class": "Class B",
-  "primary": false
- },
- {
-  "doc": "MA_FY2025_10K",
-  "attr": "fiscal_year_end",
-  "value": "2025-12-31",
-  "page": 1,
-  "quote": "For the fiscal year ended December 31, 2025",
-  "bbox": [
-   204.88,
-   139.26,
-   389.13,
-   149.26
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "MA_FY2025_10K",
-  "attr": "public_float_usd",
-  "value": "505000000000",
-  "page": 2,
-  "quote": "The aggregate market value of the registrant’s Class A common stock held by non-affiliates (using the New York Stock Exchange closing price as of June 30, 2025, the last business day of the registrant’s most recently completed second fiscal quarter) was approximately $505.0 billion.",
-  "bbox": [
-   396.14,
-   233.02,
-   443.06,
-   241.02
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "MA_FY2025_10K",
-  "attr": "state_of_incorporation",
-  "value": "Delaware",
-  "page": 1,
-  "quote": "Delaware 13-4172551 | (State or other jurisdiction of (IRS Employer",
-  "bbox": [
-   175.27,
-   330.32,
-   211.0,
-   339.32
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "MA_FY2025_10K",
-  "attr": "hq_city",
-  "value": "Purchase",
-  "page": 1,
-  "quote": "Purchase, NY | (Address of principal executive offices) (Zip Code)",
-  "bbox": [
-   159.11,
-   381.32,
-   211.23,
-   390.32
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "MA_FY2025_10K",
-  "attr": "hq_state",
-  "value": "NY",
-  "page": 1,
-  "quote": "Purchase, NY | (Address of principal executive offices) (Zip Code)",
-  "bbox": [
-   159.11,
-   381.32,
-   211.23,
-   390.32
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "MA_FY2025_10K",
-  "attr": "trading_symbol",
-  "value": "MA",
-  "page": 1,
-  "quote": "Class A Common Stock, par value $0.0001 per share MA New York Stock Exchange",
-  "bbox": [
-   297.27,
-   470.97,
-   308.73,
-   478.97
-  ],
-  "confidence": "high",
-  "share_class": "Class A",
-  "primary": true
- },
- {
-  "doc": "MA_FY2025_10K",
-  "attr": "exchange",
-  "value": "NYSE",
-  "page": 1,
-  "quote": "Class A Common Stock, par value $0.0001 per share MA New York Stock Exchange",
-  "bbox": [
-   47.7,
-   470.97,
-   509.95,
-   478.97
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MA_FY2025_10K",
@@ -4253,7 +4433,161 @@
   ],
   "confidence": "high",
   "share_class": "Class A",
-  "primary": true
+  "primary": false,
+  "derived": false
+ },
+ {
+  "doc": "MA_FY2025_10K",
+  "attr": "shares_outstanding",
+  "value": "6595925",
+  "page": 2,
+  "quote": "Class B: As of February 6, 2026, there were 885,216,386 shares outstanding of the registrant’s Class A common stock and 6,595,925 shares outstanding of the registrant’s Class B common stock.",
+  "bbox": [
+   99.42,
+   252.22,
+   131.8,
+   260.22
+  ],
+  "confidence": "high",
+  "share_class": "Class B",
+  "primary": false,
+  "derived": false
+ },
+ {
+  "doc": "MA_FY2025_10K",
+  "attr": "fiscal_year_end",
+  "value": "2025-12-31",
+  "page": 1,
+  "quote": "For the fiscal year ended December 31, 2025",
+  "bbox": [
+   204.88,
+   139.26,
+   389.13,
+   149.26
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "MA_FY2025_10K",
+  "attr": "public_float_usd",
+  "value": "505000000000",
+  "page": 2,
+  "quote": "The aggregate market value of the registrant’s Class A common stock held by non-affiliates (using the New York Stock Exchange closing price as of June 30, 2025, the last business day of the registrant’s most recently completed second fiscal quarter) was approximately $505.0 billion.",
+  "bbox": [
+   396.14,
+   233.02,
+   443.06,
+   241.02
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "MA_FY2025_10K",
+  "attr": "state_of_incorporation",
+  "value": "Delaware",
+  "page": 1,
+  "quote": "Delaware 13-4172551 | (State or other jurisdiction of (IRS Employer",
+  "bbox": [
+   175.27,
+   330.32,
+   211.0,
+   339.32
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "MA_FY2025_10K",
+  "attr": "hq_city",
+  "value": "Purchase",
+  "page": 1,
+  "quote": "Purchase, NY | (Address of principal executive offices) (Zip Code)",
+  "bbox": [
+   159.11,
+   381.32,
+   211.23,
+   390.32
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "MA_FY2025_10K",
+  "attr": "hq_state",
+  "value": "NY",
+  "page": 1,
+  "quote": "Purchase, NY | (Address of principal executive offices) (Zip Code)",
+  "bbox": [
+   159.11,
+   381.32,
+   211.23,
+   390.32
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "MA_FY2025_10K",
+  "attr": "trading_symbol",
+  "value": "MA",
+  "page": 1,
+  "quote": "Class A Common Stock, par value $0.0001 per share MA New York Stock Exchange",
+  "bbox": [
+   297.27,
+   470.97,
+   308.73,
+   478.97
+  ],
+  "confidence": "high",
+  "share_class": "Class A",
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "MA_FY2025_10K",
+  "attr": "exchange",
+  "value": "NYSE",
+  "page": 1,
+  "quote": "Class A Common Stock, par value $0.0001 per share MA New York Stock Exchange",
+  "bbox": [
+   47.7,
+   470.97,
+   509.95,
+   478.97
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "MA_FY2025_10K",
+  "attr": "shares_outstanding",
+  "value": "891812311",
+  "page": 2,
+  "quote": "All classes (sum of Class A, Class B): As of February 6, 2026, there were 885,216,386 shares outstanding of the registrant’s Class A common stock and 6,595,925 shares outstanding of the registrant’s Class B common stock.",
+  "bbox": [
+   36.0,
+   242.62,
+   557.92,
+   260.22
+  ],
+  "confidence": "high",
+  "share_class": "All classes",
+  "primary": true,
+  "derived": true
  },
  {
   "doc": "MA_FY2025_10K",
@@ -4269,7 +4603,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MA_FY2025_10K",
@@ -4285,7 +4620,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MA_FY2025_10K",
@@ -4301,7 +4637,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MA_FY2025_10K",
@@ -4317,7 +4654,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MA_FY2025_10K",
@@ -4333,7 +4671,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MA_FY2025_10K",
@@ -4349,7 +4688,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AXP_FY2025_10K",
@@ -4365,7 +4705,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AXP_FY2025_10K",
@@ -4381,7 +4722,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AXP_FY2025_10K",
@@ -4397,7 +4739,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AXP_FY2025_10K",
@@ -4413,7 +4756,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AXP_FY2025_10K",
@@ -4429,7 +4773,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AXP_FY2025_10K",
@@ -4445,7 +4790,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AXP_FY2025_10K",
@@ -4461,7 +4807,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AXP_FY2025_10K",
@@ -4477,7 +4824,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AXP_FY2025_10K",
@@ -4493,7 +4841,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AXP_FY2025_10K",
@@ -4509,7 +4858,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AXP_FY2025_10K",
@@ -4525,7 +4875,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AXP_FY2025_10K",
@@ -4541,7 +4892,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AXP_FY2025_10K",
@@ -4557,7 +4909,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AXP_FY2025_10K",
@@ -4573,7 +4926,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BLK_FY2025_10K",
@@ -4589,7 +4943,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BLK_FY2025_10K",
@@ -4605,7 +4960,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BLK_FY2025_10K",
@@ -4621,7 +4977,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BLK_FY2025_10K",
@@ -4637,7 +4994,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BLK_FY2025_10K",
@@ -4653,7 +5011,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BLK_FY2025_10K",
@@ -4669,7 +5028,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BLK_FY2025_10K",
@@ -4685,7 +5045,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BLK_FY2025_10K",
@@ -4701,7 +5062,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BLK_FY2025_10K",
@@ -4717,7 +5079,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BLK_FY2025_10K",
@@ -4733,7 +5096,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BLK_FY2025_10K",
@@ -4749,7 +5113,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BLK_FY2025_10K",
@@ -4765,7 +5130,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BLK_FY2025_10K",
@@ -4781,7 +5147,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BLK_FY2025_10K",
@@ -4797,7 +5164,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2026_10K",
@@ -4813,7 +5181,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2026_10K",
@@ -4829,7 +5198,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2026_10K",
@@ -4845,7 +5215,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2026_10K",
@@ -4861,7 +5232,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2026_10K",
@@ -4877,7 +5249,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2026_10K",
@@ -4893,7 +5266,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2026_10K",
@@ -4909,7 +5283,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2026_10K",
@@ -4925,7 +5300,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2026_10K",
@@ -4941,7 +5317,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2026_10K",
@@ -4957,7 +5334,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2026_10K",
@@ -4973,7 +5351,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2026_10K",
@@ -4989,7 +5368,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2026_10K",
@@ -5005,7 +5385,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2026_10K",
@@ -5021,7 +5402,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "COST_FY2026_10K",
@@ -5037,7 +5419,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "COST_FY2026_10K",
@@ -5053,7 +5436,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "COST_FY2026_10K",
@@ -5069,7 +5453,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "COST_FY2026_10K",
@@ -5085,7 +5470,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "COST_FY2026_10K",
@@ -5101,7 +5487,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "COST_FY2026_10K",
@@ -5117,7 +5504,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "COST_FY2026_10K",
@@ -5133,7 +5521,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "COST_FY2026_10K",
@@ -5149,7 +5538,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "COST_FY2026_10K",
@@ -5165,7 +5555,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "COST_FY2026_10K",
@@ -5181,7 +5572,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "COST_FY2026_10K",
@@ -5197,7 +5589,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "COST_FY2026_10K",
@@ -5213,7 +5606,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "COST_FY2026_10K",
@@ -5229,7 +5623,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "COST_FY2026_10K",
@@ -5245,7 +5640,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TGT_FY2025_10K",
@@ -5261,7 +5657,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TGT_FY2025_10K",
@@ -5277,7 +5674,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TGT_FY2025_10K",
@@ -5293,7 +5691,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TGT_FY2025_10K",
@@ -5309,7 +5708,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TGT_FY2025_10K",
@@ -5325,7 +5725,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TGT_FY2025_10K",
@@ -5341,7 +5742,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TGT_FY2025_10K",
@@ -5357,7 +5759,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TGT_FY2025_10K",
@@ -5373,7 +5776,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TGT_FY2025_10K",
@@ -5389,7 +5793,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TGT_FY2025_10K",
@@ -5405,7 +5810,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TGT_FY2025_10K",
@@ -5421,7 +5827,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TGT_FY2025_10K",
@@ -5437,7 +5844,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TGT_FY2025_10K",
@@ -5453,7 +5861,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TGT_FY2025_10K",
@@ -5469,7 +5878,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2025_10K",
@@ -5485,7 +5895,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2025_10K",
@@ -5501,7 +5912,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2025_10K",
@@ -5517,7 +5929,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2025_10K",
@@ -5533,7 +5946,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2025_10K",
@@ -5549,7 +5963,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2025_10K",
@@ -5565,7 +5980,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2025_10K",
@@ -5581,7 +5997,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2025_10K",
@@ -5597,7 +6014,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2025_10K",
@@ -5613,7 +6031,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2025_10K",
@@ -5629,7 +6048,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2025_10K",
@@ -5645,7 +6065,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2025_10K",
@@ -5661,7 +6082,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2025_10K",
@@ -5677,7 +6099,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2025_10K",
@@ -5693,7 +6116,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PEP_FY2025_10K",
@@ -5709,7 +6133,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PEP_FY2025_10K",
@@ -5725,7 +6150,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PEP_FY2025_10K",
@@ -5741,7 +6167,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PEP_FY2025_10K",
@@ -5757,7 +6184,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PEP_FY2025_10K",
@@ -5773,7 +6201,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PEP_FY2025_10K",
@@ -5789,7 +6218,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PEP_FY2025_10K",
@@ -5805,7 +6235,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PEP_FY2025_10K",
@@ -5821,7 +6252,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PEP_FY2025_10K",
@@ -5837,7 +6269,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PEP_FY2025_10K",
@@ -5853,7 +6286,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PEP_FY2025_10K",
@@ -5869,7 +6303,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PEP_FY2025_10K",
@@ -5885,7 +6320,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PEP_FY2025_10K",
@@ -5901,7 +6337,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PEP_FY2025_10K",
@@ -5917,7 +6354,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PG_FY2026_10K",
@@ -5933,7 +6371,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PG_FY2026_10K",
@@ -5949,7 +6388,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PG_FY2026_10K",
@@ -5965,7 +6405,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PG_FY2026_10K",
@@ -5981,7 +6422,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PG_FY2026_10K",
@@ -5997,7 +6439,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PG_FY2026_10K",
@@ -6013,7 +6456,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PG_FY2026_10K",
@@ -6029,7 +6473,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PG_FY2026_10K",
@@ -6045,7 +6490,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PG_FY2026_10K",
@@ -6061,7 +6507,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PG_FY2026_10K",
@@ -6077,7 +6524,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PG_FY2026_10K",
@@ -6093,7 +6541,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PG_FY2026_10K",
@@ -6109,7 +6558,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PG_FY2026_10K",
@@ -6125,7 +6575,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PG_FY2026_10K",
@@ -6141,7 +6592,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "NKE_FY2026_10K",
@@ -6157,119 +6609,8 @@
   ],
   "confidence": "high",
   "share_class": "Class A",
-  "primary": false
- },
- {
-  "doc": "NKE_FY2026_10K",
-  "attr": "fiscal_year_end",
-  "value": "2026-05-31",
-  "page": 2,
-  "quote": "FOR THE FISCAL YEAR ENDED MAY 31, 2026",
-  "bbox": [
-   253.53,
-   137.81,
-   393.12,
-   144.22
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "NKE_FY2026_10K",
-  "attr": "public_float_usd",
-  "value": "80529120635",
-  "page": 2,
-  "quote": "the aggregate market values of the Registrant's Common Stock held by non-affiliates were: Class A $ 4,015,962,912 Class B 76,513,157,723 $ 80,529,120,635 As of July 8, 2026, the number of shares of the Registrant's Common Stock outstanding were: Class A 281,387,752 Class B 1,202,110,951",
-  "bbox": [
-   498.66,
-   654.82,
-   543.25,
-   661.23
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "NKE_FY2026_10K",
-  "attr": "state_of_incorporation",
-  "value": "Oregon",
-  "page": 2,
-  "quote": "Oregon 93-0584541 | (State or other jurisdiction of incorporation) (IRS Employer Identification No.)",
-  "bbox": [
-   200.56,
-   268.5,
-   223.37,
-   274.92
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "NKE_FY2026_10K",
-  "attr": "hq_city",
-  "value": "Beaverton",
-  "page": 2,
-  "quote": "One Bowerman Drive, Beaverton, Oregon 97005-6453 | (Address of principal executive offices and zip code)",
-  "bbox": [
-   242.28,
-   290.78,
-   404.36,
-   297.2
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "NKE_FY2026_10K",
-  "attr": "hq_state",
-  "value": "OR",
-  "page": 2,
-  "quote": "One Bowerman Drive, Beaverton, Oregon 97005-6453 | (Address of principal executive offices and zip code)",
-  "bbox": [
-   242.28,
-   290.78,
-   404.36,
-   297.2
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "NKE_FY2026_10K",
-  "attr": "trading_symbol",
-  "value": "NKE",
-  "page": 2,
-  "quote": "Class B Common Stock NKE New York Stock Exchange",
-  "bbox": [
-   316.55,
-   344.72,
-   330.09,
-   351.13
-  ],
-  "confidence": "high",
-  "share_class": "Class B",
-  "primary": true
- },
- {
-  "doc": "NKE_FY2026_10K",
-  "attr": "exchange",
-  "value": "NYSE",
-  "page": 2,
-  "quote": "Class B Common Stock NKE New York Stock Exchange",
-  "bbox": [
-   134.55,
-   344.72,
-   516.24,
-   351.13
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
+  "primary": false,
+  "derived": false
  },
  {
   "doc": "NKE_FY2026_10K",
@@ -6285,7 +6626,144 @@
   ],
   "confidence": "high",
   "share_class": "Class B",
-  "primary": true
+  "primary": false,
+  "derived": false
+ },
+ {
+  "doc": "NKE_FY2026_10K",
+  "attr": "fiscal_year_end",
+  "value": "2026-05-31",
+  "page": 2,
+  "quote": "FOR THE FISCAL YEAR ENDED MAY 31, 2026",
+  "bbox": [
+   253.53,
+   137.81,
+   393.12,
+   144.22
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "NKE_FY2026_10K",
+  "attr": "public_float_usd",
+  "value": "80529120635",
+  "page": 2,
+  "quote": "the aggregate market values of the Registrant's Common Stock held by non-affiliates were: Class A $ 4,015,962,912 Class B 76,513,157,723 $ 80,529,120,635 As of July 8, 2026, the number of shares of the Registrant's Common Stock outstanding were: Class A 281,387,752 Class B 1,202,110,951",
+  "bbox": [
+   498.66,
+   654.82,
+   543.25,
+   661.23
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "NKE_FY2026_10K",
+  "attr": "state_of_incorporation",
+  "value": "Oregon",
+  "page": 2,
+  "quote": "Oregon 93-0584541 | (State or other jurisdiction of incorporation) (IRS Employer Identification No.)",
+  "bbox": [
+   200.56,
+   268.5,
+   223.37,
+   274.92
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "NKE_FY2026_10K",
+  "attr": "hq_city",
+  "value": "Beaverton",
+  "page": 2,
+  "quote": "One Bowerman Drive, Beaverton, Oregon 97005-6453 | (Address of principal executive offices and zip code)",
+  "bbox": [
+   242.28,
+   290.78,
+   404.36,
+   297.2
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "NKE_FY2026_10K",
+  "attr": "hq_state",
+  "value": "OR",
+  "page": 2,
+  "quote": "One Bowerman Drive, Beaverton, Oregon 97005-6453 | (Address of principal executive offices and zip code)",
+  "bbox": [
+   242.28,
+   290.78,
+   404.36,
+   297.2
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "NKE_FY2026_10K",
+  "attr": "trading_symbol",
+  "value": "NKE",
+  "page": 2,
+  "quote": "Class B Common Stock NKE New York Stock Exchange",
+  "bbox": [
+   316.55,
+   344.72,
+   330.09,
+   351.13
+  ],
+  "confidence": "high",
+  "share_class": "Class B",
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "NKE_FY2026_10K",
+  "attr": "exchange",
+  "value": "NYSE",
+  "page": 2,
+  "quote": "Class B Common Stock NKE New York Stock Exchange",
+  "bbox": [
+   134.55,
+   344.72,
+   516.24,
+   351.13
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "NKE_FY2026_10K",
+  "attr": "shares_outstanding",
+  "value": "1483498703",
+  "page": 2,
+  "quote": "All classes (printed total of Class A, Class B): As of July 8, 2026, the number of shares of the Registrant's Common Stock outstanding were: | 1,483,498,703",
+  "bbox": [
+   501.25,
+   703.67,
+   542.01,
+   710.05
+  ],
+  "confidence": "high",
+  "share_class": "All classes",
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "NKE_FY2026_10K",
@@ -6301,7 +6779,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "NKE_FY2026_10K",
@@ -6317,7 +6796,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "NKE_FY2026_10K",
@@ -6333,7 +6813,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "NKE_FY2026_10K",
@@ -6349,7 +6830,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "NKE_FY2026_10K",
@@ -6365,7 +6847,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "NKE_FY2026_10K",
@@ -6381,7 +6864,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MCD_FY2025_10K",
@@ -6397,7 +6881,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MCD_FY2025_10K",
@@ -6413,7 +6898,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MCD_FY2025_10K",
@@ -6429,7 +6915,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MCD_FY2025_10K",
@@ -6445,7 +6932,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MCD_FY2025_10K",
@@ -6461,7 +6949,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MCD_FY2025_10K",
@@ -6477,7 +6966,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MCD_FY2025_10K",
@@ -6493,7 +6983,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MCD_FY2025_10K",
@@ -6509,7 +7000,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MCD_FY2025_10K",
@@ -6525,7 +7017,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MCD_FY2025_10K",
@@ -6541,7 +7034,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MCD_FY2025_10K",
@@ -6557,7 +7051,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MCD_FY2025_10K",
@@ -6573,7 +7068,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MCD_FY2025_10K",
@@ -6589,7 +7085,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MCD_FY2025_10K",
@@ -6605,7 +7102,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "HD_FY2025_10K",
@@ -6621,7 +7119,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "HD_FY2025_10K",
@@ -6637,7 +7136,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "HD_FY2025_10K",
@@ -6653,7 +7153,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "HD_FY2025_10K",
@@ -6669,7 +7170,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "HD_FY2025_10K",
@@ -6685,7 +7187,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "HD_FY2025_10K",
@@ -6701,7 +7204,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "HD_FY2025_10K",
@@ -6717,7 +7221,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "HD_FY2025_10K",
@@ -6733,7 +7238,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "HD_FY2025_10K",
@@ -6749,7 +7255,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "HD_FY2025_10K",
@@ -6765,7 +7272,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "HD_FY2025_10K",
@@ -6781,7 +7289,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "HD_FY2025_10K",
@@ -6797,7 +7306,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "HD_FY2025_10K",
@@ -6813,7 +7323,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "HD_FY2025_10K",
@@ -6829,7 +7340,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2025_10K",
@@ -6845,7 +7357,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2025_10K",
@@ -6861,7 +7374,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2025_10K",
@@ -6877,7 +7391,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2025_10K",
@@ -6893,7 +7408,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2025_10K",
@@ -6909,7 +7425,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2025_10K",
@@ -6925,7 +7442,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2025_10K",
@@ -6941,7 +7459,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2025_10K",
@@ -6957,7 +7476,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2025_10K",
@@ -6973,7 +7493,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2025_10K",
@@ -6989,7 +7510,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2025_10K",
@@ -7005,7 +7527,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2025_10K",
@@ -7021,7 +7544,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2025_10K",
@@ -7037,7 +7561,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2025_10K",
@@ -7053,7 +7578,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PFE_FY2025_10K",
@@ -7069,7 +7595,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PFE_FY2025_10K",
@@ -7085,7 +7612,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PFE_FY2025_10K",
@@ -7101,7 +7629,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PFE_FY2025_10K",
@@ -7117,7 +7646,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PFE_FY2025_10K",
@@ -7133,7 +7663,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PFE_FY2025_10K",
@@ -7149,7 +7680,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PFE_FY2025_10K",
@@ -7165,7 +7697,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PFE_FY2025_10K",
@@ -7181,7 +7714,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PFE_FY2025_10K",
@@ -7197,7 +7731,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PFE_FY2025_10K",
@@ -7213,7 +7748,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PFE_FY2025_10K",
@@ -7229,7 +7765,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PFE_FY2025_10K",
@@ -7245,7 +7782,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PFE_FY2025_10K",
@@ -7261,7 +7799,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "PFE_FY2025_10K",
@@ -7277,7 +7816,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MRK_FY2025_10K",
@@ -7293,7 +7833,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MRK_FY2025_10K",
@@ -7309,7 +7850,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MRK_FY2025_10K",
@@ -7325,7 +7867,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MRK_FY2025_10K",
@@ -7341,7 +7884,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MRK_FY2025_10K",
@@ -7357,7 +7901,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MRK_FY2025_10K",
@@ -7373,7 +7918,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MRK_FY2025_10K",
@@ -7389,7 +7935,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MRK_FY2025_10K",
@@ -7405,7 +7952,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MRK_FY2025_10K",
@@ -7421,7 +7969,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MRK_FY2025_10K",
@@ -7437,7 +7986,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MRK_FY2025_10K",
@@ -7453,7 +8003,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MRK_FY2025_10K",
@@ -7469,7 +8020,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MRK_FY2025_10K",
@@ -7485,7 +8037,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MRK_FY2025_10K",
@@ -7501,7 +8054,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "UNH_FY2025_10K",
@@ -7517,7 +8071,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "UNH_FY2025_10K",
@@ -7533,7 +8088,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "UNH_FY2025_10K",
@@ -7549,7 +8105,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "UNH_FY2025_10K",
@@ -7565,7 +8122,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "UNH_FY2025_10K",
@@ -7581,7 +8139,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "UNH_FY2025_10K",
@@ -7597,7 +8156,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "UNH_FY2025_10K",
@@ -7613,7 +8173,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "UNH_FY2025_10K",
@@ -7629,7 +8190,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "UNH_FY2025_10K",
@@ -7645,7 +8207,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "UNH_FY2025_10K",
@@ -7661,7 +8224,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "UNH_FY2025_10K",
@@ -7677,7 +8241,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "UNH_FY2025_10K",
@@ -7693,7 +8258,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "UNH_FY2025_10K",
@@ -7709,7 +8275,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "UNH_FY2025_10K",
@@ -7725,7 +8292,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TSLA_FY2025_10K",
@@ -7741,7 +8309,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TSLA_FY2025_10K",
@@ -7757,7 +8326,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TSLA_FY2025_10K",
@@ -7773,7 +8343,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TSLA_FY2025_10K",
@@ -7789,7 +8360,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TSLA_FY2025_10K",
@@ -7805,7 +8377,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TSLA_FY2025_10K",
@@ -7821,7 +8394,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TSLA_FY2025_10K",
@@ -7837,7 +8411,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TSLA_FY2025_10K",
@@ -7853,7 +8428,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TSLA_FY2025_10K",
@@ -7869,7 +8445,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TSLA_FY2025_10K",
@@ -7885,7 +8462,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TSLA_FY2025_10K",
@@ -7901,7 +8479,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TSLA_FY2025_10K",
@@ -7917,7 +8496,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TSLA_FY2025_10K",
@@ -7933,7 +8513,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "TSLA_FY2025_10K",
@@ -7949,135 +8530,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
- },
- {
-  "doc": "F_FY2025_10K",
-  "attr": "shares_outstanding",
-  "value": "70852076",
-  "page": 2,
-  "quote": "Class B: As of February 6, 2026, Ford had outstanding 3,918,623,149 shares of Common Stock and 70,852,076 shares of Class B Stock.",
-  "bbox": [
-   399.56,
-   202.83,
-   444.59,
-   211.83
-  ],
-  "confidence": "high",
-  "share_class": "Class B",
-  "primary": false
- },
- {
-  "doc": "F_FY2025_10K",
-  "attr": "fiscal_year_end",
-  "value": "2025-12-31",
-  "page": 1,
-  "quote": "For the fiscal year ended December 31, 2025",
-  "bbox": [
-   211.34,
-   145.46,
-   400.88,
-   154.46
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "F_FY2025_10K",
-  "attr": "public_float_usd",
-  "value": "42411872532",
-  "page": 2,
-  "quote": "Based on the New York Stock Exchange Composite Transaction closing price of the Common Stock on that date ($10.85 per share), the aggregate market value of such Common Stock was $42,411,872,532.",
-  "bbox": [
-   156.25,
-   116.43,
-   225.63,
-   125.43
-  ],
-  "confidence": "low",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "F_FY2025_10K",
-  "attr": "state_of_incorporation",
-  "value": "Delaware",
-  "page": 1,
-  "quote": "Delaware 38-0549190 | (State of incorporation) (I.R.S. Employer Identification No.)",
-  "bbox": [
-   94.93,
-   261.56,
-   134.45,
-   270.56
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "F_FY2025_10K",
-  "attr": "hq_city",
-  "value": "Dearborn",
-  "page": 1,
-  "quote": "Dearborn, Michigan | (Address of principal executive offices) (Zip Code)",
-  "bbox": [
-   71.33,
-   308.81,
-   154.62,
-   317.81
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "F_FY2025_10K",
-  "attr": "hq_state",
-  "value": "MI",
-  "page": 1,
-  "quote": "Dearborn, Michigan | (Address of principal executive offices) (Zip Code)",
-  "bbox": [
-   71.33,
-   308.81,
-   154.62,
-   317.81
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "F_FY2025_10K",
-  "attr": "trading_symbol",
-  "value": "F",
-  "page": 1,
-  "quote": "Common Stock, par value $.01 per share F New York Stock Exchange",
-  "bbox": [
-   301.36,
-   393.86,
-   306.85,
-   402.86
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "F_FY2025_10K",
-  "attr": "exchange",
-  "value": "NYSE",
-  "page": 1,
-  "quote": "Common Stock, par value $.01 per share F New York Stock Exchange",
-  "bbox": [
-   52.54,
-   393.86,
-   528.01,
-   402.86
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "F_FY2025_10K",
@@ -8093,7 +8547,161 @@
   ],
   "confidence": "high",
   "share_class": "Common",
-  "primary": true
+  "primary": false,
+  "derived": false
+ },
+ {
+  "doc": "F_FY2025_10K",
+  "attr": "shares_outstanding",
+  "value": "70852076",
+  "page": 2,
+  "quote": "Class B: As of February 6, 2026, Ford had outstanding 3,918,623,149 shares of Common Stock and 70,852,076 shares of Class B Stock.",
+  "bbox": [
+   399.56,
+   202.83,
+   444.59,
+   211.83
+  ],
+  "confidence": "high",
+  "share_class": "Class B",
+  "primary": false,
+  "derived": false
+ },
+ {
+  "doc": "F_FY2025_10K",
+  "attr": "fiscal_year_end",
+  "value": "2025-12-31",
+  "page": 1,
+  "quote": "For the fiscal year ended December 31, 2025",
+  "bbox": [
+   211.34,
+   145.46,
+   400.88,
+   154.46
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "F_FY2025_10K",
+  "attr": "public_float_usd",
+  "value": "42411872532",
+  "page": 2,
+  "quote": "Based on the New York Stock Exchange Composite Transaction closing price of the Common Stock on that date ($10.85 per share), the aggregate market value of such Common Stock was $42,411,872,532.",
+  "bbox": [
+   156.25,
+   116.43,
+   225.63,
+   125.43
+  ],
+  "confidence": "low",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "F_FY2025_10K",
+  "attr": "state_of_incorporation",
+  "value": "Delaware",
+  "page": 1,
+  "quote": "Delaware 38-0549190 | (State of incorporation) (I.R.S. Employer Identification No.)",
+  "bbox": [
+   94.93,
+   261.56,
+   134.45,
+   270.56
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "F_FY2025_10K",
+  "attr": "hq_city",
+  "value": "Dearborn",
+  "page": 1,
+  "quote": "Dearborn, Michigan | (Address of principal executive offices) (Zip Code)",
+  "bbox": [
+   71.33,
+   308.81,
+   154.62,
+   317.81
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "F_FY2025_10K",
+  "attr": "hq_state",
+  "value": "MI",
+  "page": 1,
+  "quote": "Dearborn, Michigan | (Address of principal executive offices) (Zip Code)",
+  "bbox": [
+   71.33,
+   308.81,
+   154.62,
+   317.81
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "F_FY2025_10K",
+  "attr": "trading_symbol",
+  "value": "F",
+  "page": 1,
+  "quote": "Common Stock, par value $.01 per share F New York Stock Exchange",
+  "bbox": [
+   301.36,
+   393.86,
+   306.85,
+   402.86
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "F_FY2025_10K",
+  "attr": "exchange",
+  "value": "NYSE",
+  "page": 1,
+  "quote": "Common Stock, par value $.01 per share F New York Stock Exchange",
+  "bbox": [
+   52.54,
+   393.86,
+   528.01,
+   402.86
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "F_FY2025_10K",
+  "attr": "shares_outstanding",
+  "value": "3989475225",
+  "page": 2,
+  "quote": "All classes (sum of Common, Class B): As of February 6, 2026, Ford had outstanding 3,918,623,149 shares of Common Stock and 70,852,076 shares of Class B Stock.",
+  "bbox": [
+   218.49,
+   202.83,
+   444.59,
+   211.83
+  ],
+  "confidence": "high",
+  "share_class": "All classes",
+  "primary": true,
+  "derived": true
  },
  {
   "doc": "F_FY2025_10K",
@@ -8109,7 +8717,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "F_FY2025_10K",
@@ -8125,7 +8734,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "F_FY2025_10K",
@@ -8141,7 +8751,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "F_FY2025_10K",
@@ -8157,7 +8768,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "F_FY2025_10K",
@@ -8173,7 +8785,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "F_FY2025_10K",
@@ -8189,7 +8802,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GM_FY2025_10K",
@@ -8205,7 +8819,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GM_FY2025_10K",
@@ -8221,7 +8836,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GM_FY2025_10K",
@@ -8237,7 +8853,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GM_FY2025_10K",
@@ -8253,7 +8870,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GM_FY2025_10K",
@@ -8269,7 +8887,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GM_FY2025_10K",
@@ -8285,7 +8904,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GM_FY2025_10K",
@@ -8301,7 +8921,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GM_FY2025_10K",
@@ -8317,7 +8938,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GM_FY2025_10K",
@@ -8333,7 +8955,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GM_FY2025_10K",
@@ -8349,7 +8972,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GM_FY2025_10K",
@@ -8365,7 +8989,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GM_FY2025_10K",
@@ -8381,7 +9006,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GM_FY2025_10K",
@@ -8397,7 +9023,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GM_FY2025_10K",
@@ -8413,7 +9040,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2025_10K",
@@ -8429,7 +9057,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2025_10K",
@@ -8445,7 +9074,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2025_10K",
@@ -8461,7 +9091,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2025_10K",
@@ -8477,7 +9108,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2025_10K",
@@ -8493,7 +9125,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2025_10K",
@@ -8509,7 +9142,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2025_10K",
@@ -8525,7 +9159,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2025_10K",
@@ -8541,7 +9176,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2025_10K",
@@ -8557,7 +9193,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2025_10K",
@@ -8573,7 +9210,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2025_10K",
@@ -8589,7 +9227,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2025_10K",
@@ -8605,7 +9244,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2025_10K",
@@ -8621,7 +9261,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2025_10K",
@@ -8637,7 +9278,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CVX_FY2025_10K",
@@ -8653,7 +9295,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CVX_FY2025_10K",
@@ -8669,7 +9312,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CVX_FY2025_10K",
@@ -8685,7 +9329,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CVX_FY2025_10K",
@@ -8701,7 +9346,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CVX_FY2025_10K",
@@ -8717,7 +9363,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CVX_FY2025_10K",
@@ -8733,7 +9380,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CVX_FY2025_10K",
@@ -8749,7 +9397,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CVX_FY2025_10K",
@@ -8765,7 +9414,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CVX_FY2025_10K",
@@ -8781,7 +9431,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CVX_FY2025_10K",
@@ -8797,7 +9448,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CVX_FY2025_10K",
@@ -8813,7 +9465,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CVX_FY2025_10K",
@@ -8829,7 +9482,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CVX_FY2025_10K",
@@ -8845,7 +9499,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CVX_FY2025_10K",
@@ -8861,7 +9516,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2025_10K",
@@ -8877,7 +9533,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2025_10K",
@@ -8893,7 +9550,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2025_10K",
@@ -8909,7 +9567,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2025_10K",
@@ -8925,7 +9584,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2025_10K",
@@ -8941,7 +9601,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2025_10K",
@@ -8957,7 +9618,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2025_10K",
@@ -8973,7 +9635,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2025_10K",
@@ -8989,7 +9652,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2025_10K",
@@ -9005,7 +9669,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2025_10K",
@@ -9021,7 +9686,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2025_10K",
@@ -9037,7 +9703,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2025_10K",
@@ -9053,7 +9720,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2025_10K",
@@ -9069,7 +9737,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2025_10K",
@@ -9085,7 +9754,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2025_10K",
@@ -9101,7 +9771,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2025_10K",
@@ -9117,7 +9788,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2025_10K",
@@ -9133,7 +9805,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2025_10K",
@@ -9149,7 +9822,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2025_10K",
@@ -9165,7 +9839,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2025_10K",
@@ -9181,7 +9856,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2025_10K",
@@ -9197,7 +9873,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2025_10K",
@@ -9213,7 +9890,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2025_10K",
@@ -9229,7 +9907,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2025_10K",
@@ -9245,7 +9924,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2025_10K",
@@ -9261,7 +9941,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2025_10K",
@@ -9277,7 +9958,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2025_10K",
@@ -9293,7 +9975,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2025_10K",
@@ -9309,7 +9992,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2025_10K",
@@ -9325,7 +10009,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2025_10K",
@@ -9341,7 +10026,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2025_10K",
@@ -9357,7 +10043,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2025_10K",
@@ -9373,7 +10060,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2025_10K",
@@ -9389,7 +10077,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2025_10K",
@@ -9405,7 +10094,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2025_10K",
@@ -9421,7 +10111,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2025_10K",
@@ -9437,7 +10128,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2025_10K",
@@ -9453,7 +10145,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2025_10K",
@@ -9469,7 +10162,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2025_10K",
@@ -9485,7 +10179,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2025_10K",
@@ -9501,7 +10196,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2025_10K",
@@ -9517,7 +10213,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "MSFT_FY2025_10K",
@@ -9533,7 +10230,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GOOGL_FY2024_10K",
@@ -9549,151 +10247,8 @@
   ],
   "confidence": "high",
   "share_class": "Class C",
-  "primary": false
- },
- {
-  "doc": "GOOGL_FY2024_10K",
-  "attr": "shares_outstanding",
-  "value": "860000000",
-  "page": 2,
-  "quote": "Class B: As of January 28, 2025, there were 5,833 million shares of Alphabet’s Class A stock outstanding, 860 million shares of Alphabet’s Class B stock outstanding, and 5,497 million shares of the Alphabet’s Class C stock outstanding. ___________________________________________ DOCUMENTS",
-  "bbox": [
-   439.82,
-   353.47,
-   483.48,
-   362.47
-  ],
-  "confidence": "high",
-  "share_class": "Class B",
-  "primary": false
- },
- {
-  "doc": "GOOGL_FY2024_10K",
-  "attr": "shares_outstanding",
-  "value": "5497000000",
-  "page": 2,
-  "quote": "Class C: there were 5,833 million shares of Alphabet’s Class A stock outstanding, 860 million shares of Alphabet’s Class B stock outstanding, and 5,497 million shares of the Alphabet’s Class C stock outstanding. ___________________________________________ DOCUMENTS INCORPORATED BY REFERENCE",
-  "bbox": [
-   169.17,
-   364.27,
-   219.69,
-   373.27
-  ],
-  "confidence": "high",
-  "share_class": "Class C",
-  "primary": false
- },
- {
-  "doc": "GOOGL_FY2024_10K",
-  "attr": "fiscal_year_end",
-  "value": "2024-12-31",
-  "page": 1,
-  "quote": "For the fiscal year ended December 31, 2024",
-  "bbox": [
-   215.79,
-   195.02,
-   396.28,
-   204.02
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "GOOGL_FY2024_10K",
-  "attr": "public_float_usd",
-  "value": "2000000000000",
-  "page": 2,
-  "quote": "As of June 28, 2024, the aggregate market value of shares held by non-affiliates of the registrant (based upon the closing sale prices of such shares on the Nasdaq Global Select Market on June 28, 2024) was approximately $2.0 trillion.",
-  "bbox": [
-   451.79,
-   250.27,
-   499.13,
-   259.27
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "GOOGL_FY2024_10K",
-  "attr": "state_of_incorporation",
-  "value": "Delaware",
-  "page": 1,
-  "quote": "Delaware 61-1767919 | (State or other jurisdiction of incorporation or organization) (I.R.S. Employer Identification No.)",
-  "bbox": [
-   154.63,
-   329.77,
-   194.15,
-   338.77
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "GOOGL_FY2024_10K",
-  "attr": "hq_city",
-  "value": "Mountain View",
-  "page": 1,
-  "quote": "Mountain View, CA 94043 | (Address of principal executive offices, including zip code)",
-  "bbox": [
-   251.79,
-   368.82,
-   360.23,
-   377.82
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "GOOGL_FY2024_10K",
-  "attr": "hq_state",
-  "value": "CA",
-  "page": 1,
-  "quote": "Mountain View, CA 94043 | (Address of principal executive offices, including zip code)",
-  "bbox": [
-   251.79,
-   368.82,
-   360.23,
-   377.82
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "GOOGL_FY2024_10K",
-  "attr": "trading_symbol",
-  "value": "GOOGL",
-  "page": 1,
-  "quote": "Class A Common Stock, $0.001 par value GOOGL Nasdaq Stock Market LLC",
-  "bbox": [
-   288.88,
-   435.68,
-   322.39,
-   444.68
-  ],
-  "confidence": "high",
-  "share_class": "Class A",
-  "primary": true
- },
- {
-  "doc": "GOOGL_FY2024_10K",
-  "attr": "exchange",
-  "value": "NASDAQ",
-  "page": 1,
-  "quote": "Class A Common Stock, $0.001 par value GOOGL Nasdaq Stock Market LLC",
-  "bbox": [
-   56.05,
-   435.68,
-   523.19,
-   444.68
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
+  "primary": false,
+  "derived": false
  },
  {
   "doc": "GOOGL_FY2024_10K",
@@ -9709,7 +10264,178 @@
   ],
   "confidence": "high",
   "share_class": "Class A",
-  "primary": true
+  "primary": false,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2024_10K",
+  "attr": "shares_outstanding",
+  "value": "860000000",
+  "page": 2,
+  "quote": "Class B: As of January 28, 2025, there were 5,833 million shares of Alphabet’s Class A stock outstanding, 860 million shares of Alphabet’s Class B stock outstanding, and 5,497 million shares of the Alphabet’s Class C stock outstanding. ___________________________________________ DOCUMENTS",
+  "bbox": [
+   439.82,
+   353.47,
+   483.48,
+   362.47
+  ],
+  "confidence": "high",
+  "share_class": "Class B",
+  "primary": false,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2024_10K",
+  "attr": "shares_outstanding",
+  "value": "5497000000",
+  "page": 2,
+  "quote": "Class C: there were 5,833 million shares of Alphabet’s Class A stock outstanding, 860 million shares of Alphabet’s Class B stock outstanding, and 5,497 million shares of the Alphabet’s Class C stock outstanding. ___________________________________________ DOCUMENTS INCORPORATED BY REFERENCE",
+  "bbox": [
+   169.17,
+   364.27,
+   219.69,
+   373.27
+  ],
+  "confidence": "high",
+  "share_class": "Class C",
+  "primary": false,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2024_10K",
+  "attr": "fiscal_year_end",
+  "value": "2024-12-31",
+  "page": 1,
+  "quote": "For the fiscal year ended December 31, 2024",
+  "bbox": [
+   215.79,
+   195.02,
+   396.28,
+   204.02
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2024_10K",
+  "attr": "public_float_usd",
+  "value": "2000000000000",
+  "page": 2,
+  "quote": "As of June 28, 2024, the aggregate market value of shares held by non-affiliates of the registrant (based upon the closing sale prices of such shares on the Nasdaq Global Select Market on June 28, 2024) was approximately $2.0 trillion.",
+  "bbox": [
+   451.79,
+   250.27,
+   499.13,
+   259.27
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2024_10K",
+  "attr": "state_of_incorporation",
+  "value": "Delaware",
+  "page": 1,
+  "quote": "Delaware 61-1767919 | (State or other jurisdiction of incorporation or organization) (I.R.S. Employer Identification No.)",
+  "bbox": [
+   154.63,
+   329.77,
+   194.15,
+   338.77
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2024_10K",
+  "attr": "hq_city",
+  "value": "Mountain View",
+  "page": 1,
+  "quote": "Mountain View, CA 94043 | (Address of principal executive offices, including zip code)",
+  "bbox": [
+   251.79,
+   368.82,
+   360.23,
+   377.82
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2024_10K",
+  "attr": "hq_state",
+  "value": "CA",
+  "page": 1,
+  "quote": "Mountain View, CA 94043 | (Address of principal executive offices, including zip code)",
+  "bbox": [
+   251.79,
+   368.82,
+   360.23,
+   377.82
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2024_10K",
+  "attr": "trading_symbol",
+  "value": "GOOGL",
+  "page": 1,
+  "quote": "Class A Common Stock, $0.001 par value GOOGL Nasdaq Stock Market LLC",
+  "bbox": [
+   288.88,
+   435.68,
+   322.39,
+   444.68
+  ],
+  "confidence": "high",
+  "share_class": "Class A",
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2024_10K",
+  "attr": "exchange",
+  "value": "NASDAQ",
+  "page": 1,
+  "quote": "Class A Common Stock, $0.001 par value GOOGL Nasdaq Stock Market LLC",
+  "bbox": [
+   56.05,
+   435.68,
+   523.19,
+   444.68
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2024_10K",
+  "attr": "shares_outstanding",
+  "value": "12190000000",
+  "page": 2,
+  "quote": "All classes (sum of Class A, Class B, Class C): As of January 28, 2025, there were 5,833 million shares of Alphabet’s Class A stock outstanding, 860 million shares of Alphabet’s Class B stock outstanding, and 5,497 million shares of the Alphabet’s Class C stock outstanding.",
+  "bbox": [
+   43.2,
+   353.47,
+   568.75,
+   373.27
+  ],
+  "confidence": "high",
+  "share_class": "All classes",
+  "primary": true,
+  "derived": true
  },
  {
   "doc": "GOOGL_FY2024_10K",
@@ -9725,7 +10451,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GOOGL_FY2024_10K",
@@ -9741,7 +10468,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GOOGL_FY2024_10K",
@@ -9757,7 +10485,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GOOGL_FY2024_10K",
@@ -9773,7 +10502,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GOOGL_FY2024_10K",
@@ -9789,7 +10519,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GOOGL_FY2024_10K",
@@ -9805,7 +10536,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2024_10K",
@@ -9821,7 +10553,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2024_10K",
@@ -9837,7 +10570,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2024_10K",
@@ -9853,7 +10587,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2024_10K",
@@ -9869,7 +10604,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2024_10K",
@@ -9885,7 +10621,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2024_10K",
@@ -9901,7 +10638,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2024_10K",
@@ -9917,7 +10655,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2024_10K",
@@ -9933,7 +10672,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2024_10K",
@@ -9949,7 +10689,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2024_10K",
@@ -9965,7 +10706,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2024_10K",
@@ -9981,7 +10723,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2024_10K",
@@ -9997,7 +10740,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2024_10K",
@@ -10013,7 +10757,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2024_10K",
@@ -10029,7 +10774,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2024_10K",
@@ -10045,7 +10791,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2024_10K",
@@ -10061,7 +10808,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2024_10K",
@@ -10077,7 +10825,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2024_10K",
@@ -10093,7 +10842,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2024_10K",
@@ -10109,7 +10859,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2024_10K",
@@ -10125,7 +10876,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2024_10K",
@@ -10141,7 +10893,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2024_10K",
@@ -10157,7 +10910,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2024_10K",
@@ -10173,7 +10927,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2024_10K",
@@ -10189,7 +10944,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2024_10K",
@@ -10205,7 +10961,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2024_10K",
@@ -10221,7 +10978,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2024_10K",
@@ -10237,7 +10995,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GS_FY2024_10K",
@@ -10253,7 +11012,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2025_10K",
@@ -10269,7 +11029,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2025_10K",
@@ -10285,7 +11046,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2025_10K",
@@ -10301,7 +11063,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2025_10K",
@@ -10317,7 +11080,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2025_10K",
@@ -10333,7 +11097,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2025_10K",
@@ -10349,7 +11114,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2025_10K",
@@ -10365,7 +11131,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2025_10K",
@@ -10381,7 +11148,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2025_10K",
@@ -10397,7 +11165,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2025_10K",
@@ -10413,7 +11182,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2025_10K",
@@ -10429,7 +11199,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2025_10K",
@@ -10445,7 +11216,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2025_10K",
@@ -10461,7 +11233,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "WMT_FY2025_10K",
@@ -10477,7 +11250,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2024_10K",
@@ -10493,7 +11267,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2024_10K",
@@ -10509,7 +11284,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2024_10K",
@@ -10525,7 +11301,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2024_10K",
@@ -10541,7 +11318,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2024_10K",
@@ -10557,7 +11335,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2024_10K",
@@ -10573,7 +11352,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2024_10K",
@@ -10589,7 +11369,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2024_10K",
@@ -10605,7 +11386,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2024_10K",
@@ -10621,7 +11403,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2024_10K",
@@ -10637,7 +11420,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2024_10K",
@@ -10653,7 +11437,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2024_10K",
@@ -10669,7 +11454,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2024_10K",
@@ -10685,7 +11471,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2024_10K",
@@ -10701,7 +11488,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2024_10K",
@@ -10717,7 +11505,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2024_10K",
@@ -10733,7 +11522,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2024_10K",
@@ -10749,7 +11539,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2024_10K",
@@ -10765,7 +11556,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2024_10K",
@@ -10781,7 +11573,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2024_10K",
@@ -10797,7 +11590,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2024_10K",
@@ -10813,7 +11607,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2024_10K",
@@ -10829,7 +11624,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2024_10K",
@@ -10845,7 +11641,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2024_10K",
@@ -10861,7 +11658,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2024_10K",
@@ -10877,7 +11675,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2024_10K",
@@ -10893,7 +11692,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2024_10K",
@@ -10909,7 +11709,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2024_10K",
@@ -10925,7 +11726,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2024_10K",
@@ -10941,7 +11743,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2024_10K",
@@ -10957,7 +11760,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2024_10K",
@@ -10973,7 +11777,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2024_10K",
@@ -10989,7 +11794,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2024_10K",
@@ -11005,7 +11811,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2024_10K",
@@ -11021,7 +11828,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2024_10K",
@@ -11037,7 +11845,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2024_10K",
@@ -11053,7 +11862,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2024_10K",
@@ -11069,7 +11879,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2024_10K",
@@ -11085,7 +11896,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2024_10K",
@@ -11101,7 +11913,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2024_10K",
@@ -11117,7 +11930,8 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2024_10K",
@@ -11133,7 +11947,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "XOM_FY2024_10K",
@@ -11149,7 +11964,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2024_10K",
@@ -11165,7 +11981,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2024_10K",
@@ -11181,7 +11998,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2024_10K",
@@ -11197,7 +12015,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2024_10K",
@@ -11213,7 +12032,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2024_10K",
@@ -11229,7 +12049,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2024_10K",
@@ -11245,7 +12066,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2024_10K",
@@ -11261,7 +12083,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2024_10K",
@@ -11277,7 +12100,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2024_10K",
@@ -11293,7 +12117,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2024_10K",
@@ -11309,7 +12134,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2024_10K",
@@ -11325,7 +12151,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2024_10K",
@@ -11341,7 +12168,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2024_10K",
@@ -11357,7 +12185,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "CAT_FY2024_10K",
@@ -11373,7 +12202,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2026_Q3_10Q",
@@ -11389,7 +12219,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2026_Q3_10Q",
@@ -11405,7 +12236,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2026_Q3_10Q",
@@ -11421,7 +12253,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2026_Q3_10Q",
@@ -11437,7 +12270,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2026_Q3_10Q",
@@ -11453,7 +12287,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2026_Q3_10Q",
@@ -11469,7 +12304,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2026_Q3_10Q",
@@ -11485,7 +12321,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "AAPL_FY2026_Q3_10Q",
@@ -11501,7 +12338,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "GOOGL_FY2025_Q3_10Q",
@@ -11517,119 +12355,8 @@
   ],
   "confidence": "high",
   "share_class": "Class C",
-  "primary": false
- },
- {
-  "doc": "GOOGL_FY2025_Q3_10Q",
-  "attr": "shares_outstanding",
-  "value": "842000000",
-  "page": 2,
-  "quote": "Class B: As of October 22, 2025, there were 5,818 million shares of Alphabet’s Class A stock outstanding, 842 million shares of Alphabet's Class B stock outstanding, and 5,407 million shares of Alphabet's Class C stock outstanding.",
-  "bbox": [
-   436.2,
-   69.21,
-   479.24,
-   78.21
-  ],
-  "confidence": "high",
-  "share_class": "Class B",
-  "primary": false
- },
- {
-  "doc": "GOOGL_FY2025_Q3_10Q",
-  "attr": "shares_outstanding",
-  "value": "5407000000",
-  "page": 2,
-  "quote": "Class C: As of October 22, 2025, there were 5,818 million shares of Alphabet’s Class A stock outstanding, 842 million shares of Alphabet's Class B stock outstanding, and 5,407 million shares of Alphabet's Class C stock outstanding.",
-  "bbox": [
-   175.47,
-   80.01,
-   225.99,
-   89.01
-  ],
-  "confidence": "high",
-  "share_class": "Class C",
-  "primary": false
- },
- {
-  "doc": "GOOGL_FY2025_Q3_10Q",
-  "attr": "state_of_incorporation",
-  "value": "Delaware",
-  "page": 1,
-  "quote": "Delaware 61-1767919 | (State or other jurisdiction of incorporation or organization) (I.R.S. Employer Identification Number)",
-  "bbox": [
-   158.0,
-   316.71,
-   197.52,
-   325.71
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "GOOGL_FY2025_Q3_10Q",
-  "attr": "hq_city",
-  "value": "Mountain View",
-  "page": 1,
-  "quote": "Mountain View, CA 94043 | (Address of principal executive offices, including zip code)",
-  "bbox": [
-   251.79,
-   355.76,
-   360.23,
-   364.76
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "GOOGL_FY2025_Q3_10Q",
-  "attr": "hq_state",
-  "value": "CA",
-  "page": 1,
-  "quote": "Mountain View, CA 94043 | (Address of principal executive offices, including zip code)",
-  "bbox": [
-   251.79,
-   355.76,
-   360.23,
-   364.76
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
- },
- {
-  "doc": "GOOGL_FY2025_Q3_10Q",
-  "attr": "trading_symbol",
-  "value": "GOOGL",
-  "page": 1,
-  "quote": "Class A Common Stock, $0.001 par value GOOGL Nasdaq Stock Market LLC",
-  "bbox": [
-   289.25,
-   426.37,
-   322.76,
-   435.37
-  ],
-  "confidence": "high",
-  "share_class": "Class A",
-  "primary": true
- },
- {
-  "doc": "GOOGL_FY2025_Q3_10Q",
-  "attr": "exchange",
-  "value": "NASDAQ",
-  "page": 1,
-  "quote": "Class A Common Stock, $0.001 par value GOOGL Nasdaq Stock Market LLC",
-  "bbox": [
-   60.17,
-   426.37,
-   519.44,
-   435.37
-  ],
-  "confidence": "high",
-  "share_class": null,
-  "primary": true
+  "primary": false,
+  "derived": false
  },
  {
   "doc": "GOOGL_FY2025_Q3_10Q",
@@ -11645,7 +12372,144 @@
   ],
   "confidence": "high",
   "share_class": "Class A",
-  "primary": true
+  "primary": false,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2025_Q3_10Q",
+  "attr": "shares_outstanding",
+  "value": "842000000",
+  "page": 2,
+  "quote": "Class B: As of October 22, 2025, there were 5,818 million shares of Alphabet’s Class A stock outstanding, 842 million shares of Alphabet's Class B stock outstanding, and 5,407 million shares of Alphabet's Class C stock outstanding.",
+  "bbox": [
+   436.2,
+   69.21,
+   479.24,
+   78.21
+  ],
+  "confidence": "high",
+  "share_class": "Class B",
+  "primary": false,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2025_Q3_10Q",
+  "attr": "shares_outstanding",
+  "value": "5407000000",
+  "page": 2,
+  "quote": "Class C: As of October 22, 2025, there were 5,818 million shares of Alphabet’s Class A stock outstanding, 842 million shares of Alphabet's Class B stock outstanding, and 5,407 million shares of Alphabet's Class C stock outstanding.",
+  "bbox": [
+   175.47,
+   80.01,
+   225.99,
+   89.01
+  ],
+  "confidence": "high",
+  "share_class": "Class C",
+  "primary": false,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2025_Q3_10Q",
+  "attr": "state_of_incorporation",
+  "value": "Delaware",
+  "page": 1,
+  "quote": "Delaware 61-1767919 | (State or other jurisdiction of incorporation or organization) (I.R.S. Employer Identification Number)",
+  "bbox": [
+   158.0,
+   316.71,
+   197.52,
+   325.71
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2025_Q3_10Q",
+  "attr": "hq_city",
+  "value": "Mountain View",
+  "page": 1,
+  "quote": "Mountain View, CA 94043 | (Address of principal executive offices, including zip code)",
+  "bbox": [
+   251.79,
+   355.76,
+   360.23,
+   364.76
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2025_Q3_10Q",
+  "attr": "hq_state",
+  "value": "CA",
+  "page": 1,
+  "quote": "Mountain View, CA 94043 | (Address of principal executive offices, including zip code)",
+  "bbox": [
+   251.79,
+   355.76,
+   360.23,
+   364.76
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2025_Q3_10Q",
+  "attr": "trading_symbol",
+  "value": "GOOGL",
+  "page": 1,
+  "quote": "Class A Common Stock, $0.001 par value GOOGL Nasdaq Stock Market LLC",
+  "bbox": [
+   289.25,
+   426.37,
+   322.76,
+   435.37
+  ],
+  "confidence": "high",
+  "share_class": "Class A",
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2025_Q3_10Q",
+  "attr": "exchange",
+  "value": "NASDAQ",
+  "page": 1,
+  "quote": "Class A Common Stock, $0.001 par value GOOGL Nasdaq Stock Market LLC",
+  "bbox": [
+   60.17,
+   426.37,
+   519.44,
+   435.37
+  ],
+  "confidence": "high",
+  "share_class": null,
+  "primary": true,
+  "derived": false
+ },
+ {
+  "doc": "GOOGL_FY2025_Q3_10Q",
+  "attr": "shares_outstanding",
+  "value": "12067000000",
+  "page": 2,
+  "quote": "All classes (sum of Class A, Class B, Class C): As of October 22, 2025, there were 5,818 million shares of Alphabet’s Class A stock outstanding, 842 million shares of Alphabet's Class B stock outstanding, and 5,407 million shares of Alphabet's Class C stock outstanding.",
+  "bbox": [
+   49.5,
+   69.21,
+   562.54,
+   89.01
+  ],
+  "confidence": "high",
+  "share_class": "All classes",
+  "primary": true,
+  "derived": true
  },
  {
   "doc": "GOOGL_FY2025_Q3_10Q",
@@ -11661,7 +12525,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2025_Q3_10Q",
@@ -11677,7 +12542,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2025_Q3_10Q",
@@ -11693,7 +12559,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2025_Q3_10Q",
@@ -11709,7 +12576,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2025_Q3_10Q",
@@ -11725,7 +12593,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2025_Q3_10Q",
@@ -11741,7 +12610,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2025_Q3_10Q",
@@ -11757,7 +12627,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "JNJ_FY2025_Q3_10Q",
@@ -11773,7 +12644,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2025_Q3_10Q",
@@ -11789,7 +12661,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2025_Q3_10Q",
@@ -11805,7 +12678,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2025_Q3_10Q",
@@ -11821,7 +12695,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2025_Q3_10Q",
@@ -11837,7 +12712,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2025_Q3_10Q",
@@ -11853,7 +12729,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "KO_FY2025_Q3_10Q",
@@ -11869,7 +12746,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_Q3_10Q",
@@ -11885,7 +12763,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_Q3_10Q",
@@ -11901,7 +12780,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_Q3_10Q",
@@ -11917,7 +12797,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_Q3_10Q",
@@ -11933,7 +12814,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_Q3_10Q",
@@ -11949,7 +12831,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_Q3_10Q",
@@ -11965,7 +12848,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_Q3_10Q",
@@ -11981,7 +12865,8 @@
   ],
   "confidence": "high",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  },
  {
   "doc": "BAC_FY2025_Q3_10Q",
@@ -11997,6 +12882,7 @@
   ],
   "confidence": "low",
   "share_class": null,
-  "primary": true
+  "primary": true,
+  "derived": false
  }
 ]

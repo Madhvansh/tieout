@@ -64,3 +64,53 @@ class FiscalCalendar:
         if months == 3 * q:
             return f"FY{fy}Q{q}YTD"
         return f"FY{fy}Q{q}M{months}"
+
+
+FUTURE_SLACK_DAYS = 14      # a 52/53-week year end estimated from another year's day can run a few days late
+
+
+def _same_day(year: int, like: date) -> date:
+    return date(year, like.month, min(like.day, calendar.monthrange(year, like.month)[1]))
+
+
+def column_period(cal: FiscalCalendar, col, form: str, instant: bool = False,
+                  filing_end: Optional[str] = None, heading: str = "") -> tuple:
+    """(period id, ISO end date) for one table column, or (None, None). One function for the
+    primary statements (graph) and every other table (rawlayer).
+
+    A column with a printed date ends on that date. A column that prints only a year:
+      in a 10-K, the fiscal year so labelled ends on the company's year-end day;
+      in a 10-Q, the column is a quarter or a year to date, never a fiscal year. It ends on the
+        filing's own period end (month and day) in that year, and its length is what the column
+        or else the table's title or heading says ("three", "six", "nine months"). With no length
+        printed, or for a balance-sheet column of another year, it gets no period id.
+    No column gets a period that ends after the filing's own period end: a filing reports nothing
+    that has not ended.
+    """
+    from .tables import _part_year                  # tables does not import periods: no cycle
+    fe = date.fromisoformat(filing_end) if filing_end else None
+    months = None if instant else col.months
+    if col.end_date:
+        try:
+            end = date.fromisoformat(col.end_date)
+        except ValueError:
+            return None, None
+    elif col.year and 1995 <= col.year <= 2035:
+        if form == "10-Q" and fe is not None:
+            end = _same_day(col.year, fe)
+            if instant:
+                if col.year != fe.year:
+                    return None, None
+            else:
+                months = months if months and months < 12 else _part_year(heading or "")
+                if not months:
+                    return None, None
+        else:
+            end = cal.end_of_label(col.year)          # header printed only a fiscal-year label
+    else:
+        return None, None
+    if fe is not None and (end - fe).days > FUTURE_SLACK_DAYS:
+        return None, None
+    if not instant and months is None and form == "10-K":
+        months = 12
+    return cal.period_id(end, months, instant), end.isoformat()

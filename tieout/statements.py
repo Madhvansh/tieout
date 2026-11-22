@@ -79,6 +79,26 @@ def readable(pages: list) -> bool:
     return sum(1 for w in words if "(cid:" in w) / len(words) < 0.2
 
 
+TITLE_PATTERNS = list(KINDS.values()) + [OTHER_TITLE]
+
+
+def _wrapped_title(text: str, nxt: str, nxt_line: list) -> bool:
+    """Is `nxt` the second half of a title that starts on `text`?
+
+    The next line must be short and print no values, and the two lines read together must name a
+    statement that neither line names alone: "... consolidated statements" + "of earnings",
+    "consolidated statements of" + "operations".
+    """
+    if len(nxt) >= 40:
+        return False
+    if re.search(r"\b(statements?|sheets?) of$", text):
+        return True                               # the original rule, kept as is
+    if any(is_numeric(w.text) and not YEAR_ONLY.match(w.text) for w in nxt_line):
+        return False
+    joined = text + " " + nxt
+    return any(p.search(joined) and not p.search(text) and not p.search(nxt) for p in TITLE_PATTERNS)
+
+
 def split_regions(lines: list) -> list:
     """Cut a page at statement titles and return [(kind, title, lines)].
 
@@ -91,7 +111,7 @@ def split_regions(lines: list) -> list:
     texts = [" ".join(w.text for w in ln) for ln in lines]
     for i, ln in enumerate(lines):
         text = texts[i]
-        if re.search(r"\b(statements?|sheets?) of$", text) and i + 1 < len(lines) and len(texts[i + 1]) < 40:
+        if i + 1 < len(lines) and _wrapped_title(text, texts[i + 1], lines[i + 1]):
             text = text + " " + texts[i + 1]      # a title wrapped onto a second line
         if len(text) > 110 or text.rstrip().endswith((".", ";")) or text[:1].islower():
             continue                              # a sentence that mentions a statement

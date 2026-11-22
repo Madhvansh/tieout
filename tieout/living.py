@@ -33,7 +33,7 @@ import time
 from collections import defaultdict
 from typing import Optional
 
-from .concepts import Binding, concept_defs, norm_label
+from .concepts import Binding, concept_defs, label_objections, label_unrelated, norm_label
 from .graph import Fact, Graph
 from .llm import DailyLimit, ask_json, link_model
 
@@ -123,6 +123,9 @@ def gate(g: Graph, doc: str, concept: str, row: int, rows: dict) -> tuple:
         objections.append("revenue minus this row is operating income: it is all operating costs, not one of them")
     if re.search(r"\band other\b", d["label"], re.I) and not concept.lower().startswith("other"):
         objections.append("the line also holds other items ('and other'), so it is broader than the concept")
+    objections += label_objections(concept, d["label"], _siblings(rows, row))
+    if label_unrelated(concept, d["label"]):
+        evidence.append("label shares no word with the concept's seed labels: served as matched by wording only")
     siblings = _one_of_several(concept, row, rows)
     if siblings:
         objections.append(f"the heading names the concept and this is one of {siblings} lines under it; "
@@ -165,6 +168,12 @@ def gate(g: Graph, doc: str, concept: str, row: int, rows: dict) -> tuple:
     elif prior:
         evidence.append(f"role agrees with other companies ({'total' if prior == 'total' else 'line item'})")
     return (not objections), evidence, objections
+
+
+def _siblings(rows: dict, row: int) -> list:
+    """Labels of the other rows under the same heading of the same statement."""
+    sec = rows[row]["section"] if row in rows else ""
+    return [d["label"] for r, d in rows.items() if r != row and d["section"] == sec]
 
 
 COST_PARTS = {"CostOfRevenue", "SellingGeneralAdmin", "ResearchAndDevelopment", "SalesAndMarketing",
@@ -297,15 +306,23 @@ def apply_entry(g: Graph, entry: dict) -> int:
         row = entry["row"] if (doc == entry["doc"] and entry["row"] in match) else match[0]
         if any(b.doc == doc and b.concept == concept and b.state == "active" for b in g.bindings):
             continue
+        if any(b.doc == doc and b.concept == concept and b.row == row and b.kind == kind
+               and any(str(e).startswith("audit") for e in b.evidence) for b in g.bindings):
+            continue                                   # the binding audit already ruled on this row
+        if label_objections(concept, rows[row]["label"], _siblings(rows, row)):
+            continue                                   # the label itself says it is another line
+        state = "proposed" if label_unrelated(concept, rows[row]["label"]) else "active"
         g.bindings.append(Binding(doc=doc, kind=kind, row=row, label=rows[row]["label"], concept=concept,
-                                  origin=f"learned:{entry.get('taught_by', '')}", state="active",
+                                  origin=f"learned:{entry.get('taught_by', '')}", state=state,
                                   evidence=list(entry.get("evidence", []))))
         for r in rows[row]["readings"]:
             key = f"{ticker}|{concept}|{r.period}"
-            fact = g.facts.setdefault(key, Fact(ticker, concept, r.period, [], "active"))
+            fact = g.facts.setdefault(key, Fact(ticker, concept, r.period, [], state))
             if r.id not in fact.readings:
                 fact.readings.append(r.id)
                 added += 1
+            if state == "active":
+                fact.binding_state = "active"
     return added
 
 

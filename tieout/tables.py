@@ -408,9 +408,10 @@ def _scale(caption: str) -> tuple:
     return scale, share_scale
 
 
-def build_table(doc_name: str, page_no: int, lines: list, title: str = "") -> Optional[Table]:
-    """Turn the text lines of one table region into a Table."""
-    cols = find_columns(lines)
+def build_table(doc_name: str, page_no: int, lines: list, title: str = "", min_hits: int = 3) -> Optional[Table]:
+    """Turn the text lines of one table region into a Table. `min_hits`: values a column needs (a
+    one-line table under a year header has one value per column)."""
+    cols = find_columns(lines, min_hits=min_hits)
     if not cols:
         return None
     label_limit = min(c.x_left for c in cols) - 4
@@ -538,7 +539,7 @@ def build_table(doc_name: str, page_no: int, lines: list, title: str = "") -> Op
                                value=v, col=ci, is_percent=w.text.rstrip(")").endswith("%"),
                                has_dollar=any(0 < w.x0 - dx < 60 for dx in dollar_x))
         rows.append(r)
-    if len(rows) < 2:
+    if len(rows) < (1 if min_hits == 1 else 2):
         return None
     return Table(doc=doc_name, page=page_no, title=title, caption=caption, scale=scale,
                  share_scale=share_scale, columns=cols, rows=rows, header_text=header_text)

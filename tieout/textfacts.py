@@ -85,6 +85,7 @@ class TextFact:
     confidence: str
     share_class: Optional[str] = None
     primary: bool = True
+    derived: bool = False           # computed from printed facts (a sum of per-class counts), not printed
 
 
 # --------------------------------------------------------------------------- page text
@@ -244,10 +245,11 @@ class Collector:
         self.doc = doc
         self.facts: list = []
 
-    def add(self, attr, value, page, quote, words, confidence, share_class=None, bbox=None, primary=True):
+    def add(self, attr, value, page, quote, words, confidence, share_class=None, bbox=None, primary=True,
+            derived=False):
         """Keep one fact; its box is `bbox` if given, else the box around `words`."""
         self.facts.append(TextFact(self.doc, attr, str(value), page, quote[:300],
-                                   bbox or bbox_of(words), confidence, share_class, primary))
+                                   bbox or bbox_of(words), confidence, share_class, primary, derived))
 
     def from_flow(self, attr, value, flow: Flow, s, e, confidence, quote=None, prefix="",
                   share_class=None, primary=True):
@@ -553,15 +555,47 @@ def rule_shares_outstanding(c: Collector, flows: list):
         k = cand[0]
         if k not in best or cand[1] > best[k][1]:
             best[k] = cand
+    total = best.pop(ALL_CLASSES, None)                 # a total printed under the class rows
     classes = list(best)
     multi = len(classes) > 1
-    principal = _principal_class(c, classes)
+    confs = []
     for cls, date, value, f, s, e, quote in best.values():
         conflict = any(x[0] == cls and x[1] == date and x[2] != value for x in cands)
         conf = "low" if conflict or not date else "high"
+        confs.append(conf)
         prefix = f"{cls}: " if multi else ""
         c.from_flow("shares_outstanding", value, f, s, e, conf, quote=quote, prefix=prefix,
-                    share_class=cls if multi else None, primary=cls == principal)
+                    share_class=cls if multi else None, primary=not multi)
+    if multi:
+        _all_classes(c, list(best.values()), total, "low" if "low" in confs else "high")
+
+
+ALL_CLASSES = "All classes"
+
+
+def _all_classes(c: Collector, per_class: list, total, conf: str) -> None:
+    """The primary shares-outstanding fact of a filing with several classes: all classes together.
+
+    A question that names no class ("shares outstanding", market value, a per-share figure from the
+    total) means every class. The filing's own total is used when it prints one under the class rows;
+    otherwise the per-class counts are added and the fact is marked derived. The per-class facts stay,
+    each with its `share_class`, for a question that names one."""
+    names = ", ".join(x[0] for x in per_class)
+    if total is not None:
+        _cls, _date, value, f, s, e, quote = total
+        c.from_flow("shares_outstanding", value, f, s, e, conf, quote=quote,
+                    prefix=f"{ALL_CLASSES} (printed total of {names}): ", share_class=ALL_CLASSES, primary=True)
+        return
+    value = sum(x[2] for x in per_class)
+    first = per_class[0]
+    if len({id(x[3]) for x in per_class}) == 1:
+        s, e = min(x[4] for x in per_class), max(x[5] for x in per_class)
+        words, quote = first[3].span_words(s, e), clip_quote(first[3].text, s, e, 240)
+    else:
+        words = first[3].span_words(first[4], first[5])
+        quote = first[6] or clip_quote(first[3].text, first[4], first[5], 240)
+    c.add("shares_outstanding", value, first[3].page, f"{ALL_CLASSES} (sum of {names}): {quote}", words, conf,
+          share_class=ALL_CLASSES, primary=True, derived=True)
 
 
 def _principal_class(c: Collector, classes: list) -> str:
@@ -593,6 +627,13 @@ def _shares_table(f: Flow) -> list:
             m = re.fullmatch(r"((?:Class\s+[A-C](?:-\d)?\b[^\d$]*)|(?:Common\s+(?:stock|shares)[^\d$]*)|"
                              r"(?:\$[\d.]+\s+Par\s+Value))\s+(" + NUM_RE + r")", row, re.I)
             if not m:
+                # a total printed under two or more class rows: "1,483,498,703" or "Total 1,483,498,703"
+                tm = re.fullmatch(r"(?:Total[^\d$]*)?(" + NUM_RE + r")", row, re.I)
+                mine = [x for x in out if x[6] and x[6].startswith(t + " | ")]
+                if tm and len(mine) >= 2 and to_number(tm.group(1), None) == sum(x[2] for x in mine):
+                    s = f.line_start[j] + tm.start(1)
+                    out.append((ALL_CLASSES, date, to_number(tm.group(1), None), f, s, s + len(tm.group(1)),
+                                t + " | " + row))
                 break
             s = f.line_start[j] + m.start(2)
             out.append((class_label(m.group(1)), date, to_number(m.group(2), None), f, s, s + len(m.group(2)),

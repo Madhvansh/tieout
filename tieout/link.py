@@ -84,9 +84,12 @@ Answer as JSON: {"pick": <candidate number or null>, "column": <column number or
 "slot": "<slot or null>", "reason": "<one short sentence>"}"""
 
 SYSTEM_BREAKDOWN = """You match a phrase from a question to one subtotal in a company's SEC filing.
-Each numbered candidate is a subtotal row of a table: its printed label, section, table title, and the
-labels of the rows that add up to it. You are never shown values. Pick the subtotal whose parts are
-the breakdown the question asks about (by segment, by product, by region, by type of expense ...).
+Each numbered candidate is a total of a table: its printed label, section, table title, the text printed
+above the table, and its parts. The parts are either the rows that add up to it or the columns that add
+up to its total column (a segment table prints its segments as columns), and the same total can appear
+twice, once for each way. You are never shown values. Pick the candidate whose PARTS are the breakdown
+the question asks about (by segment, by product, by region, by type of expense ...): for "profit by
+segment" the parts must be the segments, not the lines of an income statement.
 If none fits, answer null. Answer as JSON: {"pick": <candidate number or null>, "reason": "<one short sentence>"}"""
 
 
@@ -598,6 +601,30 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
     return entry
 
 
+def _same_line(first: Optional[dict], row: dict, namesakes: list, member: Optional[int]) -> bool:
+    """Is `row` (same label, same section or title) the line `first` was linked to, printed elsewhere?
+
+    Three witnesses, any one is enough. The same heading above the table (a table repeated in another
+    year's filing, or another year's block of one table). A figure both print for a period they share:
+    last year's column carried into this year's filing. Or, in another filing, no rival: it prints
+    only one table with a line of this name. Two segments' tables in one filing have the same row
+    labels and pass none of the three, so they stay apart."""
+    if first is None:
+        return True
+    if heading_key(row) == heading_key(first):
+        return True
+    if row["doc"] == first["doc"]:
+        return False
+    mine, theirs = period_cells(first, member), period_cells(row, member)
+    for pid in set(mine) & set(theirs):
+        a, b = first["cells"][mine[pid]].get("value"), row["cells"][theirs[pid]].get("value")
+        if (isinstance(a, (int, float)) and isinstance(b, (int, float)) and a == b
+                and len(str(abs(int(a))).rstrip("0")) >= 3):          # three significant digits: not a coincidence
+            return True
+    rivals = {heading_key(r) for r in namesakes if r["doc"] == row["doc"]}
+    return len(rivals) == 1
+
+
 def _tied_row(st: Store, mention: dict, slot: str, wanted: set) -> Optional[dict]:
     """The table row that prints the chosen sentence figure exactly, for the period asked, if one does.
 
@@ -652,12 +679,11 @@ def apply_link(g: Graph, entry: dict) -> int:
         first = st.by_id.get(entry.get("row_id") or entry.get("ref_id"))
         want_label = norm_label(entry["label"])
         want_ctx = norm_label(entry.get("section") or entry.get("title") or "")
-        want_heading = heading_key(first) if first is not None else None
+        namesakes = [r for r in st.rows_by_ticker.get(ticker, [])
+                     if norm_label(r["label"]) == want_label and norm_label(r["section"] or r["title"] or "") == want_ctx]
         for row in st.rows_by_ticker.get(ticker, []):
             same_row = first is not None and row["id"] == first["id"]
-            if not same_row and (norm_label(row["label"]) != want_label
-                                 or norm_label(row["section"] or row["title"] or "") != want_ctx
-                                 or (want_heading is not None and heading_key(row) != want_heading)):
+            if not same_row and (row not in namesakes or not _same_line(first, row, namesakes, entry.get("member"))):
                 continue                              # the same label under another heading is another table
             # the cell that is the row's figure for each period (the column the link names, if it names one)
             stands_for = {j: pid for pid, j in period_cells(row, entry.get("member")).items()}
@@ -695,14 +721,14 @@ def apply_link(g: Graph, entry: dict) -> int:
 def breakdown(g: Graph, ticker: str, phrase: str) -> Optional[list]:
     """The lines that add up to a linked total, or None if the phrase is not linked yet: the rows
     under a subtotal, or the columns of a row that sum to its total column."""
-    total_id = getattr(g, "breakdown_alias", {}).get(_phrase_key(ticker, phrase))
+    total_id, by = getattr(g, "breakdown_alias", {}).get(_phrase_key(ticker, phrase), (None, "rows"))
     total = store().by_id.get(total_id) if total_id else None
     if total is None:
         return None
+    if by == "columns":
+        return across(store(), total) or None
     kids, how = store().parts(total)
-    if len(kids) >= 2:
-        return [dict(_line(k), grouped_by=how) for k in kids]
-    return across(store(), total) or None
+    return [dict(_line(k), grouped_by=how) for k in kids]
 
 
 _ADJUSTED = re.compile(r"effect|impact|currenc|exchange|adjust|exclud|constant|prior year rates|change|increase|"
@@ -873,23 +899,23 @@ def learn_breakdown(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year
     want = set(tokens(phrase))
     scored = []
     for r in st.rows_by_ticker.get(ticker, []):
-        kids, _how = st.parts(r)
-        if len(kids) < 2:
-            kids = across(st, r)                      # its parts may be columns: segments printed across
+        # one line can be broken down two ways: by the rows that add up to it, and by the columns
+        # that add up to its total column (segments printed across the page). Both are candidates.
+        for kids, how in ((st.parts(r)[0], "rows"), (across(st, r), "columns")):
             if len(kids) < 2:
                 continue
-        words = set(tokens(" ".join([r["label"], r["section"], r["title"], r.get("context", ""), r.get("above", "")]
-                                    + [k["label"] for k in kids])))
-        hit = len(want & words)
-        if not hit:
-            continue
-        scored.append((2.0 * hit + (1.5 if any(_cell_pid(r, j) in wanted for j in range(len(r["cells"]))) else 0)
-                       + (1.0 if r.get("ties_to") else 0)
-                       + (0.75 if g.filings[r["doc"]]["fiscal_year"] == fiscal_year else 0), r, kids))
+            words = set(tokens(" ".join([r["label"], r["section"], r["title"], r.get("context", ""), r.get("above", "")]
+                                        + [k["label"] for k in kids])))
+            hit = len(want & words)
+            if not hit:
+                continue
+            scored.append((2.0 * hit + (1.5 if any(_cell_pid(r, j) in wanted for j in range(len(r["cells"]))) else 0)
+                           + (1.0 if r.get("ties_to") else 0)
+                           + (0.75 if g.filings[r["doc"]]["fiscal_year"] == fiscal_year else 0), r, kids, how))
     scored.sort(key=lambda x: -x[0])
     cands, seen = [], set()
     for item in scored:                               # the same subtotal reprinted in another filing adds nothing
-        sig = (norm_label(item[1]["label"]), tuple(norm_label(k["label"]) for k in item[2]))
+        sig = (norm_label(item[1]["label"]), tuple(norm_label(k["label"]) for k in item[2]), item[3])
         if sig not in seen:
             seen.add(sig)
             cands.append(item)
@@ -900,10 +926,9 @@ def learn_breakdown(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year
     lines = [f"{i}: SUBTOTAL ({g.filings[r['doc']]['form']} {g.filings[r['doc']]['fiscal_year']}, page {r['page']}): "
              f"label '{r['label'][:70]}' | section '{r['section'][:40]}' | table '{r['title'][:80]}' | "
              f"printed above the table '{r.get('above', '')[-150:]}' | "
-             f"ties to {r.get('ties_to') or 'nothing bound'} | parts "
-             f"({'columns' if kids[0].get('grouped_by') == 'columns' else 'rows'}): "
+             f"ties to {r.get('ties_to') or 'nothing bound'} | broken down by its {how}: "
              + "; ".join(k["label"][:40] for k in kids[:14])
-             for i, (_s, r, kids) in enumerate(cands)]
+             for i, (_s, r, kids, how) in enumerate(cands)]
     user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nBreakdown asked for: {phrase}\n"
             f"Question: {question}\n\nCandidates:\n" + "\n".join(lines))
     ans, case = _pick(SYSTEM_BREAKDOWN, user, "breakdown", model, offline)
@@ -912,9 +937,10 @@ def learn_breakdown(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year
         entry["objections"] = ["proposer found no subtotal"]
         return entry
     entry["reason"], entry["picked"] = str(ans.get("reason", ""))[:200], case
-    total = cands[pick][1]
-    entry.update(state="active" if not case or case in WITNESSED else "flagged", ref_id=total["id"], label=total["label"], title=total["title"], page=total["page"],
-                 doc=total["doc"], evidence=["its parts are the operands of the formula recovered for this subtotal"]
+    total, how = cands[pick][1], cands[pick][3]
+    entry.update(state="active" if not case or case in WITNESSED else "flagged", ref_id=total["id"], by=how,
+                 label=total["label"], title=total["title"], page=total["page"], doc=total["doc"],
+                 evidence=[f"its parts are the {how} that add up to it in the recovered arithmetic"]
                  + ([f"the subtotal prints the same value as {total['ties_to']}"] if total.get("ties_to") else []))
     apply_breakdown(g, entry)
     return entry
@@ -923,7 +949,7 @@ def learn_breakdown(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year
 def apply_breakdown(g: Graph, entry: dict) -> None:
     if not hasattr(g, "breakdown_alias"):
         g.breakdown_alias = {}
-    g.breakdown_alias[_phrase_key(entry["ticker"], entry["phrase"])] = entry["ref_id"]
+    g.breakdown_alias[_phrase_key(entry["ticker"], entry["phrase"])] = (entry["ref_id"], entry.get("by", "rows"))
 
 
 # ------------------------------------------------------------------ persistence
