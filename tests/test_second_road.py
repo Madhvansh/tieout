@@ -341,3 +341,32 @@ def test_same_figure_across_roads():
     assert not passage.same(Result("number", 1.4742, "ratio"), ("n", 1.4158))
     assert passage.same(Result("companies", [("GM", 1.0), ("F", 2.0)]), passage.head(reply(["General Motors", "Ford"]), COMPANIES))
     assert not passage.same(Result("companies", [("F", 1.0), ("GM", 2.0)]), passage.head(reply(["General Motors", "Ford"]), COMPANIES))
+
+
+def test_a_node_at_a_named_place_outranks_a_planners_belief_that_filings_lack_the_fact(road, monkeypatch):
+    # round 10, N05: two planners said no filing reports an employee turnover rate; the reader named the page,
+    # and the graph holds the figure there. The node is served, FLAGGED, with the planners' decline on record
+    road(reply(0.037, unit="ratio"))
+    monkeypatch.setattr(passage, "node_of_answer", lambda reply, g=None: {**NODE, "value": 3.7, "unit": "percent", "printed": "3.7%"})
+    rs = [seen("maker", None, declined=True), seen("checker", None), seen("arbiter", None, declined=True)]
+    out = readers.second_road("q", G, served(ARBITER_ALONE, "arbiter", rs), PANEL, {})
+    assert out["result"].ok and out["result"].value == pytest.approx(0.037) and out["result"].tier == "FLAGGED"
+    assert out["reading"]["case"] == readers.POINTED_NODE
+    assert any("planners said the filings do not state this" in r for r in out["result"].tier_reasons)
+    monkeypatch.setattr(passage, "node_of_answer", lambda reply, g=None: None)   # no node there: the decline stands
+    assert not readers.second_road("q", G, served(ARBITER_ALONE, "arbiter", rs), PANEL, {})["result"].ok
+
+
+def test_another_planners_plan_is_completed_by_pointing_when_it_gives_the_readers_figure(road, monkeypatch):
+    # round 10, N13: the served reading has one planner only; another plan stopped at a line with no value for
+    # the year asked; with that line pointed at it gives 13,200, which the reader gives for the whole question
+    road(reply(13200.0, unit="count"))
+    rs = [seen("maker", None), seen("checker", 65900.0), seen("arbiter", None)]
+    rs[0]["result"].missing = [("KO", "item:number of employees", {"fy": 2023})]
+    pointing(monkeypatch, ran(13200.0, "count"))
+    out = readers.second_road("q", G, served(readers.ONE_READER, "checker", rs), PANEL, {"executor": object()})
+    assert out["result"].value == 13200.0 and out["result"].tier == "FLAGGED"
+    assert out["reading"]["case"] == readers.POINTED_LINES
+    pointing(monkeypatch, ran(70000.0, "count"))        # the completed plan says something else: nothing changes
+    out = readers.second_road("q", G, served(readers.ONE_READER, "checker", rs), PANEL, {"executor": object()})
+    assert out["result"].value == 65900.0

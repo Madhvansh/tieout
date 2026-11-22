@@ -42,6 +42,9 @@ ARBITER_AND_PASSAGE = "the arbiter and the passage reader agree"
 POINTED_NODE = "one node the text reader pointed at"  # three cases where a reader of the text named the
 POINTED_LINES = "a plan on lines the text reader pointed at"          # lines and the graph gave the figures
 LINES_OVERRULED = "the text reader's lines against the linker's"
+# Two rules added after round 10's misses were read (23 Nov), each with a switch so its gain can be measured:
+NODE_OVER_BELIEF = os.environ.get("TIEOUT_NODE_OVER_BELIEF", "1") == "1"       # a node at a named place outranks a decline
+COMPLETE_OTHER_PLANS = os.environ.get("TIEOUT_COMPLETE_PLANS", "1") == "1"     # point at the gap of another planner's plan
 UNWITNESSED = "the planners read the question differently; this reading has no second witness"
 FIGURES_DIFFER = "two readers rank these in the same order but do not compute every figure the same way"
 
@@ -100,12 +103,18 @@ def second_road(question: str, g, served: dict, readers: Readers, kw: dict) -> d
     pointed = _pointer(g, readers, kw)
 
     if not res.ok:
-        if lacking:
-            return served
         out = passage.as_answer(reply, g) if answers else None
-        if out is not None:                           # one printed figure: the node at the place the reader names
+        if out is not None and (not lacking or NODE_OVER_BELIEF):
+            # one printed figure: the node at the place the reader names. A planner that says "filings do
+            # not report this" states a belief about filings in general; a node at a named place is the
+            # filing itself (round 10, N05: an employee turnover rate two planners said no filing gives)
+            if lacking:
+                out["result"].tier_reasons.append("the planners said the filings do not state this; the graph holds "
+                                                  "the figure at the place the reader names")
             reading["passage"]["used"] = POINTED_NODE
             return {**out, "reading": {**reading, "case": POINTED_NODE, "witnessed": False}}
+        if lacking:
+            return served
         for s in seen:                                # a planner's plan, its missing lines pointed at
             got = pointed(s["plan"], s["result"].missing)
             if got is not None:
@@ -132,6 +141,17 @@ def second_road(question: str, g, served: dict, readers: Readers, kw: dict) -> d
                 reading["passage"]["used"] = READER_AND_PASSAGE
                 base = s.get("out") or {"answer": s["answer"], "plan": s["plan"], "learned": []}
                 return {**base, "result": other, "reading": {**reading, "case": READER_AND_PASSAGE, "witnessed": False}}
+        for s in seen if COMPLETE_OTHER_PLANS else []:
+            # another planner's plan stopped at a line the linker could not find (round 10, N13: a head-count
+            # of two years earlier, "linked but has no value for FY2023"). With that line pointed at, the plan
+            # runs on the graph; it is served only if it gives the figure the reader gives for the whole question
+            if not s["result"].ok and s["result"].missing:
+                got = pointed(s["plan"], s["result"].missing)
+                if got is not None and passage.same(got[0], shown):
+                    return _serve_pointed(got, s["plan"], reading, POINTED_LINES,
+                                          "this planner's plan stopped at a line the linker could not find; with that line "
+                                          "pointed at it gives the figure a reader of the text gives for the whole question "
+                                          f"({passage.cited(reply)})")
     if passage.same(res, shown):
         res.tier = CORROBORATED
         res.tier_reasons = [f"a second method repeats this figure: a reader of the text read it in {passage.cited(reply)}"] \
