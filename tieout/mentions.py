@@ -200,37 +200,20 @@ def _iso(text: str) -> str:
 
 CUED = ("USD", "USD/share", "percent", "count", "shares")
 
-# a unit printed right after a figure ("46.7 GWh", "3.2 Bcf", "12 MMcf"): known units, or a short
-# token with two capitals that is not a currency, period, form or common acronym
-KNOWN_UNITS = (r"GWh|MWh|kWh|TWh|GW|MW|kW|Bcfe?|Tcfe?|MMcfe?|Mcfe?|MMBtu|Btu|MMBOE|MBOED|MBOE|BOED|BOE|MBD|"
-               r"bbls?|sq\.\s?ft\.?|miles|kilometers|gallons|metric tons|tons|tonnes|ounces|acres|hectares|"
-               r"terawatt[- ]hours|gigawatt[- ]hours|megawatt[- ]hours|megawatts|gigawatts|petabytes|terabytes")
-UNIT_AFTER_RE = re.compile(rf"^\s?(?:(?P<known>{KNOWN_UNITS})|(?P<token>[A-Z][A-Za-z]{{1,5}}))(?![\w-])")
-NOT_UNITS = {
-    "USD", "EUR", "GBP", "JPY", "CNY", "RMB", "CHF", "CAD", "AUD", "INR", "BRL", "MXN", "KRW", "HKD", "SGD",
-    "FY", "YTD", "Q", "AM", "PM", "US", "USA", "UK", "EU", "AI", "IT", "HR", "IP", "PC", "TV", "CEO", "CFO",
-    "COO", "SEC", "LLC", "LP", "INC", "PLC", "NV", "SA", "AG", "GAAP", "EPS", "ROE", "ROA", "ESG", "IPO", "ETF",
-    "IRS", "NYSE", "LIBOR", "SOFR", "THE", "AND", "FOR", "OF", "IN", "TO", "ON", "AT", "BY", "OR", "NO", "NET",
-    "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "SEPT", "OCT", "NOV", "DEC", "ATM", "ATMs",
-    "NOTE", "ITEM", "PART", "LEVEL", "TABLE", "ASU", "ASC", "FASB", "OCI", "AOCI", "CET", "TLAC", "LCR", "SLR",
-    "RSU", "RSUs", "PSU", "PSUs", "CODM", "EBIT", "EBITDA", "DTC", "IFRS", "SOX", "VIE", "VIEs", "NA", "II", "III",
-    "IV", "VI", "VII", "VIII", "IX", "XI", "XII", "CO", "MD", "OTC", "FX", "PP", "MBS", "ABS", "CLO", "CDS"}
+# a unit printed right after a figure ("46.7 GWh", "276 BCF", "12 MMcf"): a closed list of physical
+# units. An open pattern (any short token with two capitals) was tried on the 55 filings and dropped: it
+# caught "12 CFR", "15 USC", "Scope 1 GHG", "Tier 1 HQ", "24/7 CFE" as often as a real unit.
+KNOWN_UNITS = (r"GWh|MWh|kWh|TWh|GW|MW|kW|Bcfe?|BCFE?|Tcfe?|TCFE?|MMcfe?d?|MMCFE?D?|Mcfe?|MCFE?|MMBtu|MMBTU|Btu|"
+               r"MMBOE|MBOED|MBOE|BOED|BOE|MBD|MBPD|KBD|MMbbls?|Mbbls?|bbls?|sq\.\s?ft\.?|miles|kilometers|gallons|"
+               r"metric tons|tons|tonnes|ounces|acres|hectares|terawatt[- ]hours|gigawatt[- ]hours|"
+               r"megawatt[- ]hours|megawatts|gigawatts|petabytes|terabytes")
+UNIT_AFTER_RE = re.compile(rf"^\s?({KNOWN_UNITS})(?![\w-])")
 
 
 def unit_token(after: str) -> Optional[str]:
-    """The unit printed right after a figure, or None. A token from the open pattern must carry two
-    capitals and, when it is all capitals, be at most three letters long ("GWh", "MW", "BOE"); words such
-    as "Note", "Item", "Level", company names in capitals and the codes in NOT_UNITS never qualify."""
+    """The physical unit printed right after a figure, as printed ("GWh"), or None."""
     m = UNIT_AFTER_RE.match(after)
-    if not m:
-        return None
-    if m.group("known"):
-        return m.group("known")
-    tok = m.group("token")
-    caps = sum(1 for ch in tok if ch.isupper())
-    if caps < 2 or tok in NOT_UNITS or tok.upper() in NOT_UNITS or tok.isupper() and len(tok) > 3:
-        return None
-    return tok
+    return m.group(1) if m else None
 
 
 def cued(n: dict) -> bool:

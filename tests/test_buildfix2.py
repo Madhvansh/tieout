@@ -139,6 +139,25 @@ def test_list_of_names_between_years_and_figures_is_not_a_year_pairing():
     assert pair_years(s, nums, 2026) == 0
 
 
+def test_nike_footnote_with_years_is_running_text_and_dated():
+    """NKE FY2026 p35: the footnote has 13 numbers counting the years, which read as a table row before."""
+    from tieout.mentions import _table_residue
+    s = ("(3) Included in NIKE Brand revenues are sales of Jordan Brand products of $7,034 million, $7,270 million "
+         "and $8,701 million in fiscal 2026, 2025 and 2024, respectively, decreasing 3% and 16% on a reported "
+         "basis and decreasing 5% and 16% on a currency-neutral basis, for fiscal 2026 and 2025, respectively.")
+    assert _table_residue(s) and not _table_residue(s, years=False)
+    _, nums = numbers_of(s)
+    pair_years(s, nums, 2026)
+    assert [n["pid"] for n in nums if n["unit"] == "USD"] == ["FY2026", "FY2025", "FY2024"]
+
+
+def test_printed_unit_after_a_figure_is_a_cue():
+    nums = numbers_of("In 2025, we deployed 46.7 GWh of energy storage products.")[1]
+    assert (nums[1]["unit"], nums[1]["value"], nums[1].get("unit_token")) == ("GWh", 46.7, True)
+    nums = numbers_of("as described in 12 CFR 217 and Scope 1 GHG emissions")[1]
+    assert all(n["unit"] == "number" for n in nums)
+
+
 def test_listed_figures_take_the_scale_of_the_count_table_above():
     raw = [{"doc": "D", "page": 6, "table_id": "D:p6:x1", "unit": "count",
             "cells": [{"text": "84,100", "value": 84_100_000, "bbox": [0, 310, 1, 322]},
