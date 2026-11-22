@@ -987,6 +987,28 @@ def _member_in(first: dict, row: dict, member: Optional[int]) -> Optional[int]:
     return theirs.index(want) if want in theirs else None
 
 
+def shares_words(row: dict, mention: dict) -> bool:
+    """Does a table row that prints a sentence's figure also share a content word with the sentence
+    (its label, section or title)? A tie by value alone can be a coincidence: on 22 Nov Procter &
+    Gamble's "advertising costs ... $10.2 billion" tied to its "Dividends to shareholders" cell of the
+    same size, and two pickers who had chosen the right sentence were served the dividends."""
+    soft = {stem(w) for w in SOFT}
+    words = {w for w in tokens(" ".join((row.get("label", ""), row.get("section", ""), row.get("title", ""))))
+             if not w.isdigit() and len(w) > 2 and w not in soft}
+    said = {w for w in tokens(mention.get("masked") or mention.get("sentence", "")) if not w.isdigit()}
+    return bool(words & said)
+
+
+def lexical_ties(st: Store, mention: dict) -> list:
+    """The sentence's ties to table cells that also share a word with it (see shares_words)."""
+    out = []
+    for cid in mention.get("ties") or []:
+        row = st.by_id.get(str(cid).rpartition(":c")[0])
+        if row is not None and shares_words(row, mention):
+            out.append(cid)
+    return out
+
+
 def _tied_row(st: Store, mention: dict, slot: str, wanted: set) -> Optional[tuple]:
     """(row, cell index) of the table cell that prints the chosen sentence figure exactly, for the period asked.
 
@@ -1002,6 +1024,8 @@ def _tied_row(st: Store, mention: dict, slot: str, wanted: set) -> Optional[tupl
         row = st.by_id.get(rid)
         if row is None or not ci.isdigit() or int(ci) >= len(row.get("cells", [])):
             continue
+        if not shares_words(row, mention):
+            continue                                  # equal by value only: a coincidence, not the same figure
         j = int(ci)
         cell = row["cells"][j]
         if (_cell_pid(row, j) in wanted and isinstance(cell.get("value"), (int, float))
@@ -1030,7 +1054,7 @@ def apply_link(g: Graph, entry: dict) -> int:
             return 0
         rid = f"{m['id']}:{entry['slot']}"
         pid = entry.get("period") or TIMELESS         # the period the sentence states for the figure, if it states one
-        value, unit, status = number["value"], number["unit"], "verified" if m.get("ties") else "text"
+        value, unit, status = number["value"], number["unit"], "verified" if lexical_ties(st, m) else "text"
         if unit == "USD_scale_unknown":
             # "$2,842 and $2,670" in a note that prints the statements' millions without saying so: read in
             # the scale of the filing's own statements, and never trusted beyond FLAGGED
