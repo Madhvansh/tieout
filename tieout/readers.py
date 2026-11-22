@@ -29,7 +29,7 @@ from typing import Optional
 from . import ask
 from .execute import Result, same_name
 from .link import start_question
-from .llm import DailyLimit
+from .llm import DailyLimit, impatient
 from .witness import (AGREE, AGREE_ON_ORDER, ARBITER_ALONE, ARBITER_AND_READER, ONE_READER,  # noqa: F401 - re-exported
                       WITNESSED, Panel as Readers)
 
@@ -133,7 +133,8 @@ def _prefer(*outs: dict) -> dict:
 def _arbitrate(question: str, g, arbiters: tuple, kw: dict) -> tuple:
     for model in arbiters:
         try:
-            return ask.answer(question, g, model=model, **kw), model
+            with impatient(model):                   # an overloaded arbiter is skipped for the next in the chain
+                return ask.answer(question, g, model=model, **kw), model
         except DailyLimit:
             continue
     return None, None

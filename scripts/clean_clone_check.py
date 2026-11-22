@@ -54,6 +54,7 @@ SECRET_TEXT = [("google key", re.compile(r"AIza[0-9A-Za-z_\-]{35}")),
 
 STEPS: list[dict] = []
 REPLAYS: list[dict] = []
+HELDOUT = False                                  # set by --with-heldout
 
 
 def clean_env(extra: dict | None = None) -> dict:
@@ -170,33 +171,46 @@ def read_result(path: Path) -> dict:
             "ok_ids": sorted(r["id"] for r in rows if r.get("correct"))}
 
 
+# The declared configuration (README, "Four eyes, four tiers"): two readers, two pickers, an arbiter chain.
+# Offline, every one of these calls comes from cache/llm, so no key and no local model server is needed.
+DECLARED = ["--model", "gemini:gemini-3.5-flash-lite", "--checker", "ollama:tieout-planner-4b-v3",
+            "--arbiter", "gemini:gemini-3.6-flash,gemini:gemini-3.5-flash,gemini:gemini-3-flash-preview",
+            "--pick-checker", "gemini:gemini-3.1-flash-lite"]
+DECLARED_ENV = {"TIEOUT_LINK_LLM": "gemini:gemini-3.5-flash-lite"}
+
+
 def replay(cwd: Path, py: str, bench: str, oracle: str | None, out_json: Path) -> tuple[dict | None, str, bool]:
     """Run scripts/run_benchmark.py --offline in cwd and read its results file from out_json.
-    Third value: True if the plain command failed with "No module named 'tieout'" and only worked
-    (or was measured) after PYTHONPATH was set to the repository root."""
+    Without hand-written plans (`oracle`) the run is the declared configuration, replayed from the
+    call cache. Third value: True if the plain command failed with "No module named 'tieout'" and
+    only worked (or was measured) after PYTHONPATH was set to the repository root."""
     results_dir = cwd / "results"
     results_dir.mkdir(exist_ok=True)
     name = os.path.relpath(out_json.with_suffix(""), results_dir).replace("\\", "/")
     cmd = [py, "scripts/run_benchmark.py", "--offline", "--bench", str(cwd / bench), "--name", name]
+    env = clean_env(DECLARED_ENV)
     if oracle:
         if not (cwd / oracle).exists():
             return None, f"{oracle} is missing", False
         cmd += ["--oracle", oracle]
-    rc, out = run(cmd, cwd)
+    else:
+        cmd += DECLARED
+    rc, out = run(cmd, cwd, env=env)
     needs_path = False
     if rc and "No module named 'tieout'" in out:
         needs_path = True
-        rc, out = run(cmd, cwd, env=clean_env({"PYTHONPATH": str(cwd)}))
+        rc, out = run(cmd, cwd, env=clean_env({**DECLARED_ENV, "PYTHONPATH": str(cwd)}))
     if rc or not out_json.exists():
         return None, tail(out, 8), needs_path
     return read_result(out_json), "", needs_path
 
 
 def do_replays(dest: Path, compare: bool, wt_python: str):
-    cases = [("round1 cached planner plans", "benchmark/questions.jsonl", None),
-             ("round1 hand-written plans", "benchmark/questions.jsonl", "benchmark/oracle_plans.json"),
-             ("round2-dev cached planner plans", "benchmark/round2/dev.jsonl", None),
-             ("round2-dev hand-written plans", "benchmark/round2/dev.jsonl", "benchmark/oracle_plans_r2dev.json")]
+    cases = [("round 8 (the last fresh round), declared configuration", "benchmark/round8/dev.jsonl", None),
+             ("round-2 development, declared configuration", "benchmark/round2/dev.jsonl", None),
+             ("round 1, declared configuration", "benchmark/questions.jsonl", None)]
+    if HELDOUT:                                       # only after the freeze and the one held-out run
+        cases.insert(0, ("held-out round 2, declared configuration", "benchmark/round2/questions.jsonl", None))
     tmp = Path(tempfile.mkdtemp(prefix="cleanclone_wt_"))
     try:
         for i, (label, bench, oracle) in enumerate(cases):
@@ -272,7 +286,11 @@ def main() -> int:
     ap.add_argument("--wt-python", default=None,
                     help="python with the requirements installed, for the working-tree replays (default: .venv here, else this python)")
     ap.add_argument("--no-compare", action="store_true", help="do not rerun the replays in this working tree")
+    ap.add_argument("--with-heldout", action="store_true",
+                    help="also replay the held-out round (only after the freeze and its one run; the replay is offline)")
     a = ap.parse_args()
+    global HELDOUT
+    HELDOUT = a.with_heldout
     dest = Path(a.dest).resolve()
     wt_python = a.wt_python or (str(venv_python(ROOT)) if venv_python(ROOT).exists() else sys.executable)
     t0 = time.time()

@@ -1,5 +1,5 @@
 \documentclass[10pt]{article}
-\usepackage[a4paper,margin=1.4cm]{geometry}
+\usepackage[a4paper,margin=1.35cm]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{helvet}
@@ -12,118 +12,91 @@
 \captionsetup{font=scriptsize,labelfont=bf,skip=2pt}
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{2.4pt}
+\setlength{\parskip}{2.2pt}
 \newcommand{\head}[1]{\vspace{3pt}{\normalsize\bfseries #1}\vspace{1pt}\par}
 \newcommand{\sub}[1]{\textbf{#1}}
-\newcommand{\slot}[1]{\textcolor{red}{\textbf{[#1]}}}
-\newenvironment{tight}{\begin{list}{\textbullet}{\setlength{\leftmargin}{9pt}\setlength{\itemsep}{0.5pt}\setlength{\parsep}{0pt}\setlength{\topsep}{1pt}\setlength{\labelsep}{4pt}}}{\end{list}}
-\renewcommand{\arraystretch}{1.12}
+\newenvironment{tight}{\begin{list}{\textbullet}{\setlength{\leftmargin}{9pt}\setlength{\itemsep}{0.4pt}\setlength{\parsep}{0pt}\setlength{\topsep}{1pt}\setlength{\labelsep}{4pt}}}{\end{list}}
+\renewcommand{\arraystretch}{1.1}
+% every number below is written by scripts/report_numbers.py from the files in results/
+\input{numbers}
 \begin{document}
 \small
 
-{\Large\bfseries TieOut: a knowledge graph of SEC filings that ties out its numbers}\par\vspace{2pt}
-{\normalsize Madhvansh Choksi \quad\textbar\quad Genloop tech intern take-home \quad\textbar\quad code: \texttt{github.com/Madhvansh/tieout}}\par\vspace{4pt}
+{\Large\bfseries TieOut: the knowledge graph is the filing's own arithmetic}\par\vspace{2pt}
+{\normalsize Madhvansh Choksi \quad\textbar\quad Genloop tech intern take-home \quad\textbar\quad code: \texttt{github.com/Madhvansh/tieout}}\par\vspace{3pt}
 
-\textbf{The idea.} A 10-K is a spreadsheet whose formulas were erased, and the numbers still over-determine each other. TieOut recovers the formulas from arithmetic alone (no model, no XBRL) and keeps them as the graph. The structure then verifies every number, solves for numbers printed nowhere, names rows that have no label, explains why a figure changed between two filings and reads a PDF whose fonts have no Unicode map, while a language model only turns the question into a typed plan and never sees or writes a number.\par\vspace{4pt}
+\textbf{The idea.} A 10-K is a spreadsheet whose formulas were erased; its numbers still over-determine each other. TieOut recovers the formulas from the printed numbers alone (no model, no XBRL), down the rows and across the columns, and keeps them as the graph. That structure verifies a number, solves for one printed nowhere, names a row that has no label and finds the total column of a segment table. A language model only compiles the question into a typed plan and picks a printed line among masked candidates; it never sees or writes a number, and none of its choices is trusted alone: two independent models make each one and a third is called only when they differ.\par\vspace{3pt}
 
-\begin{minipage}[t]{0.60\textwidth}
+\begin{minipage}[t]{0.585\textwidth}
 \vspace{0pt}
-\head{1. Results}
-\sub{Held-out benchmark:} 30 questions written by authors who never saw the system, committed before any run, run once on the frozen code. Planner: \slot{PRIMARY PLANNER: name}. Precision and recall are macro averages over questions.
+\head{1. Held-out questions, run once}
+30 questions by blind authors who never saw the system, committed before any run, gold re-derived by another blind agent, run once on the frozen code (tag \texttt{frozen-v2}) with one free API key and a laptop CPU. Cells are right/asked; precision and recall are macro averages over questions of the facts each answer rests on.
 
 \vspace{2pt}
-{\footnotesize\setlength{\tabcolsep}{3pt}
-\begin{tabular}{@{}l>{\raggedleft\arraybackslash}p{0.5cm}>{\raggedleft\arraybackslash}p{1.75cm}>{\raggedleft\arraybackslash}p{1.75cm}>{\raggedleft\arraybackslash}p{1.75cm}@{}}
+{\scriptsize\setlength{\tabcolsep}{2.6pt}
+\begin{tabular}{@{}p{5.15cm}rrrrrr@{}}
 \toprule
-Type & n & Accuracy & Precision & Recall \\
+ & single & multi & cross & all & P & R \\
 \midrule
-Single-fact & 10 & \slot{HELD-OUT} & \slot{HELD-OUT} & \slot{HELD-OUT} \\
-Multi-hop & 10 & \slot{HELD-OUT} & \slot{HELD-OUT} & \slot{HELD-OUT} \\
-Cross-filing & 10 & \slot{HELD-OUT} & \slot{HELD-OUT} & \slot{HELD-OUT} \\
-\textbf{Overall} & 30 & \slot{HELD-OUT} & \slot{HELD-OUT} & \slot{HELD-OUT} \\
-Without B26* & 29 & \slot{HELD-OUT} & \slot{HELD-OUT} & \slot{HELD-OUT} \\
+\HeldRows
 \bottomrule
 \end{tabular}}
 
-{\footnotesize *B26 is a near paraphrase of a development question written independently by another blind author (README, benchmark section). Every score is computed by script against answer keys the system did not write; no language model judges any answer.}
-
-\head{Trust and evidence}
-\sub{Tiers (held-out).} Accuracy in VERIFIED, FLAGGED and ABSTAIN, and silent wrong answers (wrong and served as VERIFIED): \slot{HELD-OUT: trust table}.
-
 \vspace{2pt}
-{\scriptsize
-\begin{tabular}{@{}p{2.9cm}p{7.2cm}@{}}
-\toprule
-Evidence from outside data & Result (file in \texttt{results/}) \\
-\midrule
-Formulas vs the SEC calculation linkbase & 416 of 418 recoverable declared relations recovered; same arithmetic as declared: IS 97.0\%, BS 99.0\%, CF 93.7\% (\texttt{lab\_linkbase}) \\
-Scale test keyed by SEC data, no model & 8,667 questions: 7,833 correct, 709 abstained, 125 silent wrong (1.4\%) (\texttt{scale\_test}) \\
-Concept bindings vs SEC data & 2,874 of 2,912 agree, 98.7\% (\texttt{xbrl\_audit}) \\
-Readings vs SEC value and period & 10,714 of 12,160 confirmed, 88.1\% (\texttt{xbrl\_audit}) \\
-Development facts addressable & 247 of 247 on their own page (\texttt{addressability}) \\
-Fault injection, final graph & whole table at wrong scale caught 1.8\% by the checks, 59.1\% with a sentence figure added (measured, not yet applied by the graph); two rows swapped 25.0\% and 50.8\%. The first session's own study: 2.5\% and 26.7\% (\texttt{faults}, \texttt{faults\_v1}) \\
-Damage curve (5 seeds, 4,158 facts) & at 5\% of cells corrupted, silent wrong facts: 342 with checks off, 64 on. The checks withheld 1,030 facts, 991 of them right (\texttt{damage\_curve}) \\
-\bottomrule
-\end{tabular}}
+{\footnotesize \sub{By tier:} \TierLine. \sub{Cost:} \CostLine. \sub{How the two readers split:} \CaseLine. Scores are computed by script against keys the system did not write; no model judges an answer.}
 \end{minipage}\hfill
-\begin{minipage}[t]{0.375\textwidth}
-\vspace{4pt}
+\begin{minipage}[t]{0.39\textwidth}
+\vspace{2pt}
 \centering
-\includegraphics[width=\linewidth]{fig_page.png}
-\captionof{figure}{A statement page with its recovered formulas. Merck, 10-K page 80: both unlabeled rows are total assets, bound by their sums and their tie. Green brackets are formulas that hold.}
+\includegraphics[width=\linewidth]{fig_rounds.png}
+\captionof{figure}{Each round of blind questions the first time the system saw it (green, by tier of the right answers) and on the final code (grey). The held-out round was never fixed against.}
 \end{minipage}
 
-\vspace{4pt}
-\sub{Baseline.} Passage retrieval with a small embedding model, then a free LLM reads the passages and does the arithmetic: \slot{HELD-OUT: accuracy, precision, recall}. On development questions the gold page is in the top 12 passages for 57.2\% of gold facts (dense) and 41.5\% (dense fused with keyword); dense was chosen on those numbers, a tuning advantage for the baseline (\texttt{baseline/retrieval\_eval.json}).\par
-\sub{Hand-written plans} (development only; none exist for the held-out set): 32 of 39 on round-2 development, 28 of 30 on round 1. The gap to a planner is the cost of the language model; what is left is the graph's.\par
-\sub{Ablations} (concepts, solve, link, checks, learned store off): \slot{HELD-OUT}.\ \ \sub{Planner sizes} (development, round-2 dev / round 1 / round-1 dev): fine-tuned 0.6B 21/18/11, 1.7B 23/21/15, 4B 23/22/16 of 39/30/18; Gemini Flash-Lite 28 of 39 on round-2 dev (\texttt{a\_t\_*.json}; before the last graph rebuild).\par
-\sub{Round-1 history.} The first version scored 24 of 30 on its own held-out set (single-fact 9/10, multi-hop 10/10, cross-filing 5/10; \texttt{benchmark\_tieout.json}). Those questions are development material now.
+\head{2. We measured our own overfitting}
+The first development set flattered the system: 84 of 87 there, and 25 of 36 on the first batch of questions it had never seen. So the work ran in rounds. Blind authors (agents that read only the PDFs and the list of used questions; a new persona each round: analyst, auditor, credit analyst, journalist, test engineer) write a round; a gate drops near copies of held-out questions without anyone reading them; the system runs once and that number is recorded; only then are the misses fixed, by class, with general rules, never a rule about one company. First-run accuracy stayed 15 to 30 points below the same day's development numbers. Part of that is adaptation; part may be that fresh questions are different (Recht et al.\ 2019 saw the same drop with no reuse at all), so we report both and do not call the gap overfitting alone. What the rounds taught, one class each: the total column is the one that sums the others; a year printed once over three columns; a fourth quarter of any line as year minus nine months; a quarterly header that spans two columns; one company's segment against another's (\texttt{compare}); a figure dated by the date printed beside it in a sentence; a count stated with a scale in its row label; a table cut where a row carries a footnote marker; an equal value that is a coincidence, not a tie.
+
+\head{3. The graph learns}
+A link from a phrase to a printed line is kept only when the answer it led to matched its gold, and only then reused. On the last fresh round, same code and same questions: \StoreLine.
 
 \newpage
-\head{2. Method}
+\head{4. Method}
 \begin{tight}
-\item \emph{Tables} from word coordinates: columns from the right edges of numbers, periods from header dates, scale from the caption. Statements that run over two pages are joined.
-\item \emph{Formulas.} A row is a subtotal only if a signed run of rows above it sums to it in every period column. Integer arithmetic, a rounding tolerance, no label needed.
-\item \emph{Checks:} SUM (recovered formula), TIE (same value printed twice), RATIO (income over shares gives the per-share amount, which pins the scale), CARRY (last year's column in last year's filing). 2,708 checks; 12,613 of 13,314 readings (94.7\%) sit inside a passing one.
-\item \emph{Names.} 47 seed concepts kept as data. A label only proposes; structure confirms (a total is named by its tie, per-share rows by income over shares). Companies' fiscal years are separate calendars.
-\item \emph{Every other table and sentence is a node:} 51,438 rows, 188,073 cells, 14,759 sentences holding 46,775 numbers, each with value, unit, period and page.
-\item \emph{Solve.} A number printed nowhere comes from the one equation where it is the only unknown (fourth quarter = year minus nine months; identities as data).
-\item \emph{Explain.} A changed figure between two filings is a reclassification (a named counterpart line moved, totals unchanged), a restatement (totals moved) or a presentation change, with the filing's own sentence quoted: 18 events (6, 5 and 7).
-\item \emph{Read.} A PDF with no Unicode font map (McDonald's) is decoded as a cipher by glyph width, vocabulary and arithmetic: 281,068 glyphs, 70 undecoded.
-\item \emph{Plan and answer.} A model writes a typed plan; a deterministic executor walks the graph and returns the answer with proof leaves (filing, page, printed number) and a tier. A missing or unverified fact becomes an abstention that names it.
-\item \emph{Links.} A phrase naming a line outside the statements is tied once to a printed row or sentence: the model chooses among labelled candidates with numbers masked, structure vouches for the number, the link is stored with the question that taught it. 215 ``not reported'' facts are stored with evidence.
-\item \emph{No key needed.} Qwen3 models (0.6B, 1.7B, 4B) fine-tuned on Colab and Kaggle on 9,000 question and plan pairs the graph wrote from its own vocabulary do both model jobs on a CPU.
+\item \emph{Tables} from word coordinates: columns from the right edges of numbers, periods from header dates, scale from captions and row labels, rows kept whole across footnote markers.
+\item \emph{Equations.} A row is a subtotal only if a signed run of rows above it sums to it in every period; a column is the total only if it sums the columns beside it. Checks: SUM, TIE (a value printed twice), RATIO (income over shares pins the scale), CARRY (last year's column equals last year's filing).
+\item \emph{Names.} 47 concepts kept as data; a label proposes, structure confirms. Every other table row and every numeric sentence is a node, linked to a phrase the first time a question needs it.
+\item \emph{Solve.} A number printed nowhere comes from the one equation where it is the only unknown (a fourth quarter, an identity).
+\item \emph{Plan.} A model writes a typed plan (get, calc, compare, rank, filter, members ...); a deterministic executor returns the answer with proof leaves (filing, page, printed text).
+\item \emph{Four eyes.} Two readers plan each question: a free hosted model and a 4B model fine-tuned on Kaggle on paraphrased questions, run on the laptop. Plans are compared on what they compute. Two pickers choose each printed line, compared on the figure the pick yields. A strong free model (about 20 calls a day) arbitrates only disagreements.
+\item \emph{Tiers.} VERIFIED: every number inside a passing equation, no line chosen by a model. WITNESSED: the numbers tie out and two models chose the same line. FLAGGED: answered, weakness named. ABSTAIN: says what is missing.
 \end{tight}
-\sub{LLM use, all of it.} Planner \slot{PRIMARY PLANNER}; linker; baseline reader (Gemini 3.5 Flash-Lite); AI agents wrote the benchmark and re-derived the gold answers. Every call is cached. No number passes through a model.
 
-\head{3. How the benchmark was prepared}
-Three AI agents, each allowed to read only the PDFs and the manifest, wrote 69 candidate questions with gold answer, document, page and printed value (A 27, B 27, C 15). A seeded script (\texttt{split\_round2.py}) made the split before any run: author A's questions had been read by the developers, so all of A is development; the 30 held-out come from B and C (10 single-fact, 10 multi-hop, 10 cross-filing), the other 39 are development. A separate blind agent re-derived all 30 gold answers; a script compared them (28 agree), and a third agent read the pages for the other 2 and found differences of form. I did not check any gold answer by hand; every check was automated. A leakage script found no held-out text in any prompt, training file, plan or cache except B26's paraphrase and a sentence quoted in H04's gold. The code was frozen (tag \texttt{frozen-v2}), each planner was run once, and the result files are committed untouched. Fixes made afterwards are reported separately. Scoring (\texttt{tieout/eval/bench.py}, fixed before any run): retrieved facts are every leaf the executor read; a fact matches when company and value agree.
-
-\head{4. Gaps: where it failed, and why}
+\head{5. Where it fails, by class}
 {\scriptsize
-\begin{tabular}{@{}p{1.35cm}p{9.2cm}p{6.3cm}@{}}
+\begin{tabular}{@{}p{3.1cm}p{14.4cm}@{}}
 \toprule
-Stage & Example on development questions (before the freeze) & Held-out \\
+Class & What happens, with one page each \\
 \midrule
-Parse & J\&J cash flow, page 53: a stray 47 with no label was read into the fiscal 2023 financing column, so its formula failed and nine cells were marked failed. The checks saw it. & \slot{HELD-OUT} \\
-Bind & Apple long-term debt FY2026: key 68,208, read 9,906 from a line labelled ``Term debt'' (page 37) and served as verified. Scale test: 125 silent wrong in 8,667; 46 equal a second defensible definition. & \slot{HELD-OUT} \\
-Link & ``Net new money'' for BlackRock, where the filing says ``total net inflows'': no link, abstained. A CET1 ranking of four banks abstained for one missing fact. & \slot{HELD-OUT} \\
-Plan & Coca-Cola third-quarter operating income: gold 3,982 million, answered 11.921 billion, the nine-month figure, served as verified. The graph read its number correctly; the plan asked for the wrong period. & \slot{HELD-OUT} \\
-Execute & Morgan Stanley compensation ratio 3.51\% against gold 41.4\% (hand-written plan, wrong row, verified). AMD Data Center answered from a rounded sentence, \$16.600 billion, not the table's \$16,635 million. & \slot{HELD-OUT} \\
-Checks & Swapped rows and a whole table at the wrong scale keep every sum intact (numbers above). The checks also withhold right facts: 116 with no corruption, 1,030 at 5\%. & \slot{HELD-OUT} \\
+\FailRows
 \bottomrule
 \end{tabular}}
 
-Silent wrong answers, not accuracy, are the number that matters for a bank, and rows bound to the wrong concept are their source. The sample is small: thirty questions give wide intervals, so the 8,667 keyed questions measure the graph and the 30 measure the whole system.
+\head{6. Evidence from keys we did not write}
+{\scriptsize
+\begin{tabular}{@{}p{5.6cm}p{11.9cm}@{}}
+\toprule
+\EvidenceRows
+\bottomrule
+\end{tabular}}
 
-\head{5. What I would do next}
+\head{7. What did not work}
 \begin{tight}
-\item Make the statements' own arithmetic veto a binding before it is served (started on 22 Nov), then measure it against the SEC key on the scale test.
-\item Add a second independent reader for swapped rows, and pin every table's scale from a sentence figure.
-\item Measure answer accuracy against graph size as the raw layer is pruned, and review learned links against the SEC key.
-\item Extend the same checks to text: policies and risk factors as sourced spans.
+\item Tuning on one development set (above). Trusting one model's plan or pick: the cheap model slips on about one plan in eight.
+\item Distant supervision of a row picker by equal values: of 1,790 training pairs 805 were coincidences; the picker trained on them was not used.
+\item A link kept for ever: one bad pick failed every later question that used its phrase. Links are now outcome-gated.
+\item Planners fine-tuned on template questions: 84 to 88\% on synthetic phrasings, far lower on real ones. Paraphrase training lifted the 4B model from 137 to 152 of 194 development questions.
+\item A model judge to admit a binding (it threw away half the right ones); hosted Gemma (503s); a strong model as the only planner (20 calls a day).
 \end{tight}
 
-\head{6. AI use}
-Claude Code (three parallel sessions that resumed after usage limits, coordinated through a shared log) wrote all the code and ran every experiment. Separate blind agents wrote and re-derived the benchmark. I made the design and evaluation decisions: README, ``How I used AI''.
+\head{8. AI use}
+Claude Code (several sessions and sub-agents, coordinated through shared logs) wrote all the code and ran every experiment; blind agents wrote and re-derived the benchmark. I set the direction and made the rulings (README, ``How I used AI''), twice against the AI's own plan.
 \end{document}

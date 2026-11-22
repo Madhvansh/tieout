@@ -15,6 +15,7 @@ Token counts of every live call are kept with its cached answer, for the cost re
 """
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import json
 import os
@@ -37,6 +38,28 @@ _USAGE: dict = {}                                  # token counts of the last li
 
 class DailyLimit(RuntimeError):
     """The provider's daily quota is spent. A run must stop here, not record abstentions."""
+
+
+class Busy(DailyLimit):
+    """The provider says this model is overloaded right now. Raised only for a model named in
+    `impatient`: a caller with another model to turn to (an arbiter chain) moves on instead of waiting."""
+
+
+_QUICK_FAIL: set = set()                          # models that must not be waited for (see impatient)
+
+
+@contextlib.contextmanager
+def impatient(model: str):
+    """Inside the block, an overloaded `model` ("gemini:gemini-3.6-flash") fails after one retry.
+    The default is to wait out an overload, which can take minutes; an arbiter has a successor."""
+    name = model.split(":", 1)[-1]
+    added = name not in _QUICK_FAIL
+    _QUICK_FAIL.add(name)
+    try:
+        yield
+    finally:
+        if added:
+            _QUICK_FAIL.discard(name)
 
 
 def load_env() -> None:
@@ -160,6 +183,8 @@ def _gemini(name: str, system: str, user: str, schema: Optional[dict]) -> str:
         if r.status_code == 429 and "PerDay" in r.text:
             raise DailyLimit(f"gemini {name}: daily quota spent")
         if r.status_code in (429, 500, 503):
+            if r.status_code == 503 and name in _QUICK_FAIL and attempt >= 1:
+                raise Busy(f"gemini {name}: overloaded, the caller has another model")
             time.sleep(8 * (attempt + 1))          # free tier: wait out the per-minute limit
             continue
         r.raise_for_status()

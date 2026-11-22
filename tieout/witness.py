@@ -18,7 +18,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable
 
-from .llm import DailyLimit
+from .llm import DailyLimit, impatient
 
 AGREE = "two readers agree"
 AGREE_ON_ORDER = "two readers agree on the order"
@@ -44,7 +44,8 @@ def choose(ask: Callable, panel: Panel, same: Callable = lambda a, b: a == b) ->
         return first, AGREE, seen
     for model in panel.arbiters:
         try:
-            third = ask(model)
+            with impatient(model):                   # an overloaded arbiter is skipped for the next in the chain
+                third = ask(model)
         except DailyLimit:
             continue
         seen.append((model, third))
