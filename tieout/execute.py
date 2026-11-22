@@ -327,6 +327,9 @@ class Executor:
                 res = self._from_fact(f, ticker, key, pid, first, source.unit, _is_payment(source))
                 for leaf in res.leaves:
                     leaf.witnessed = (ticker, key) in getattr(self.g, "witnessed_links", ())
+                second = getattr(self.g, "second_readings", {}).get((ticker, key))
+                if second and res.ok:                 # a namesake line the words could not rule out
+                    res.notes.append(second)
                 if pid == TIMELESS and res.ok:
                     res.notes.append(f"{ticker} '{phrase}': the source prints no period column for this figure")
                 return res

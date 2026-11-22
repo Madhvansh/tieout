@@ -900,9 +900,52 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
         entry["evidence"].append(f"picked independently by two models ({case})")
     elif case:
         entry["objections"].append(f"the pickers did not agree on this line ({case})")
-    entry["state"] = "active" if confirmed and (not case or case in WITNESSED) else "flagged"
+    twin = lookalike(g, cands, pick, ans, phrase, wanted) if cands[pick]["kind"] == "row" and cand["ref"] is cands[pick]["ref"] else None
+    if twin is not None:                              # two models can agree on the wrong one of two namesakes
+        entry["second_reading"] = (f"second reading: a line with the same label '{twin['label'][:50]}' is printed on page "
+                                   f"{twin['page']} of {twin['doc']} under another heading with a different figure, "
+                                   "and the words asked for do not tell the two apart")
+        entry["objections"].append(entry["second_reading"])
+    entry["state"] = "active" if confirmed and (not case or case in WITNESSED) and twin is None else "flagged"
     apply_link(g, entry)
     return entry
+
+
+def _context_words(row: dict) -> set:
+    """The words printed around a row but not in its label: section, title, the lines above its table, column names."""
+    around = " ".join((row["section"], row["title"], row.get("context", ""), row.get("above", ""), row.get("own", ""),
+                       " ".join((c.get("head") or c.get("col") or "") for c in row["cells"])))
+    return set(tokens(around)) - set(tokens(row["label"]))
+
+
+def lookalike(g: Graph, cands: list, pick: int, ans: dict, phrase: str, wanted: set) -> Optional[dict]:
+    """A candidate row with the picked row's label, printed under another heading, that reads a different
+    figure for the period asked and that the phrase's own words fit at least as well. None if there is
+    no such row.
+
+    Two segments' tables, or a debt schedule and an amortization schedule, print rows with one
+    label. A model tells them apart by the words around the row; when the phrase shares no more
+    words with the picked row's surroundings than with its namesake's, nothing but the model's
+    judgement separates them, and two models can share a wrong judgement (22 Nov, Oracle: both
+    picked "Fiscal 2027" of the amortization schedule for a question about debt maturities)."""
+    picked = cands[pick]["ref"]
+    mine = pick_yields(g, cands, ans, phrase, wanted)
+    if mine is None:
+        return None
+    asked = set(tokens(phrase)) - {stem(w) for w in SOFT} - set(tokens(picked["label"]))
+    fit = len(asked & _context_words(picked))
+    for i, c in enumerate(cands):
+        row = c["ref"]
+        if i == pick or c["kind"] != "row" or norm_label(row["label"]) != norm_label(picked["label"]):
+            continue
+        if row["doc"] == picked["doc"] and heading_key(row) == heading_key(picked):
+            continue                                  # another block of the same table
+        theirs = pick_yields(g, cands, {**ans, "pick": i}, phrase, wanted)
+        if theirs is None or (len(theirs) == len(mine) and all(_same_figure(x, y) for x, y in zip(theirs, mine))):
+            continue                                  # a reprint of the same figures
+        if len(asked & _context_words(row)) >= fit:
+            return row
+    return None
 
 
 def _same_line(first: Optional[dict], row: dict, namesakes: list, member: Optional[int]) -> bool:
@@ -1123,6 +1166,10 @@ def apply_link(g: Graph, entry: dict) -> int:
         if not hasattr(g, "witnessed_links"):
             g.witnessed_links = set()
         g.witnessed_links.add((ticker, key))          # two models picked this line independently
+    if entry.get("second_reading"):
+        if not hasattr(g, "second_readings"):
+            g.second_readings = {}
+        g.second_readings[(ticker, key)] = entry["second_reading"]
     if added or f"{ticker}|{key}|{TIMELESS}" in g.facts or any(k.startswith(f"{ticker}|{key}|") for k in g.facts):
         keys = aliases(g).setdefault(_phrase_key(ticker, entry["phrase"]), [])
         if key in keys:
