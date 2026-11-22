@@ -118,7 +118,7 @@ def ask_json(system: str, user: str, schema: Optional[dict] = None, model: Optio
     provider, name = model.split(":", 1)
     t0 = time.time()
     _USAGE.clear()
-    text = {"gemini": _gemini, "groq": _groq, "ollama": _ollama}[provider](name, system, user, schema)
+    text = {"gemini": _gemini, "groq": _groq, "openrouter": _openrouter, "ollama": _ollama}[provider](name, system, user, schema)
     CALLS["live"] += 1
     CALLS["seconds"] += time.time() - t0
     CALLS["tokens_in"] += _USAGE.get("in", 0)
@@ -197,6 +197,16 @@ def _gemini(name: str, system: str, user: str, schema: Optional[dict]) -> str:
 
 
 def _groq(name: str, system: str, user: str, schema: Optional[dict]) -> str:
+    return _openai_style("https://api.groq.com/openai/v1/chat/completions", "GROQ_API_KEY", name, system, user)
+
+
+def _openrouter(name: str, system: str, user: str, schema: Optional[dict]) -> str:
+    """Any model OpenRouter serves ("openrouter:deepseek/deepseek-chat"): one key, many model families."""
+    return _openai_style("https://openrouter.ai/api/v1/chat/completions", "OPENROUTER_API_KEY", name, system, user)
+
+
+def _openai_style(url: str, key_name: str, name: str, system: str, user: str) -> str:
+    """One chat completion from a provider that speaks the OpenAI wire format, in JSON mode."""
     name, _, effort = name.partition("@")         # "openai/gpt-oss-120b@low" sets the reasoning effort
     body = {"model": name, "temperature": 0, "response_format": {"type": "json_object"},
             "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}]}
@@ -204,13 +214,14 @@ def _groq(name: str, system: str, user: str, schema: Optional[dict]) -> str:
         body["reasoning_effort"] = effort
     for attempt in range(8):
         try:
-            r = requests.post("https://api.groq.com/openai/v1/chat/completions",
-                              headers={"Authorization": f"Bearer {os.environ['GROQ_API_KEY']}"}, json=body, timeout=120)
+            r = requests.post(url, headers={"Authorization": f"Bearer {os.environ[key_name]}"}, json=body, timeout=120)
         except (requests.ConnectionError, requests.Timeout):
             time.sleep(10 * (attempt + 1))         # a dropped connection is retried like a rate limit
             continue
         if r.status_code == 429 and "per day" in r.text:
-            raise DailyLimit(f"groq {name}: daily quota spent")
+            raise DailyLimit(f"{key_name} {name}: daily quota spent")
+        if r.status_code == 402:
+            raise DailyLimit(f"{key_name} {name}: no credit left")
         if r.status_code == 400 and "failed_generation" in r.text:
             # JSON mode rejected the reply (often a stray character); the reply itself is returned,
             # and _parse keeps it only if it holds a JSON object
@@ -224,7 +235,7 @@ def _groq(name: str, system: str, user: str, schema: Optional[dict]) -> str:
         usage = r.json().get("usage", {})
         _USAGE.update({"in": usage.get("prompt_tokens", 0), "out": usage.get("completion_tokens", 0)})
         return r.json()["choices"][0]["message"]["content"]
-    raise RuntimeError(f"groq {name}: no answer after 8 attempts")
+    raise RuntimeError(f"{key_name} {name}: no answer after 8 attempts")
 
 
 def _ollama(name: str, system: str, user: str, schema: Optional[dict]) -> str:
