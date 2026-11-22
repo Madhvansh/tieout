@@ -124,7 +124,27 @@ def _parse(text: str) -> dict:
     try:
         return json.loads(text[start:end + 1])
     except json.JSONDecodeError as e:
+        last = _last_object(text)                 # a model that reasons aloud ends with its answer
+        if last is not None:
+            return last
         raise ValueError(f"model reply is not valid JSON: {e.msg}") from None
+
+
+def _last_object(text: str) -> Optional[dict]:
+    """The last complete JSON object in a reply that holds other text or several objects."""
+    decoder = json.JSONDecoder()
+    found = None
+    i = text.find("{")
+    while i >= 0:
+        try:
+            obj, length = decoder.raw_decode(text[i:])
+        except json.JSONDecodeError:
+            i = text.find("{", i + 1)
+            continue
+        if isinstance(obj, dict):
+            found = obj
+        i = text.find("{", i + length)
+    return found
 
 
 def _gemini(name: str, system: str, user: str, schema: Optional[dict]) -> str:

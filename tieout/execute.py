@@ -272,17 +272,26 @@ class Executor:
         from .link import resolve
         if not self.use_links:
             return abstain(f"linking is switched off; '{phrase}' is not a shared concept")
-        key = resolve(self.g, ticker, phrase)
-        if key is None:
+        keys = resolve(self.g, ticker, phrase)
+        if not keys:
             return abstain(f"no link yet for '{phrase}' at {ticker}", missing=[(ticker, "item:" + phrase, spec)])
+        asked = f"FY{self._fy(ticker, spec)}"
         for pid in (self._pid(ticker, spec, "flow"), self._pid(ticker, spec, "stock"), TIMELESS):
-            f = self.g.fact(ticker, key, pid)
-            if f is not None:
+            for key in keys:
+                f = self.g.fact(ticker, key, pid)
+                if f is None:
+                    continue
+                if pid == TIMELESS:
+                    # a figure printed with no period speaks for its own filing's year, never for another
+                    said_in = {self.g.filings[self.g.readings[i].doc]["fiscal_year"] for i in f.readings}
+                    if asked not in said_in or spec.get("q"):
+                        continue
                 res = self._from_fact(f, ticker, key, pid, first, self.g.readings[f.readings[0]].unit, False)
                 if pid == TIMELESS and res.ok:
                     res.notes.append(f"{ticker} '{phrase}': the source prints no period column for this figure")
                 return res
-        return abstain(f"'{phrase}' is linked for {ticker} but has no value for {self._pid(ticker, spec, 'flow')}")
+        return abstain(f"'{phrase}' is linked for {ticker} but has no value for {self._pid(ticker, spec, 'flow')}",
+                       missing=[(ticker, "item:" + phrase, spec)])
 
     def _attr(self, ticker: str, attr: str) -> Result:
         if attr == "cluster":
@@ -445,6 +454,8 @@ class Executor:
             else:
                 skipped.append(name)
                 missing.extend(r.missing)
+        if "item" in m:
+            rows = _one_scale(rows)
         return kind, rows, leaves, skipped, absent, missing
 
     def _line_measure(self, line: dict, m: dict, spec: dict) -> Result:
@@ -459,6 +470,29 @@ class Executor:
             if not start.value:
                 return abstain("base value is zero", start.leaves + end.leaves)
             return Result("number", (end.value - start.value) / abs(start.value), "ratio", start.leaves + end.leaves)
+        if "ratio" in m:                              # a segment's margin: its income over its own revenue
+            top, bottom = (self._line_measure(line, part, spec) for part in m["ratio"])
+            if not (top.ok and bottom.ok):
+                return _merge_abstain(top, bottom)
+            if not bottom.value:
+                return abstain("division by zero", top.leaves + bottom.leaves)
+            return Result("number", top.value / bottom.value, "ratio", top.leaves + bottom.leaves, top.notes + bottom.notes)
+        if "item" in m:                               # another figure of the same line
+            if line.get("grouped_by") == "columns":   # a column of a table: the same column of another row
+                from .link import same_table_figure
+                beside = same_table_figure(line, m["item"])
+                if beside is not None:
+                    return self._line_value(beside, spec)
+            other = self._item(ticker, f"{line['label']} {m['item']}", spec)
+            own, mine = {cell["id"] for cell in line["cells"].values()}, self._line_value(line, spec)
+            if other.ok and (any(lf.id in own for lf in other.leaves) or (mine.ok and other.value == mine.value)):
+                # the link came back to the line itself (or a reprint of it): this line has no such figure
+                return abstain(f"'{line['label']}' prints no separate {m['item']}", other.leaves)
+            return other
+        if "value" not in m:
+            raise PlanTypeError(f"{_name(m)} is a company-wide measure and cannot be read for one line of a "
+                                "breakdown; over lines use {\"value\": true}, or a ratio of it with an item "
+                                "that names the line's other figure")
         return self._line_value(line, spec)
 
     def _line_value(self, line: dict, spec: dict) -> Result:
@@ -479,8 +513,9 @@ class Executor:
 
     def _op_get(self, s: dict, env: dict) -> Result:
         line = self._top_line(s["company"], env)
-        if line is not None:                          # "$sN" holds lines: read the top line itself
-            r = self._line_measure(line, _on_value(step_measure(s)), s["period"])
+        if line is not None:                          # "$sN" holds lines: read the top line itself,
+            m = step_measure(s) or {}                 # or another figure printed under that line's name
+            r = self._line_measure(line, m if ("item" in m or "ratio" in m) else _on_value(m), s["period"])
             prior = env[s["company"][1:]]
             r.leaves, r.notes = list(prior.leaves) + r.leaves, list(prior.notes) + r.notes
             if r.ok:
@@ -529,13 +564,20 @@ class Executor:
                 return node.value, ""
             raise PlanTypeError(f"unsupported expression: {s['expr']}")
 
+        tree = ast.parse(s["expr"], mode="eval")
         try:
-            value, unit = term(ast.parse(s["expr"], mode="eval").body)
+            value, unit = term(tree.body)
         except KeyError as e:
             bad = env.get(str(e).strip("'"))
             if bad is None:
                 return abstain(f"step {e} has no number", leaves)
             return Result("abstain", leaves=leaves + bad.leaves, notes=notes + bad.notes, missing=bad.missing)
+        used = [n.id for n in ast.walk(tree) if isinstance(n, ast.Name) and n.id in env]
+        reads = [frozenset(lf.id for lf in env[i].leaves) for i in dict.fromkeys(used)]
+        if len(reads) > 1 and reads[0] and all(r == reads[0] for r in reads):
+            # two steps that read the very same printed cells: their difference or ratio says nothing
+            return abstain(f"the steps of '{s['expr']}' all read the same printed figure, so they cannot be "
+                           "compared: only one filing or one period prints it", leaves)
         return Result("number", value, unit, leaves, notes, {"op": "calc", "what": s["expr"], "value": value, "children": children})
 
     def _op_rank(self, s: dict, env: dict) -> Result:
@@ -740,6 +782,16 @@ def trust(r: Result) -> tuple:
 def _merge_abstain(a: Result, b: Result) -> Result:
     return Result("abstain", leaves=a.leaves + b.leaves, notes=[n for r in (a, b) if not r.ok for n in r.notes],
                   missing=a.missing + b.missing, extra={k: v for r in (a, b) for k, v in r.extra.items()})
+
+
+def _one_scale(rows: list) -> list:
+    """A set is compared on one scale. One filing prints a rate as "11.4%" (read as 0.114), another
+    prints a bare "14.6" in a table whose heading says percent (read as 14.6). When the same item
+    comes back on both scales across a set, the bare figures are percentages too."""
+    rates = [abs(v) for _, v, u in rows if u in ("ratio", "percent")]
+    if len(rates) < len(rows) or not (any(v < 1 for v in rates) and any(1 <= v <= 100 for v in rates)):
+        return rows
+    return [(name, v / 100.0 if abs(v) >= 1 else v, u) for name, v, u in rows]
 
 
 def _coverage_notes(ranked: int, skipped: list, absent: list) -> list:

@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import gzip
 import json
+import os
 import pathlib
 import re
 import time
@@ -39,6 +40,7 @@ from typing import Optional
 from .concepts import norm_label
 from .graph import Fact, Graph, Reading
 from .llm import DailyLimit, ask_json, link_model
+from .witness import WITNESSED, Panel, choose
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 LEARNED = ROOT / "semantics" / "learned.jsonl"
@@ -71,6 +73,8 @@ are handled elsewhere and are not your concern. A candidate that reports the ite
 even though it does not answer the whole question. Rows marked "columns: periods" hold every period
 the filing prints; the period is chosen later.
 For a ROW whose columns are not periods, also give the number of the column that holds the item.
+For a ROW whose periods each span several columns, give the number of the column that holds the item:
+the total of the others, unless the item names one of the columns (a region, "as reported", "net").
 For a SENTENCE, give the slot that holds the item's figure for the period asked (a count for "number of",
 an amount for revenue or spending, a percentage only when a percentage is asked).
 For a figure of the whole company, prefer the consolidated statements' row to a row of a segment
@@ -236,6 +240,15 @@ def _inferred_pid(row: dict, j: int) -> Optional[str]:
     cells = row["cells"]
     if cells[j].get("pid") or not isinstance(cells[j].get("value"), (int, float)):
         return None
+    filed = re.search(r"_FY(\d{4})", str(row.get("doc") or ""))   # doc ids carry the filing's fiscal year
+    limit = int(filed.group(1)) if filed else 9999
+    if not any(c.get("pid") for c in cells):          # no column was dated: the heading may name the years
+        years = _heading_years(row.get("above", ""))
+        # two or three reported years, none after the filing's own: a longer run, or later years,
+        # is a maturity schedule or loans by year of origination, not reporting periods
+        if not 2 <= len(years) <= 3 or max(years) > limit or len(years) > len(cells):
+            return None
+        return f"FY{years[j]}" if j < len(years) else None
     known = [(k, _PID.match(c.get("pid") or "")) for k, c in enumerate(cells)]
     known = [(k, int(m.group(1)), m.group(2) or "") for k, m in known if m]
     if len(known) < 2:
@@ -252,13 +265,50 @@ def _inferred_pid(row: dict, j: int) -> Optional[str]:
         year = last[1] + int(step)
     else:
         return None
-    m = re.search(r"_FY(\d{4})", str(row.get("doc") or ""))   # doc ids carry the filing's fiscal year
-    limit = int(m.group(1)) if m else 9999
     return f"FY{year}{suffix}" if year <= limit else None
 
 
+def _heading_years(above: str) -> list:
+    """The run of years a table's heading prints for its first columns: "2025 2024 2023" before
+    "2025 vs. 2024" gives [2025, 2024, 2023]. Only a run of two or more years that follow one another
+    directly and step by one counts; anything else gives []."""
+    run: list = []
+    for token in above.replace("|", " | ").split():
+        bare = token.strip("(),.;:")
+        if run and bare.lower() in ("fiscal", "fy"):   # "FISCAL 2026 FISCAL 2025" is one run
+            continue
+        if len(bare) == 4 and bare.isdigit() and bare[:2] in ("19", "20"):
+            year = int(bare)
+            if not run or abs(year - run[-1]) == 1 and (len(run) < 2 or year - run[-1] == run[-1] - run[-2]):
+                run.append(year)
+                continue
+        if len(run) >= 2:
+            return run
+        run = []
+    return run if len(run) >= 2 else []
+
+
+_QUARTERLY_DOC = re.compile(r"_FY(\d{4})_Q(\d)_10Q$")
+_QUARTER_PID = re.compile(r"^FY(\d{4})Q(\d)")
+
+
 def _cell_pid(row: dict, j: int) -> Optional[str]:
-    return row["cells"][j].get("pid") or _inferred_pid(row, j)
+    """The period of cell j: read from its header, or inferred. In a quarterly report a column cannot
+    be a full fiscal year of flows or a quarter after the report's own, so such an id is dropped."""
+    pid = row["cells"][j].get("pid") or _inferred_pid(row, j)
+    filed = _QUARTERLY_DOC.search(str(row.get("doc") or ""))
+    if pid and filed and not pid.endswith("@end"):
+        quarter = _QUARTER_PID.match(pid)
+        if quarter is None or (quarter.group(1), quarter.group(2)) > (filed.group(1), filed.group(2)):
+            return None
+    return pid
+
+
+def heading_key(row: dict) -> str:
+    """What is printed above a row's table, reduced to its words: the same table in another year's
+    filing has the same key, another segment's table with the same row labels does not."""
+    words = [w for w in re.findall(r"[a-z&]+", norm_label(row.get("above", ""))) if len(w) > 2]
+    return " ".join(words[:14])
 
 
 def candidates(st: Store, g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str) -> list:
@@ -281,7 +331,8 @@ def candidates(st: Store, g: Graph, ticker: str, phrase: str, wanted: set, fisca
                 and not any(_inferred_pid(r, j) in wanted for j in range(len(r["cells"]))):
             continue                                  # prints other periods only
         label = set(tokens(r["label"]))
-        ctx_text = " ".join((r["section"], r["title"], r.get("context", ""), " ".join(c.get("col", "") for c in r["cells"])))
+        ctx_text = " ".join((r["section"], r["title"], r.get("context", ""), r.get("above", ""),
+                             " ".join(c.get("col", "") for c in r["cells"])))
         context = set(tokens(ctx_text))
         hit_label = _hits(core, phrase, r["label"], label)
         hit_context = _hits(core, phrase, ctx_text, context) - hit_label
@@ -310,7 +361,7 @@ def candidates(st: Store, g: Graph, ticker: str, phrase: str, wanted: set, fisca
     seen, out = set(), []
     for score, kind, ref, covered in scored:         # the same row reprinted in an older filing adds nothing
         sig = (kind, norm_label(ref.get("label") or ref.get("masked", "")), norm_label(ref.get("section", "")),
-               g.filings[ref["doc"]]["fiscal_year"] if kind == "sentence" else "")
+               g.filings[ref["doc"]]["fiscal_year"] if kind == "sentence" else heading_key(ref))
         if sig in seen:
             continue
         seen.add(sig)
@@ -380,11 +431,14 @@ def _show(i: int, cand: dict, g: Graph, phrase: str = "") -> str:
     if cand["kind"] == "sentence":
         return (f"{i}: SENTENCE ({filing}, page {ref['page']}): {shown_sentence(ref)[:360]}"
                 + acronym_note(phrase, ref["masked"]))
-    dated = any(c.get("pid") for c in ref["cells"])
+    dated = any(_cell_pid(ref, j) for j in range(len(ref["cells"])))
     cols = "periods" if dated else "; ".join(f"[{j}] {h[:40]}" for j, h in enumerate(_columns(ref)))
+    spans = members(ref) if dated else []
+    if spans:
+        cols += "; each period spans the columns " + "; ".join(f"[{k}] {name}" for k, name in enumerate(spans))
     return (f"{i}: ROW ({filing}, page {ref['page']}): label '{ref['label'][:80]}' | section '{ref['section'][:50]}' | "
-            f"table '{ref['title'][:90]}' | note '{ref.get('context', '')[:50]}' | columns: {cols} | "
-            f"role {ref['role']} | unit {ref['unit']}"
+            f"table '{ref['title'][:90]}' | printed above the table '{ref.get('above', '')[-170:]}' | "
+            f"note '{ref.get('context', '')[:50]}' | columns: {cols} | role {ref['role']} | unit {ref['unit']}"
             + acronym_note(phrase, " ".join((ref["label"], ref["section"], ref["title"]))))
 
 
@@ -431,9 +485,40 @@ def aliases(g: Graph) -> dict:
     return g.item_alias
 
 
-def resolve(g: Graph, ticker: str, phrase: str) -> Optional[str]:
-    """The fact key an item phrase was linked to for this company, if it has been."""
-    return aliases(g).get(_phrase_key(ticker, phrase))
+def resolve(g: Graph, ticker: str, phrase: str) -> list:
+    """The fact keys an item phrase was linked to for this company, newest first ([] if never linked).
+    A phrase can hold more than one: the same item may sit in differently laid-out tables in two years' filings."""
+    return list(reversed(aliases(g).get(_phrase_key(ticker, phrase), [])))
+
+
+def _pick(system: str, user: str, tag: str, model: Optional[str], offline: bool) -> tuple:
+    """(the pick as the model's JSON answer, or None; the case). One picker by default. With
+    TIEOUT_LINK_CHECKER set, the pick is made under the four-eyes rule: a second, independent
+    picker, and an arbiter (TIEOUT_LINK_ARBITER, strongest first) when the two differ."""
+
+    def ask(m: str) -> Optional[dict]:
+        try:
+            ans = ask_json(system, user, model=m, tag=tag, offline=offline)
+        except DailyLimit:
+            raise
+        except Exception:  # noqa: BLE001 - a picker that fails has no pick
+            return None
+        return ans if isinstance(ans, dict) and _as_int(ans.get("pick")) is not None else None
+
+    def same(a: dict, b: dict) -> bool:
+        """The same candidate, and the same column or slot where both pickers name one."""
+        column_a, column_b = _as_int(a.get("column")), _as_int(b.get("column"))
+        slot_a, slot_b = str(a.get("slot") or "").strip("<>"), str(b.get("slot") or "").strip("<>")
+        return (_as_int(a.get("pick")) == _as_int(b.get("pick"))
+                and (column_a is None or column_b is None or column_a == column_b)
+                and (not slot_a or not slot_b or slot_a == slot_b))
+
+    maker, checker = link_model(model, offline), os.environ.get("TIEOUT_LINK_CHECKER")
+    if not checker:
+        return ask(maker), ""
+    arbiters = tuple(m for m in os.environ.get("TIEOUT_LINK_ARBITER", "").split(",") if m)
+    ans, case, _seen = choose(ask, Panel(maker, checker, arbiters), same)
+    return ans, case
 
 
 def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str, question: str = "",
@@ -452,18 +537,12 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
     period = fiscal_year + (f" (fiscal year ending {ends[-1]})" if ends else "")
     user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nItem asked for: {phrase}\nPeriod asked: {period}\n"
             f"Question: {question}\n\nCandidates:\n" + "\n".join(_show(i, c, g, phrase) for i, c in enumerate(cands)))
-    try:
-        ans = ask_json(SYSTEM, user, model=link_model(model, offline), tag="link", offline=offline)
-    except DailyLimit:
-        raise
-    except Exception as e:  # noqa: BLE001 - a failed proposal is recorded, not fatal
-        entry["objections"] = [f"proposer failed: {type(e).__name__}"]
-        return entry
-    pick = _as_int(ans.get("pick"))
-    entry["reason"] = str(ans.get("reason", ""))[:200]
+    ans, case = _pick(SYSTEM, user, "link", model, offline)
+    pick = _as_int(ans.get("pick")) if ans else None
     if pick is None or not 0 <= pick < len(cands):
         entry["objections"] = ["proposer found no candidate"]
         return entry
+    entry["reason"], entry["picked"] = str(ans.get("reason", ""))[:200], case
     cand = cands[pick]
     ref = cand["ref"]
     if cand["kind"] == "sentence":
@@ -491,7 +570,7 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
                          tied_from=f"the sentence on page {sentence_page} states this figure")
     else:
         column = None
-        if not any(c.get("pid") for c in ref["cells"]):
+        if not any(_cell_pid(ref, j) for j in range(len(ref["cells"]))):
             headers = _columns(ref)
             j = _as_int(ans.get("column"))
             column = headers[j] if j is not None and 0 <= j < len(headers) else (headers[0] if len(headers) == 1 else None)
@@ -499,12 +578,22 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
                 entry["objections"] = ["the row's columns are not periods and the proposer named no column"]
                 return entry
         key = f"item:{_slug(ref['label'])}@{_slug(ref['section'] or ref['title'])}" + (f"#{_slug(column, 32)}" if column else "")
-        entry.update(item=key, ref_id=ref["id"], row_id=ref["id"], column=column, label=ref["label"],
+        spans, member = (members(ref) if column is None else []), None
+        if spans:                                     # the proposer may name one column of a period's group
+            k = _as_int(ans.get("column"))
+            default = [j for js in column_groups(ref).values() if len(js) == len(spans) for j in [js.index(default_cell(ref, js))]]
+            if k is not None and 0 <= k < len(spans) and (not default or k != default[0]):
+                member, key = k, key + f"#{_slug(spans[k], 32)}"
+        entry.update(item=key, ref_id=ref["id"], row_id=ref["id"], column=column, member=member, label=ref["label"],
                      title=ref["title"], section=ref["section"], page=ref["page"], doc=ref["doc"])
     confirmed, entry["evidence"], entry["objections"] = gate(cand)
     if entry.get("tied_from"):
         entry["evidence"].append(entry["tied_from"])
-    entry["state"] = "active" if confirmed else "flagged"
+    if case in WITNESSED:
+        entry["evidence"].append(f"picked independently by two models ({case})")
+    elif case:
+        entry["objections"].append(f"the pickers did not agree on this line ({case})")
+    entry["state"] = "active" if confirmed and (not case or case in WITNESSED) else "flagged"
     apply_link(g, entry)
     return entry
 
@@ -563,18 +652,22 @@ def apply_link(g: Graph, entry: dict) -> int:
         first = st.by_id.get(entry.get("row_id") or entry.get("ref_id"))
         want_label = norm_label(entry["label"])
         want_ctx = norm_label(entry.get("section") or entry.get("title") or "")
+        want_heading = heading_key(first) if first is not None else None
         for row in st.rows_by_ticker.get(ticker, []):
             same_row = first is not None and row["id"] == first["id"]
             if not same_row and (norm_label(row["label"]) != want_label
-                                 or norm_label(row["section"] or row["title"] or "") != want_ctx):
-                continue                              # the same label elsewhere in the filing is another table
+                                 or norm_label(row["section"] or row["title"] or "") != want_ctx
+                                 or (want_heading is not None and heading_key(row) != want_heading)):
+                continue                              # the same label under another heading is another table
+            # the cell that is the row's figure for each period (the column the link names, if it names one)
+            stands_for = {j: pid for pid, j in period_cells(row, entry.get("member")).items()}
             for j, c in enumerate(row["cells"]):
                 if entry.get("column") is not None:
                     if c.get("col", "") != entry["column"] or not same_row:
                         continue
                     pid = TIMELESS
-                elif _cell_pid(row, j) and j == period_cells(row).get(_cell_pid(row, j)):
-                    pid = _cell_pid(row, j)
+                elif j in stands_for:
+                    pid = stands_for[j]
                 else:
                     continue
                 rid = c.get("rid") or f"{row['id']}:c{j}"   # a primary-statement cell is already a reading
@@ -590,37 +683,177 @@ def apply_link(g: Graph, entry: dict) -> int:
                     fact.readings.append(rid)
                     added += 1
     if added or f"{ticker}|{key}|{TIMELESS}" in g.facts or any(k.startswith(f"{ticker}|{key}|") for k in g.facts):
-        aliases(g)[_phrase_key(ticker, entry["phrase"])] = key
+        keys = aliases(g).setdefault(_phrase_key(ticker, entry["phrase"]), [])
+        if key in keys:
+            keys.remove(key)
+        keys.append(key)
     return added
 
 
 # ------------------------------------------------------------------ the parts of a total
 
 def breakdown(g: Graph, ticker: str, phrase: str) -> Optional[list]:
-    """The lines that add up to a linked subtotal, or None if the phrase is not linked yet."""
+    """The lines that add up to a linked total, or None if the phrase is not linked yet: the rows
+    under a subtotal, or the columns of a row that sum to its total column."""
     total_id = getattr(g, "breakdown_alias", {}).get(_phrase_key(ticker, phrase))
     total = store().by_id.get(total_id) if total_id else None
     if total is None:
         return None
     kids, how = store().parts(total)
-    return [dict(_line(k), grouped_by=how) for k in kids]
+    if len(kids) >= 2:
+        return [dict(_line(k), grouped_by=how) for k in kids]
+    return across(store(), total) or None
 
 
-def period_cells(row: dict) -> dict:
-    """{period id: the cell index that stands for the row in that period}.
+_ADJUSTED = re.compile(r"effect|impact|currenc|exchange|adjust|exclud|constant|prior year rates|change|increase|"
+                       r"decrease|variance|non-gaap", re.I)
+_YEARISH = re.compile(r"\b(19|20)\d\d\b|\b(january|february|march|april|may|june|july|august|september|october|"
+                      r"november|december)\b\.?,?\s*\d{0,2},?|\|", re.I)
 
-    A period printed over several columns is one figure for the row: the column headed "total" when one
-    is (a year over U.S., Non-U.S. and Total), else the first of them (a count before its square feet,
-    three months before nine months)."""
-    out: dict = {}
-    for j, c in enumerate(row["cells"]):
+
+def column_groups(row: dict) -> dict:
+    """{period id: the row's cells for that period, in print order}.
+
+    Usually one cell. Several when the period is printed over a group of columns: U.S., International
+    and Total under one year; cost, depreciation and net; as reported and at constant currency. A year
+    printed once over three undated columns is such a group too, when one of them sums the others."""
+    cells = row["cells"]
+    groups: dict = defaultdict(list)
+    for j in range(len(cells)):
         pid = _cell_pid(row, j)
-        if not pid:
+        if pid:
+            groups[pid].append(j)
+    for pid, js in list(groups.items()):
+        if len(js) == 1:
+            j = js[0]
+            around = [w for w in ([j - 1, j, j + 1], [j, j + 1, j + 2], [j - 2, j - 1, j])
+                      if w[0] >= 0 and w[-1] < len(cells) and all(k == j or not _cell_pid(row, k) for k in w)]
+            groups[pid] = next((w for w in around if _sum_of_others(row, w) is not None), js)
+    return dict(groups)
+
+
+def default_cell(row: dict, js: list) -> int:
+    """The cell that stands for the row when nobody names a column of the group `js`.
+
+    A column of adjustments (currency effects, changes) means the first plain column is the figure as
+    reported. Otherwise arithmetic decides: the column that is the sum of the others is their total,
+    whatever the headers say. Failing that, a column headed "total", else the first column."""
+    heads = [(row["cells"][j].get("col") or "") for j in js]
+    if any(_ADJUSTED.search(h) for h in heads):
+        return next((j for j, h in zip(js, heads) if not _ADJUSTED.search(h)), js[0])
+    summed = _sum_of_others(row, js)
+    if summed is not None:
+        return summed
+    return next((j for j, h in zip(js, heads) if "total" in h.lower()), js[0])
+
+
+def members(row: dict) -> list:
+    """Names of the columns one period spans, in print order ([] when every period is a single cell):
+    the header without its dates, with the arithmetic total marked."""
+    js = max(column_groups(row).values(), key=len, default=[])
+    if len(js) < 2:
+        return []
+    total = _sum_of_others(row, js)
+    names = []
+    for k, j in enumerate(js):
+        names.append(_column_name(row, j, k)[:32] + (" (the sum of the others)" if j == total else ""))
+    return names
+
+
+def _column_name(row: dict, j: int, k: int) -> str:
+    """What the page prints over column j: its header words, without dates."""
+    cell = row["cells"][j]
+    return " ".join(_YEARISH.sub(" ", cell.get("head") or cell.get("col") or "").split()) or f"column {k + 1}"
+
+
+def period_cells(row: dict, member: Optional[int] = None) -> dict:
+    """{period id: the cell index that stands for the row in that period}: the `member`-th column of
+    each period's group when a link names one, else the default cell."""
+    return {pid: js[member] if member is not None and 0 <= member < len(js) else default_cell(row, js)
+            for pid, js in column_groups(row).items()}
+
+
+def _sum_of_others(row: dict, js: list) -> Optional[int]:
+    """The cell among `js` (one period's columns, in print order) that totals the others, by arithmetic.
+
+    Reading left to right, a figure that equals the sum of the two or more figures before it closes
+    them into one, and may be summed again further on: regions add up to external sales, external
+    plus inter-segment sales add up to the total. The last figure that closed others is the row's
+    figure for the period. None when no figure is a sum of others."""
+    values = [row["cells"][j].get("value") for j in js]
+    if len(js) < 3 or not all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in values):
+        return None
+    totals = _sums(values)
+    return js[totals[-1]] if totals else None
+
+
+def _sums(values: list) -> list:
+    """Positions of the figures that are sums of the figures before them, in print order."""
+    open_parts: list = []                             # figures not yet folded into a total
+    totals: list = []
+    for k, v in enumerate(values):
+        for n in range(len(open_parts), 1, -1):       # the longest run that adds up to this figure
+            if v and abs(v - sum(open_parts[-n:])) <= max(1e-9, 0.004 * abs(v)):
+                open_parts = open_parts[:-n]
+                totals.append(k)
+                break
+        open_parts.append(v)
+    return totals
+
+
+def across(st: Store, row: dict) -> list:
+    """The parts of a row printed across the page: one line per column that is not a sum of others.
+
+    A segment table prints its segments as columns, and the consolidated column is their sum. The
+    same arithmetic that finds a subtotal down a column finds it across a row, so the row is a
+    breakdown by column. Blocks of the same table printed for other years are merged in by period.
+    Returns [] unless the row has a total found by arithmetic and at least two named parts."""
+    groups = column_groups(row)
+    js = max(groups.values(), key=len, default=[])
+    values = [row["cells"][j].get("value") for j in js]
+    if len(js) < 3 or not all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in values):
+        return []
+    totals = set(_sums(values))
+    parts = [k for k in range(len(js)) if k not in totals]
+    names = {k: _column_name(row, js[k], k) for k in parts}
+    if not totals or len(parts) < 2 or sum(1 for n in names.values() if not n.startswith("column ")) < 2:
+        return []
+    key = (norm_label(row["label"]), norm_label(row["section"] or row["title"] or ""), heading_key(row))
+    blocks = [r for r in st.rows_by_ticker.get(row["ticker"], [])
+              if (norm_label(r["label"]), norm_label(r["section"] or r["title"] or ""), heading_key(r)) == key]
+    lines = []
+    for k in parts:
+        cells = {}
+        for r in blocks:
+            for pid, group in column_groups(r).items():
+                if len(group) == len(js) and pid not in cells:
+                    c = r["cells"][group[k]]
+                    cells[pid] = {"id": c.get("rid") or f"{r['id']}:c{group[k]}", "value": c["value"], "text": c["text"],
+                                  "ok": c.get("ok")}
+        lines.append({"ticker": row["ticker"], "doc": row["doc"], "page": row["page"], "label": names[k],
+                      "unit": row["unit"], "cells": cells, "grouped_by": "columns", "of_row": row["id"], "member": k,
+                      "width": len(js)})
+    return lines
+
+
+def same_table_figure(line: dict, words: str) -> Optional[dict]:
+    """Another figure of a column line, read from the same table: the row whose label carries `words`,
+    in the line's own column. None when the table prints no such row."""
+    st = store()
+    origin = st.by_id.get(line.get("of_row", ""))
+    if origin is None:
+        return None
+    want = set(tokens(words))
+    best = None
+    for r in st.rows_by_ticker.get(origin["ticker"], []):
+        if r["doc"] != origin["doc"] or heading_key(r) != heading_key(origin) or r["id"] == origin["id"]:
             continue
-        if pid not in out or ("total" in (c.get("col") or "").lower()
-                              and "total" not in (row["cells"][out[pid]].get("col") or "").lower()):
-            out[pid] = j
-    return out
+        label = set(tokens(r["label"]))
+        if want and want <= label and (best is None or len(label) < len(set(tokens(best["label"])))):
+            best = r
+    if best is None:
+        return None
+    return next((ln for ln in across(st, best) if ln["member"] == line["member"] and ln["width"] == line["width"]), None)
 
 
 def _line(row: dict) -> dict:
@@ -642,40 +875,45 @@ def learn_breakdown(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year
     for r in st.rows_by_ticker.get(ticker, []):
         kids, _how = st.parts(r)
         if len(kids) < 2:
-            continue
-        words = set(tokens(" ".join([r["label"], r["section"], r["title"], r.get("context", "")]
+            kids = across(st, r)                      # its parts may be columns: segments printed across
+            if len(kids) < 2:
+                continue
+        words = set(tokens(" ".join([r["label"], r["section"], r["title"], r.get("context", ""), r.get("above", "")]
                                     + [k["label"] for k in kids])))
         hit = len(want & words)
         if not hit:
             continue
-        scored.append((2.0 * hit + (1.5 if any(c.get("pid") in wanted for c in r["cells"]) else 0)
+        scored.append((2.0 * hit + (1.5 if any(_cell_pid(r, j) in wanted for j in range(len(r["cells"]))) else 0)
                        + (1.0 if r.get("ties_to") else 0)
                        + (0.75 if g.filings[r["doc"]]["fiscal_year"] == fiscal_year else 0), r, kids))
     scored.sort(key=lambda x: -x[0])
-    cands = scored[:12]
+    cands, seen = [], set()
+    for item in scored:                               # the same subtotal reprinted in another filing adds nothing
+        sig = (norm_label(item[1]["label"]), tuple(norm_label(k["label"]) for k in item[2]))
+        if sig not in seen:
+            seen.add(sig)
+            cands.append(item)
+    cands = cands[:16]
     if not cands:
         entry["objections"] = ["no subtotal in the company's filings matches the wording"]
         return entry
     lines = [f"{i}: SUBTOTAL ({g.filings[r['doc']]['form']} {g.filings[r['doc']]['fiscal_year']}, page {r['page']}): "
              f"label '{r['label'][:70]}' | section '{r['section'][:40]}' | table '{r['title'][:80]}' | "
-             f"ties to {r.get('ties_to') or 'nothing bound'} | parts: " + "; ".join(k["label"][:40] for k in kids[:14])
+             f"printed above the table '{r.get('above', '')[-150:]}' | "
+             f"ties to {r.get('ties_to') or 'nothing bound'} | parts "
+             f"({'columns' if kids[0].get('grouped_by') == 'columns' else 'rows'}): "
+             + "; ".join(k["label"][:40] for k in kids[:14])
              for i, (_s, r, kids) in enumerate(cands)]
     user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nBreakdown asked for: {phrase}\n"
             f"Question: {question}\n\nCandidates:\n" + "\n".join(lines))
-    try:
-        ans = ask_json(SYSTEM_BREAKDOWN, user, model=link_model(model, offline), tag="breakdown", offline=offline)
-    except DailyLimit:
-        raise
-    except Exception as e:  # noqa: BLE001
-        entry["objections"] = [f"proposer failed: {type(e).__name__}"]
-        return entry
-    pick = _as_int(ans.get("pick"))
-    entry["reason"] = str(ans.get("reason", ""))[:200]
+    ans, case = _pick(SYSTEM_BREAKDOWN, user, "breakdown", model, offline)
+    pick = _as_int(ans.get("pick")) if ans else None
     if pick is None or not 0 <= pick < len(cands):
         entry["objections"] = ["proposer found no subtotal"]
         return entry
+    entry["reason"], entry["picked"] = str(ans.get("reason", ""))[:200], case
     total = cands[pick][1]
-    entry.update(state="active", ref_id=total["id"], label=total["label"], title=total["title"], page=total["page"],
+    entry.update(state="active" if not case or case in WITNESSED else "flagged", ref_id=total["id"], label=total["label"], title=total["title"], page=total["page"],
                  doc=total["doc"], evidence=["its parts are the operands of the formula recovered for this subtotal"]
                  + ([f"the subtotal prints the same value as {total['ties_to']}"] if total.get("ties_to") else []))
     apply_breakdown(g, entry)

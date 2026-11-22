@@ -14,6 +14,9 @@
   python scripts/run_benchmark.py --ids A01,A06         # only these questions
   python scripts/run_benchmark.py --no-repair           # no second planner call after an executor failure
   python scripts/run_benchmark.py --persist             # development only: keep what was learned in the store
+  python scripts/run_benchmark.py --model M --checker C --arbiter A1,A2
+                                                        # two readers and an arbiter (tieout/readers.py): M and C each
+                                                        # plan every question; A1 (then A2 ...) is called on disagreement
 
 Each row records the model calls the question made (live or replayed from the cache) with their
 tokens and seconds. The result file is rewritten after every question, so a run that stops keeps
@@ -31,6 +34,7 @@ import logging
 import os
 import pathlib
 
+from tieout import readers
 from tieout.ask import answer
 from tieout.concepts import audit_bindings, norm_label
 from tieout.eval.bench import load_benchmark, run_graph_system, score
@@ -93,6 +97,8 @@ def main():
     ap.add_argument("--persist", action="store_true",
                     help="save what the run learns to the learned store (development runs only: the store is "
                          "the system's learning history, which a held-out run then starts from)")
+    ap.add_argument("--checker", default=None, help="second, independent planner model (see tieout/readers.py)")
+    ap.add_argument("--arbiter", default="", help="comma-separated arbiter models, strongest first")
     a = ap.parse_args()
 
     questions = load_benchmark(pathlib.Path(a.bench))
@@ -118,11 +124,15 @@ def main():
     if a.oracle:
         oracle = json.loads(pathlib.Path(a.oracle).read_text(encoding="utf-8"))
 
+    panel = readers.Readers(a.model, a.checker, tuple(m for m in a.arbiter.split(",") if m)) if a.checker else None
+
     def run(q):
-        return answer(q["question"], g, model=a.model, question_id=q["id"], offline=a.offline,
-                      plan=oracle.get(q["id"]) if a.oracle else None, executor=ex,
+        common = dict(question_id=q["id"], offline=a.offline, executor=ex,
                       allow_learning=not (a.no_learning or a.ablate == "living" or a.noise > 0),
                       persist=a.persist and not a.ablate and a.noise == 0, repair=not a.no_repair)
+        if panel and not a.oracle:
+            return readers.answer(q["question"], g, panel, **common)
+        return answer(q["question"], g, model=a.model, plan=oracle.get(q["id"]) if a.oracle else None, **common)
 
     name = a.name or "_".join(x for x in ["tieout", "oracle" if a.oracle else "", f"no-{a.ablate}" if a.ablate else "",
                                           "strict" if a.strict else "", f"noise{a.noise}" if a.noise else ""] if x)
@@ -157,7 +167,22 @@ def main():
     for r in rows:
         if not r["correct"]:
             print(f"  x {r['id']} [{r['type']}] [{r.get('tier', '')}] gold={str(r['gold'])[:40]!r} got={r['answer'][:70]!r}")
+    if any(r.get("reading") for r in rows):
+        print_readings(rows)
     print(f"LLM calls: live {CALLS['live']}, cached {CALLS['cached']}" + ("" if complete else "  (INCOMPLETE)"))
+
+
+def print_readings(rows: list) -> None:
+    """Two readers and an arbiter: how often each case happened and how often it was right."""
+    cases: dict = {}
+    for r in rows:
+        n, k = cases.get(r.get("reading"), (0, 0))
+        cases[r.get("reading")] = (n + 1, k + bool(r["correct"]))
+    print("readings: " + "; ".join(f"{case} {k}/{n}" for case, (n, k) in cases.items()))
+    for role in ("maker", "checker", "arbiter"):
+        seen = [x for r in rows for x in r.get("readers", []) if x["role"] == role]
+        if seen:
+            print(f"  {role} alone: {sum(x['correct'] for x in seen)}/{len(seen)}")
 
 
 def call_totals(calls: list) -> dict:

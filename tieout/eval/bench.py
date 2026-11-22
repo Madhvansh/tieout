@@ -38,6 +38,11 @@ in three places where it had drifted: unanswerable questions are left out of rec
 their notes list facts; a retrieved fact matches every gold fact with the same company and value;
 a ranked list of segments, products or regions is scored like a ranked list of companies. Every
 system, the baseline included, is scored by this one function.
+
+Also on 22 Nov, before any held-out run: a gold value read off one printed figure is matched by any
+value that rounds to that figure as printed. A page that says "$14.0 trillion" and a table that
+says 14,041,518 (millions) state the same fact; the first fresh development batch had a gold taken
+from the sentence while the graph answered from the table.
 """
 from __future__ import annotations
 
@@ -110,7 +115,8 @@ def is_correct(q: dict, pred: dict, companies: dict) -> bool:
             v = alt["latest"]                         # "not restated, both filings print X": X is the answer
         if abs(gold) < 1e-12:
             return abs(v) < 1e-9
-        return abs(v - gold) <= max(tol, 1e-9) * abs(gold) or (unit == "USD" and abs(abs(v) - abs(gold)) <= max(tol, 1e-9) * abs(gold))
+        slack = max(tol, 1e-9) * abs(gold) + printed_slack(q)
+        return abs(v - gold) <= slack or (unit == "USD" and abs(abs(v) - abs(gold)) <= slack)
     if isinstance(gold, list):
         if pred["kind"] == "lines":                   # a ranked list of segments, products or regions
             want, got = [_norm_text(x) for x in gold], [_norm_text(n) for n, _ in pred["value"]]
@@ -127,6 +133,22 @@ def is_correct(q: dict, pred: dict, companies: dict) -> bool:
         return company_to_ticker(pred["value"], companies) == want
     g, p = _norm_text(gold), _norm_text(pred["value"])
     return bool(g) and bool(p) and (g == p or g in p or p in g)
+
+
+def printed_slack(q: dict) -> float:
+    """Half a unit of the last digit of the gold figure as its page prints it: "$14.0 trillion" stands
+    for every amount from 13.95 to 14.05 trillion. 0 unless the gold is one printed figure."""
+    gold = q.get("answer_value")
+    for sf in q.get("supporting_facts") or []:
+        printed = sf.get("printed")
+        if sf.get("value") != gold or not isinstance(printed, str):
+            continue
+        m = re.search(r"\d[\d,]*\.?\d*", printed)
+        text = m.group(0).replace(",", "") if m else ""
+        if text and float(text):
+            decimals = len(text.split(".")[1]) if "." in text else 0
+            return 0.5 * 10 ** -decimals * abs(gold / float(text))
+    return 0.0
 
 
 def fact_match(q: dict, retrieved: list, companies: dict) -> dict:
@@ -247,4 +269,11 @@ def run_graph_system(questions: list, g, answer_fn: Callable, label: str = "tieo
             "repaired": out.get("repaired", False), "plan_errors": out.get("plan_errors", []),
             "tier": res.tier or ("ABSTAIN" if res.kind == "abstain" else "FLAGGED"), "tier_reasons": res.tier_reasons[:4],
         })
+        if out.get("reading"):                        # two readers and an arbiter: what each one answered
+            rows[-1]["reading"] = out["reading"]["case"]
+            rows[-1]["readers"] = [
+                {"role": s["role"], "model": s["model"], "answer": s["answer"], "tier": s["tier"], "plan": s["plan"],
+                 "correct": is_correct(q, {"kind": s["result"].kind, "value": s["result"].value,
+                                           "extra": s["result"].extra}, g.companies)}
+                for s in out["reading"]["readers"]]
     return rows

@@ -19,6 +19,7 @@ question that taught it.
 from __future__ import annotations
 
 import json
+import os
 import re
 import time
 from typing import Optional
@@ -49,7 +50,8 @@ def answer(question: str, g: Graph, model: Optional[str] = None, allow_learning:
                       offline=offline, persist=persist)
     res, learned = _execute(plan, g, ex, **learn_args)
     repaired = False
-    misfit = shape_misfit(question, plan, res)
+    word_rules = not os.environ.get("TIEOUT_NO_WORD_RULES")   # ablation: no check that reads the question's words
+    misfit = shape_misfit(question, plan, res) if word_rules else ""
     if planned_here and misfit and any(w in misfit for w in ("quarter", "part of the year", "named", "threshold",
                                                               "audits")):
         fixed = fix_from_words(question, fix_named_set(question, fix_periods(question, plan), g))   # no model call
@@ -59,12 +61,12 @@ def answer(question: str, g: Graph, model: Optional[str] = None, allow_learning:
             if res2.ok and not shape_misfit(question, fixed, res2):
                 res, plan, misfit, repaired = res2, fixed, "", True
     if planned_here and repair and (misfit or _repairable(res, plan)):
-        problem = misfit or _problem(res, plan, errors)
+        problem = misfit or (_problem(res, plan, errors) + _printed_lines(g, ex, res))
         fixed, errs2 = _plan(question, g, model, offline, feedback={"plan": plan, "problem": problem})
         if fixed.get("steps") and not errs2 and fixed != plan:
             res2, learned2 = _execute(fixed, g, ex, **learn_args)
             learned += learned2
-            if res2.ok and not shape_misfit(question, fixed, res2):
+            if res2.ok and not (word_rules and shape_misfit(question, fixed, res2)):
                 res, plan, errors, repaired = res2, fixed, [], True
     out = _package(res, plan, learned, t0, errors)
     out["repaired"] = repaired
@@ -326,6 +328,26 @@ def _problem(res: Result, plan: dict, errors: list) -> str:
     """What went wrong, in words, with every figure masked so the planner never sees a value."""
     text = "; ".join(errors + res.notes) or "the plan returned nothing"
     return _FIGURE.sub(lambda m: m.group(0) if re.fullmatch(r"(19|20)\d\d", m.group(0)) else "<n>", text)[:600]
+
+
+def _printed_lines(g: Graph, ex: Executor, res: Result, shown: int = 8) -> str:
+    """For each line item the plan asked for and the filings do not print under those words: the
+    labels the company does print near that wording (labels and column names only, never a value),
+    so the planner can name the printed line or compute the figure from several."""
+    from .link import _show, candidates, store
+    out = []
+    for ticker, what, spec in dict.fromkeys(_hashable(m) for m in res.missing):
+        if not (isinstance(what, str) and what.startswith("item:")) or ticker not in g.companies:
+            continue
+        spec = dict(spec) if isinstance(spec, tuple) else {}
+        wanted = {ex._pid(ticker, spec, "flow"), ex._pid(ticker, spec, "stock")}
+        found = candidates(store(), g, ticker, what[len("item:"):], wanted, f"FY{ex._fy(ticker, spec)}")[:shown]
+        rows = [c for c in found if c["kind"] == "row"]
+        if rows:
+            out.append(f" {ticker} prints no line called '{what[len('item:'):]}'. Lines it does print near those "
+                       "words (use one of these labels as the item, or compute the figure from several):\n"
+                       + "\n".join(_show(i, c, g).split(" | note ")[0] for i, c in enumerate(rows)))
+    return "".join(out)[:2400]
 
 
 def _hashable(missing: tuple) -> tuple:

@@ -134,8 +134,15 @@ def _as_measure(m):
             return {wrap: _as_measure(m[wrap])}
     if "ratio" in m and isinstance(m["ratio"], list):
         return {"ratio": [_as_measure(x) for x in m["ratio"]]}
-    if "concept" in m and m["concept"] not in concepts and _key(m["concept"]) in by_key:
-        return dict(by_key[_key(m["concept"])])
+    if "concept" in m and m["concept"] not in concepts:
+        key = _key(m["concept"])
+        if key in by_key:
+            return dict(by_key[key])
+        attr = next((a for a in NUMERIC_ATTRS if _key(a) == key), None)
+        if attr:
+            return {"attr": attr}                        # "employees" is an attribute, not a concept
+        # a word that is not in the concept list names a narrower line: an item, in the planner's own words
+        return {"item": re.sub(r"(?<=[a-z])(?=[A-Z])|_", " ", str(m["concept"])).strip()}
     if "metric" in m and m["metric"] not in metrics and _key(m["metric"]) in by_key:
         return dict(by_key[_key(m["metric"])])
     return m
@@ -179,7 +186,11 @@ def normalize(plan: dict) -> dict:
                         s["op"] = "get"
                     if s.get("op") == "get" and "metric" in fixed:
                         s["op"] = "metric"
+                    if "item" in fixed and isinstance(s.get("item"), str) and s["item"].strip():
+                        continue                                        # the step already words its item
                     s.update(fixed)
+        if s.get("as") not in (None, "first_reported", "latest"):
+            del s["as"]                                                 # not a way of reading the language has
         ref = s.get("company") if isinstance(s.get("company"), str) and s["company"].startswith("$") else None
         if s.get("op") in ("get", "metric", "members", "restated") and not s.get("period") and ref:
             if ref[1:] in period_of:

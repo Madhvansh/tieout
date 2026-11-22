@@ -30,7 +30,7 @@ from .llm import ask_json
 from .plan import metric_defs, normalize, validate, vocabulary
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-PROMPT_VERSION = "p12"
+PROMPT_VERSION = "p13"
 N_EXAMPLES = 6
 
 RULES = """Translate a question about US public companies into a query plan over a knowledge graph of their
@@ -71,6 +71,8 @@ RULES
 2. Copy the fiscal year named: "fiscal 2025", "FY25", "2025" are {"fy":2025}; a balance "at the end of
    fiscal 2025" is {"fy":2025}. No year: {"fy":"latest"}; the year before it: {"fy":"prior"}. A quarter
    is {"fy":Y,"q":Q} with Y the fiscal year it belongs to; "nine months"/"year to date" add "ytd":true.
+   A fourth quarter is {"fy":Y,"q":4}: the graph derives it from the year and the nine months, so never
+   subtract periods yourself, even when the question explains the derivation.
 3. Ratios, shares, margins, per-unit figures, growth and differences are computed: a metric only when it
    means exactly what is asked, otherwise get the parts and calc, or a growth, delta or ratio measure.
 4. "Which company has the highest X": rank, k=1. "Rank A, B and C": rank over them, k = their number.
@@ -79,15 +81,22 @@ RULES
 6. "How many ...": filter then count. Do not end on count unless the question asks how many.
 7. A hop (find a company or line, then ask about it) names the earlier step as "$sN".
 8. "Which segment/product/region/business ...": members, then rank or filter over "$sN" by {"value":true}
-   or {"growth":{"value":true}}; for the chosen line's figure add get with "company":"$sN" and the period.
+   or {"growth":{"value":true}}. A ratio per line (a segment's margin) is
+   {"ratio":[{"value":true},{"item":"revenue"}]}: an item inside a measure over lines is that line's own
+   other figure. For a figure of the chosen line add get with "company":"$sN" and the period (its own
+   value) or with "item":"words" (another figure of that line, such as its revenue). The figure of one
+   segment the question names needs no members: it is an item.
 9. Thresholds in full units: $10 billion is 10000000000; 20 percent is 0.2.
-10. The size of a loss or gap ("how big", "how large") uses abs() in calc.
+10. The size of a loss, gap or deduction uses abs() in calc: losses, costs, incentives and discounts may be
+    printed negative, so wrap them in abs() before adding them back or taking their share.
 11. General knowledge may only say WHICH listed company is meant (a brand, "Google's parent").
 12. {"steps":[],"answer":null,"cannot":"<why>"} when a company is not listed, or for what filings do not
     print (stock prices, market share, forecasts, ratings) or leave to the proxy (audit fees, pay).
     Never answer cannot because of the year (the filings run to fiscal 2026, whatever today's date
     seems to be) or because a figure is narrower than a concept (that is an item).
 13. If the question also asks why a figure changed, plan the figure (restated explains why).
+14. Attributes are facts of the latest filing and have no period. A head-count or share count for a named
+    earlier year, by region or by share class, is an item.
 """
 
 # The example pool: one or more per operation and shape, written from the language above.
@@ -185,6 +194,26 @@ EXAMPLES = [
      {"steps": [{"id": "s1", "op": "members", "company": "MSFT", "of": "revenue by product and service", "period": {"fy": 2025}},
                 {"id": "s2", "op": "rank", "over": "$s1", "by": {"growth": {"value": True}}, "period": {"fy": 2025}, "order": "desc", "k": 1},
                 {"id": "s3", "op": "get", "company": "$s2", "period": {"fy": 2025}}], "answer": "s3"}),
+    ("Which of Caterpillar's segments had the highest profit margin in 2025, and what was the margin?",
+     {"steps": [{"id": "s1", "op": "members", "company": "CAT", "of": "profit by segment", "period": {"fy": 2025}},
+                {"id": "s2", "op": "rank", "over": "$s1", "by": {"ratio": [{"value": True}, {"item": "sales and revenues"}]},
+                 "period": {"fy": 2025}, "order": "desc", "k": 1}], "answer": "s2"}),
+    ("Which Procter & Gamble segment earned the most before tax in fiscal 2025, and what share of its own net sales was that?",
+     {"steps": [{"id": "s1", "op": "members", "company": "PG", "of": "earnings before income taxes by segment", "period": {"fy": 2025}},
+                {"id": "s2", "op": "rank", "over": "$s1", "by": {"value": True}, "period": {"fy": 2025}, "order": "desc", "k": 1},
+                {"id": "s3", "op": "get", "company": "$s2", "period": {"fy": 2025}},
+                {"id": "s4", "op": "get", "company": "$s2", "item": "net sales", "period": {"fy": 2025}},
+                {"id": "s5", "op": "calc", "expr": "s3 / s4"}], "answer": "s5"}),
+    ("What was Target's operating margin in the fourth quarter of fiscal 2025, worked out from the annual report and the nine-month figures?",
+     {"steps": [{"id": "s1", "op": "metric", "company": "TGT", "metric": "operating_margin", "period": {"fy": 2025, "q": 4}}], "answer": "s1"}),
+    ("How many more people did Cisco employ at the end of fiscal 2025 than at the end of fiscal 2023?",
+     {"steps": [{"id": "s1", "op": "get", "company": "CSCO", "item": "number of employees", "period": {"fy": 2025}},
+                {"id": "s2", "op": "get", "company": "CSCO", "item": "number of employees", "period": {"fy": 2023}},
+                {"id": "s3", "op": "calc", "expr": "s1 - s2"}], "answer": "s3"}),
+    ("Before deducting customer rebates, what were Merck's gross sales in 2025?",
+     {"steps": [{"id": "s1", "op": "get", "company": "MRK", "concept": "Revenue", "period": {"fy": 2025}},
+                {"id": "s2", "op": "get", "company": "MRK", "item": "customer rebates", "period": {"fy": 2025}},
+                {"id": "s3", "op": "calc", "expr": "s1 + abs(s2)"}], "answer": "s3"}),
     ("Did Pfizer's 2025 annual report change the 2024 revenue it first reported, and why?",
      {"steps": [{"id": "s1", "op": "restated", "company": "PFE", "concept": "Revenue", "period": {"fy": 2024}}], "answer": "s1"}),
     ("Did Walmart's latest annual report revise the prior year's accrued liabilities balance?",
@@ -290,7 +319,11 @@ def plan_question(question: str, graph, model: Optional[str] = None, offline: bo
         tag = f"plan_{PROMPT_VERSION}fix"
     else:
         user, tag = f"Q: {question}\nA:", f"plan_{PROMPT_VERSION}"
-    plan = _as_plan(ask_json(system, user, model=model, tag=tag, offline=offline))
+    try:
+        plan = _as_plan(ask_json(system, user, model=model, tag=tag, offline=offline))
+    except ValueError:                                # the reply was not JSON: ask once more, saying so
+        plan = _as_plan(ask_json(system, user + " (Answer with one valid JSON object and nothing else.)",
+                                 model=model, tag=tag, offline=offline))
     if plan.get("cannot") or not plan.get("steps"):
         return {"plan": plan, "errors": [], "attempts": 1}
     errs = validate(plan, graph)
