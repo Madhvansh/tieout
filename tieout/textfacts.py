@@ -70,8 +70,12 @@ PCAOB_IDS = {238: "PricewaterhouseCoopers", 42: "Ernst & Young", 34: "Deloitte",
 
 @dataclass
 class TextFact:
-    """One fact read by rule. `share_class` names the class of stock a per-class fact
-    is about ("Class A"), "all classes" on a total over several classes, else None."""
+    """One fact read by rule.
+
+    `share_class` names the class of stock a per-class fact is about ("Class A", "Class B-1",
+    "Common"); it is None when the filing has a single class. When a filing prints several
+    classes, `primary` marks the one that answers a question that names no class: the class
+    traded under the company's first listed symbol. Every other fact is primary."""
     doc: str
     attr: str
     value: str
@@ -80,6 +84,7 @@ class TextFact:
     bbox: Optional[tuple]
     confidence: str
     share_class: Optional[str] = None
+    primary: bool = True
 
 
 # --------------------------------------------------------------------------- page text
@@ -151,7 +156,7 @@ def find_gutter(words: list, width: float) -> Optional[float]:
     xs = [width * 0.38 + 2 * i for i in range(int(width * 0.24 / 2))]
     crossing = {x: sum(1 for w in words if w.x0 < x + 1 and w.x1 > x - 1) for x in xs}
     # the few least-crossed positions, nearest the centre first on ties
-    cands = sorted((x for x in xs if crossing[x] <= 0.08 * n_lines),
+    cands = sorted((x for x in xs if crossing[x] <= 0.12 * n_lines),
                    key=lambda x: (crossing[x], abs(x - width / 2)))[:4]
     best, best_score = None, 0.0
     for x in cands:
@@ -239,17 +244,24 @@ class Collector:
         self.doc = doc
         self.facts: list = []
 
-    def add(self, attr, value, page, quote, words, confidence, share_class=None, bbox=None):
+    def add(self, attr, value, page, quote, words, confidence, share_class=None, bbox=None, primary=True):
         """Keep one fact; its box is `bbox` if given, else the box around `words`."""
         self.facts.append(TextFact(self.doc, attr, str(value), page, quote[:300],
-                                   bbox or bbox_of(words), confidence, share_class))
+                                   bbox or bbox_of(words), confidence, share_class, primary))
 
-    def from_flow(self, attr, value, flow: Flow, s, e, confidence, quote=None, prefix="", share_class=None):
+    def from_flow(self, attr, value, flow: Flow, s, e, confidence, quote=None, prefix="",
+                  share_class=None, primary=True):
         q = quote if quote is not None else clip_quote(flow.text, s, e, 300 - len(prefix))
-        self.add(attr, value, flow.page, prefix + q, flow.span_words(s, e), confidence, share_class)
+        self.add(attr, value, flow.page, prefix + q, flow.span_words(s, e), confidence,
+                 share_class, primary=primary)
 
     def has(self, attr: str) -> bool:
         return any(f.attr == attr for f in self.facts)
+
+    def ordered(self) -> list:
+        """Facts with each primary one after the others of its attribute, so a reader that
+        keeps the last fact per attribute gets the primary one."""
+        return sorted(self.facts, key=lambda f: f.primary)
 
 
 # --------------------------------------------------------------------------- cover page
@@ -445,12 +457,18 @@ def rule_hq(c: Collector, flow: Flow):
 _EXCH = re.compile(r"\s(?:The\s+)?(New\s+York\s+Stock\s+Exchange|NYSE(?!\s+Arca)|Nasdaq|NASDAQ)\b.*$", re.I)
 
 
-def rule_exchange_symbol(c: Collector, flow: Flow):
-    """Section 12(b) table: 'Common Stock, $0.00001 par value per share  AAPL  The Nasdaq Stock Market LLC'.
-    One trading_symbol per common class row (GOOGL and GOOG); exchange from the first row.
-    Note, preferred and depositary rows are skipped."""
-    in_table = False
-    found = 0
+def class_label(text: str) -> str:
+    """The class of stock a printed phrase names: 'Class A', 'Class B-1', or 'Common' when
+    no class letter is printed."""
+    m = re.search(r"\bClass\s+([A-C](?:-\d)?)\b", text)
+    return f"Class {m.group(1)}" if m else "Common"
+
+
+def _common_rows(flow: Flow) -> list:
+    """Common-stock rows of the Section 12(b) table, as (class, symbol, exchange, line text,
+    symbol words, line words); 'Common Stock, $0.00001 par value per share  AAPL  The Nasdaq
+    Stock Market LLC'. Preferred, depositary, note and warrant rows are skipped."""
+    rows, in_table = [], False
     for ln in flow.lines:
         t = " ".join(w.text for w in ln)
         if re.search(r"Section\s+12\(b\)", t, re.I):
@@ -473,21 +491,31 @@ def rule_exchange_symbol(c: Collector, flow: Flow):
         if not re.fullmatch(r"[A-Z]{1,5}(?:\.[A-Z])?", sym):
             continue
         exch = "NYSE" if re.match(r"New|NYSE", m.group(1), re.I) else "NASDAQ"
-        words = [w for w in ln if w.text == sym][:1]
-        c.add("trading_symbol", sym, flow.page, t, words, "high")
-        if found == 0:
-            c.add("exchange", exch, flow.page, t, ln, "high")
-        found += 1
+        if any(r[1] == sym for r in rows):  # the same symbol listed on a second exchange
+            continue
+        rows.append((class_label(cls), sym, exch, t, [w for w in ln if w.text == sym][:1], ln))
+    return rows
+
+
+def rule_exchange_symbol(c: Collector, flow: Flow):
+    """Exchange and trading symbol from the first common row of the Section 12(b) table.
+
+    One trading_symbol per filing. When several common classes are listed (GOOGL and GOOG)
+    each symbol is kept with its class and the first row is the primary one. A single listed
+    class is named only when it carries a class letter (NKE lists Class B), because that
+    letter says which of the cover's share counts the symbol belongs to."""
+    rows = _common_rows(flow)
+    for k, (cls, sym, exch, t, words, ln) in enumerate(rows):
+        named = len(rows) > 1 or cls != "Common"
+        c.add("trading_symbol", sym, flow.page, t, words, "high", share_class=cls if named else None,
+              primary=k == 0)
+    if rows:
+        c.add("exchange", rows[0][2], flow.page, rows[0][3], rows[0][5], "high")
 
 
 def _as_of(text: str) -> Optional[str]:
     m = re.search(r"(?:as\s+of|on|at)\s+(" + MONTH_RE + r")\s+(\d{1,2}),?\s+(\d{4})", text, re.I)
     return to_iso(m.group(1), m.group(2), m.group(3)) if m else None
-
-
-def _class_of(text: str) -> str:
-    m = re.search(r"\bClass\s+([A-C](?:-\d)?)\b", text)
-    return f"Class {m.group(1)}" if m else "common"
 
 
 def rule_shares_outstanding(c: Collector, flows: list):
@@ -509,13 +537,13 @@ def rule_shares_outstanding(c: Collector, flows: list):
             # "...excludes 1.0 billion shares held by directors" / float sentences
             if re.search(r"aggregate\s+market\s+value", before, re.I) and not re.search(r"there\s+were|had\s+outstanding", before, re.I):
                 continue
-            cls = _class_of(m.group("tail").split(" and ")[0])
+            cls = class_label(m.group("tail").split(" and ")[0])
             cands.append((cls, _as_of(sent) or "", to_number(m.group("n"), m.group("sc")), f,
                           m.start("n"), m.end("sc") if m.group("sc") else m.end("n"), None))
         for m in rx_b.finditer(f.text):
             qs, _ = sentence_bounds(f.text, m.start(), m.end())
             pre = f.text[qs:m.end()]
-            cands.append((_class_of(pre), _as_of(pre) or "", to_number(m.group("n"), m.group("sc")), f,
+            cands.append((class_label(pre), _as_of(pre) or "", to_number(m.group("n"), m.group("sc")), f,
                           m.start("n"), m.end("sc") if m.group("sc") else m.end("n"), None))
         cands += _shares_table(f)
     if not cands:
@@ -525,12 +553,24 @@ def rule_shares_outstanding(c: Collector, flows: list):
         k = cand[0]
         if k not in best or cand[1] > best[k][1]:
             best[k] = cand
-    multi = len(best) > 1
+    classes = list(best)
+    multi = len(classes) > 1
+    principal = _principal_class(c, classes)
     for cls, date, value, f, s, e, quote in best.values():
         conflict = any(x[0] == cls and x[1] == date and x[2] != value for x in cands)
         conf = "low" if conflict or not date else "high"
-        prefix = f"{cls if cls != 'common' else 'Common stock'}: " if multi else ""
-        c.from_flow("shares_outstanding", value, f, s, e, conf, quote=quote, prefix=prefix)
+        prefix = f"{cls}: " if multi else ""
+        c.from_flow("shares_outstanding", value, f, s, e, conf, quote=quote, prefix=prefix,
+                    share_class=cls if multi else None, primary=cls == principal)
+
+
+def _principal_class(c: Collector, classes: list) -> str:
+    """The class a count without a named class means: the first class listed under a trading
+    symbol, else the first class printed on the cover. A holding company's total is not
+    summed: classes carry different rights (Visa's convert at set ratios), so a sum is not
+    a number the filing states."""
+    listed = [f.share_class for f in c.facts if f.attr == "trading_symbol" and f.share_class]
+    return next((k for k in listed if k in classes), classes[0])
 
 
 def _shares_table(f: Flow) -> list:
@@ -555,13 +595,23 @@ def _shares_table(f: Flow) -> list:
             if not m:
                 break
             s = f.line_start[j] + m.start(2)
-            out.append((_class_of(m.group(1)), date, to_number(m.group(2), None), f, s, s + len(m.group(2)),
+            out.append((class_label(m.group(1)), date, to_number(m.group(2), None), f, s, s + len(m.group(2)),
                         t + " | " + row))
     return out
 
 
+def _float_amount(window: str) -> Optional[tuple]:
+    """(value, match) of the first dollar amount of $1 million or more in the float sentence,
+    else of the first such bare figure (MCD prints 'as of June 30, 2025: 208,464,334,129.').
+    Smaller figures are per-share prices, years or days."""
+    for dollar in (r"\$\s?", r""):
+        for m in re.finditer(dollar + r"(" + NUM_RE + r")(?:\s+(million|billion|trillion))?", window):
+            if to_number(m.group(1), m.group(2)) >= 1_000_000:
+                return to_number(m.group(1), m.group(2)), m
+    return None
+
+
 def rule_public_float(c: Collector, flows: list):
-    amt = re.compile(r"\$\s?(" + NUM_RE + r")(?:\s+(million|billion|trillion))?")
     found = []
     for f in flows:
         for a in re.finditer(r"aggregate\s+market\s+values?", f.text, re.I):
@@ -570,15 +620,12 @@ def rule_public_float(c: Collector, flows: list):
             if re.search(r"were:\s*Class", window):
                 found += _float_table(f, a.end())
                 continue
-            for m in amt.finditer(window):
-                v = to_number(m.group(1), m.group(2))
-                if v < 1_000_000:  # a per-share closing price, not the float
-                    continue
+            hit = _float_amount(window)
+            if hit:
+                v, m = hit
                 pre = window[max(0, m.start() - 20):m.start()]
                 conf = "low" if re.search(r"excess\s+of|more\s+than|less\s+than", pre, re.I) else "high"
-                s = a.end() + m.start()
-                found.append((v, f, s, a.end() + m.end(), conf))
-                break
+                found.append((v, f, a.end() + m.start(), a.end() + m.end(), conf))
     if not found:
         return
     v, f, s, e, conf = found[0]
@@ -599,6 +646,66 @@ def _float_table(f: Flow, start: int) -> list:
         m = nums[-1][1]
         return [(nums[-1][0], f, start + m.start(), start + m.end(), "high")]
     return []
+
+
+# --------------------------------------------------------------------------- no cover table
+
+# "common stock is listed on the NYSE under the ticker symbol “C”";
+# "is listed and trades on the New York Stock Exchange: WFC."
+_LISTED = re.compile(r"\blisted\s+(?:and\s+trades\s+)?on\s+the\s+(New\s+York\s+Stock\s+Exchange|NYSE|Nasdaq[A-Za-z ]*?)\s*"
+                     r"(?:under\s+the\s+(?:ticker\s+)?symbol\s*|:\s*)[“\"]?([A-Z]{1,5}(?:\.[A-Z])?)\b")
+# "3,092,618,850 common shares outstanding (12/31/25)"
+_SHARES_DATED = re.compile(r"(" + NUM_RE + r")\s+(?:common\s+)?shares\s+outstanding\s*\((\d{1,2})/(\d{1,2})/(\d{2,4})\)", re.I)
+_REPORT_YEAR = re.compile(r"Form\s+10-K\s+for\s+the\s+(?:fiscal\s+)?year\s+ended\s+(" + MONTH_RE + r")\s+(\d{1,2}),?\s+(\d{4})", re.I)
+
+
+def rule_listing_sentence(c: Collector, flows: list):
+    """Exchange and symbol from a sentence in the stockholder information, for filings whose
+    Section 12(b) table sits in an exhibit (C: 'see Exhibit 99.01') or is absent (an annual
+    report printed without its 10-K cover, WFC)."""
+    for f in flows:
+        m = _LISTED.search(f.text)
+        if m:
+            exch = "NYSE" if re.match(r"New|NYSE", m.group(1), re.I) else "NASDAQ"
+            around = " ".join(f.text[max(m.start() - 60, 0):m.end() + 60].split()[1:-1])  # whole words only
+            c.from_flow("exchange", exch, f, m.start(), m.end(), "high", quote=around)
+            c.from_flow("trading_symbol", m.group(2), f, m.start(2), m.end(2), "high", quote=around)
+            return
+
+
+def rule_shares_dated(c: Collector, flows: list):
+    """A share count printed with its date in the stockholder information (no cover)."""
+    for f in flows:
+        m = _SHARES_DATED.search(f.text)
+        if m:
+            c.from_flow("shares_outstanding", to_number(m.group(1), None), f, m.start(1), m.end(1), "high")
+            return
+
+
+def rule_fiscal_year_end_report(c: Collector, flows: list):
+    """'Annual Report on Form 10-K for the year ended December 31, 2025', read in an annual
+    report printed without its cover. It names the report's year, so confidence is low."""
+    for f in flows:
+        m = _REPORT_YEAR.search(f.text)
+        if m:
+            c.from_flow("fiscal_year_end", to_iso(m.group(1), m.group(2), m.group(3)), f,
+                        m.start(), m.end(), "low", quote=m.group(0))
+            return
+
+
+def rule_hq_back_page(c: Collector, page: dict, page_no: int):
+    """The one 'street, City, ST ZIP' line on the last page (an annual report's back cover)."""
+    hits = []
+    for ln in group_lines(page["words"]):
+        for seg in _segments(ln):
+            st = " ".join(w.text for w in seg)
+            got = parse_city_state(st)
+            if got and re.search(r"\d{5}(?:-\d{4})?\s*$", st):
+                hits.append((got, st, seg))
+    if len(hits) == 1:
+        (city, code, _), st, seg = hits[0]
+        c.add("hq_city", city, page_no, st, seg, "low")
+        c.add("hq_state", code, page_no, st, seg, "low")
 
 
 # --------------------------------------------------------------------------- auditor
@@ -753,7 +860,8 @@ def _employee_table_rows(f: Flow) -> list:
     return out
 
 
-def rule_employees(c: Collector, flows: list):
+def _text_headcount(flows: list) -> Optional[tuple]:
+    """Best headcount sentence as (value, flow, start, end, quote, confidence), or None."""
     cands = []  # (score, value, flow, start, end, quote or None)
     for f in flows:
         page_hc = bool(re.search(r"human\s+capital|our\s+people|workforce", f.text, re.I))
@@ -782,7 +890,7 @@ def rule_employees(c: Collector, flows: list):
                 cands.append((score, v, f, m.start(), m.end(), None))
         cands += [(s + (1 if page_hc else 0), *rest) for s, *rest in _employee_table_rows(f)]
     if not cands:
-        return
+        return None
     top = max(x[0] for x in cands)
     score, v, f, s, e, quote = min((x for x in cands if x[0] == top), key=lambda x: x[2].page)
     rivals = {x[1] for x in cands if x[1] != v}
@@ -794,7 +902,68 @@ def rule_employees(c: Collector, flows: list):
         if dated:
             _, v, f, s, e, quote = max(dated, key=lambda x: x[0])
     conf = "high" if not rivals and (score >= 5 or agree >= 2) else "low"
-    c.from_flow("employees", v, f, s, e, conf, quote=quote)
+    return v, f, s, e, quote, conf
+
+
+# A row about people: 'Total employees', 'Headcount (#)', 'Direct staff (in thousands)'.
+_HEADCOUNT_LABEL = re.compile(r"^(?:total\s+)?(?:employees|headcount|direct\s+staff|number\s+of\s+employees)\b", re.I)
+_HEADCOUNT_TITLE = re.compile(r"employ|headcount|workforce", re.I)
+
+
+def _table_headcount(rows: list) -> Optional[dict]:
+    """The company headcount from the table layer: count rows labelled as employees, or
+    'Total ...' rows of a table titled as employment ('Worldwide employment (in thousands)',
+    GM: 'Total Worldwide 155'). Values arrive in full units with the row's own scale. Takes
+    the newest period of each row and the largest row (a company total over its segments)."""
+    best = None
+    for r in rows:
+        if r["unit"] != "count" or not r["cells"]:
+            continue
+        if not (_HEADCOUNT_LABEL.match(r["label"])
+                or (_HEADCOUNT_TITLE.search(r["title"]) and r["label"].lower().startswith("total"))):
+            continue
+        cell = max(r["cells"], key=lambda x: (x["pid"], x["value"]))
+        if 1_000 <= cell["value"] <= 3_000_000 and (best is None or cell["value"] > best[0]["value"]):
+            best = (cell, r)
+    if best is None:
+        return None
+    cell, r = best
+    return {"value": cell["value"], "page": r["page"], "bbox": tuple(cell["bbox"]),
+            "quote": f"{r['title']} | {r['label']} {cell['text']}"}
+
+
+def _mention_headcount(mentions: list) -> Optional[tuple]:
+    """First sentence of the sentence layer that gives a count of people ('Over 150,000 people
+    are employed by the Company'), as (page, sentence, printed number, value), or None."""
+    for m in sorted(mentions, key=lambda x: x["page"]):
+        if not re.search(r"\b(?:employ\w*|associates|team\s+members)\b", m["sentence"], re.I):
+            continue
+        for n in m["numbers"]:
+            after = m["sentence"].split(n["text"], 1)[-1][:40]
+            if (n["unit"] == "count" and 1_000 <= n["value"] <= 3_000_000
+                    and not _SUBSET.search(after) and not _US_ONLY.search(after)):
+                return m["page"], m["sentence"], n["text"], n["value"]
+    return None
+
+
+def rule_employees(c: Collector, flows: list, rows: list, mentions: list, pages: list):
+    """Employees: the sentence rules first, confirmed or contradicted by the table layer; a
+    headcount table alone (GM, WFC) when no sentence states one; the sentence layer last."""
+    text, table = _text_headcount(flows), _table_headcount(rows)
+    if text:
+        v, f, s, e, quote, conf = text
+        if table:
+            conf = "high" if table["value"] == v else "low"
+        c.from_flow("employees", v, f, s, e, conf, quote=quote)
+    elif table:
+        c.add("employees", table["value"], table["page"], table["quote"], [], "high", bbox=table["bbox"])
+    else:
+        hit = _mention_headcount(mentions)
+        if hit:
+            page, sentence, printed, value = hit
+            flow = make_flow(page, pages[page - 1])
+            at = max(flow.text.find(printed), 0)
+            c.from_flow("employees", value, flow, at, at + len(printed), "low", quote=sentence[:300])
 
 
 # --------------------------------------------------------------------------- officers
@@ -999,6 +1168,41 @@ def rule_officers(c: Collector, pages: list, first: int):
         elif not hits and certs.get(attr):
             name, page_no, quote, ws = certs[attr]
             c.add(attr, name, page_no, quote, ws, "low")
+        elif not hits:
+            _officer_from_grid(c, attr, pages, first)
+
+
+# A title under a name: 'Chairman and Chief Executive Officer', 'Chief Financial Officer'.
+_GRID_TITLE = {
+    "ceo": re.compile(r"(?:(?:Chairman|Chair|President)\s*(?:,|and)\s+)*Chief\s+Executive\s+Officer", re.I),
+    "cfo": re.compile(r"Chief\s+Financial\s+Officer", re.I),
+}
+
+
+def _grid_names(page: dict, title: re.Pattern) -> list:
+    """(name, words, line) for each name printed in a column with the role's title a few
+    lines under it, as in an annual report's list of the operating committee."""
+    cols = [_segments(ln, 12.0) for ln in group_lines(page["words"])]
+    out = []
+    for li, segs in enumerate(cols):
+        for seg in segs:
+            if not title.fullmatch(" ".join(w.text for w in seg).strip(" ,")):
+                continue
+            for up in range(li - 1, max(li - 4, -1), -1):
+                named = [s for s in cols[up] if abs(s[0].x0 - seg[0].x0) < 12 and len(_name_run(s)) == len(s) >= 2]
+                if named:
+                    out.append((" ".join(w.text for w in named[0]), named[0], " ".join(w.text for w in seg)))
+                    break
+    return out
+
+
+def _officer_from_grid(c: Collector, attr: str, pages: list, first: int):
+    """CEO / CFO from a name-over-title grid when the filing has no signature page; one
+    distinct name only, as for signatures. Low confidence: a grid is not a signature."""
+    hits = [(i, h) for i in range(first, len(pages)) for h in _grid_names(pages[i], _GRID_TITLE[attr])]
+    if len({title_name(h[0]) for _, h in hits}) == 1:
+        i, (name, words, title) = hits[0]
+        c.add(attr, title_name(name), i + 1, name + " | " + title, words, "low")
 
 
 def _surname(name: str) -> str:
@@ -1035,8 +1239,12 @@ def prose_flows(pages: list, first: int, pattern: str) -> list:
     return [make_flow(i + 1, pages[i]) for i in range(first, len(pages)) if rx.search(raw_text(pages[i]))]
 
 
-def extract_text_facts(doc_id: str, pages: list) -> list:
+def extract_text_facts(doc_id: str, pages: list, rows: Optional[list] = None,
+                       mentions: Optional[list] = None) -> list:
+    """All text facts of one filing. `rows` are its table-layer rows and `mentions` its
+    sentence-layer records (both optional); headcounts are read from them as well as the pages."""
     c = Collector(doc_id)
+    rows, mentions = rows or [], mentions or []
     ci = find_cover(pages)
     form = "10-K"
     if ci is not None:
@@ -1051,7 +1259,21 @@ def extract_text_facts(doc_id: str, pages: list) -> list:
         rule_shares_outstanding(c, flows)
     first = ci or 0
     if form == "10-K":
+        _stockholder_facts(c, pages, first, ci is None)
         rule_auditor(c, prose_flows(pages, first, r"auditor|LLP|PCAOB|Firm\s+ID"))
-        rule_employees(c, prose_flows(pages, first, r"employ|associates|headcount|workforce|team\s+members|colleagues"))
+        rule_employees(c, prose_flows(pages, first, r"employ|associates|headcount|workforce|team\s+members|colleagues"),
+                       rows, mentions, pages)
     rule_officers(c, pages, first)
-    return c.facts
+    return c.ordered()
+
+
+def _stockholder_facts(c: Collector, pages: list, first: int, no_cover: bool):
+    """What the cover table did not give, from the stockholder information: the listing
+    sentence, and for an annual report without a cover also the dated share count, the report
+    year and the back-cover address."""
+    if not c.has("trading_symbol"):
+        rule_listing_sentence(c, prose_flows(pages, first, r"\blisted\s+(?:and\s+trades\s+)?on\s+the"))
+    if no_cover:
+        rule_shares_dated(c, prose_flows(pages, first, r"shares\s+outstanding\s*\("))
+        rule_fiscal_year_end_report(c, prose_flows(pages, first, r"Form\s+10-K\s+for\s+the"))
+        rule_hq_back_page(c, pages[-1], len(pages))
