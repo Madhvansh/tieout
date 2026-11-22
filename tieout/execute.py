@@ -641,6 +641,8 @@ class Executor:
                                                 if kind == "lines" and ln["label"] in {n for n, _, _ in top}]}
         if len(top) >= 2:                             # "which of the two, and by how much": the gap is part of the answer
             extra["gap"] = abs(top[0][1] - top[1][1])
+        if len(top) >= 3:                             # "... how much bigger than the smallest": first against last
+            extra["spread"] = abs(top[0][1] - top[-1][1])
         return Result("companies" if kind == "companies" else "lines", [(name, v) for name, v, _ in top], top[0][2],
                       leaves, notes, {"op": "rank", "what": f"{_name(m)} over {len(rows)}", "value": top}, missing, extra)
 
@@ -679,6 +681,8 @@ class Executor:
         extra = {"ranked": len(sides)}
         if len(top) >= 2:
             extra["gap"] = abs(top[0]["value"] - top[1]["value"])
+        if len(top) >= 3:
+            extra["spread"] = abs(top[0]["value"] - top[-1]["value"])
         return Result("companies" if by_company else "lines", value, top[0]["unit"], leaves, notes,
                       {"op": "compare", "what": " against ".join(side["name"] for side in sides), "value": value,
                        "children": [env[i].tree for i in ids]}, extra=extra)
@@ -975,6 +979,8 @@ def render(r: Result) -> str:
         return str(r.value)
     if r.extra.get("first") is not None:
         a, b = r.extra["first"], r.extra["latest"]
+        if r.extra.get("first_doc") == r.extra.get("latest_doc"):
+            return f"Only one filing reports this period: {_fmt(b, r.unit)} ({r.extra['latest_doc']})"
         if a == b:
             return f"Not restated: both filings print {_fmt(a, r.unit)}"
         why = r.extra.get("diagnosis", {}).get("summary")
@@ -985,6 +991,8 @@ def render(r: Result) -> str:
         two_sides = r.kind == "companies" or r.tree.get("op") == "compare"
         if two_sides and len(r.value) == 2 and all(not isinstance(v, str) for _, v in r.value):
             shown += f"; difference {_fmt(abs(r.value[0][1] - r.value[1][1]), r.unit)}"
+        if r.extra.get("spread") is not None and len(r.value) >= 3:
+            shown += f"; first minus last {_fmt(r.extra['spread'], r.unit)}"
         return shown or "none"
     if r.unit == "count" and r.extra.get("names"):
         return f"{r.value}: {', '.join(r.extra['names'])}"

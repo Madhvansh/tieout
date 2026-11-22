@@ -13,7 +13,10 @@ Accuracy     correct answers / questions.
                             before the first round-2 run: two blind authors recorded different halves
                             of such two-part questions. On 22 Nov, before the held-out run, the same
                             rule was applied to two lines of one company, such as two products: it
-                            had read only the winner's value.)
+                            had read only the winner's value. Also on 22 Nov: a comparison of three
+                            or more prints the first minus the last as well ("how much bigger is the
+                            largest than the smallest"), and that figure counts as one of its
+                            stated figures.)
 
 Retrieved    every fact the system read to produce its answer: for the graph system, every
 facts        leaf of the proof tree, including every company scanned for a ranking. Nothing
@@ -40,6 +43,10 @@ in three places where it had drifted: unanswerable questions are left out of rec
 their notes list facts; a retrieved fact matches every gold fact with the same company and value;
 a ranked list of segments, products or regions is scored like a ranked list of companies. Every
 system, the baseline included, is scored by this one function.
+
+Also on 22 Nov, before the held-out run: a gold in percentage points (a difference of two rates, 3.72)
+is matched by the same difference stated as a fraction (0.0372), the unit every rate has in the graph;
+the fresh rounds 5 and 6 had such golds and no answer could match them.
 
 Also on 22 Nov, before any held-out run: a gold value read off one printed figure is matched by any
 value that rounds to that figure as printed. A page that says "$14.0 trillion" and a table that
@@ -103,17 +110,17 @@ def is_correct(q: dict, pred: dict, companies: dict) -> bool:
         # the parts of a total (segments, products): the answer is the top line, by name or by value;
         # two lines compared ("which of the two products, and by how much") also carry the gap
         name, value = pred["value"][0]
-        gap = (pred.get("extra") or {}).get("gap")
-        if isinstance(gold, (int, float)) and not isinstance(gold, bool) and gap is not None:
+        extra = pred.get("extra") or {}
+        if isinstance(gold, (int, float)) and not isinstance(gold, bool) and extra.get("gap") is not None:
             return any(isinstance(v, (int, float)) and is_correct(q, {"kind": "number", "value": v}, companies)
-                       for v in (gap, value))
+                       for v in (extra["gap"], extra.get("spread"), value))
         pred = {"kind": "number", "value": value} if isinstance(gold, (int, float)) else {"kind": "text", "value": name}
     if isinstance(gold, (int, float)) and not isinstance(gold, bool):
         alt = pred.get("extra") or {}
         if pred["kind"] == "companies" and alt.get("gap") is not None and pred["value"]:
             winner = pred["value"][0][1]
             return any(isinstance(v, (int, float)) and is_correct(q, {"kind": "number", "value": v}, companies)
-                       for v in (alt["gap"], winner))
+                       for v in (alt["gap"], alt.get("spread"), winner))
         if pred["kind"] != "number":
             return False
         tol = q.get("tolerance", 0.005) or 0.0
@@ -123,6 +130,8 @@ def is_correct(q: dict, pred: dict, companies: dict) -> bool:
         if abs(gold) < 1e-12:
             return abs(v) < 1e-9
         slack = max(tol, 1e-9) * abs(gold) + printed_slack(q)
+        if unit == "percent_points" and abs(100 * v - gold) <= slack:
+            return True                               # 3.72 points stated as the fraction 0.0372
         return abs(v - gold) <= slack or (unit == "USD" and abs(abs(v) - abs(gold)) <= slack)
     if isinstance(gold, list):
         if pred["kind"] == "lines":                   # a ranked list of segments, products or regions
@@ -272,7 +281,9 @@ def run_graph_system(questions: list, g, answer_fn: Callable, label: str = "tieo
             "answer": out["answer"], "correct": is_correct(q, pred, g.companies),
             "abstained": res.kind == "abstain", "match": fact_match(q, retrieved, g.companies),
             "plan": out.get("plan"), "notes": list(dict.fromkeys(res.notes))[:6],
-            "learned": [{k: e.get(k) for k in ("ticker", "concept", "state", "label")} for e in out.get("learned", [])],
+            # each link with how its pick was made (two pickers agreed, an arbiter settled it, one picker)
+            "learned": [{k: e.get(k) for k in ("kind", "ticker", "concept", "phrase", "state", "label", "doc", "page",
+                                               "picked")} for e in out.get("learned", [])],
             "seconds": round(out.get("seconds", 0.0), 2), "system": label, "tags": q.get("tags", []),
             "repaired": out.get("repaired", False), "plan_errors": out.get("plan_errors", []),
             "tier": res.tier or ("ABSTAIN" if res.kind == "abstain" else "FLAGGED"), "tier_reasons": res.tier_reasons[:4],

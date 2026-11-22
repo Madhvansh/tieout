@@ -53,9 +53,11 @@ def answer(question: str, g, readers: Readers, **kw) -> dict:
     if third["result"].ok or declined(third):
         if any(same_answer(third["result"], o["result"]) or (declined(third) and declined(o)) for o in (first, second)):
             return _serve(third, ARBITER_AND_READER, seen)
-        # three readers, three readings: no model outranks the others here, so structure decides.
-        # An answer before none, then the one whose every number ties out, then the earlier reader.
-        return _serve(_prefer(first, second, third), ARBITER_ALONE, seen)
+        # three readers, three readings: structure decides first (an answer before none, then the one
+        # whose every number ties out); when it cannot, the arbiter's reading, the strongest model's.
+        # Measured 22 Nov on 61 such cases with the local 4B as checker (rounds 1 to 6): the arbiter
+        # was right 34 times, the reading served by the earlier order (maker, checker) 32. Still FLAGGED.
+        return _serve(_prefer(third, first, second), ARBITER_ALONE, seen)
     answered = [o for o in (first, second) if o["result"].ok]
     if answered:                                     # the arbiter's plan did not run; a reader's did
         return _serve(_prefer(*answered), ONE_READER, seen)

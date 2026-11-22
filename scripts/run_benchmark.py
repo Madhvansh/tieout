@@ -220,13 +220,15 @@ def keep_links(out: dict, question_id: str) -> int:
 def call_totals(calls: list) -> dict:
     """Model calls one question made, live or replayed, with the tokens and seconds of the original call."""
     by_kind: dict = {}
+    by_model: dict = {}                               # the arbiter's daily quota is counted per model and key
     for c in calls:                                   # plan, link, labels, breakdown, bind ...
         kind = c["tag"].split("_")[0] if c["tag"] else "other"
         by_kind[kind] = by_kind.get(kind, 0) + 1
+        by_model[c["model"]] = by_model.get(c["model"], 0) + 1
     return {"llm_calls": len(calls), "llm_live": sum(1 for c in calls if not c["cached"]),
             "tokens_in": sum(c["prompt_tokens"] for c in calls), "tokens_out": sum(c["completion_tokens"] for c in calls),
             "llm_seconds": round(sum(c["seconds"] for c in calls), 2), "models": sorted({c["model"] for c in calls}),
-            "calls_by_kind": by_kind}
+            "calls_by_kind": by_kind, "calls_by_model": by_model}
 
 
 def error_row(q: dict, label: str, e: Exception) -> dict:

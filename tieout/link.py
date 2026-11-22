@@ -167,8 +167,16 @@ def stem(w: str) -> str:
     return w[:-1] if len(w) > 4 and w.endswith("e") else w
 
 
+_FOOTNOTE_TAIL = re.compile(r"(?<=[a-z]{4})\d{1,2}$")
+
+
 def tokens(text: str) -> list:
-    return [stem(w) for w in re.findall(r"[a-z0-9&]+", norm_label(text)) if w not in STOP]
+    """Stemmed content words. A footnote marker printed against a word ("Production5", "Data1") is
+    dropped, so the word still meets the question's (22 Nov: Chevron's worldwide production total sat
+    under "Net Oil-Equivalent Production5" and never reached the shortlist). Short tokens such as
+    "q4", "cet1" or "fy2025" keep their digits."""
+    words = (_FOOTNOTE_TAIL.sub("", w) for w in re.findall(r"[a-z0-9&]+", norm_label(text)))
+    return [stem(w) for w in words if w and w not in STOP]
 
 
 def _phrase_key(ticker: str, phrase: str) -> tuple:
@@ -667,6 +675,31 @@ def _same_figure(x, y) -> bool:
     return x == y
 
 
+_BASIS = re.compile(r"\b(?:non[- ]?)?(?:u\.?\s?s\.?\s+)?gaap\b", re.I)
+_TOTAL = re.compile(r"\btotal\b", re.I)
+
+
+def named_columns(spans: list, phrase: str) -> list:
+    """The columns of a period's group that the phrase names in their own words ("North America
+    revenue", "total earnings"). An accounting basis names how a figure is measured, not a column:
+    "(U.S. GAAP)" is not the U.S. column. ("Total" is a stop word for row matching, so it is tested
+    on its own.) 22 Nov: Exxon's Energy Products earnings "(U.S. GAAP, total ...)" were read from the
+    U.S. column although both pickers chose the Total."""
+    text = _BASIS.sub(" ", phrase)
+    asked = set(tokens(text))
+    named = []
+    for n, name in enumerate(spans):
+        bare = name.replace(" (the sum of the others)", "")
+        if _TOTAL.fullmatch(bare.strip()):
+            if _TOTAL.search(text):
+                named.append(n)
+            continue
+        words = set(tokens(bare))
+        if words and words <= asked:
+            named.append(n)
+    return named
+
+
 def pick_yields(g: Graph, cands: list, ans: dict, phrase: str, wanted: set) -> Optional[tuple]:
     """The figures a pick would read for the periods asked, in period order; None when the pick
     names nothing readable. Computed in code from the candidates: no model sees these values. It
@@ -691,10 +724,8 @@ def pick_yields(g: Graph, cands: list, ans: dict, phrase: str, wanted: set) -> O
         return None if column is None else tuple(c.get("value") for c in ref["cells"] if c.get("col", "") == column)
     spans, member = members(ref), None
     if spans:
-        asked, k = set(tokens(phrase)), _as_int(ans.get("column"))
-        named = [n for n, name in enumerate(spans)
-                 if tokens(name.replace(" (the sum of the others)", ""))
-                 and set(tokens(name.replace(" (the sum of the others)", ""))) <= asked]
+        k = _as_int(ans.get("column"))
+        named = named_columns(spans, phrase)
         k = named[0] if len(named) == 1 else k
         member = k if k is not None and 0 <= k < len(spans) else None
     figures = tuple(ref["cells"][j].get("value") for pid, j in sorted(period_cells(ref, member).items()) if pid in wanted)
@@ -821,9 +852,7 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
         if spans:                                     # the proposer may name one column of a period's group
             k = _as_int(ans.get("column"))
             default = [j for js in column_groups(ref).values() if len(js) == len(spans) for j in [js.index(default_cell(ref, js))]]
-            asked = set(tokens(phrase))
-            named = [i for i, name in enumerate(spans)
-                     if tokens(name.replace(" (the sum of the others)", "")) and set(tokens(name.replace(" (the sum of the others)", ""))) <= asked]
+            named = named_columns(spans, phrase)
             if len(named) == 1:                       # the phrase itself names one column ("North America ...")
                 k = named[0]
             if k is not None and 0 <= k < len(spans) and (not default or k != default[0]):
@@ -852,18 +881,57 @@ def _same_line(first: Optional[dict], row: dict, namesakes: list, member: Option
     labels and pass none of the three, so they stay apart."""
     if first is None:
         return True
+    if member is not None and _member_in(first, row, member) is None:
+        return False                                  # the column the link names is not printed in this row
     if heading_key(row) == heading_key(first):
         return True
     if row["doc"] == first["doc"]:
         return False
-    mine, theirs = period_cells(first, member), period_cells(row, member)
+    mine, theirs = period_cells(first, member), period_cells(row, _member_in(first, row, member))
     for pid in set(mine) & set(theirs):
         a, b = first["cells"][mine[pid]].get("value"), row["cells"][theirs[pid]].get("value")
         if (isinstance(a, (int, float)) and isinstance(b, (int, float)) and a == b
                 and len(str(abs(int(a))).rstrip("0")) >= 3):          # three significant digits: not a coincidence
             return True
-    rivals = {heading_key(r) for r in namesakes if r["doc"] == row["doc"]}
-    return len(rivals) == 1
+    # No rival: the one line of this name in that filing. When the row prints a period of the linked
+    # line, only rows that print one too are rivals: the other year blocks of the same table are not.
+    # A restated figure has no shared figure to witness it, so this is how a later filing's comparative
+    # column meets the earlier filing's line (22 Nov: Coca-Cola North America 2024 operating income,
+    # 4,336 in the 2024 10-K, 4,556 in the 2025 10-K, whose segment columns were reordered and renamed).
+    def prints_mine(r: dict) -> bool:
+        k = _member_in(first, r, member)
+        return (member is None or k is not None) and bool(set(period_cells(r, k)) & set(mine))
+    same_doc = [r for r in namesakes if r["doc"] == row["doc"]]
+    if prints_mine(row):
+        return len({heading_key(r) for r in same_doc if prints_mine(r)}) == 1
+    return len({heading_key(r) for r in same_doc}) == 1
+
+
+def _only_printer(first: dict, row: dict, pool: list, member: Optional[int]) -> bool:
+    """Is `row` the one row of its filing, among rows of this label and table title, that prints a
+    period the linked line `first` prints (in the column the link names)?"""
+    mine = set(period_cells(first, member))
+
+    def prints(r: dict) -> bool:
+        k = _member_in(first, r, member)
+        return (member is None or k is not None) and bool(set(period_cells(r, k)) & mine)
+    if not prints(row):
+        return False
+    return len({heading_key(r) for r in pool if r["doc"] == row["doc"] and prints(r)}) == 1
+
+
+def _member_in(first: dict, row: dict, member: Optional[int]) -> Optional[int]:
+    """The index in `row` of the column `first`'s link names, found by its printed name: another
+    filing may reorder or rename the other columns. None when `row` does not print that column."""
+    if member is None or row is first or row["id"] == first["id"]:
+        return member
+    names = members(first)
+    if not 0 <= member < len(names):
+        return None
+    bare = lambda n: norm_label(n.replace(" (the sum of the others)", ""))  # noqa: E731
+    theirs = [bare(n) for n in members(row)]
+    want = bare(names[member])
+    return theirs.index(want) if want in theirs else None
 
 
 def _tied_row(st: Store, mention: dict, slot: str, wanted: set) -> Optional[tuple]:
@@ -923,12 +991,26 @@ def apply_link(g: Graph, entry: dict) -> int:
         want_ctx = norm_label(entry.get("section") or entry.get("title") or "")
         namesakes = [r for r in st.rows_by_ticker.get(ticker, [])
                      if norm_label(r["label"]) == want_label and norm_label(r["section"] or r["title"] or "") == want_ctx]
+        # In another filing the same line may carry another section: a later year block of a segment
+        # table is filed under the block's first heading. Those rows (same label, same table title) are
+        # accepted only as the one row of that filing that prints a period of the linked line.
+        want_title = norm_label(entry.get("title") or "")
+        loose = [r for r in st.rows_by_ticker.get(ticker, [])
+                 if first is not None and want_title and r["doc"] != first["doc"] and r not in namesakes
+                 and norm_label(r["label"]) == want_label and norm_label(r["title"] or "") == want_title]
         for row in st.rows_by_ticker.get(ticker, []):
             same_row = first is not None and row["id"] == first["id"]
-            if not same_row and (row not in namesakes or not _same_line(first, row, namesakes, entry.get("member"))):
+            if row in loose:
+                if not _only_printer(first, row, namesakes + loose, entry.get("member")):
+                    continue
+            elif not same_row and (row not in namesakes or not _same_line(first, row, namesakes, entry.get("member"))):
                 continue                              # the same label under another heading is another table
-            # the cell that is the row's figure for each period (the column the link names, if it names one)
-            stands_for = {j: pid for pid, j in period_cells(row, entry.get("member")).items()}
+            # the cell that is the row's figure for each period (the column the link names, if it names one,
+            # found by its name in a row of another filing)
+            k = entry.get("member") if same_row or first is None else _member_in(first, row, entry.get("member"))
+            if entry.get("member") is not None and k is None:
+                continue
+            stands_for = {j: pid for pid, j in period_cells(row, k).items()}
             for j, c in enumerate(row["cells"]):
                 if entry.get("column") is not None:
                     if c.get("col", "") != entry["column"] or not same_row:

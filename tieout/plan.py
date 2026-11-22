@@ -253,6 +253,9 @@ def measure_errors(m, where: str) -> list:
         return measure_errors(parts[0], where) + measure_errors(parts[1], where)
     if "value" in m:
         return []                                    # the printed value of a line from a members step
+    for key in ("concept", "metric", "attr"):        # a name, never an object (a plan once nested one and
+        if key in m and not isinstance(m[key], str):  # crashed the validator: round 6 S18, 22 Nov)
+            return [f"{where}: {key} must be a name such as {{\"{key}\": \"...\"}}, not {type(m[key]).__name__}"]
     if "concept" in m:
         return [] if m["concept"] in concepts else [f"{where}: unknown concept {m['concept']}"]
     if "metric" in m:

@@ -45,6 +45,14 @@ def test_two_lines_compared_are_scored_on_the_gap_or_the_winner():
     assert is_correct(winner_gold, pred, {})
 
 
+def test_three_compared_are_scored_on_first_minus_last_too():
+    # round 6 R16: "which is largest, and how much bigger is it than the smallest of the three?"
+    q = {"id": "R16", "answer_value": 79086000000.0, "answer_unit": "USD", "tolerance": 0.005, "tags": []}
+    value = [("MSFT", 137791e6), ("AMZN", 128725e6), ("GOOGL", 58705e6)]
+    assert is_correct(q, {"kind": "companies", "value": value, "extra": {"gap": 9066e6, "spread": 79086e6}}, {})
+    assert not is_correct(q, {"kind": "companies", "value": value, "extra": {"gap": 9066e6}}, {})
+
+
 def test_lines_without_a_gap_still_read_the_top_line_only():
     pred = {"kind": "lines", "value": [("TREMFYA", 1589e6), ("STELARA", 1230e6)], "extra": {}}
     assert not is_correct(Q, pred, {})
