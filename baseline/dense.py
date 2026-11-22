@@ -7,7 +7,7 @@ Model     BAAI/bge-small-en-v1.5 (MIT licence): 33M parameters, 384 dimensions, 
 Usage     as the model card says: a query gets the instruction prefix below, a passage gets none;
           the vector is the [CLS] hidden state, L2-normalised, so a dot product is the cosine.
           Inputs are cut at 512 tokens, the model's limit.
-Compute   CPU only, one process, at most 8 intra-op threads. Texts are sorted by length before
+Compute   CPU only, one process, at most 6 intra-op threads. Texts are sorted by length before
           batching so a batch pads to similar lengths; results come back in input order.
 """
 from __future__ import annotations
@@ -26,7 +26,7 @@ FILES = {"onnx/model.onnx": (133_093_490, "828e1496d7fabb79cfa4dcd84fa38625c0d3d
 QUERY_PREFIX = "Represent this sentence for searching relevant passages: "
 MAX_TOKENS = 512
 DIM = 384
-THREADS = 8
+THREADS = 6
 BATCH = 16
 
 _ENCODER = None

@@ -1,4 +1,8 @@
-"""Conventional RAG answerer: retrieve k pages, hand them to the LLM, let it read and compute.
+"""Conventional RAG answerer: retrieve, hand the text to the LLM, let it read and compute.
+
+Two retrievers. v2 (default) is baseline/hybrid.py: passages, BM25 + dense, company-aware, at most
+16,000 characters of filing text per prompt. v1 (--retriever v1) is baseline/index.py: whole pages,
+BM25 + TF-IDF, as described below.
 
 Choices
   k            8 pages by default.
@@ -146,27 +150,69 @@ def _facts(reply: dict, allowed: set) -> list:
     return out
 
 
-def answer(question: str, k: int = K, model: str = None) -> dict:
+PASSAGE_SYSTEM = SYSTEM.replace("using ONLY the pages provided", "using ONLY the passages provided").replace(
+    "Each page starts with a header line naming the company, form, fiscal year, doc id and page number.",
+    "Each passage starts with a header line naming the company, form, fiscal year, period end, doc id and page "
+    "number. A passage is a piece of one page; a table cut across passages repeats its title and column headings.").replace(
+    "from the pages", "from the passages").replace("the pages do not contain", "the passages do not contain")
+
+
+def _call(system: str, user: str, model: str):
+    """One question's LLM call(s): reply, number of calls, error, live token counts."""
     from tieout import llm
-    t0 = time.time()
-    pages = index.retrieve(question, k)
-    context = "\n\n".join(f"=== PAGE {i + 1} ===\n" + trim(p["text"], question) for i, p in enumerate(pages))
-    user = f"Question: {question}\n\nPages:\n\n{context}\n\nReply with the JSON object only."
     reply, calls, error = None, 0, None
+    before = (llm.CALLS["tokens_in"], llm.CALLS["tokens_out"], llm.CALLS["live"])
     for _ in range(2):
         calls += 1
         try:
-            reply = llm.ask_json(SYSTEM, user, model=model, tag="baseline")
+            reply = llm.ask_json(system, user, model=model, tag="baseline")
             if isinstance(reply, dict):
                 break
             reply, error = None, "reply is not a JSON object"
+        except llm.DailyLimit:
+            raise
         except Exception as e:  # noqa: BLE001 - bad JSON or provider error: retry once, then abstain
             error = f"{type(e).__name__}: {e}"[:200]
-    reply = reply or {"answer": "", "value": None, "abstain": True, "facts_used": []}
+    live = llm.CALLS["live"] - before[2]
+    tokens = {"live_calls": live, "tokens_in": llm.CALLS["tokens_in"] - before[0],
+              "tokens_out": llm.CALLS["tokens_out"] - before[1]} if live else {"live_calls": 0}
+    return reply or {"answer": "", "value": None, "abstain": True, "facts_used": []}, calls, error, tokens
+
+
+def build_prompt(question: str, retriever: str = "v2", k: int = K, budget_chars: int = None, mode: str = None) -> dict:
+    """Retrieve and assemble the prompt (no LLM call): system, user, retrieved, texts, filing_chars."""
+    if retriever == "v1":
+        hits = index.retrieve(question, k)
+        context = "\n\n".join(f"=== PAGE {i + 1} ===\n" + trim(p["text"], question) for i, p in enumerate(hits))
+        return {"system": SYSTEM,
+                "user": f"Question: {question}\n\nPages:\n\n{context}\n\nReply with the JSON object only.",
+                "retrieved": [{"doc": p["doc"], "page": p["page"], "score": p["score"]} for p in hits],
+                "texts": [], "filing_chars": len(context)}
+    from baseline import hybrid
+    hits = hybrid.retrieve(question, budget_chars or hybrid.BUDGET_CHARS, mode=mode)
+    # reading order inside each searched company: filing, page, part
+    shown = sorted(hits, key=lambda h: (h["scope"], h["doc"], h["page"], h["part"]))
+    context = "\n\n".join(f"=== PASSAGE {i + 1} ===\n" + h["text"] for i, h in enumerate(shown))
+    return {"system": PASSAGE_SYSTEM,
+            "user": f"Question: {question}\n\nPassages:\n\n{context}\n\nReply with the JSON object only.",
+            "retrieved": [{"doc": h["doc"], "page": h["page"], "part": h["part"], "scope": h["scope"],
+                           "rank": h["rank"]} for h in shown],
+            "texts": [h["text"] for h in shown], "filing_chars": sum(len(h["text"]) for h in shown)}
+
+
+def answer(question: str, k: int = K, model: str = None, retriever: str = "v2",
+           budget_chars: int = None, mode: str = None) -> dict:
+    """v2: passages within budget_chars (default hybrid.BUDGET_CHARS); v1: the top k pages."""
+    t0 = time.time()
+    b = build_prompt(question, retriever, k, budget_chars, mode)
+    system, user, retrieved = b["system"], b["user"], b["retrieved"]
+    t_retrieve = time.time() - t0
+    reply, calls, error, tokens = _call(system, user, model)
     pred = to_pred(reply)
-    allowed = {(p["doc"], p["page"]) for p in pages}
+    allowed = {(p["doc"], p["page"]) for p in retrieved}
     return {"answer": str(reply.get("answer", "")), "pred": pred, "unit": reply.get("unit"),
-            "retrieved_pages": [{"doc": p["doc"], "page": p["page"], "score": p["score"]} for p in pages],
+            "retrieved_pages": retrieved, "retrieved_text": b["texts"],
             "facts_used": _facts(reply, allowed),
-            "seconds": round(time.time() - t0, 2), "llm_calls": calls, "error": error,
-            "prompt_chars": len(SYSTEM) + len(user)}
+            "seconds": round(time.time() - t0, 2), "retrieval_seconds": round(t_retrieve, 2),
+            "llm_calls": calls, "error": error, "prompt_chars": len(system) + len(user),
+            "filing_chars": b["filing_chars"], "est_tokens_in": (len(system) + len(user)) // 4, **tokens}
