@@ -660,10 +660,52 @@ def resolve(g: Graph, ticker: str, phrase: str) -> list:
     return list(reversed(aliases(g).get(_phrase_key(ticker, phrase), [])))
 
 
-def _pick(system: str, user: str, tag: str, model: Optional[str], offline: bool) -> tuple:
+def _same_figure(x, y) -> bool:
+    """Two figures that are one printed fact: equal, or a sentence's rounding of a table's amount."""
+    if isinstance(x, (int, float)) and isinstance(y, (int, float)) and not isinstance(x, bool) and not isinstance(y, bool):
+        return abs(abs(x) - abs(y)) <= 0.006 * max(abs(x), abs(y), 1e-12)
+    return x == y
+
+
+def pick_yields(g: Graph, cands: list, ans: dict, phrase: str, wanted: set) -> Optional[tuple]:
+    """The figures a pick would read for the periods asked, in period order; None when the pick
+    names nothing readable. Computed in code from the candidates: no model sees these values. It
+    lets two pickers be compared on what they chose rather than on where in the list they found it."""
+    i = _as_int(ans.get("pick"))
+    if i is None or not 0 <= i < len(cands):
+        return None
+    ref = cands[i]["ref"]
+    if cands[i]["kind"] == "sentence":
+        said = re.search(r"n\d+", str(ans.get("slot") or ""))
+        fitting = [n["slot"].strip("<>") for n in ref["numbers"]
+                   if not _is_time(n) and _unit_fit(n.get("unit"), expected_unit(phrase)) >= 0]
+        slot = said.group(0) if said else (fitting[0] if len(fitting) == 1 else "")
+        dated = [s for s in fitting if stated_period(g, ref, s) in wanted]
+        if len(dated) == 1:
+            slot = dated[0]
+        number = next((n for n in ref["numbers"] if n["slot"].strip("<>") == slot), None)
+        return None if number is None else (number.get("value"),)
+    if not any(_cell_pid(ref, j) for j in range(len(ref["cells"]))):
+        headers, j = _columns(ref), _as_int(ans.get("column"))
+        column = headers[j] if j is not None and 0 <= j < len(headers) else (headers[0] if len(headers) == 1 else None)
+        return None if column is None else tuple(c.get("value") for c in ref["cells"] if c.get("col", "") == column)
+    spans, member = members(ref), None
+    if spans:
+        asked, k = set(tokens(phrase)), _as_int(ans.get("column"))
+        named = [n for n, name in enumerate(spans)
+                 if tokens(name.replace(" (the sum of the others)", ""))
+                 and set(tokens(name.replace(" (the sum of the others)", ""))) <= asked]
+        k = named[0] if len(named) == 1 else k
+        member = k if k is not None and 0 <= k < len(spans) else None
+    figures = tuple(ref["cells"][j].get("value") for pid, j in sorted(period_cells(ref, member).items()) if pid in wanted)
+    return figures or None
+
+
+def _pick(system: str, user: str, tag: str, model: Optional[str], offline: bool, yields=None) -> tuple:
     """(the pick as the model's JSON answer, or None; the case). One picker by default. With
     TIEOUT_LINK_CHECKER set, the pick is made under the four-eyes rule: a second, independent
-    picker, and an arbiter (TIEOUT_LINK_ARBITER, strongest first) when the two differ."""
+    picker, and an arbiter (TIEOUT_LINK_ARBITER, strongest first) when the two differ. `yields(pick)`
+    says what a pick would read, so agreement is judged on the figures, not the candidate number."""
 
     def ask(m: str) -> Optional[dict]:
         try:
@@ -675,7 +717,12 @@ def _pick(system: str, user: str, tag: str, model: Optional[str], offline: bool)
         return ans if isinstance(ans, dict) and _as_int(ans.get("pick")) is not None else None
 
     def same(a: dict, b: dict) -> bool:
-        """The same candidate, and the same column or slot where both pickers name one."""
+        """The same choice. Judged on what the picks yield where that is known (two reprints of one
+        line give the same figures and are one choice), else on the candidate, column and slot named."""
+        if yields is not None:
+            ya, yb = yields(a), yields(b)
+            if ya is not None and yb is not None:
+                return len(ya) == len(yb) and all(_same_figure(x, y) for x, y in zip(ya, yb))
         column_a, column_b = _as_int(a.get("column")), _as_int(b.get("column"))
         slot_a, slot_b = str(a.get("slot") or "").strip("<>"), str(b.get("slot") or "").strip("<>")
         return (_as_int(a.get("pick")) == _as_int(b.get("pick"))
@@ -713,7 +760,8 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
                   + (f" (ending {report['period_end']})" if report and report.get("period_end") else ""))
     user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nItem asked for: {phrase}\nPeriod asked: {period}\n"
             f"Question: {question}\n\nCandidates:\n" + "\n".join(_show(i, c, g, phrase) for i, c in enumerate(cands)))
-    ans, case = _pick(SYSTEM, user, "link", model, offline)
+    ans, case = _pick(SYSTEM, user, "link", model, offline,
+                      yields=lambda pick: pick_yields(g, cands, pick, phrase, wanted))
     pick = _as_int(ans.get("pick")) if ans else None
     if pick is None or not 0 <= pick < len(cands):
         entry["objections"] = ["proposer found no candidate"]
