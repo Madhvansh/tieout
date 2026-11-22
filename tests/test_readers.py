@@ -106,3 +106,20 @@ def test_the_same_ranking_with_different_figures_is_witnessed_but_flagged(monkey
 @pytest.mark.parametrize("why,expected", [("stock prices are not in filings", True), ("planner failed (ValueError)", False)])
 def test_declined_means_a_deliberate_cannot(why, expected):
     assert readers.declined(out(abstain("planner: x"), cannot=why)) is expected
+
+
+def test_a_third_cheap_reader_breaks_the_tie_before_the_arbiter(monkeypatch):
+    three = Readers("maker-model", "checker-model", ("strong-1",), third="third-model")
+    asked = panel(monkeypatch, {"maker-model": number(7.0), "checker-model": number(9.0), "third-model": number(9.0),
+                                "strong-1": number(7.0)})
+    served = readers.answer("q", None, three)
+    assert asked == ["maker-model", "checker-model", "third-model"]          # no arbiter call
+    assert served["reading"]["case"] == readers.AGREE_OF_THREE and served["result"].value == 9.0
+
+
+def test_three_readings_go_to_the_arbiter_which_may_side_with_the_third(monkeypatch):
+    three = Readers("maker-model", "checker-model", ("strong-1",), third="third-model")
+    panel(monkeypatch, {"maker-model": number(7.0), "checker-model": number(9.0), "third-model": number(8.0),
+                        "strong-1": number(8.0)})
+    served = readers.answer("q", None, three)
+    assert served["reading"]["case"] == ARBITER_AND_READER and served["result"].value == 8.0

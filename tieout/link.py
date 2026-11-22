@@ -43,7 +43,7 @@ from typing import Optional
 from .concepts import norm_label
 from .graph import Fact, Graph, Reading
 from .llm import DailyLimit, ask_json, link_model
-from .witness import WITNESSED, Panel, choose
+from .witness import ONE_READER, WITNESSED, Panel, choose
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 LEARNED = ROOT / "semantics" / "learned.jsonl"
@@ -51,6 +51,10 @@ RAW_PATH = ROOT / "graph" / "raw.json.gz"
 MENTIONS_PATH = ROOT / "graph" / "mentions.json.gz"
 TIMELESS = "*"                                    # period id of a figure whose source prints no period
 MAX_CANDIDATES = 18
+# Item 5 (23 Nov): the second shortlist after "none of these" (TIEOUT_WIDEN) and the reverse check of a
+# picked row (TIEOUT_REVERSE). Off by default until measured on rounds 7 to 9; "1" switches one on.
+WIDEN_DEFAULT = "0"
+REVERSE_DEFAULT = "0"
 STOP = {"the", "of", "and", "in", "for", "to", "a", "an", "by", "its", "total", "net", "from", "on", "at", "s",
         "was", "what", "how", "much", "many", "did", "does", "is", "were", "had", "have", "with", "that", "this"}
 SOFT = {"number", "count", "amount", "figure", "level", "value", "reported", "full", "fiscal", "year", "company",
@@ -428,7 +432,8 @@ def heading_key(row: dict) -> str:
     return " ".join(words[:14])
 
 
-def candidates(st: Store, g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str) -> list:
+def candidates(st: Store, g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str,
+               limit: int = 0) -> list:
     """Rows and sentences of this company whose wording overlaps the phrase, best first.
 
     `wanted` are the period ids the question asks for. A row that prints periods but none of
@@ -485,9 +490,56 @@ def candidates(st: Store, g: Graph, ticker: str, phrase: str, wanted: set, fisca
             continue
         seen.add(sig)
         out.append({"kind": kind, "ref": ref, "score": score, "covered": covered})
-        if len(out) == MAX_CANDIDATES:
+        if len(out) == (limit or MAX_CANDIDATES):
             break
     return out
+
+
+def wider(st: Store, g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str, shown: set,
+          model: Optional[str] = None, offline: bool = False) -> list:
+    """The second shortlist, after a picker said none of the first reports the item (item 5, 23 Nov):
+    the candidates for the phrase and for the other labels a filing might print for it, beyond the
+    first list (rows of other tables, sentences), without any candidate already shown."""
+    best: dict = {}
+    for words in [phrase] + other_labels(g, ticker, phrase, model, offline):
+        for c in candidates(st, g, ticker, words, wanted, fiscal_year, limit=3 * MAX_CANDIDATES):
+            rid = c["ref"]["id"]
+            if rid not in shown and (rid not in best or best[rid]["score"] < c["score"]):
+                best[rid] = c
+    return sorted(best.values(), key=lambda c: -c["score"])[:MAX_CANDIDATES]
+
+
+SYSTEM_REVERSE = """You are shown where one figure is printed in a company's SEC filing: the table's title, the
+lines printed above the table, the section heading, the row's label and the column the figure sits in. You
+are never shown the figure, and never a question. Say in a few words what this figure reports: the item,
+whose it is (the whole company, or one segment, region, product or business) and its unit if the table
+prints one. Answer as JSON: {"reports": "<a few words>"}"""
+
+
+def reverse_reading(g: Graph, ticker: str, ref: dict, column: str, model: Optional[str] = None,
+                    offline: bool = False) -> Optional[str]:
+    """What a model shown only the picked row's place (never a value, never the question) says the
+    row reports. None if the call fails."""
+    user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nTable title: {ref.get('title', '')[:150]}\n"
+            f"Printed above the table: {ref.get('above', '')[-220:]}\nSection: {ref.get('section', '')[:120]}\n"
+            f"Row label: {ref.get('label', '')[:150]}\nColumn: {column or 'the row figure for each period'}")
+    try:
+        ans = ask_json(SYSTEM_REVERSE, user, model=link_model(model, offline), tag="reverse", offline=offline)
+    except DailyLimit:
+        raise
+    except Exception:  # noqa: BLE001 - no reverse reading: the check is skipped, not failed
+        return None
+    said = ans.get("reports") if isinstance(ans, dict) else None
+    return said.strip()[:160] if isinstance(said, str) and said.strip() else None
+
+
+def describes(said: str, phrase: str) -> bool:
+    """Does a reverse reading name the item asked? At least half of the phrase's content words."""
+    soft = {stem(w) for w in SOFT} | {stem(w) for w in STOP}
+    asked = {w for w in tokens(phrase) if w not in soft and not w.isdigit()}
+    if not asked:
+        return True
+    return 2 * len(asked & set(tokens(said))) >= len(asked)
 
 
 SYSTEM_LABELS = """You say how an SEC filing would label a financial item. Given an item phrase from a question
@@ -714,6 +766,25 @@ def named_columns(spans: list, phrase: str) -> list:
     return totals
 
 
+def column_choice(seen: list, pick: int, spans: list, named: int) -> tuple:
+    """(dispute, by_rule) when the phrase names one column of the picked row in its own words.
+
+    The column is then a word rule's choice, not the pickers': pick_yields applies the same rule to
+    every picker, so their "agreement" on the column says nothing. It is recorded as the rule's
+    (`by_rule`), and it is a dispute, served FLAGGED, when the pickers themselves named different
+    columns of that row (23 Nov red team, research/17 Part 1c item 3)."""
+    said = {c for c in (_as_int(a.get("column")) for _m, a in seen
+                        if isinstance(a, dict) and _as_int(a.get("pick")) == pick) if c is not None}
+    name = spans[named][:40] if 0 <= named < len(spans) else str(named)
+    if len(said) > 1:
+        shown = ", ".join(spans[c][:30] for c in sorted(said) if 0 <= c < len(spans))
+        return (f"the pickers named different columns of this row ({shown}); the column served is '{name}', "
+                "the one the phrase names: a word rule's choice, not an agreed one"), ""
+    if said != {named}:
+        return "", f"the column '{name}' is the one the phrase names (a word rule), not a picker's choice"
+    return "", ""
+
+
 def pick_yields(g: Graph, cands: list, ans: dict, phrase: str, wanted: set) -> Optional[tuple]:
     """The figures a pick would read for the periods asked, in period order; None when the pick
     names nothing readable. Computed in code from the candidates: no model sees these values. It
@@ -757,24 +828,27 @@ def start_question(arbiter_budget: Optional[int] = None) -> None:
     _QUESTION["budget"], _QUESTION["seen"] = arbiter_budget, {}
 
 
-def _pick(system: str, user: str, tag: str, model: Optional[str], offline: bool, yields=None) -> tuple:
+def _pick(system: str, user: str, tag: str, model: Optional[str], offline: bool, yields=None,
+          field: str = "pick") -> tuple:
     """A pick made once per question: the same prompt asked again (another learning round, another
-    reader) gets the same answer without new calls or arbitration."""
+    reader) gets the same answer without new calls or arbitration. Returns (answer, case, seen)."""
     seen = _QUESTION["seen"]
     if seen is None:
-        return _pick_once(system, user, tag, model, offline, yields)
+        return _pick_once(system, user, tag, model, offline, yields, field)
     key = (tag, model, os.environ.get("TIEOUT_LINK_CHECKER", ""), os.environ.get("TIEOUT_LINK_ARBITER", ""),
            hashlib.sha1((system + "\n" + user).encode("utf-8")).hexdigest())
     if key not in seen:
-        seen[key] = _pick_once(system, user, tag, model, offline, yields)
+        seen[key] = _pick_once(system, user, tag, model, offline, yields, field)
     return seen[key]
 
 
-def _pick_once(system: str, user: str, tag: str, model: Optional[str], offline: bool, yields=None) -> tuple:
-    """(the pick as the model's JSON answer, or None; the case). One picker by default. With
-    TIEOUT_LINK_CHECKER set, the pick is made under the four-eyes rule: a second, independent
-    picker, and an arbiter (TIEOUT_LINK_ARBITER, strongest first) when the two differ. `yields(pick)`
-    says what a pick would read, so agreement is judged on the figures, not the candidate number."""
+def _pick_once(system: str, user: str, tag: str, model: Optional[str], offline: bool, yields=None,
+               field: str = "pick") -> tuple:
+    """(the pick as the model's JSON answer, or None; the case; [(model, answer), ...]). One picker by
+    default. With TIEOUT_LINK_CHECKER set, the pick is made under the four-eyes rule: a second picker,
+    and an arbiter (TIEOUT_LINK_ARBITER, strongest first) when the two differ. `yields(pick)` says what
+    a pick would read, so agreement is judged on the figures, not the candidate number. `field` is the
+    answer's key ("pick" for a candidate, "row" for a concept's statement row in living.learn)."""
 
     def ask(m: str) -> Optional[dict]:
         try:
@@ -783,6 +857,8 @@ def _pick_once(system: str, user: str, tag: str, model: Optional[str], offline: 
             raise
         except Exception:  # noqa: BLE001 - a picker that fails has no pick
             return None
+        if isinstance(ans, dict) and field != "pick" and _as_int(ans.get(field)) is not None:
+            return {**ans, "pick": _as_int(ans.get(field))}
         return ans if isinstance(ans, dict) and _as_int(ans.get("pick")) is not None else None
 
     def same(a: dict, b: dict) -> bool:
@@ -800,7 +876,13 @@ def _pick_once(system: str, user: str, tag: str, model: Optional[str], offline: 
 
     maker, checker = link_model(model, offline), os.environ.get("TIEOUT_LINK_CHECKER")
     if not checker:
-        return ask(maker), ""
+        first = ask(maker)
+        return first, "", [(maker, first)]
+    if checker == maker:
+        # the same model twice is one witness, not two (23 Nov: a binding proposed by the checker's
+        # own model must not be "confirmed" by itself)
+        first = ask(maker)
+        return first, ONE_READER, [(maker, first)]
     arbiters = tuple(m for m in os.environ.get("TIEOUT_LINK_ARBITER", "").split(",") if m)
     budget = _QUESTION["budget"]
     if budget is not None and budget <= 0:
@@ -808,7 +890,7 @@ def _pick_once(system: str, user: str, tag: str, model: Optional[str], offline: 
     ans, case, seen = choose(ask, Panel(maker, checker, arbiters), same)
     if budget is not None and len(seen) > 2:
         _QUESTION["budget"] = budget - 1
-    return ans, case
+    return ans, case, seen
 
 
 def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str, question: str = "",
@@ -836,20 +918,42 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
     # the inputs of a derived fourth quarter (J&J Cardiovascular, full year and nine months) because the
     # question asked for a quarter the filing never prints, though the system prompt says that is not its
     # concern. The pick is judged for the item and period of this step only.
-    user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nItem asked for: {phrase}\nPeriod asked: {period}\n"
-            f"Question (context only: it may ask for another period, or for arithmetic that is done elsewhere "
-            f"with this figure as one input): {question}\n\nCandidates:\n"
-            + "\n".join(_show(i, c, g, phrase) for i, c in enumerate(cands))
-            + f"\n\nPick the candidate that reports '{phrase}' for {period}.")
-    ans, case = _pick(SYSTEM, user, "link", model, offline,
-                      yields=lambda pick: pick_yields(g, cands, pick, phrase, wanted))
+    def prompt(shown: list, second: bool = False) -> str:
+        return (f"Company: {g.companies[ticker]['name']} ({ticker})\nItem asked for: {phrase}\nPeriod asked: {period}\n"
+                f"Question (context only: it may ask for another period, or for arithmetic that is done elsewhere "
+                f"with this figure as one input): {question}\n\n"
+                + ("Candidates (a second list: none of an earlier list was found to report the item):\n" if second
+                   else "Candidates:\n")
+                + "\n".join(_show(i, c, g, phrase) for i, c in enumerate(shown))
+                + f"\n\nPick the candidate that reports '{phrase}' for {period}.")
+
+    ans, case, seen = _pick(SYSTEM, prompt(cands), "link", model, offline,
+                            yields=lambda pick: pick_yields(g, cands, pick, phrase, wanted))
+    # "None of these" (item 5, 23 Nov): the shortlist holds the right row only part of the time, and a
+    # forced choice breeds agreement on a wrong row. When a picker finds no candidate that reports the
+    # item, the shortlist is widened once (other labels the filing may print, rows of other tables,
+    # sentences); if a picker still finds none, whatever is served is FLAGGED.
+    none_said = len(seen) > 0 and any(a is None for _m, a in seen)
+    if none_said and os.environ.get("TIEOUT_WIDEN", WIDEN_DEFAULT) == "1":
+        more = wider(st, g, ticker, phrase, wanted, fiscal_year, {c["ref"]["id"] for c in cands}, model, offline)
+        if more:
+            ans2, case2, seen2 = _pick(SYSTEM, prompt(more, second=True), "link", model, offline,
+                                       yields=lambda pick, more=more: pick_yields(g, more, pick, phrase, wanted))
+            if ans2 is not None and (ans is None or all(a is not None for _m, a in seen2)):
+                cands, ans, case, seen = more, ans2, case2, seen2
+                none_said = any(a is None for _m, a in seen2)
+                entry["widened"] = True
     pick = _as_int(ans.get("pick")) if ans else None
     if pick is None or not 0 <= pick < len(cands):
         entry["objections"] = ["proposer found no candidate"]
         return entry
+    if none_said:
+        entry["none_of_these"] = "a picker found that none of the candidates reports the item"
     entry["reason"], entry["picked"] = str(ans.get("reason", ""))[:200], case
+    entry["periods"] = sorted(wanted)                 # the periods the pickers judged the line for
     cand = cands[pick]
     ref = cand["ref"]
+    column_dispute = ""
     if cand["kind"] == "sentence":
         said = re.search(r"n\d+", str(ans.get("slot") or ""))                   # "<n1 count>" or "n1" -> "n1"
         fitting = [n["slot"].strip("<>") for n in ref["numbers"]
@@ -881,6 +985,12 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
             entry.update(item=key, ref_id=ref["id"], row_id=ref["id"], column=None, member=member, label=ref["label"],
                          title=ref["title"], section=ref["section"], page=ref["page"], doc=ref["doc"],
                          tied_from=f"the sentence on page {sentence_page} states this figure")
+            if not label_names_phrase(ref["label"], phrase):
+                # the pickers saw the sentence, never this row: the row's own words must name the item
+                # for the swap to keep their witness (23 Nov red team, research/17 Part 1c item 4)
+                entry["unwitnessed"] = (f"the pickers chose the sentence on page {sentence_page}; the figure is served "
+                                        f"from the table row '{ref['label'][:50]}' on page {ref['page']} that prints "
+                                        f"the same value, and no picker saw that row")
     else:
         column = None
         if not any(_cell_pid(ref, j) for j in range(len(ref["cells"]))):
@@ -897,25 +1007,50 @@ def learn_link(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year: str
             default = [j for js in column_groups(ref).values() if len(js) == len(spans) for j in [js.index(default_cell(ref, js))]]
             named = named_columns(spans, phrase)
             if len(named) == 1:                       # the phrase itself names one column ("North America ...")
+                column_dispute, by_rule = column_choice(seen, pick, spans, named[0])
+                if by_rule:
+                    entry["column_by_rule"] = by_rule
                 k = named[0]
             if k is not None and 0 <= k < len(spans) and (not default or k != default[0]):
                 member, key = k, key + f"#{_slug(spans[k], 32)}"
         entry.update(item=key, ref_id=ref["id"], row_id=ref["id"], column=column, member=member, label=ref["label"],
                      title=ref["title"], section=ref["section"], page=ref["page"], doc=ref["doc"])
+    if (cand["kind"] == "row" and case in WITNESSED and not entry.get("tied_from") and not entry.get("unwitnessed")
+            and os.environ.get("TIEOUT_REVERSE", REVERSE_DEFAULT) == "1"):
+        # The reverse check (item 5, 23 Nov): two pickers can agree on the wrong row. A model shown only
+        # the picked row's place (title, heading, section, label, column; no value, no question) says
+        # what it reports; the pick keeps its witnesses only if that names the item asked.
+        spans = members(ref) if entry.get("member") is not None else []
+        shown_column = entry.get("column") or (spans[entry["member"]] if 0 <= (entry.get("member") or 0) < len(spans) else "")
+        said = reverse_reading(g, ticker, ref, shown_column, model, offline)
+        if said is not None:
+            entry["reverse"] = said
+            if not describes(said, phrase):
+                entry["unwitnessed"] = (f"shown only the row's place in the filing, a reader said it reports "
+                                        f"'{said[:70]}', which does not name '{phrase[:50]}'")
     confirmed, entry["evidence"], entry["objections"] = gate(cand)
     if entry.get("tied_from"):
         entry["evidence"].append(entry["tied_from"])
+    if entry.get("none_of_these"):
+        entry["objections"].append(entry["none_of_these"])
+    if entry.get("unwitnessed"):
+        entry["objections"].append(entry["unwitnessed"])
     if case in WITNESSED:
-        entry["evidence"].append(f"picked independently by two models ({case})")
+        entry["evidence"].append(f"picked by two models ({case})")
     elif case:
         entry["objections"].append(f"the pickers did not agree on this line ({case})")
+    if column_dispute:
+        entry["objections"].append(column_dispute)
+    if entry.get("column_by_rule"):
+        entry["evidence"].append(entry["column_by_rule"])
     twin = lookalike(g, cands, pick, ans, phrase, wanted) if cands[pick]["kind"] == "row" and cand["ref"] is cands[pick]["ref"] else None
     if twin is not None:                              # two models can agree on the wrong one of two namesakes
         entry["second_reading"] = (f"second reading: a line with the same label '{twin['label'][:50]}' is printed on page "
                                    f"{twin['page']} of {twin['doc']} under another heading with a different figure, "
                                    "and the words asked for do not tell the two apart")
         entry["objections"].append(entry["second_reading"])
-    entry["state"] = "active" if confirmed and (not case or case in WITNESSED) and twin is None else "flagged"
+    entry["state"] = ("active" if confirmed and (not case or case in WITNESSED) and twin is None and not column_dispute
+                      and not entry.get("none_of_these") else "flagged")
     apply_link(g, entry)
     return entry
 
@@ -973,12 +1108,9 @@ def _same_line(first: Optional[dict], row: dict, namesakes: list, member: Option
         return True
     if row["doc"] == first["doc"]:
         return False
-    mine, theirs = period_cells(first, member), period_cells(row, _member_in(first, row, member))
-    for pid in set(mine) & set(theirs):
-        a, b = first["cells"][mine[pid]].get("value"), row["cells"][theirs[pid]].get("value")
-        if (isinstance(a, (int, float)) and isinstance(b, (int, float)) and a == b
-                and len(str(abs(int(a))).rstrip("0")) >= 3):          # three significant digits: not a coincidence
-            return True
+    if _shares_figure(first, row, member):
+        return True
+    mine = period_cells(first, member)
     # No rival: the one line of this name in that filing. When the row prints a period of the linked
     # line, only rows that print one too are rivals: the other year blocks of the same table are not.
     # A restated figure has no shared figure to witness it, so this is how a later filing's comparative
@@ -991,6 +1123,61 @@ def _same_line(first: Optional[dict], row: dict, namesakes: list, member: Option
     if prints_mine(row):
         return len({heading_key(r) for r in same_doc if prints_mine(r)}) == 1
     return len({heading_key(r) for r in same_doc}) == 1
+
+
+def _shares_figure(first: dict, row: dict, member: Optional[int]) -> bool:
+    """Does `row` print the same figure as the linked line `first` for a period both print, to three
+    significant digits (last year's column carried into this year's filing)? Arithmetic, not words."""
+    mine, theirs = period_cells(first, member), period_cells(row, _member_in(first, row, member))
+    for pid in set(mine) & set(theirs):
+        a, b = first["cells"][mine[pid]].get("value"), row["cells"][theirs[pid]].get("value")
+        if (isinstance(a, (int, float)) and isinstance(b, (int, float)) and a == b
+                and len(str(abs(int(a))).rstrip("0")) >= 3):          # three significant digits: not a coincidence
+            return True
+    return False
+
+
+def _seen_by_pickers(first: Optional[dict], row: dict, entry: dict) -> bool:
+    """Is `row` a line the pickers judged, or one the arithmetic or the table itself says is that line?
+
+    The pickers judged one row (`first`). Its own cells are witnessed; so are the other year blocks of
+    the same table in the same filing, and a row of another filing that prints one of its figures for a
+    shared period. A namesake reached only through the same heading in another filing, or because it is
+    the one line of that name there, was never shown to a picker: the four-eyes rule does not cover it
+    (23 Nov red team, research/17 Part 1c item 2)."""
+    if first is None:
+        return row["doc"] == entry.get("doc")
+    if row["id"] == first["id"]:
+        return True
+    if row["doc"] == first["doc"]:
+        return heading_key(row) == heading_key(first)
+    return _shares_figure(first, row, entry.get("member"))
+
+
+def witness_of(g: Graph, ticker: str, phrase: str, key: str, rid: str) -> tuple:
+    """(witnessed, why not) for the reading `rid` served for (ticker, phrase) through the link `key`.
+    Witnessed only when two models picked this line for this phrase and the reading is on a row they
+    saw (or one the arithmetic or its own table ties to it)."""
+    why = getattr(g, "unwitnessed_links", {}).get((ticker, key))
+    if why:
+        return False, why
+    if (ticker, key) not in getattr(g, "witnessed_links", ()):
+        return False, ""
+    if (_phrase_key(ticker, phrase), key) not in getattr(g, "witnessed_phrases", ()):
+        return False, (f"two models picked this line for another wording; '{phrase[:50]}' was tied to it "
+                       "without their check")
+    if rid not in getattr(g, "witnessed_readings", ()):
+        return False, ("two models picked this line in another filing; this figure is read from a line of the same "
+                       "name that no picker saw")
+    return True, ""
+
+
+def label_names_phrase(label: str, phrase: str) -> bool:
+    """Does a row's label share a content word with the phrase asked for?"""
+    soft = {stem(w) for w in SOFT}
+    words = {w for w in tokens(label) if not w.isdigit() and len(w) > 2 and w not in soft}
+    asked = {w for w in tokens(phrase) if not w.isdigit() and w not in soft}
+    return bool(words & asked)
 
 
 def statement_scale(g: Graph, doc: str) -> Optional[float]:
@@ -1099,6 +1286,7 @@ def apply_link(g: Graph, entry: dict) -> int:
     st, ticker, key = store(), entry["ticker"], entry["item"]
     status_cap = None if entry["state"] == "active" else "unverified"
     added = 0
+    judged: set = set()                               # readings of rows the pickers saw (see _seen_by_pickers)
     if entry["kind"] == "mention":
         m = st.by_id.get(entry["ref_id"])
         number = next((n for n in (m or {}).get("numbers", []) if n["slot"].strip("<>") == entry["slot"]), None)
@@ -1121,6 +1309,7 @@ def apply_link(g: Graph, entry: dict) -> int:
             row=0, col=0, label=m["sentence"][:200], section="", text=number["text"], value=value,
             unit=unit, period=pid, period_end="", status=status))
         fact = g.facts.setdefault(f"{ticker}|{key}|{pid}", Fact(ticker, key, pid, [], "active"))
+        judged.add(rid)
         if rid not in fact.readings:
             fact.readings.append(rid)
             added += 1
@@ -1150,6 +1339,7 @@ def apply_link(g: Graph, entry: dict) -> int:
             if entry.get("member") is not None and k is None:
                 continue
             stands_for = {j: pid for pid, j in period_cells(row, k).items()}
+            seen_row = _seen_by_pickers(first, row, entry)
             for j, c in enumerate(row["cells"]):
                 if entry.get("column") is not None:
                     if c.get("col", "") != entry["column"] or not same_row:
@@ -1168,13 +1358,22 @@ def apply_link(g: Graph, entry: dict) -> int:
                         section=(row["section"] or row["title"])[:120], text=c["text"], value=c["value"],
                         unit=row["unit"], period=pid, period_end=c.get("end") or "", status=status_cap or status)
                 fact = g.facts.setdefault(f"{ticker}|{key}|{pid}", Fact(ticker, key, pid, [], "active"))
+                if seen_row:
+                    judged.add(rid)
                 if rid not in fact.readings:
                     fact.readings.append(rid)
                     added += 1
     if entry.get("picked") in WITNESSED and entry["state"] == "active":
-        if not hasattr(g, "witnessed_links"):
-            g.witnessed_links = set()
-        g.witnessed_links.add((ticker, key))          # two models picked this line independently
+        if entry.get("unwitnessed"):
+            g.__dict__.setdefault("unwitnessed_links", {})[(ticker, key)] = entry["unwitnessed"]
+        else:
+            if not hasattr(g, "witnessed_links"):
+                g.witnessed_links = set()
+            g.witnessed_links.add((ticker, key))      # two models picked this line
+            # ... for this phrase, and for the rows they saw: another phrase linked to the same line by one
+            # model, or a namesake row of another filing, is not covered by their witness
+            g.__dict__.setdefault("witnessed_phrases", set()).add((_phrase_key(ticker, entry["phrase"]), key))
+            g.__dict__.setdefault("witnessed_readings", set()).update(judged)
     if entry.get("second_reading"):
         if not hasattr(g, "second_readings"):
             g.second_readings = {}
@@ -1402,7 +1601,7 @@ def learn_breakdown(g: Graph, ticker: str, phrase: str, wanted: set, fiscal_year
              for i, (_s, r, kids, how) in enumerate(cands)]
     user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nBreakdown asked for: {phrase}\n"
             f"Question: {question}\n\nCandidates:\n" + "\n".join(lines))
-    ans, case = _pick(SYSTEM_BREAKDOWN, user, "breakdown", model, offline)
+    ans, case, _seen = _pick(SYSTEM_BREAKDOWN, user, "breakdown", model, offline)
     pick = _as_int(ans.get("pick")) if ans else None
     if pick is None or not 0 <= pick < len(cands):
         entry["objections"] = ["proposer found no subtotal"]

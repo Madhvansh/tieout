@@ -38,7 +38,7 @@ import pathlib
 from tieout import readers
 from tieout.ask import answer
 from tieout.concepts import audit_bindings, norm_label
-from tieout.eval.bench import load_benchmark, run_graph_system, score
+from tieout.eval.bench import as_printed_scale, load_benchmark, run_graph_system, score
 from tieout.execute import Executor
 from tieout.graph import Graph, build
 from tieout.link import load_links, start_question
@@ -101,6 +101,8 @@ def main():
                          "learning history a held-out run starts from; a held-out run never persists")
     ap.add_argument("--checker", default=None, help="second, independent planner model (see tieout/readers.py)")
     ap.add_argument("--arbiter", default="", help="comma-separated arbiter models, strongest first")
+    ap.add_argument("--third", default="", help="a third cheap reader, asked only when the first two differ and "
+                                                "before any arbiter call (item 8, 23 Nov)")
     ap.add_argument("--pick-checker", default=None,
                     help="second, independent model for row picks (the four-eyes rule in tieout/link.py); the "
                          "arbiters above settle its disagreements with the first picker")
@@ -132,7 +134,8 @@ def main():
     if a.oracle:
         oracle = json.loads(pathlib.Path(a.oracle).read_text(encoding="utf-8"))
 
-    panel = readers.Readers(a.model, a.checker, tuple(m for m in a.arbiter.split(",") if m)) if a.checker else None
+    panel = (readers.Readers(a.model, a.checker, tuple(m for m in a.arbiter.split(",") if m), third=a.third)
+             if a.checker else None)
 
     def run(q):
         common = dict(question_id=q["id"], offline=a.offline, executor=ex,
@@ -166,7 +169,7 @@ def main():
             row = error_row(q, name, e)
         row.update(call_totals(CALL_LOG[start:]))
         if keep and row.get("correct") and served:
-            row["kept_links"] = keep_links(served[-1], q["id"])
+            row["kept_links"], row["not_kept"] = keep_links(served[-1], q)
         rows.append(row)
         save(path, name, a, complete, rows, g)
     table = save(path, name, a, complete, rows, g)
@@ -182,6 +185,8 @@ def main():
         print("trust: " + ", ".join(f"{t} {v['correct']}/{v['n']}" for t, v in bt.items())
               + f"; silent wrong (wrong while VERIFIED): {table['overall']['silent_wrong']}"
               + f"; wrong while WITNESSED: {table['overall'].get('witnessed_wrong', 0)}")
+        print(f"scorers: final {table['overall']['correct_final']}/{table['overall']['n']}, "
+              f"strict (as of 21 Nov) {table['overall']['correct_strict']}/{table['overall']['n']}")
     for r in rows:
         if not r["correct"]:
             print(f"  x {r['id']} [{r['type']}] [{r.get('tier', '')}] gold={str(r['gold'])[:40]!r} got={r['answer'][:70]!r}")
@@ -197,25 +202,49 @@ def print_readings(rows: list) -> None:
         n, k = cases.get(r.get("reading"), (0, 0))
         cases[r.get("reading")] = (n + 1, k + bool(r["correct"]))
     print("readings: " + "; ".join(f"{case} {k}/{n}" for case, (n, k) in cases.items()))
-    for role in ("maker", "checker", "arbiter"):
+    for role in ("maker", "checker", "third", "arbiter"):
         seen = [x for r in rows for x in r.get("readers", []) if x["role"] == role]
         if seen:
             print(f"  {role} alone: {sum(x['correct'] for x in seen)}/{len(seen)}")
 
 
-def keep_links(out: dict, question_id: str) -> int:
-    """Outcome gate: write to the store the links and bindings this answer learned, now that its gold
-    confirmed the answer. Returns how many were written."""
+def keep_links(out: dict, q: dict) -> tuple:
+    """Outcome gate at fact level: write to the store a link or binding this answer learned only when
+    a figure it supplied to the answer equals a value among the question's gold facts. A right answer
+    confirms the facts its key names, not every line it read: the losers of a ranking, or an input the
+    arithmetic did not need, are not kept (23 Nov; research/17 Top 3). Returns (written, not written)."""
     from tieout.link import save_link
     from tieout.living import save_entry
-    kept = 0
+    facts = [sf["value"] for sf in q.get("supporting_facts") or []
+             if isinstance(sf.get("value"), (int, float)) and not isinstance(sf.get("value"), bool)]
+    scale = as_printed_scale(q) or 1.0
+    leaves = getattr(out.get("result"), "leaves", []) or []
+
+    def supplied(entry: dict) -> list:
+        kind, ticker = entry.get("kind"), entry.get("ticker")
+        if kind in ("item", "mention"):
+            return [lf.value for lf in leaves if lf.what == entry.get("item")]
+        if kind == "breakdown":
+            return [lf.value for lf in leaves if lf.ticker == ticker and str(lf.what).startswith("line:")]
+        return [lf.value for lf in leaves if lf.ticker == ticker and lf.what == entry.get("concept")]
+
+    def is_fact(v) -> bool:
+        if not isinstance(v, (int, float)) or isinstance(v, bool):
+            return False
+        return any(abs(abs(v) - abs(f) * s) <= 0.006 * max(abs(v), abs(f) * s, 1e-12) for f in facts for s in {1.0, scale})
+
+    kept, dropped = 0, 0
     for entry in out.get("learned", []):
         if entry.get("state") not in ("active", "flagged"):
             continue
-        entry = {**entry, "confirmed_by": f"the answer to {question_id} matched its gold"}
+        if not any(is_fact(v) for v in supplied(entry)):
+            dropped += 1                              # right answer, but this line's figure is none of its gold facts
+            continue
+        entry = {**entry, "confirmed_by": f"the answer to {q['id']} matched its gold, and this line supplied one of "
+                                          "its gold facts"}
         (save_link if entry.get("kind") in ("item", "mention", "breakdown") else save_entry)(entry)
         kept += 1
-    return kept
+    return kept, dropped
 
 
 def call_totals(calls: list) -> dict:

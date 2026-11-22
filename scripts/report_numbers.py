@@ -52,6 +52,15 @@ def tex(s: str) -> str:
     return s.replace("&", "\\&").replace("%", "\\%").replace("_", "\\_") if "\\" not in s else s
 
 
+def mcnemar_exact(b: int, c: int) -> float:
+    """Two-sided exact McNemar p-value: the discordant pairs b and c under Binomial(b + c, 1/2)."""
+    import math
+    n, k = b + c, min(b, c)
+    if n == 0:
+        return 1.0
+    return min(1.0, 2.0 * sum(math.comb(n, i) for i in range(k + 1)) / 2 ** n)
+
+
 def calls(d: dict) -> dict:
     rows = d.get("rows", [])
     n = max(1, len(rows))
@@ -130,9 +139,44 @@ def main() -> None:
         if o:
             scale_line = f"{o.get('n')} questions: {o.get('correct')} correct, {o.get('abstained')} abstained, {o.get('silent')} silent wrong"
             summary["scale_test"] = o
+    # 23 Nov (Session A): both scorers, the exact McNemar test against the baseline, the scaled side
+    # experiment and the store's transfer split
+    strict_line = mcnemar_line = scaled_line = transfer_line = "n/a"
+    if held:
+        o = held["score"]["overall"]
+        strict_line = (f"final scorer {o.get('correct_final', o['correct'])}/{o['n']}, strict scorer (the 21 Nov rules) "
+                       f"{o.get('correct_strict', o['correct'])}/{o['n']}, 95\\% interval (final) "
+                       f"{pct(o['accuracy_ci95'][0])} to {pct(o['accuracy_ci95'][1])}")
+        base = load("heldout_baseline_dense.json")
+        if base:
+            mine = {r["id"]: bool(r.get("correct")) for r in held["rows"]}
+            theirs = {r["id"]: bool(r.get("correct")) for r in base.get("rows", []) if "id" in r}
+            ids = sorted(set(mine) & set(theirs))
+            b = sum(1 for i in ids if mine[i] and not theirs[i])
+            c = sum(1 for i in ids if theirs[i] and not mine[i])
+            p = mcnemar_exact(b, c)
+            summary["mcnemar_vs_dense_baseline"] = {"n": len(ids), "only_tieout": b, "only_baseline": c, "p_two_sided": p}
+            mcnemar_line = (f"on the {len(ids)} held-out questions TieOut alone is right on {b}, the dense baseline alone on "
+                            f"{c}; exact McNemar two-sided p = {p:.4f}")
+    scaled = load("heldout_v2_scaled.json")
+    if scaled:
+        o = scaled["score"]["overall"]
+        scaled_line = (f"labelled side experiment, paid models (Claude Sonnet 5.5 reads and picks, gemini-3.1-pro "
+                       f"arbitrates): {o['correct']}/{o['n']} (strict {o.get('correct_strict', o['correct'])}/{o['n']})")
+        summary["heldout_scaled"] = {"correct": o["correct"], "n": o["n"], "correct_strict": o.get("correct_strict")}
+    transfer = load("transfer_heldout.json")
+    if transfer:
+        gr = transfer["groups"]
+        t, u = gr.get("touches the store", {}), gr.get("does not touch it", {})
+        transfer_line = (f"with the learned store {gr['all']['with_store']}/{gr['all']['n']}, without it "
+                         f"{gr['all']['without_store']}/{gr['all']['n']}; on the {t.get('n', 0)} questions that touch a "
+                         f"stored pair {t.get('with_store')} vs {t.get('without_store')}, on the other {u.get('n', 0)} "
+                         f"{u.get('with_store')} vs {u.get('without_store')}")
+        summary["transfer"] = transfer
     macros = {"HeldRows": "\n".join(rows_tex), "TierLine": tex(tier_line), "CostLine": tex(cost_line),
               "CaseLine": tex(case_line), "RoundRows": "\n".join(round_rows), "StoreLine": tex(store_line),
-              "ScaleLine": tex(scale_line)}
+              "ScaleLine": tex(scale_line), "StrictLine": strict_line, "McNemarLine": tex(mcnemar_line),
+              "ScaledLine": tex(scaled_line), "TransferLine": tex(transfer_line)}
     (ROOT / "report" / "numbers.tex").write_text(
         "".join(f"\\newcommand{{\\{k}}}{{{v}}}\n" for k, v in macros.items()), encoding="utf-8")
     (RES / "summary.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")

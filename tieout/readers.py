@@ -4,11 +4,14 @@ The graph can prove a number: it sits inside a formula that holds. It cannot pro
 plan asked for the right number. A plan over the wrong set of companies, or the wrong year,
 ties out just as well. That reading is the one thing a language model decides alone.
 
-So the question is read twice, by two models that share nothing: a hosted model with a large
-free quota (the maker) and the small fine-tuned local model (the checker). Each writes its
-own plan and each plan runs on the graph.
+So the question is read twice, by two different models: a hosted model with a large free quota
+(the maker) and the small fine-tuned local model (the checker). Each writes its own plan without
+seeing the other's, and each plan runs on the graph. They are not independent: the local model was
+trained on plans written with the maker family's help, and the word rules of ask.py rewrite both
+plans alike (see witness.py), so they can share an error; agreement lowers the error rate, and the
+measured rate is what the write-up reports.
 
-    the two answers are the same       served: the reading has two independent witnesses
+    the two answers are the same       served: the reading has two witnesses
     they differ, or one has no answer  one call to the strongest free model (the arbiter),
                                        which plans from the question alone and sees neither
                                        plan. If it equals one reader's answer, that answer is
@@ -30,8 +33,8 @@ from . import ask
 from .execute import Result, same_name
 from .link import start_question
 from .llm import DailyLimit, impatient
-from .witness import (AGREE, AGREE_ON_ORDER, ARBITER_ALONE, ARBITER_AND_READER, ONE_READER,  # noqa: F401 - re-exported
-                      WITNESSED, Panel as Readers)
+from .witness import (AGREE, AGREE_OF_THREE, AGREE_ON_ORDER, ARBITER_ALONE, ARBITER_AND_READER,  # noqa: F401
+                      ONE_READER, WITNESSED, Panel as Readers)
 
 UNWITNESSED = "the planners read the question differently; this reading has no second witness"
 FIGURES_DIFFER = "two readers rank these in the same order but do not compute every figure the same way"
@@ -51,12 +54,25 @@ def answer(question: str, g, readers: Readers, **kw) -> dict:
         res = served["result"]
         res.tier, res.tier_reasons = "FLAGGED", [FIGURES_DIFFER] + [r for r in res.tier_reasons if r != FIGURES_DIFFER]
         return served
+    readers_out = [first, second]
+    if getattr(readers, "third", ""):
+        # item 8 (23 Nov): a third cheap reader of another model family breaks the tie before any arbiter call
+        try:
+            extra = ask.answer(question, g, model=readers.third, **kw)
+        except DailyLimit:
+            extra = None
+        if extra is not None:
+            seen.append(_seen("third", readers.third, extra))
+            readers_out.append(extra)
+            for o in (first, second):
+                if (extra["result"].ok and same_answer(extra["result"], o["result"])) or (declined(extra) and declined(o)):
+                    return _serve(_prefer(o, extra), AGREE_OF_THREE, seen)
     third, model = _arbitrate(question, g, readers.arbiters, kw)
     if third is None:                                # no arbiter configured, or none has quota left
         return _serve(_prefer(first, second), ONE_READER, seen)
     seen.append(_seen("arbiter", model, third))
     if third["result"].ok or declined(third):
-        if any(same_answer(third["result"], o["result"]) or (declined(third) and declined(o)) for o in (first, second)):
+        if any(same_answer(third["result"], o["result"]) or (declined(third) and declined(o)) for o in readers_out):
             return _serve(third, ARBITER_AND_READER, seen)
         # three readers, three readings: structure decides first (an answer before none, then the one
         # whose every number ties out); when it cannot, the arbiter's reading, the strongest model's.

@@ -60,7 +60,9 @@ class Leaf:
     printed: str
     status: str               # verified | unverified | text
     value: Any = None
-    witnessed: bool = False   # a linked line that two models picked independently (see witness.py)
+    witnessed: bool = False   # a line two models chose (see witness.py): a linked line, or a learned binding
+    unwitnessed: str = ""     # why a line two models chose does not cover this reading (link.witness_of)
+    bound: str = ""           # a concept's row bound while answering: the binding's origin ("learned:<id>")
 
     def key(self) -> tuple:
         return (self.ticker, self.what, self.period)
@@ -211,6 +213,10 @@ class Executor:
         r = self.g.best_reading(f, as_first_reported=first)
         label = r.label or "(printed without a label; identified by its place in the statement's arithmetic)"
         leaf = Leaf(r.id, ticker, what, r.period, r.doc, r.page, label, r.text, r.status, r.value)
+        origin = self._binding_origin(r, what)
+        if origin.startswith("learned"):              # a model proposed this row for the concept (living.learn)
+            leaf.bound = origin
+            leaf.witnessed = (r.doc, r.kind, r.row, what) in getattr(self.g, "witnessed_bindings", ())
         if self.use_checks and r.status == "failed":
             return abstain(f"{ticker} {what} {pid} is quarantined: its formula does not hold on page {r.page}",
                            [leaf], [(ticker, what, pid)])
@@ -232,6 +238,20 @@ class Executor:
             notes.append(other)
         return Result("number", value, unit, [leaf], notes,
                       {"op": "read", "what": f"{ticker} {what} {pid}", "value": value, "page": r.page, "doc": r.doc})
+
+    def _binding_origin(self, r, concept: str) -> str:
+        """Where the binding of this reading's row to the concept came from: "seed" (structure),
+        "learned:<question id>" (a model's proposal, admitted by the gate), "human", or "" for a
+        reading that is not a bound statement row. Bindings can be added while a run answers, so
+        the index is rebuilt when their number changes."""
+        bs = self.g.bindings
+        if getattr(self, "_origin_n", -1) != len(bs):
+            self._origins = {}
+            for b in bs:
+                if b.state == "active":
+                    self._origins.setdefault((b.doc, b.kind, b.row, b.concept), b.origin)
+            self._origin_n = len(bs)
+        return self._origins.get((r.doc, r.kind, r.row, concept), "")
 
     def _second_reading(self, ticker: str, concept: str, pid: str, value) -> str:
         """The other defensible reading of a concept that has two forms (attributable and consolidated
@@ -325,8 +345,9 @@ class Executor:
                         continue
                 source = self.g.readings[f.readings[0]]
                 res = self._from_fact(f, ticker, key, pid, first, source.unit, _is_payment(source))
+                from .link import witness_of
                 for leaf in res.leaves:
-                    leaf.witnessed = (ticker, key) in getattr(self.g, "witnessed_links", ())
+                    leaf.witnessed, leaf.unwitnessed = witness_of(self.g, ticker, phrase, key, leaf.id)
                 second = getattr(self.g, "second_readings", {}).get((ticker, key))
                 if second and res.ok:                 # a namesake line the words could not rule out
                     res.notes.append(second)
@@ -876,13 +897,17 @@ def trust(r: Result) -> tuple:
     """The answer's tier and the reasons for it.
 
     VERIFIED  every number the answer rests on is a statement line bound to its concept by structure
-              and sits inside a formula that holds on its page (or is solved from such numbers),
-              every text fact is quoted from its page, and nothing was matched by wording alone,
-              skipped, or left with a second defensible reading. A line the linker chose by its
-              words is never VERIFIED: the arithmetic proves the number, not which line it is.
-    WITNESSED the same, except that some numbers are lines the linker chose by their words, and each
-              such line was picked independently by two models that agreed (the four-eyes rule of
-              witness.py). Arithmetic vouches for the numbers, two witnesses for each choice of line.
+              (a seed binding: no model chose the row) and sits inside a formula that holds on its
+              page (or is solved from such numbers), every text fact is quoted from its page, and
+              nothing was matched by wording alone, skipped, or left with a second defensible reading.
+              A line the linker chose by its words is never VERIFIED: the arithmetic proves the
+              number, not which line it is. Neither is a concept row a model proposed while answering
+              (living.learn): the structural gate admitted it, but a model chose it.
+    WITNESSED the same, except that some numbers are lines a model chose (a linked line, or a concept
+              row learned while answering), and each such choice was made by two models that agreed
+              (the four-eyes rule of witness.py) on the row this number is read from. Arithmetic vouches
+              for the numbers, two models for each choice of line. The two are not independent: both
+              pickers are Gemini flash-lite models and the word rules shape what both see.
     FLAGGED   answered, with each weakness named.
     ABSTAIN   no answer.
     """
@@ -897,6 +922,10 @@ def trust(r: Result) -> tuple:
                 continue
             if lf.witnessed and lf.status == "verified":
                 continue
+            if lf.status == "verified" and lf.unwitnessed:
+                reasons.append(f"{lf.ticker}: {lf.unwitnessed}; the arithmetic confirms the number, not that it is "
+                               f"the line asked for ({lf.doc} page {lf.page})")
+                continue
             reasons.append(f"{lf.ticker}: the line was chosen by the linker from its words"
                            + (" and one model alone" if not lf.witnessed else "")
                            + "; the arithmetic confirms the number, not that it is the line asked for "
@@ -904,6 +933,15 @@ def trust(r: Result) -> tuple:
                            f"{lf.ticker}: the line was chosen by the linker from its words and its number is not "
                            f"inside a passing formula ({lf.doc} page {lf.page})")
             continue
+        if lf.bound.startswith("learned"):            # a concept row a model proposed while answering
+            if not lf.witnessed:
+                reasons.append(f"{lf.ticker} {lf.what}: the row '{lf.label[:40]}' was bound to the concept by one "
+                               f"model's proposal ({lf.bound}), admitted by the structural gate; no second model "
+                               f"made the same binding ({lf.doc} page {lf.page})")
+                continue
+            if lf.status == "verified":
+                linked = True                         # two models chose the row: WITNESSED, never VERIFIED
+                continue
         if lf.status == "verified":
             continue
         if lf.status == "text" and lf.what not in NUMERIC_ATTRS and not str(lf.what).startswith(("said:", "item:")):

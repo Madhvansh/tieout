@@ -44,13 +44,13 @@ def test_row_picks_are_witnessed_when_a_second_picker_is_set(monkeypatch):
     monkeypatch.setattr(link, "link_model", lambda model, offline: "maker-picker")
     monkeypatch.setattr(link, "ask_json", lambda system, user, model=None, tag="", offline=False: answers[model])
     monkeypatch.delenv("TIEOUT_LINK_CHECKER", raising=False)
-    assert link._pick("s", "u", "link", None, False) == ({"pick": 2, "column": None}, "")       # one picker: no case
+    assert link._pick("s", "u", "link", None, False)[:2] == ({"pick": 2, "column": None}, "")       # one picker: no case
     monkeypatch.setenv("TIEOUT_LINK_CHECKER", "second-picker")
     assert link._pick("s", "u", "link", None, False)[1] == AGREE                                 # same candidate
     answers["second-picker"] = {"pick": 4}
     monkeypatch.setenv("TIEOUT_LINK_ARBITER", "strong")
     answers["strong"] = {"pick": 4}
-    assert link._pick("s", "u", "link", None, False) == ({"pick": 4}, ARBITER_AND_READER)
+    assert link._pick("s", "u", "link", None, False)[:2] == ({"pick": 4}, ARBITER_AND_READER)
 
 
 def test_a_question_asks_each_pick_once_and_caps_its_arbiter_calls(monkeypatch):
@@ -66,10 +66,10 @@ def test_a_question_asks_each_pick_once_and_caps_its_arbiter_calls(monkeypatch):
     monkeypatch.setenv("TIEOUT_LINK_ARBITER", "strong")
     link.start_question(arbiter_budget=1)
     try:
-        assert link._pick("s", "u1", "link", None, False) == ({"pick": 2}, ARBITER_AND_READER)
-        assert link._pick("s", "u1", "link", None, False) == ({"pick": 2}, ARBITER_AND_READER)   # asked once
+        assert link._pick("s", "u1", "link", None, False)[:2] == ({"pick": 2}, ARBITER_AND_READER)
+        assert link._pick("s", "u1", "link", None, False)[:2] == ({"pick": 2}, ARBITER_AND_READER)   # asked once
         assert len(calls) == 3
-        assert link._pick("s", "u2", "link", None, False) == ({"pick": 1}, ONE_READER)          # budget spent
+        assert link._pick("s", "u2", "link", None, False)[:2] == ({"pick": 1}, ONE_READER)          # budget spent
         assert [m for m, _ in calls[3:]] == ["maker-picker", "second-picker"]
     finally:
         link._QUESTION.update(budget=None, seen=None)

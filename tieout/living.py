@@ -36,6 +36,7 @@ from typing import Optional
 from .concepts import Binding, concept_defs, label_objections, label_unrelated, norm_label
 from .graph import Fact, Graph
 from .llm import DailyLimit, ask_json, link_model
+from .witness import WITNESSED
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 LEARNED = ROOT / "semantics" / "learned.jsonl"
@@ -247,6 +248,18 @@ def describe(rows: dict, bound: dict) -> str:
     return "\n".join(lines)
 
 
+def binding_prompt(g: Graph, ticker: str, concept: str, doc: str) -> tuple:
+    """(the user prompt of the binding question, the statement's rows) for (ticker, concept) on one
+    filing. Labels, sections and roles only, never a value."""
+    c = concept_defs()[concept]
+    rows = row_table(g, doc, c.statement)
+    bound = {b.row: b.concept for b in g.bindings if b.doc == doc and b.kind == c.statement and b.state == "active"}
+    user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nStatement: {c.statement}\n"
+            f"Concept: {concept}: {SAYS.get(concept, '')}\n\nRows (number: label (section) <role>):\n"
+            + describe(rows, bound))
+    return user, rows
+
+
 def learn(g: Graph, ticker: str, concept: str, question_id: str = "", question: str = "",
           model: Optional[str] = None, use_gate: bool = True, offline: bool = False) -> dict:
     """Try to learn a binding for (ticker, concept). Returns the store entry."""
@@ -258,31 +271,32 @@ def learn(g: Graph, ticker: str, concept: str, question_id: str = "", question: 
     if doc is None:
         entry["objections"] = ["no readable filing"]
         return entry
-    rows = row_table(g, doc, c.statement)
+    user, rows = binding_prompt(g, ticker, concept, doc)
     if not rows:
         entry["objections"] = [f"no {c.statement} statement was parsed for this filing"]
         return entry
-    bound = {b.row: b.concept for b in g.bindings if b.doc == doc and b.kind == c.statement and b.state == "active"}
-    user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nStatement: {c.statement}\n"
-            f"Concept: {concept}: {SAYS.get(concept, '')}\n\nRows (number: label (section) <role>):\n"
-            + describe(rows, bound))
-    try:
-        ans = ask_json(SYSTEM, user, schema=None, model=link_model(model, offline), tag="bind", offline=offline)
-    except DailyLimit:
-        raise
-    except Exception as e:  # noqa: BLE001 - a failed proposal is recorded, not fatal
-        entry["objections"] = [f"proposer failed: {type(e).__name__}"]
-        return entry
-    row = ans.get("row")
+    # The row is a model's choice, so it is made under the four-eyes rule of the row picks (link._pick:
+    # a second model when TIEOUT_LINK_CHECKER is set, the arbiter on a dispute). A binding one model made
+    # alone is still applied, but every answer that rests on it is FLAGGED (execute.trust); one two
+    # models made is WITNESSED, never VERIFIED (23 Nov red team, research/17 Top 1).
+    from .link import _pick
+    ans, case, seen = _pick(SYSTEM, user, "bind", model, offline, field="row")
+    row = ans.get("row") if ans else None
     if isinstance(row, str) and row.strip().isdigit():
         row = int(row)                                   # small models answer "24" for 24
-    entry["reason"] = str(ans.get("reason", ""))[:200]
+    entry["reason"] = str((ans or {}).get("reason", ""))[:200]
     if row is None or not isinstance(row, int) or row not in rows:
         entry["objections"] = ["proposer found no row"]
         return entry
     entry["row"], entry["label"] = row, rows[row]["label"]
+    entry["picked"] = case
+    entry["proposer"] = entry["proposer"] or " + ".join(m for m, _a in seen)
     ok, evidence, objections = gate(g, doc, concept, row, rows)
     entry["evidence"], entry["objections"] = evidence, objections
+    if case in WITNESSED:
+        entry["evidence"].append(f"bound by two models ({case})")
+    else:
+        entry["objections"].append("one model chose this row" + (f" ({case})" if case else ""))
     if ok or not use_gate:
         entry["state"] = "active"
         apply_entry(g, entry)
@@ -315,6 +329,8 @@ def apply_entry(g: Graph, entry: dict) -> int:
         g.bindings.append(Binding(doc=doc, kind=kind, row=row, label=rows[row]["label"], concept=concept,
                                   origin=f"learned:{entry.get('taught_by', '')}", state=state,
                                   evidence=list(entry.get("evidence", []))))
+        if entry.get("picked") in WITNESSED:          # two models chose this label (learn, or the witness pass)
+            g.__dict__.setdefault("witnessed_bindings", set()).add((doc, kind, row, concept))
         for r in rows[row]["readings"]:
             key = f"{ticker}|{concept}|{r.period}"
             fact = g.facts.setdefault(key, Fact(ticker, concept, r.period, [], state))
