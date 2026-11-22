@@ -1,13 +1,14 @@
-% Written by Session B (the write-up). Failure classes come from Session A's analysis of the held-out and fresh-round
-% misses (takehome/RESULTS_FOR_WRITEUP.md); evidence rows from result files named in each row.
+% Written by Session B (the write-up). Classes from the misses of the first runs on fresh rounds (round 10:
+% results/first_runs/round10_pointer.json) until the held-out misses are read after the run; evidence rows from the
+% result files named in each row.
 \newcommand{\FailRows}{%
-Right number, wrong line & Structure proves a number, not its meaning. CVX ``Net sales (purchases) of treasury shares'' served as share repurchases (10-K cash-flow statement). Fix: a second reading of the label against the question's item, served FLAGGED when they differ. \\
-Look-alike rows & The same label in two tables (two segments, two definitions); six models of four families pick the right one 68 to 73\% of the time on 145 clean pairs. Fix: scope tags (parent, child, sibling) and the next reading printed beside the answer. \\
-Odd periods & A twelve-month period that is not the fiscal year (Visa), a quarter printed only in a 10-K table (BAC p35, fixed this night). Fix: periods as intervals (start and end dates), a quarter as interval subtraction. \\
-A line the build never read & The ledger lists 26,045 body numbers no node holds; three named misses (HD p37, BAC p35, JPM p70) are fixed. Fix: the page image as a second parser accepted only by arithmetic (318 rows on 13 pages, control 0), not yet merged. \\
+The planners decline what a filing prints & Two planners answer ``filings do not report this'' for NVIDIA's employee turnover rate, printed on 10-K p99 (3.7\%). Now a node at the place the text reader names outranks that belief, served FLAGGED. \\
+A plan stops at a line it cannot place & Coca-Cola's fall in headcount: two plans abstain on ``number of employees''. Now another planner's plan is completed by pointing at its gap, served only if it gives the reader's own figure. \\
+Look-alike lines and odd periods & Walmart's square feet per unit: a sentence on p40 against the Item 2 table on p29. Six models of four families pick the right one of two look-alike rows 68 to 73\% of the time (145 clean pairs). A twelve-month period that is not the fiscal year, a quarter restated in a later table. \\
+A line the build did not read, or read in the wrong scale & GM's 6,276 dealerships (10-K p7) are held by no node. Exxon's refining capacity carries its caption's thousands and Chevron's does not, so their ratio is 1,895, not 1.79. The ledger lists 26,045 body numbers no node holds. \\
 }
 \newcommand{\EvidenceRows}{%
 Recovered formulas against the SEC calculation linkbase & 416 of 418 declared relations whose lines are printed (\texttt{results/lab\_linkbase.json}) \\
-Scale test, SEC-keyed, no model & 8,667 questions: 8,083 right (93.3\%), 517 abstained, 0 unverified wrong, 67 silent wrong (\texttt{results/scale\_test.json}) \\
-Every printed number a node or a listed gap & 231,273 printed quantities, 86.4\% held by a node; body 88.0\%; matching against another page's nodes holds 2.8\% (\texttt{results/ledger.csv}) \\
+Scale test, keyed by SEC data, no model & 8,667 questions: 8,083 right (93.3\%), 517 abstained, 0 wrong while unverified, 67 silent wrong (\texttt{results/scale\_test.json}) \\
+Every printed number a node or a listed gap & 231,273 printed quantities, 86.4\% held by a node (88.0\% in the body of the filings); matched against another page's nodes, 2.8\% (\texttt{results/ledger.csv}) \\
 }

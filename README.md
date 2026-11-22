@@ -1,174 +1,147 @@
 # TieOut
 
-Questions about SEC filings, answered from a graph of the filing's own arithmetic. A reader of the text may dispute an answer or point at a line of the graph; it never supplies an answer. Every answer comes with the page and the printed number behind it, and a tier that says how far to trust it.
+Questions about SEC filings, answered from a knowledge graph of the filings' own arithmetic. Every answer is read from graph nodes and comes with its proof (the filing, the page and the printed figure behind each number) and a tier that says how far to trust it. 55 filings of 40 companies. The reported run uses one free Gemini key and a laptop CPU.
 
-[[HEADLINE]]
+## Results: 30 held-out questions, run once
 
-## The idea: a filing is a spreadsheet whose formulas were erased
+Written by blind authors and committed before any run (`benchmark/round2/questions.jsonl`; how: [below](#how-the-benchmark-was-made)), run once on the frozen code (tag `frozen-v2`), reported as it came. **Precision**: of the facts an answer rests on (its proof leaves), the share that are gold supporting facts. **Recall**: of the gold supporting facts, the share the answer retrieved. Both are means over questions, computed by `tieout/eval/bench.py`. No model judges an answer.
 
-TieOut recovers the formulas from the printed numbers alone, with no model and no XBRL. A subtotal is the sum of the lines above it, in every period column. A total column is the sum of the segment columns. The same figure printed in two tables ties. Last year's column must equal last year's report. Those equations are the graph. They verify a number, solve for a number printed nowhere, name a row by its place in the arithmetic, and explain why a figure changed between two filings. Every other table row and every numeric sentence is a node with a value, a unit, a period and a page, linked to a question when a question needs it.
+<!-- gen:heldout (written by scripts/readme_numbers.py from results/; never edit by hand) -->
+| Question type | Questions | Accuracy | Precision | Recall |
+|---|---|---|---|---|
+| Single fact | [[...]] | [[...]] | [[...]] | [[...]] |
+| Multi-hop | [[...]] | [[...]] | [[...]] | [[...]] |
+| Cross-filing comparison | [[...]] | [[...]] | [[...]] | [[...]] |
+| **Overall** | [[...]] | [[...]] | [[...]] | [[...]] |
 
-![A statement page with its recovered formulas](report/fig_page.png)
-
-*Merck's balance sheet (10-K page 80), drawn by `python -m tieout show`. Green brackets are recovered formulas. The answer cell is outlined in blue.*
-
-## How a question is answered
-
-**A plan, run on the graph.** A language model compiles the question into a typed plan in a small plan language (`benchmark/plan_language.txt`: get, calc, compare, rank, filter, series, members). It never sees a figure. A deterministic executor runs the plan on the graph and returns the answer with its proof leaves (filing, page, printed text), or an abstention that names the fact it could not find.
-
-"What were Apple's net sales in the fourth quarter of fiscal 2026?" No filing prints that number. The plan is one step: get Revenue for fiscal 2026, quarter 4. The executor finds the equation where it is the only unknown: 478,834 for the year (10-K page 28) minus 364,357 for nine months (third-quarter 10-Q page 4) is $114,477 million, and both sources sit inside passing checks.
-
-**A reader of the text, as witness and pointer. It never answers.** The brief asks that answers come from the graph, not from search over text chunks. But the graph cannot answer from a line its linker did not find, and two pickers that choose from one shortlist can agree on a look-alike row. A plain retrieval pipeline (passages of the filings, BM25 and dense vectors fused, one model reads them; it is this repository's baseline) is right far less often than the graph, but on different questions. On the first runs of rounds 3 to 9 (240 questions nobody had seen), the graph's plans were right on 162, the reader on 135, and at least one of the two on 203. So the reader is kept inside the system, with two jobs and one rule (`tieout/passage.py`):
-
-| Job | What happens |
-|---|---|
-| Witness | Its answer is compared with the graph's. The same figure makes a FLAGGED answer CORROBORATED. A different figure against a VERIFIED or WITNESSED answer sends the question to the strongest free model, which plans it too. |
-| Pointer | It is asked where a line is printed. The place it names (filing, page, figure) is looked up in the graph. The row found there is linked to the plan's phrase exactly as a picker's choice is, and the executor runs the plan again. The reader names the row; the column head still picks the period, the caption the scale, the executor does the arithmetic. This fills an abstention. It overrules the linker's lines only when the plan on the pointed lines gives the reader's own figure. |
-
-The rule: nothing the reader writes is ever served. No figure, no name, no ranking. Every served figure is a node of the graph, and one command checks that for a whole run: `python scripts/check_brief.py results/<run>.json` fails if any proof leaf of any served answer is not a node at the filing and page it states. Of 579 figures the reader cited in 279 saved answers, 546 are nodes of the graph (402 table cells, 144 sentence figures). Where no node is there, there is no answer.
-
-On the four latest development rounds (142 questions) the plans alone were right on 114 and the whole system on 122 (`results/h2_r7.json` to `results/h2_r10.json`). Every result row records what the plans alone served, so each run reports both numbers.
-
-## Trust: two planners, two pickers, one outside witness, five tiers
-
-No single model's choice is served as fact. Two planners read each question: a free hosted model and a small model fine-tuned on Kaggle that runs on a laptop CPU. Their plans are compared on what they yield, not on their wording. A stronger model, the arbiter, is called only when they disagree. When an answer needs a printed line outside the three statements, two pickers choose it and are compared on the figure each pick yields. The reader of the text then checks the result from outside.
-
-The planners and pickers are not independent, and we measured how much that matters. Both pickers are Gemini flash-lite models. The local planner learned from paraphrases the hosted model wrote. When the two planners disagreed (139 cases over rounds 4 to 8), the hosted one was right 80 times, the local one 29, the arbiter 96, and the served answer 100. The reader of the text is the one witness that shares none of this: it reads text, not plans.
-
-| Tier | What the code promises (`tieout/execute.py` `trust`, `tieout/readers.py`) | Right, [[TIER-SOURCE]] |
-|---|---|---|
-| VERIFIED | Every number is a statement line bound to its concept by a seed binding (no model chose the row), inside a formula that holds on its page or solved from such numbers. Two planners read the question alike. | [[T-VERIFIED]] |
-| WITNESSED | The same, except some lines were chosen by models, and each such choice was made by two models that agreed. | [[T-WITNESSED]] |
-| CORROBORATED | An answer with a weakness (one model's choice, a line outside any formula) that the reader of the text repeats, or one where the arbiter's plan and the reader agree. | [[T-CORROBORATED]] |
-| FLAGGED | Answered, with each weakness named, and the text reader's different answer printed beside it when there is one. Every answer whose line the reader pointed at is here. | [[T-FLAGGED]] |
-| ABSTAIN | Not answered. Says what is missing. | [[T-ABSTAIN]] |
-
-## The configuration
-
-The headline runs on what the brief allows: one free Gemini key and a laptop CPU. Planner `gemini-3.5-flash-lite` (plans and picks). Second planner `tieout-planner-4b-v3`, our fine-tuned Qwen3-4B, through Ollama on the CPU. Second picker `gemini-3.1-flash-lite`. Arbiter `gemini-3.6-flash`, then `3.5-flash`, then `3-flash-preview`. Text reader `gemini-3.5-flash-lite` over a hybrid retriever (BM25 plus `bge-small` vectors on the CPU). One command runs it (`dev_scripts/fable/heldout_c.sh`).
-
-Paid models were used for development throughput and for one question only: is the model the bottleneck? That answer is its own table below. No paid number is mixed into a free one.
-
-## Held-out results (run once, after the freeze)
-
-[[HELDOUT]]
-
-## The centre of this work: we measured our own overfitting
-
-Development numbers flattered the system: 84 of 87 on the first development set, 56 to 69 percent on questions nobody had seen. So the work ran in rounds. Blind authors (agents that read only the filings and the list of questions already used) write a fresh round. A leak gate drops near copies of held-out questions without anyone reading them. The system runs once, and that first run is recorded before any answer is read. Only then are the misses fixed, by class. The round then becomes development material.
-
-[[ROUNDS-TABLE]]
-
-![First runs on fresh rounds against the frozen code](report/fig_rounds.png)
-
-[[ROUNDS-TEXT]]
-
-Part of the gap is adaptation to development questions. Part may be that fresh questions are harder or different: Recht et al. (2019) measured a similar drop on fresh ImageNet test sets with no reuse at all. We report both numbers and do not call the gap overfitting alone. The scorer changed during the work (six rules were relaxed on 22 November after misses were read, then tightened against a red team's counter-examples), so every headline number is given under the final scorer and under the strict scorer of 21 November.
-
-**A negative result we keep.** The system stores links between a question's words and a printed line when the answer they led to was right. We expected that store to help on new questions. It did not: round 8 scored 30 of 35 with the links learned on rounds 1 to 7 and 30 of 35 without them, because only 3 of its 35 questions touch a stored pair. The store helps a question that is asked again, not a new one.
-
-## Is the model the bottleneck? (paid side experiment)
-
-| Setup | Round 7, 36 questions (development by then) | Round 9, 36 questions (first run, unseen) |
-|---|---|---|
-| Baseline: passages, flash-lite reads | 20 | 17 |
-| flash-lite alone on the graph (one planner, one picker) | 19 | |
-| gemini-3.1-pro alone on the graph (paid) | 22 | |
-| The free setup: two planners, two pickers, arbiter | 31 | 27 |
-| Scaled: Claude Sonnet 5.5 plans and picks, gemini-3.1-pro arbitrates (paid) | 32 | 26 |
-
-All on the code of 22 November, before the text reader was added; round 9 as scored that night (26 and 26 under the final scorer). A stronger model alone gains 3 questions. The design gains 12. Paid models inside the design gain one question on a development round and lose one on unseen questions. On 145 clean row-pick pairs, six models of four families all pick the right row 68 to 73 percent of the time (`dev_scripts/fable/pick_models*.log`). The model is not the bottleneck; a witness of another kind was worth more than a stronger model.
-
-## Where it fails, by class
-
-[[FAILURES]]
-
-## Every printed number is a node or a listed gap
-
-A question about a line the build never read gets a confident wrong neighbour. So the graph keeps a ledger of what it failed to read (`scripts/ledger.py`). Every number on every page of the text layer is tokenised. Years, dates, footnote markers, page numbers and references are set aside, and each remaining quantity is matched to a node on the same page. What no node holds is written to `graph/residue.json.gz` with its line, the lines around it and a class.
-
-`python scripts/ledger.py --ticker HD --page 37` prints one page's certificate; `results/ledger.csv` has one line per filing. Over the 55 filings: 231,273 printed quantities, 199,791 held by a node (86.4 percent); in the body of the filings, outside tables of contents and exhibits, 191,087 of 217,132 (88.0 percent). The 26,045 body numbers not held are listed by class. Matching each page against the nodes of another page of the same filing holds 2.8 percent, so a match by value is rarely a coincidence. The ledger reads the same text layer as the build, so the certificate can say "listed" but never "complete".
-
-The ledger found three build cases the loss analysis had left open, each fixed as a class with a test (`tests/test_buildfix4.py`): a chain of footnote markers that hid a row's figures (Home Depot, average ticket), a quarterly table inside a 10-K whose header read as prose (Bank of America, 400 undated figures), and a caption broken over three lines that lost its scale (JPMorgan, 13 rows read as per-share amounts). Against the previous graph: 46 table lines gained, none lost, and the SEC-keyed scale test unchanged at 8,083 right, 0 unverified wrong, 67 silent wrong out of 8,667.
-
-Two further uses were measured and not merged. A vision model laid out the tables of the 13 pages with the most residue; a cell was accepted only if its number is in the text layer and a row only if it restores a footing equation. 318 of 445 proposed rows were accepted and 935 of 1,337 unread numbers recovered; with the numbers shuffled within each page, 100 seeds accepted no row (`vision_lab/REPORT.md`). And of 7,689 footing checks, 64 fail; one unread line of the same page completes 4 of them, 2 by coincidence (`results/complete_by_arithmetic.json`).
-
-## What did not work
-
-- Tuning on one development set: 84 of 87 there, 56 to 69 percent on fresh questions.
-- Trusting one model's plan or pick. Flash-lite slips on about one plan in eight and often picks a look-alike row.
-- A stronger model alone, or a picker of another family: see the side experiment above.
-- Serving an answer the text reader wrote. An earlier version filled abstentions with the reader's own answer. It gained three questions on a fresh round (27 of 35 against 24) and broke the brief's rule that answers come from the graph. It was rebuilt so that the reader can only point at a graph node: the first run of that version on the same round scored 26.
-- Letting the text reader replace a served answer whenever it disagrees: 141 of 178 right on saved results, against 144 when it may only fill, break ties and corroborate.
-- A word rule for "how much did X grow" (the rate or the amount?): the keys of blind authors want the rate in 2 development questions and the amount in 2, so the rule was removed after its red team.
-- A reverse check of a picked row (a model shown only the row's place says what it reports), and a third cheap planner of another family: neither gained on rounds 7 and 8, and the first promoted a wrong answer.
-- The link store on new questions (above).
-- Relaxing a scoring rule after reading a miss without a counter-example test. The red team found a wrong answer that passes each of the six rules relaxed on 22 November, hence the strict scorer.
-- Distant supervision of a row picker by numeric equality: of 1,790 training pairs, 805 were coincidental ties.
-- A model judge for admitting a binding: 97.0 percent precise, but it threw away 34 of 66 right proposals (`results/judge_vs_gate.json`).
-- Fine-tuned planners trained on template questions only: 84 to 88 percent exact on synthetic phrasings, 64 to 68 of 87 on real ones. Paraphrase training fixed most of it (below).
-
-## The fine-tuned models
-
-Planners fine-tuned on Kaggle GPUs from Qwen3 (LoRA, one epoch, plans written in the plan language for templated questions, paraphrased by the hosted model and drift-checked, leak-checked against the held-out questions). Published with cards that state data, method, scores and limits: [4B v3](https://huggingface.co/Madhvansh/tieout-planner-qwen3-4b-v3-gguf) (the second planner of the configuration), [4B v2](https://huggingface.co/Madhvansh/tieout-planner-qwen3-4b-v2-gguf), [1.7B v3.1](https://huggingface.co/Madhvansh/tieout-planner-qwen3-1.7b-v3.1-gguf), [1.7B v2](https://huggingface.co/Madhvansh/tieout-planner-qwen3-1.7b-v2-gguf), [0.6B v2](https://huggingface.co/Madhvansh/tieout-planner-qwen3-0.6b-v2-gguf). Alone, on rounds 1 to 5 (194 questions): v2 4B 137, v3 4B 152, flash-lite 175. A v3.2 retrain on eight newer plan forms had its success criteria written before training (5 more right answers on rounds 6 to 8). It missed them: 52 of 106 for both v3.2 and v3 on the same machine, so v3 stays. [[8B]]
-
-## What I would do next
-
-Each of these was built or measured and stopped short of the frozen system. The number is what was measured.
-
-- **A judge between two sets of lines.** When the linker's rows and the rows the reader cites give different answers, show both sets to the arbiter with their tables and headings and no figures, and let the executor compute on the set it picks. Today the reader's lines win only when a separate reading of each line agrees with its answer to the whole question.
-- **Periods as intervals.** A twelve-month period that is not the fiscal year, or a quarter restated in a later table, still fails (Bank of America's restated third quarter, round 7). Start and end dates for every column, a quarter as interval subtraction.
-- **Wire the page-image rows into the graph.** 318 rows accepted by arithmetic on 13 pages. Left out because a label is not proven by arithmetic: two operands that trade labels keep every sum.
-- **Read award and option tables.** Share counts there are read as dollars in the money scale. A fix was built and switched off: its red team found the share scale wrong on 11 pages.
-- **Show the unread lines when nothing fits.** The ledger knows which printed lines of a page no node holds; they could be listed as FLAGGED candidates.
-- [[NEXT-EXTRA]]
+- On the same 30 questions: the retrieval baseline (passages, the same free model reads) [[...]]; TieOut's plans alone, without the text reader, [[...]] (`results/heldout_v2.json`, `results/heldout_baseline_hybrid.json`).
+- Right by tier: [[...]]. Under the strict scorer of 21 November: [[...]].
+- `python scripts/check_brief.py results/heldout_v2.json`: [[...]].
+- Paid side experiment, is the model the bottleneck? (Claude Sonnet 5.5 plans and picks, gemini-3.1-pro arbitrates, labelled and never mixed into the headline): [[...]].
+<!-- /gen:heldout -->
 
 ## Run it
 
-Python 3.12, no GPU, no key. The built graph, every model call and every passage reply are in the repository, so the reported runs replay offline:
+Python 3.12, no GPU, no key: the built graph and every model call of the reported runs are in the repository.
 
 ```
 pip install -r requirements.txt
-[[REPLAY]]
-python -m tieout ask --offline "What were Apple's net sales in the fourth quarter of fiscal 2026?"
-python scripts/ledger.py --ticker HD --page 37
+python scripts/check_brief.py results/heldout_v2.json    # every proof leaf of every served answer is a graph node
+python scripts/report_numbers.py                          # the numbers of this README and the PDF, from results/
+TIEOUT_LLM=gemini:gemini-3.5-flash-lite python -m tieout ask --offline "What were Apple's net sales in the fourth quarter of fiscal 2026?"
+TIEOUT_LINK_LLM=gemini:gemini-3.5-flash-lite python scripts/run_benchmark.py --bench benchmark/round2/questions.jsonl \
+  --model gemini:gemini-3.5-flash-lite --checker ollama:tieout-planner-4b-v3 --pick-checker gemini:gemini-3.1-flash-lite \
+  --arbiter gemini:gemini-3.6-flash,gemini:gemini-3.5-flash,gemini:gemini-3-flash-preview \
+  --passage gemini:gemini-3.5-flash-lite --offline --name replay     # the held-out run, replayed from the cache
 ```
 
-A new question needs the local model (Ollama on the CPU) and a free key. Rebuild from the PDFs: `python scripts/fetch_corpus.py`, `python -m tieout build`, `python scripts/build_raw.py`, `python scripts/add_headings.py`, `python scripts/ledger.py`. `python scripts/clean_clone_check.py` clones the repository into a fresh folder and runs the checks (`results/clean_clone_check.json`).
+Without `--offline` the last command answers new questions: it needs a free `GEMINI_API_KEY` in `.env` and the fine-tuned planner in Ollama (`finetune/README.md`). Rebuild the graph from the PDFs with `python scripts/fetch_corpus.py`, `python -m tieout build`, `python scripts/build_raw.py`, `python scripts/add_headings.py`, `python scripts/ledger.py`.
+
+## One answer, end to end
+
+"What were Apple's net sales in the fourth quarter of fiscal 2026?" No filing prints that number. A language model writes the plan and never sees a figure; the executor runs it on the graph:
+
+```
+PLAN:   {"steps": [{"id": "s1", "op": "get", "company": "AAPL", "concept": "Revenue", "period": {"fy": 2026, "q": 4}}], "answer": "s1"}
+ANSWER: $114.477 billion
+TRUST:  VERIFIED
+  source: AAPL_FY2026_10K page 35 | Total net sales | printed 478,834 | verified
+  source: AAPL_FY2026_Q3_10Q page 4 | Total net sales | printed 364,357 | verified
+  note: AAPL Revenue for the fourth quarter is not printed; derived as the full year minus the nine months
+```
+
+The graph holds the equation "year = nine months + fourth quarter" across the 10-K and the third-quarter 10-Q. The fourth quarter is its only unknown, so the executor solves for it. Both printed figures sit inside checks that hold on their own pages, so the answer is VERIFIED. The two sources are its proof leaves: the facts scored for precision and recall.
+
+## The idea: a filing is a spreadsheet whose formulas were erased
+
+The printed numbers of a 10-K over-determine each other. TieOut recovers the formulas from the numbers alone, with no model and no XBRL, and keeps them as the graph. The structure decides what a model would otherwise guess:
+
+- which row is a subtotal: a signed run of the rows above it sums to it in every period column;
+- which column is the total: it sums the segment columns beside it;
+- which two figures are one fact: the same value printed in two tables ties them;
+- the scale: net income over shares must give the printed earnings per share, which pins thousands against millions;
+- the period: last year's column must equal last year's filing.
+
+The 55 filings hold 2,800 such checks (`results/graph_stats.json`). They verify a figure, solve for one printed nowhere (above), name a row by its place in the arithmetic, and explain a figure that changed between two filings (a restatement). Every other table row and every numeric sentence is a node too, with value, unit, period and page (52,761 rows, 192,730 cells, 15,124 sentence records), linked to a question when a question needs one.
+
+![Merck's balance sheet, 10-K page 80, drawn by python -m tieout show: green brackets are recovered formulas, the answer cell is outlined in blue](report/fig_page.png)
+
+## How a question is answered
+
+1. **Plan.** A language model compiles the question into a typed plan (`benchmark/plan_language.txt`: get, calc, compare, rank, filter, series, members).
+2. **Link.** A line outside the statements (a segment, a count, a sentence figure) is chosen among candidate rows shown with their labels, headings and columns, and no figures.
+3. **Execute.** A deterministic executor runs the plan on the graph and returns the answer with its proof leaves, or abstains and names the missing fact.
+4. **Four eyes.** No single model's choice is served as fact. Two planners read each question: a free hosted model (`gemini-3.5-flash-lite`) and a Qwen3-4B we fine-tuned on Kaggle, on the laptop CPU. Their plans are compared on what they compute; a stronger free model arbitrates only when they differ. Two pickers choose each line and are compared on the figure each pick yields. They are not fully independent: both pickers are Gemini models, and the 4B learned from paraphrases the hosted model wrote.
+5. **A text reader: a witness and a pointer, never a source.** The baseline of this repository (passages of the filings, BM25 and `bge-small` vectors, the same free model reads them) is used inside TieOut in two ways only. As a witness it corroborates or disputes: the same figure makes a FLAGGED answer CORROBORATED; a different figure against a VERIFIED or WITNESSED answer sends the question to the arbiter. As a pointer it names a place (filing, page, figure); the node at the place it names is linked to the plan like any picker's choice, and the executor answers from the graph. Nothing the reader writes is served, and `scripts/check_brief.py` fails a run if any proof leaf of any served answer is not a node of the graph.
+
+<!-- gen:devline -->
+On the four latest development rounds (142 questions, `results/h3_r7.json` to `h3_r10.json`), the plans alone were right on 114 and the whole system on 122. `check_brief` passes on 4 of the 4 files (round 10: 31 answers served, 76 proof leaves, 76 of them graph nodes).
+<!-- /gen:devline -->
+
+| Tier | What the code promises (`tieout/execute.py` `trust`, `tieout/readers.py`) |
+|---|---|
+| VERIFIED | Every number is a statement line bound by structure (no model chose the row), inside a formula that holds or solved from such numbers; both planners agree. |
+| WITNESSED | The same, but some lines were chosen by models, each choice by two models that agreed. |
+| CORROBORATED | An answer with a named weakness that the text reader repeats, figure for figure. |
+| FLAGGED | Answered, each weakness named. Every answer on a line the reader pointed at is here. |
+| ABSTAIN | Not answered. Says what is missing. |
+
+## How the benchmark was made
+
+- **Corpus.** 55 filings of 40 companies across sectors, banks included (`data/manifest.csv`): the latest 10-K of each, the prior-year 10-K of ten (so restatements show) and five 10-Qs (so a quarter printed nowhere can be derived), fetched from SEC EDGAR by `scripts/fetch_corpus.py`.
+- **Questions.** Three blind authors, language-model agents that could read only the text of the filings and never saw the system, wrote 69 candidates, each with a golden answer, its document and page, and the supporting facts as (document, page, printed value). Author A's questions were read by the developer while the system was still changing, so all of A is development. The 30 held-out questions come only from authors B and C, drawn by a seeded script (`scripts/split_round2.py`): 10 single-fact, 10 multi-hop, 10 cross-filing. The split was committed (`1d7346f`) before any run; the other 39 are development.
+- **Gold, verified blind.** Another agent re-derived all 30 answers from the pages without seeing the authors' gold. A script compared the two: 28 of 30 agree. A third agent judged the other 2 to be differences of form, and the author's gold stands (`benchmark/round2/adjudication.json`).
+- **Sealed until the freeze.** Nobody who changed the system read the held-out questions. Every later development round passed a leak gate (`scripts/check_leakage.py`) that drops near copies of held-out questions without anyone reading them.
+- **LLM use.** Authors, checker and adjudicator are language models. Answers are scored by a script against keys the system did not write.
+
+## Development: we measured our own overfitting
+
+The first development set flattered the system, so the work ran in rounds. Blind authors (a new persona each round: analyst, auditor, credit analyst, journalist, test engineer) write a fresh round; the leak gate runs; the system answers it once, and that first run is recorded before anyone reads an answer. Only then are the misses fixed, by class, each fix with a test, and the round becomes development material. First runs stay well below the same rounds on the current code. Part of that is adaptation; part may be that fresh questions are harder (Recht et al. 2019 saw a similar drop on fresh ImageNet test sets with no reuse at all). Six scoring rules were relaxed on 22 November after misses were read, then tightened against a red team's counter-examples, so numbers are also given under the strict scorer of 21 November.
+
+<!-- gen:rounds -->
+| Fresh round | First run, final scorer | First run, strict scorer | Current code |
+|---|---|---|---|
+| 3 | 25/36 | 25/36 | 34/36 |
+| 4 | 23/34 | 22/34 | 32/35 |
+| 5 | 20/36 | 20/36 | 34/36 |
+| 6 | 17/27 | 17/27 | 29/35 |
+| 7 | 23/36 | 20/36 | 32/36 |
+| 8 | 29/35 | 27/35 | 32/35 |
+| 9 | 26/36 | 21/36 | 31/36 |
+| 10 | 26/35 | 21/35 | 27/35 |
+| **All** | 189/275 (69%) | 173/275 (63%) | 251/284 (88%) |
+
+Files: `results/pooled_first_runs.json` (first runs rescored under both scorers), `results/first_runs/`, `results/h3_r<N>.json` (current code). Round 10's row is the first run of the corrected design, made before anyone read the round's answers; a version withdrawn the same night (it served answers the text reader wrote) had run it once before.
+<!-- /gen:rounds -->
+
+## Where it fails, by class
+
+[[HELDOUT-FAILURES: the held-out misses by class, read after the run]] On round 10's first run (`results/first_runs/round10_pointer.json`) the nine misses fall into five classes. **The planners decline what a filing prints** (NVIDIA's employee turnover rate, 3.7 percent on 10-K page 99). **A plan stops at a line it cannot place** (Coca-Cola's fall in headcount). **A look-alike line** (Walmart's square feet per unit: a sentence on page 40 against the Item 2 table on page 29). **A line the build did not read, or read in the wrong scale** (GM's 6,276 dealerships on 10-K page 7 are held by no node; Exxon's refining capacity carries its caption's thousands and Chevron's does not, so their ratio comes out 1,895 instead of 1.79). **Readings** (a balance grown over one quarter read three ways by three planners; a ranking read off a chart).
+
+## The JD's four directions, measured on this graph
+
+[[JD: at most eight lines from research/20_lcg_counterparts.md, each with its file]]
+
+## What did not work
+
+- **Serving an answer the text reader wrote.** An earlier version filled abstentions with the reader's own answer: 27 of 35 on round 10's first run (`results/first_runs/round10.json`). It broke the brief's rule that answers come from the graph, so it was rebuilt to point only: 26 on the same round (`results/first_runs/round10_pointer.json`).
+- **A stronger model alone.** On round 7, `gemini-3.1-pro` planning alone on the graph scored 22 of 36 and flash-lite alone 19 (`results/v_r7_pro.json`, `results/v_r7_fl.json`, code of 22 November).
+- **The link store on new questions.** Round 8 scored 30 of 35 with the links learned on rounds 1 to 7 and 30 of 35 without them (`results/store_round8.json`, `results/nolinks_round8.json`): stored links help a question asked again, not a new one.
+- **A model judge to admit a binding** (97.0 percent precise, but it threw away 34 of 66 right proposals: `results/judge_vs_gate.json`), and **relaxing a scoring rule after reading a miss** without a counter-example test (hence the strict scorer).
+
+**The fine-tuned planners.** Qwen3 models fine-tuned on Kaggle GPUs (LoRA; plans in the plan language for templated questions, paraphrased by the hosted model, leak-checked against the held-out questions), published with cards: [4B v3](https://huggingface.co/Madhvansh/tieout-planner-qwen3-4b-v3-gguf) (the second planner), [4B v2](https://huggingface.co/Madhvansh/tieout-planner-qwen3-4b-v2-gguf), [1.7B v3.1](https://huggingface.co/Madhvansh/tieout-planner-qwen3-1.7b-v3.1-gguf), [1.7B v2](https://huggingface.co/Madhvansh/tieout-planner-qwen3-1.7b-v2-gguf), [0.6B v2](https://huggingface.co/Madhvansh/tieout-planner-qwen3-0.6b-v2-gguf). Planning alone on rounds 1 to 5 and 6 to 8 (`results/v32_table_all.json`): hosted flash-lite 175 of 194 and 75 of 106, 4B v3.2 153 and 52, 8B v3.2 160 and 57. [[8B: seconds per question on the laptop CPU, and its card]]
+
+## What I would do next
+
+- **A judge between two sets of lines.** When the linker's rows and the rows the reader points at disagree, show both sets to the arbiter with their headings and no figures; the executor computes on the set it picks.
+- **Periods as intervals**, so a twelve-month period that is not the fiscal year, or a quarter restated in a later table, is read. **Page-image rows**: a vision model laid out 13 pages and arithmetic accepted 318 of 445 of its rows, none in 100 shuffled controls (`vision_lab`); left out because arithmetic does not prove a label.
 
 ## How I used AI
 
-The brief says to use AI tools freely and to say how. The AI (Claude Code: several sessions of Claude Opus 5.5 and Claude Fable 5.2, with Sonnet sub-agents for narrow lanes) wrote all of the code in this repository, ran every experiment and drafted this README and the results PDF. Agents that could read only the filings wrote the benchmark questions; other agents, blind to the answers, re-derived the gold; red-team agents attacked each change before it was kept. Hosted models read questions inside the system (Gemini flash-lite and flash); the paid side experiment used Gemini 3.1 Pro and Claude Sonnet 5.5. I set the direction and made the rulings, recorded as they were made in `DECISIONS.md`:
+The brief says to use AI tools freely and to say how. Claude Code (several sessions of Claude Opus 5.5 and Claude Fable 5.2, with sub-agents) wrote all of the code, ran every experiment and drafted this README and the PDF. Blind agents wrote and re-derived the benchmark; red-team agents attacked each change before it was kept. I set the direction and made the rulings, recorded as they were made in `DECISIONS.md`:
 
-1. **Design (D1).** Take the most ambitious design and drop nothing for being hard: the recovered-formula graph fused with a layer that learns from questions behind an admission gate, general rather than tuned to a few companies.
-2. **Corpus (D2).** About forty latest 10-Ks across sectors with the banks included, the prior-year 10-K for ten of them so restatements show up, and a few 10-Qs so a quarter printed nowhere can be derived.
-3. **Fine-tuning (D3).** The literature survey and the red team advised against it. I overruled them: a small local model is fine-tuned to write plans, so the system has a second reader that needs no key.
-4. **Name (D4).** TieOut.
-5. **AI use (D5).** The take-home uses AI openly and says how; the interview is mine alone.
-6. **Resources (D6, D12).** I set up the keys and accounts; extra keys are for development only, so the reported run fits one free key.
-7. **Publication (D7).** Push the public repository.
-8. **No checks by hand (D8).** Checks are automated passes, and this README says so.
-9. **Stop and revamp (D9, D10).** I stopped the first version and ordered a red team of everything it claimed, written failures, and a revamp rather than a patch. On the last night I ordered a second revamp for real gains on unseen questions; the reader of the text as a witness came out of it. I stopped that version when I saw it serve answers the reader had written: the brief says answers come from the graph. I had it rebuilt so that the reader can only point at a graph node.
-10. **The target (D11).** Accuracy on questions nobody has seen, not on development: the reason for the fresh rounds above.
-11. **Research before training (D13).** The lab's plan was to start GPU runs at once. I overruled it: research first, success criteria written before any run, no blind training.
-12. **The learning layer stays (D14),** with a second witness before a link is trusted and a way to withdraw it.
-13. **Do the hard thing (D15).** Difficulty and time are not reasons to drop an idea.
+- **The design (D1, D15)**: the most ambitious design, nothing dropped for being hard, general rather than tuned to a few companies. **The corpus (D2)**: forty latest 10-Ks with the banks, prior-year 10-Ks for restatements, 10-Qs for derived quarters. **The target (D11)**: accuracy on questions nobody has seen, hence the fresh rounds.
+- **Fine-tuning (D3) and research before training (D13)**, both against the AI's plan: it advised against fine-tuning, then wanted GPU runs at once. I ruled for a small local planner, with success criteria written before any run.
+- **Stop and revamp (D9, D10)**: I stopped the first version and ordered a red team of every claim and a revamp, not a patch. On the last night I stopped a version that served answers the text reader had written, because the brief says answers come from the graph, and had it rebuilt so the reader can only point at a graph node. **Resources and honesty (D5 to D8, D12, D14)**: the keys and accounts, one free key for the reported run, no checks by hand, a public repository, a learning layer that needs a second witness and can be withdrawn.
 
-Two of these overruled the plan the AI had put to me: fine-tuning (D3) and research before training (D13). On rules: every rule in the code is written for a class of page or question and has a test. Three began as one company's miss and were rewritten for their class: counted nouns in sentences (Costco's leases, UnitedHealth's scripts), a column the question names outranking the Total column (Exxon's reserves), and the audit of look-alike rows (Oracle's debt schedule).
-
-## Repository map
-
-```
-tieout/        the package: pdfio, tables, alltables, statements, calc, graph (build); rawlayer, mentions (every
-               other table and sentence); concepts, living, link (names and links); plan, planner, readers,
-               witness, execute, ask (plans on the graph); passage (the text reader: witness and pointer); restate; eval/
-baseline/      the retrieval pipeline: the baseline, and the text reader
-benchmark/     every round's questions, the plan language, hand-written plans
-scripts/       build, ledger, evaluate, audit, scale test, coverage, figures
-results/       every result file the numbers above come from
-graph/         the built graph, the raw layer, sentence records, the ledger's residue
-semantics/     seed concepts as data, learned links, absence facts
-finetune/      data builders, Kaggle scripts, model cards
-cache/         every model call and passage reply, so results replay offline
-report/        the two-page results PDF and its figures
-```
+Layout: `tieout/` the package (build, links, plans, executor, text reader, `eval/`), `scripts/` build, ledger, evaluation and report scripts, `benchmark/` every round's questions (`round2/questions.jsonl` is the held-out file), `results/` every result file quoted here, `graph/` the built graph, `cache/` every model call the reported runs used, `finetune/` the planners' training, `baseline/` the retrieval pipeline, `report/` the PDF.

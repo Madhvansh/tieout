@@ -1,0 +1,16 @@
+\newcommand{\HeldTypeRows}{Single fact & [[...]] & [[...]] & [[...]] & [[...]] & [[...]] \\
+Multi-hop & [[...]] & [[...]] & [[...]] & [[...]] & [[...]] \\
+Cross-filing comparison & [[...]] & [[...]] & [[...]] & [[...]] & [[...]] \\
+Overall & [[...]] & [[...]] & [[...]] & [[...]] & [[...]] \\}
+\newcommand{\HeldNotes}{On the same 30 questions: the retrieval baseline (passages, the same free model reads) [[...]]; TieOut's plans alone, without the text reader, [[...]] (results/heldout\_v2.json, results/heldout\_baseline\_hybrid.json). Right by tier: [[...]]. Under the strict scorer of 21 November: [[...]]. python scripts/check\_brief.py results/heldout\_v2.json: [[...]]. Paid side experiment, is the model the bottleneck? (Claude Sonnet 5.5 plans and picks, gemini-3.1-pro arbitrates, labelled and never mixed into the headline): [[...]].}
+\newcommand{\DevLine}{On the four latest development rounds (142 questions, results/h3\_r7.json to h3\_r10.json), the plans alone were right on 114 and the whole system on 122. check\_brief passes on 4 of the 4 files (round 10: 31 answers served, 76 proof leaves, 76 of them graph nodes).}
+\newcommand{\RoundsRows}{3 & 25/36 & 25/36 & 34/36 \\
+4 & 23/34 & 22/34 & 32/35 \\
+5 & 20/36 & 20/36 & 34/36 \\
+6 & 17/27 & 17/27 & 29/35 \\
+7 & 23/36 & 20/36 & 32/36 \\
+8 & 29/35 & 27/35 & 32/35 \\
+9 & 26/36 & 21/36 & 31/36 \\
+10 & 26/35 & 21/35 & 27/35 \\
+All & 189/275 & 173/275 & 251/284 \\}
+\newcommand{\OtherRows}{[[...]] (run after the freeze) & & & & & & \\}
