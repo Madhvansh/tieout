@@ -481,11 +481,13 @@ def by_pointing(plan: dict, g, ex, model: Optional[str] = None, offline: bool = 
     A concept line is pointed at by its name in words and read as an item for this run. Returns
     (the executor's result, the nodes pointed at) or None: a line the reader could not place, a place
     with no node, more than MAX_LINES lines, or a plan that still does not run. The links live for this
-    call only: the phrase map is restored before returning, so no later question sees them."""
+    call only: the phrase map, the readings and the facts are restored before returning, so no later
+    question sees them and a run does not depend on the order of its questions."""
     from . import link
     if not isinstance(plan, dict) or not isinstance(plan.get("steps"), list):
         return None
     alias, before, nodes = link.aliases(g), {}, []
+    had: dict = {}                                    # what the graph held before the first pointed link
     plan2 = copy.deepcopy(plan)
 
     def bind(ticker: str, phrase: str, spec: dict) -> bool:
@@ -495,6 +497,8 @@ def by_pointing(plan: dict, g, ex, model: Optional[str] = None, offline: bool = 
             return False
         key = link._phrase_key(ticker, phrase)
         before.setdefault(key, list(alias[key]) if key in alias else None)
+        if not had:
+            had.update(readings=set(g.readings), facts={k: len(f.readings) for k, f in g.facts.items()})
         link.apply_link(g, entry)
         nodes.append({"phrase": phrase, **{k: node[k] for k in ("id", "kind", "doc", "page", "label", "printed", "cited")
                                            if k in node}})
@@ -550,11 +554,22 @@ def by_pointing(plan: dict, g, ex, model: Optional[str] = None, offline: bool = 
         res.tier_reasons = [POINTED] + [r for r in res.tier_reasons if r != POINTED]
         return res, nodes
     finally:
+        # Withdraw everything this call added, so that no later question depends on it: the phrase map, the
+        # readings (a pointed link's readings are capped "unverified"; left behind they would lower the tier
+        # of a later answer whose pickers link the same row), and the facts
         for key, keys in before.items():
             if keys is None:
                 alias.pop(key, None)
             else:
                 alias[key] = keys
+        if had:
+            for rid in [rid for rid in g.readings if rid not in had["readings"]]:
+                del g.readings[rid]
+            for key in list(g.facts):
+                if key not in had["facts"]:
+                    del g.facts[key]
+                elif len(g.facts[key].readings) > had["facts"][key]:
+                    del g.facts[key].readings[had["facts"][key]:]
 
 
 def as_answer(reply: dict, g=None) -> Optional[dict]:
