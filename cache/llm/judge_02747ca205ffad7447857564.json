@@ -1,0 +1,14 @@
+{
+ "model": "ollama:phi4-mini",
+ "system": "You check one proposed mapping from a financial concept to a row of a company's financial statement.\nYou see the row's printed label, the section heading above it and its role in the statement's arithmetic.\nYou never see values. Answer whether this row reports exactly the concept for the whole company (not a\npart of it, not a broader line that includes other items, not a gross amount when the concept is net).\nAnswer as JSON: {\"reports\": true or false, \"reason\": \"<one short sentence>\"}",
+ "user": "Concept: DividendsPaid: cash dividends paid to shareholders\nStatement: CF\nRow label: Dividends and dividend equivalents paid on common stock, preferred stock and share-based awards\nSection: Cash flows from financing activities\nRole: operand",
+ "answer": {
+  "reports": true,
+  "reason": "The row directly reports the concept of 'DividendsPaid' as it is a cash outflow under CF."
+ },
+ "seconds": 4.87,
+ "usage": {
+  "in": 157,
+  "out": 34
+ }
+}

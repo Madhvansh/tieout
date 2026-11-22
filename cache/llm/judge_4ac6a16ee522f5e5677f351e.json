@@ -1,0 +1,14 @@
+{
+ "model": "ollama:phi4-mini",
+ "system": "You check one proposed mapping from a financial concept to a row of a company's financial statement.\nYou see the row's printed label, the section heading above it and its role in the statement's arithmetic.\nYou never see values. Answer whether this row reports exactly the concept for the whole company (not a\npart of it, not a broader line that includes other items, not a gross amount when the concept is net).\nAnswer as JSON: {\"reports\": true or false, \"reason\": \"<one short sentence>\"}",
+ "user": "Concept: OperatingCashFlow: net cash provided by operating activities\nStatement: CF\nRow label: TOTAL OPERATING ACTIVITIES\nSection: OPERATING ACTIVITIES\nRole: total",
+ "answer": {
+  "reports": true,
+  "reason": "The row reports the concept for the whole company."
+ },
+ "seconds": 3.72,
+ "usage": {
+  "in": 144,
+  "out": 21
+ }
+}
