@@ -29,7 +29,7 @@ ROUNDS = [
     ("round 7", "first_runs/round7.json", "c2_final_r7.json", ""),
     ("round 8", "first_runs/round8.json", "c2_final_r8.json", ""),
     ("round 9", "first_runs/round9.json", "c2_final_r9.json", "no fix aimed at it"),
-    ("round 10", "first_runs/round10.json", None, "second road on"),
+    ("round 10", "first_runs/round10_pointer.json", None, "text reader as pointer"),
     ("held-out", "heldout_v2.json", None, "run once"),
 ]
 TIERS = ("VERIFIED", "WITNESSED", "CORROBORATED", "FLAGGED")

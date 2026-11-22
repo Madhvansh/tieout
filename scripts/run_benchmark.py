@@ -192,7 +192,7 @@ def main():
               f"strict (as of 21 Nov) {table['overall']['correct_strict']}/{table['overall']['n']}")
         if table["overall"].get("plan_road_correct") is not None:
             print(f"roads: the plan road alone {table['overall']['plan_road_correct']}/{table['overall']['n']}, "
-                  f"with the passage reader as second road {table['overall']['correct']}/{table['overall']['n']}")
+                  f"with the text reader as witness and pointer {table['overall']['correct']}/{table['overall']['n']}")
     for r in rows:
         if not r["correct"]:
             print(f"  x {r['id']} [{r['type']}] [{r.get('tier', '')}] gold={str(r['gold'])[:40]!r} got={r['answer'][:70]!r}")

@@ -16,8 +16,8 @@ RES = ROOT / "results"
 TYPES = ("single_fact", "multi_hop", "cross_filing", "overall")
 # (row label in the table, result file, what was switched off)
 SYSTEMS = [
-    ("TieOut, declared configuration (two roads)", "heldout_v2.json", ""),
-    ("Baseline: hybrid retrieval, same model reads (this is the second road, alone)", "heldout_baseline_hybrid.json", ""),
+    ("TieOut, declared configuration (plans on the graph; a text reader as witness and pointer)", "heldout_v2.json", ""),
+    ("Baseline: hybrid retrieval, same model reads (the text reader, alone)", "heldout_baseline_hybrid.json", ""),
     ("Baseline: dense retrieval, same model reads", "heldout_baseline_dense.json", "baseline"),
     ("TieOut, one planner (no second planner, no arbiter)", "heldout_abl_onereader.json", "ablation"),
     ("TieOut, one picker (no second picker)", "heldout_abl_onepicker.json", "ablation"),
@@ -99,9 +99,9 @@ def main() -> None:
                         by[t][0] += bool((r.get("plan_road") or {}).get("correct"))
                         by[t][1] += 1
             show = {t: f"{k}/{n}" for t, (k, n) in by.items()}
-            rows_tex.append(f"TieOut, plan road alone (no second road) & {show['single_fact']} & {show['multi_hop']} & "
+            rows_tex.append(f"TieOut, plans alone (no text reader) & {show['single_fact']} & {show['multi_hop']} & "
                             f"{show['cross_filing']} & \\textbf{{{show['overall']}}} & -- & -- \\\\")
-            summary["systems"].append({"label": "TieOut, plan road alone (no second road)", "file": name,
+            summary["systems"].append({"label": "TieOut, plans alone (no text reader)", "file": name,
                                        "kind": "ablation", **show})
         if kind == "baseline":
             rows_tex.append("\\midrule")
@@ -166,7 +166,7 @@ def main() -> None:
                 how = (r.get("passage") or {}).get("used")
                 if how:
                     used[how] = used.get(how, 0) + 1
-            road_line = (f"the plan road alone {o['plan_road_correct']}/{o['n']}; with the passage reader as second road "
+            road_line = (f"the plan road alone {o['plan_road_correct']}/{o['n']}; with the text reader as witness and pointer "
                          f"{o['correct']}/{o['n']}")
             summary["second_road"] = {"plan_road_alone": o["plan_road_correct"], "with_second_road": o["correct"],
                                       "n": o["n"], "how_the_passage_reader_was_used": used}
@@ -200,16 +200,23 @@ def main() -> None:
                          f"{u.get('with_store')} vs {u.get('without_store')}")
         summary["transfer"] = transfer
     round10_line = "n/a"
-    r10 = load("first_runs/round10.json")              # the one fresh round run with the second road on
+    # Round 10 was run twice before anyone read its answers: first by a version that served some answers the
+    # text reader had written (first_runs/round10.json; withdrawn the same night, it broke the brief), then
+    # by the design in which the reader can only point at a graph node (first_runs/round10_pointer.json).
+    r10, withdrawn = load("first_runs/round10_pointer.json"), load("first_runs/round10.json")
     if r10:
         o = r10["score"]["overall"]
         bt = o["by_tier"]
-        round10_line = (f"Round 10 (35 questions nobody had seen, first run): the plan road alone "
-                        f"{o.get('plan_road_correct')}/{o['n']}, with the second road {o['correct']}/{o['n']}; "
+        round10_line = (f"Round 10 (35 questions nobody had seen; first run of the design in which the text reader can "
+                        f"only point at a graph node): the plans alone {o.get('plan_road_correct')}/{o['n']}, with the "
+                        f"text reader {o['correct']}/{o['n']}; "
                         + ", ".join(f"{t} {bt[t]['correct']}/{bt[t]['n']}"
-                                    for t in ("VERIFIED", "WITNESSED", "CORROBORATED", "FLAGGED", "ABSTAIN") if t in bt) + ".")
-        summary["round10_first_run"] = {"plan_road_alone": o.get("plan_road_correct"), "with_second_road": o["correct"],
-                                        "n": o["n"], "by_tier": bt, "correct_strict": o.get("correct_strict")}
+                                    for t in ("VERIFIED", "WITNESSED", "CORROBORATED", "FLAGGED", "ABSTAIN") if t in bt) + "."
+                        + (f" A version withdrawn the same night, which served answers the reader had written, scored "
+                           f"{withdrawn['score']['overall']['correct']}/{o['n']}." if withdrawn else ""))
+        summary["round10_first_run"] = {"plan_road_alone": o.get("plan_road_correct"), "with_text_reader": o["correct"],
+                                        "n": o["n"], "by_tier": bt, "correct_strict": o.get("correct_strict"),
+                                        "withdrawn_version": withdrawn["score"]["overall"]["correct"] if withdrawn else None}
     macros = {"HeldRows": "\n".join(rows_tex), "TierLine": tex(tier_line), "CostLine": tex(cost_line),
               "RoundTenLine": tex(round10_line),
               "CaseLine": tex(case_line), "RoundRows": "\n".join(round_rows), "StoreLine": tex(store_line),
