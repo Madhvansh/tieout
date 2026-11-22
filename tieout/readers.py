@@ -134,9 +134,12 @@ def _arbitrate(question: str, g, arbiters: tuple, kw: dict) -> tuple:
     for model in arbiters:
         try:
             with impatient(model):                   # an overloaded arbiter is skipped for the next in the chain
-                return ask.answer(question, g, model=model, **kw), model
+                out = ask.answer(question, g, model=model, **kw)
         except DailyLimit:
             continue
+        if str((out.get("plan") or {}).get("cannot") or "").startswith("planner failed"):
+            continue                                 # the call itself failed (a timeout): the next arbiter reads
+        return out, model
     return None, None
 
 

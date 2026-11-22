@@ -98,6 +98,9 @@ def company_to_ticker(x, companies: dict) -> Optional[str]:
     return None
 
 
+_DECLINE = re.compile(r"\b(fall|fell|fallen|declin\w*|decreas\w*|drop\w*|shr[aiu]nk|reduc\w*|lower|narrow\w*)\b", re.I)
+
+
 def is_correct(q: dict, pred: dict, companies: dict) -> bool:
     """pred = {"kind": number|text|companies|abstain, "value": ...}"""
     gold = q.get("answer_value")
@@ -106,9 +109,12 @@ def is_correct(q: dict, pred: dict, companies: dict) -> bool:
     if pred["kind"] == "abstain":
         return False
     unit = q.get("answer_unit", "")
-    if pred["kind"] == "lines" and pred["value"]:
+    if pred["kind"] == "lines" and pred["value"] and not isinstance(gold, list):
         # the parts of a total (segments, products): the answer is the top line, by name or by value;
-        # two lines compared ("which of the two products, and by how much") also carry the gap
+        # two lines compared ("which of the two products, and by how much") also carry the gap.
+        # (A gold that is itself a list is compared line by line further down: until 22 Nov 22:10 this
+        # branch reduced the answer to its first line first, so a correct ranking of six lines was
+        # scored wrong; found on round 7, T11, corrected before the held-out run.)
         name, value = pred["value"][0]
         extra = pred.get("extra") or {}
         if isinstance(gold, (int, float)) and not isinstance(gold, bool) and extra.get("gap") is not None:
@@ -132,7 +138,11 @@ def is_correct(q: dict, pred: dict, companies: dict) -> bool:
         slack = max(tol, 1e-9) * abs(gold) + printed_slack(q)
         if unit == "percent_points" and abs(100 * v - gold) <= slack:
             return True                               # 3.72 points stated as the fraction 0.0372
-        return abs(v - gold) <= slack or (unit == "USD" and abs(abs(v) - abs(gold)) <= slack)
+        if abs(v - gold) <= slack or (unit == "USD" and abs(abs(v) - abs(gold)) <= slack):
+            return True
+        # a fall asked for as a size ("by how many turns did coverage fall": 3.53) is answered by a change
+        # of minus that size (dated 22 Nov 22:10, round 7, U11; corrected before the held-out run)
+        return gold > 0 > v and abs(-v - gold) <= slack and bool(_DECLINE.search(q.get("question", "")))
     if isinstance(gold, list):
         if pred["kind"] == "lines":                   # a ranked list of segments, products or regions
             want, got = [_norm_text(x) for x in gold], [_norm_text(n) for n, _ in pred["value"]]
