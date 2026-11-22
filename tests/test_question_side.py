@@ -126,3 +126,21 @@ def test_the_binding_audit_drops_only_rows_the_arithmetic_contradicts():
                        for b in g.bindings)
     # a net line is never dropped as the gross one
     assert not any(d["concept"] == "PropertyPlantEquipment" and ", net" in d["label"].lower() for d in dropped)
+
+
+def test_a_question_that_names_the_companies_ranks_exactly_those():
+    from tieout.ask import fix_named_set, named_companies
+    q = ("Rank the six big banks in the set (JPMorgan, Bank of America, Citi, Wells Fargo, Goldman Sachs, "
+         "Morgan Stanley) by 2025 net income, largest first.")
+    assert named_companies(q) == ["JPM", "BAC", "C", "WFC", "GS", "MS"]
+    plan = _plan({"op": "rank", "over": {"cluster": "banks_finance"}, "by": {"concept": "NetIncome"},
+                  "period": {"fy": 2025}, "order": "desc", "k": 6})
+    res = Result("companies", [("JPM", 1.0)])
+    assert "names the companies" in shape_misfit(q, plan, res)
+    fixed = fix_named_set(q, plan)["steps"][0]
+    assert fixed["over"] == ["JPM", "BAC", "C", "WFC", "GS", "MS"] and fixed["k"] == 6
+    q2 = "Among Merck, J&J and Pfizer, who spent the most on R&D in 2025? Rank all three."
+    plan2 = _plan({"op": "rank", "over": ["MRK", "JNJ", "PFE"], "by": {"concept": "ResearchAndDevelopment"},
+                   "period": {"fy": 2025}, "order": "desc", "k": 1})
+    assert shape_misfit(q2, plan2, res) and fix_named_set(q2, plan2)["steps"][0]["k"] == 3
+    assert named_companies("Which bank had the highest net income in 2025?") == []

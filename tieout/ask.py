@@ -49,8 +49,8 @@ def answer(question: str, g: Graph, model: Optional[str] = None, allow_learning:
     res, learned = _execute(plan, g, ex, **learn_args)
     repaired = False
     misfit = shape_misfit(question, plan, res)
-    if planned_here and misfit and ("quarter" in misfit or "part of the year" in misfit):
-        fixed = fix_periods(question, plan)               # periods named in words are set without a model call
+    if planned_here and misfit and ("quarter" in misfit or "part of the year" in misfit or "named" in misfit):
+        fixed = fix_named_set(question, fix_periods(question, plan), g)   # set from the words, no model call
         if fixed != plan:
             res2, learned2 = _execute(fixed, g, ex, **learn_args)
             learned += learned2
@@ -128,6 +128,15 @@ def shape_misfit(question: str, plan: dict, res: Result) -> str:
         return "the question does not ask how many: the answer is not a count; end on the step that answers it"
     if _SHARE.search(question) and res.kind == "number" and res.unit == "USD":
         return "the question asks for a share, margin or ratio, but the plan returns an amount in dollars"
+    ranks = [s for s in plan["steps"] if s.get("op") in ("rank", "filter", "agg")]
+    named = named_companies(question)
+    if len(named) >= 3 and ranks and not isinstance(ranks[0].get("over"), list) \
+            and not str(ranks[0].get("over", "")).startswith("$"):
+        return "the question names the companies to compare: use them as the set, not a cluster or all"
+    for s in ranks:
+        if (s.get("op") == "rank" and isinstance(s.get("over"), list) and int(s.get("k", 1)) < len(s["over"])
+                and re.search(r"\brank\b", question, re.I) and not re.search(r"\btop\b", question, re.I)):
+            return "the question asks to rank the named companies: keep all of them (k = their number)"
     periods = [p for s in plan["steps"] for p in (s.get("period"), s.get("from"), s.get("to"),
                                                    (s.get("where") or {}).get("period")) if isinstance(p, dict)]
     quarter, so_far = _QUARTER.search(question), _SO_FAR.search(question)
@@ -143,6 +152,51 @@ def shape_misfit(question: str, plan: dict, res: Result) -> str:
         return ("the question asks which of two companies: rank over the two with k=2, which gives both values, "
                 "the winner and the gap")
     return ""
+
+
+def named_companies(question: str) -> list:
+    """Tickers of the listed companies the question names, in the order it names them (common names
+    from semantics/company_aliases.yaml; tickers of one or two letters are not matched on their own)."""
+    found = []
+    for ticker, names in _aliases().items():
+        for name in names:
+            m = re.search(rf"(?<![\w&]){re.escape(name)}(?![\w&])", question)   # proper nouns: case matters
+            if m:
+                found.append((m.start(), ticker))
+                break
+    return [t for _, t in sorted(found)]
+
+
+_ALIASES: dict = {}
+
+
+def _aliases() -> dict:
+    if not _ALIASES:
+        import pathlib
+
+        import yaml
+        path = pathlib.Path(__file__).resolve().parents[1] / "semantics" / "company_aliases.yaml"
+        raw = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        _ALIASES.update({t: [n for n in names if len(n) > 2] for t, names in raw.items()})
+    return _ALIASES
+
+
+def fix_named_set(question: str, plan: dict, g=None) -> dict:
+    """Rank or compare over the companies the question names (in place of a cluster or "all"), and rank
+    all of them when it asks to rank them. Only the first set step is touched."""
+    named = named_companies(question)
+    steps, done = [], False
+    for s in plan.get("steps", []):
+        s = dict(s)
+        if not done and s.get("op") in ("rank", "filter", "agg"):
+            if len(named) >= 3 and not isinstance(s.get("over"), list) and not str(s.get("over", "")).startswith("$"):
+                s["over"] = named
+            if (s.get("op") == "rank" and isinstance(s.get("over"), list) and re.search(r"\brank\b", question, re.I)
+                    and not re.search(r"\btop\b", question, re.I)):
+                s["k"] = len(s["over"])
+            done = True
+        steps.append(s)
+    return {**plan, "steps": steps}
 
 
 _QWORD = {"first": 1, "1st": 1, "second": 2, "2nd": 2, "third": 3, "3rd": 3, "fourth": 4, "4th": 4}
