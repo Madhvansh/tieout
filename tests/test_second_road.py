@@ -1,6 +1,7 @@
-"""The second road (tieout/passage.py, readers.second_road): a passage reader as a witness of another kind.
-It may fill an abstention, break a tie between unwitnessed readings, or corroborate a FLAGGED answer.
-It never overrides an answer the plan road served, and never touches VERIFIED or WITNESSED."""
+"""A reader of the text as witness and pointer (tieout/passage.py, readers.second_road, readers._disputed).
+The brief: "Answers must come from the graph, not from plain vector search over text chunks." So the reader
+may corroborate or dispute an answer of the graph, and may point at a place whose graph node then answers.
+Nothing it writes is ever served: no figure, no name, no ranking."""
 import pytest
 
 from tieout import passage, readers
@@ -50,13 +51,20 @@ def road(monkeypatch):
 PANEL = Panel("maker", "checker", ("arbiter",), passage="reader")
 
 
-def test_an_abstention_no_planner_declined_is_filled_and_flagged(road):
+NODE = {"kind": "sentence", "id": "GM_FY2025_10K:p5:s0:n1", "ticker": "GM", "doc": "GM_FY2025_10K", "page": 5,
+        "label": "We employed approximately 25,400 people.", "printed": "25,400", "value": 25400.0, "unit": "count",
+        "period": "", "verified": False, "cited": "GM_FY2025_10K page 5"}
+
+
+def test_an_abstention_is_filled_from_the_node_the_reader_points_at(road, monkeypatch):
     road(reply(25400.0, unit="count"))
+    monkeypatch.setattr(passage, "node_of_answer", lambda reply, g=None: NODE)
     rs = [seen("maker", None), seen("checker", None), seen("arbiter", None)]
     out = readers.second_road("q", G, served(ARBITER_ALONE, "arbiter", rs), PANEL, {})
     assert out["result"].ok and out["result"].value == 25400.0 and out["result"].tier == "FLAGGED"
-    assert out["reading"]["case"] == readers.PASSAGE_ALONE
-    assert "not tied by arithmetic" in out["result"].tier_reasons[0]
+    assert out["reading"]["case"] == readers.POINTED_NODE
+    assert out["result"].leaves[0].id == NODE["id"]               # the proof leaf is the graph's node
+    assert "the graph's node" in out["result"].tier_reasons[0]
     assert out["reading"]["plan_road"]["tier"] == "ABSTAIN"       # what the first road served is kept for the record
 
 
@@ -143,29 +151,41 @@ def test_a_dissent_after_the_arbiter_sided_with_a_planner_changes_nothing(road, 
     assert out["result"].value == 0.8927 and out["result"].tier == "WITNESSED"
 
 
-def test_two_passage_readings_overrule_the_graphs_line(road, monkeypatch):
-    # JPMorgan, round 8 W05: the graph read a per-share row ($52.80); the passage reader read $63.4 billion,
-    # and the served plan run on facts read from passages gives $63.4 billion too
+def ran(value, unit="USD"):
+    """What passage.by_pointing returns: the executor's result on lines the reader pointed at, and the nodes."""
+    res = Result("number", value, unit)
+    res.tier = "FLAGGED"
+    return res, [{"phrase": "a line", "id": "GM_FY2025_10K:p5:x0:r3:c0", "doc": "GM_FY2025_10K", "page": 5}]
+
+
+def pointing(monkeypatch, result):
+    monkeypatch.setattr(passage, "by_pointing", lambda plan, g, ex, model=None, offline=False, missing=None: result)
+
+
+def test_the_readers_lines_overrule_the_linkers_when_they_give_the_readers_own_figure(road, monkeypatch):
+    # JPMorgan, round 8 W05: the linker read a per-share row ($52.80); the text reader read $63.4 billion, and
+    # the served plan run on the graph lines the reader points at gives $63.4 billion too. Served from those nodes
     road(reply(63.4e9))
-    monkeypatch.setattr(passage, "run_plan", lambda plan, g, ex, model=None, offline=False: {"value": 63.4e9, "leaves": []})
+    pointing(monkeypatch, ran(63.4e9))
     rs = [seen("maker", 52.8), seen("checker", 52.8)]
     out = readers.second_road("q", G, served(AGREE, "maker", rs), PANEL, {"executor": object()})
     assert out["result"].value == 63.4e9 and out["result"].tier == "FLAGGED"
-    assert out["reading"]["case"] == readers.PASSAGES_OVERRULE
+    assert out["reading"]["case"] == readers.LINES_OVERRULED
+    assert out["reading"]["passage"]["pointed"][0]["id"].startswith("GM_FY2025_10K")   # the nodes are on record
     assert out["reading"]["plan_road"]["value"] == 52.8
 
 
-def test_one_passage_reading_alone_does_not_overrule(road, monkeypatch):
+def test_the_readers_own_figure_alone_does_not_overrule(road, monkeypatch):
     road(reply(54e6))
-    monkeypatch.setattr(passage, "run_plan", lambda plan, g, ex, model=None, offline=False: None)
+    pointing(monkeypatch, None)
     rs = [seen("maker", 14e6), seen("checker", 14e6)]
     out = readers.second_road("q", G, served(AGREE, "maker", rs), PANEL, {"executor": object()})
     assert out["result"].value == 14e6 and out["result"].tier == "FLAGGED"
 
 
-def test_the_plan_on_passage_facts_corroborates_the_lines_of_a_witnessed_reading(road, monkeypatch):
-    road(reply(None, abstain=True))                     # the passage reader has no whole answer (two filings, arithmetic)
-    monkeypatch.setattr(passage, "run_plan", lambda plan, g, ex, model=None, offline=False: {"value": 3.4e9, "leaves": []})
+def test_pointed_lines_corroborate_the_lines_of_a_witnessed_reading(road, monkeypatch):
+    road(reply(None, abstain=True))                     # the reader has no whole answer (two filings, arithmetic)
+    pointing(monkeypatch, ran(3.4e9))
     rs = [seen("maker", 3.4e9), seen("checker", 3.4e9)]
     out = readers.second_road("q", G, served(AGREE, "maker", rs), PANEL, {"executor": object()})
     assert out["result"].tier == "CORROBORATED"
@@ -174,51 +194,107 @@ def test_the_plan_on_passage_facts_corroborates_the_lines_of_a_witnessed_reading
     assert out["result"].tier == "FLAGGED"              # the lines agree, but the reading has one planner only
 
 
-def test_a_plan_on_passage_facts_fills_an_abstention_the_reader_could_not(road, monkeypatch):
+def test_a_plan_on_pointed_lines_fills_an_abstention(road, monkeypatch):
     road(reply(None, abstain=True))
-    monkeypatch.setattr(passage, "run_plan", lambda plan, g, ex, model=None, offline=False: {"value": 3.4e9, "leaves": []})
+    pointing(monkeypatch, ran(3.4e9))
     rs = [seen("maker", None), seen("checker", None)]
-    for s in rs:
-        s["plan"] = {"steps": [{"id": "s1", "op": "calc", "expr": "1 - 1"}], "answer": "s1"}
     out = readers.second_road("q", G, served(ARBITER_ALONE, "maker", rs), PANEL, {"executor": object()})
     assert out["result"].value == 3.4e9 and out["result"].tier == "FLAGGED"
-    assert out["reading"]["case"] == readers.PLAN_ON_PASSAGES
+    assert out["reading"]["case"] == readers.POINTED_LINES
 
 
-def test_run_plan_does_the_plans_arithmetic_on_passage_facts(monkeypatch):
-    figures = {("WMT", 2023): 12.1e9, ("WMT", 2026): 8.7e9}
-    monkeypatch.setattr(passage, "read_fact",
-                        lambda g, ex, ticker, words, spec, model, offline: (figures[(ticker, spec["fy"])], {"facts": []}))
+def test_no_figure_name_or_ranking_of_the_reader_is_ever_served(road, monkeypatch):
+    """The brief: "Answers must come from the graph, not from plain vector search over text chunks." With no
+    node at the place the reader names, and no plan that runs on pointed lines, an abstention stays one."""
+    monkeypatch.setattr(passage, "node_of_answer", lambda reply, g=None: None)
+    pointing(monkeypatch, None)
+    rs = [seen("maker", None), seen("checker", None), seen("arbiter", None)]
+    for said in (25400.0, ["General Motors", "Ford"]):
+        road(reply(said))
+        out = readers.second_road("q", G, served(ARBITER_ALONE, "arbiter", rs), PANEL, {"executor": object()})
+        assert not out["result"].ok
+    text = {"abstain": False, "answer": "Deloitte", "unit": "", "facts_ok": True, "pred": {"kind": "text", "value": "Deloitte"},
+            "facts": [{"ticker": "GM", "doc": "GM_FY2025_10K", "page": 5, "value": "Deloitte", "in_context": True}]}
+    road(text)
+    assert not readers.second_road("q", G, served(ARBITER_ALONE, "arbiter", rs), PANEL, {"executor": object()})["result"].ok
+
+
+class FakeStore:
+    def __init__(self, rows=(), mentions=()):
+        self.rows_by_ticker, self.mentions_by_ticker = {"GM": list(rows)}, {"GM": list(mentions)}
+        self.by_id = {x["id"]: x for x in list(rows) + list(mentions)}
+
+
+def row(label, values, page=5, unit="USD", rid="r0"):
+    return {"id": f"GM_FY2025_10K:p{page}:x0:{rid}", "doc": "GM_FY2025_10K", "ticker": "GM", "page": page, "table": 0,
+            "title": "", "section": "", "label": label, "unit": unit, "role": "loose", "verified": False,
+            "cells": [{"pid": pid, "value": v, "text": f"{v:,}", "ok": False, "col": pid} for pid, v in values]}
+
+
+def test_the_place_the_reader_names_is_looked_up_in_the_graph(monkeypatch):
+    from tieout import link
+    rows = [row("Automotive revenue", [("FY2025", 19_918_000_000.0), ("FY2024", 17_000_000_000.0)], rid="r1"),
+            row("Shares repurchased", [("FY2025", 12_000_000.0)], unit="shares", rid="r2"),
+            row("Operating margin", [("FY2025", 29.8)], unit="percent", rid="r3"),
+            row("Automotive revenue", [("FY2025", 19_918_000_000.0)], page=9, rid="r4")]
+    sentence = {"id": "GM_FY2025_10K:p5:s0", "doc": "GM_FY2025_10K", "ticker": "GM", "page": 5,
+                "sentence": "We employed approximately 25,400 people.", "masked": "We employed approximately <n1> people.",
+                "numbers": [{"slot": "<n1>", "text": "25,400", "value": 25400, "unit": "count"}], "ties": []}
+    monkeypatch.setattr(link, "store", lambda: FakeStore(rows, [sentence]))
+    fact = {"doc": "GM_FY2025_10K", "page": 5, "value": 19918.0, "label": "Automotive revenue"}
+    node = passage.node_for(fact, "USD")
+    assert node["id"].endswith("r1:c0") and node["value"] == 19_918_000_000.0     # the node's scale, not the reader's
+    assert passage.node_for({**fact, "page": 8}, "USD")["page"] == 9             # the page after the cited one
+    assert passage.node_for({**fact, "page": 30}, "USD") is None                 # no node near that page: no answer
+    assert passage.node_for({**fact, "value": 19919.0}, "USD") is None           # 19,919 is not 19,918
+    assert passage.node_for({**fact, "value": 19.9e9}, "USD")["id"].endswith("r1:c0")   # "19.9 billion": it rounds to it
+    assert passage.node_for({**fact, "value": 12.0, "label": "employees"}, "count") is None   # 12 against 12 million shares
+    assert passage.node_for({**fact, "value": 12.0, "label": "shares repurchased"}, "shares")["id"].endswith("r2:c0")
+    assert passage.node_for({**fact, "value": 0.298, "label": "margin"}, "ratio")["id"].endswith("r3:c0")   # 29.8% printed
+    assert passage.node_for({**fact, "value": 29.8, "label": "margin"}, "USD") is None   # a rate is not a dollar amount
+    people = passage.node_for({**fact, "value": 25400.0, "label": "employees"}, "count")
+    assert people["kind"] == "sentence" and people["id"] == "GM_FY2025_10K:p5:s0:n1"
+    # an answer that is one printed figure is served as its node; the reader's own arithmetic is not
+    one = {"pred": {"kind": "number", "value": 19918000000.0}, "unit": "USD", "facts": [fact]}
+    out = passage.as_answer(one)
+    assert out["result"].value == 19_918_000_000.0 and out["result"].leaves[0].id.endswith("r1:c0")
+    assert out["result"].tier == "FLAGGED" and out["plan"]["lookup"]["node"].endswith("r1:c0")
+    summed = {"pred": {"kind": "number", "value": 36918000000.0}, "unit": "USD", "facts": [fact]}
+    assert passage.as_answer(summed) is None
+    assert passage.as_answer({"pred": {"kind": "companies", "value": ["General Motors"]}, "facts": [fact]}) is None
+
+
+def test_the_lines_of_a_plan_are_its_single_printed_figures():
     change = {"steps": [{"id": "s1", "op": "change", "company": "WMT", "item": "fuel-related expenses",
                          "from": {"fy": 2023}, "to": {"fy": 2026}, "mode": "abs"}], "answer": "s1"}
-    assert passage.run_plan(change, G, None)["value"] == pytest.approx(-3.4e9)
-    calc = {"steps": [{"id": "s1", "op": "get", "company": "WMT", "item": "x", "period": {"fy": 2023}},
-                      {"id": "s2", "op": "get", "company": "WMT", "item": "x", "period": {"fy": 2026}},
-                      {"id": "s3", "op": "calc", "expr": "(s2 - s1) / abs(s1)"}], "answer": "s3"}
-    assert passage.run_plan(calc, G, None)["value"] == pytest.approx(-3.4 / 12.1)
-    ranking = {"steps": [{"id": "s1", "op": "rank", "over": ["WMT"], "by": "Revenue", "period": {"fy": 2026}}], "answer": "s1"}
-    assert passage.run_plan(ranking, G, None) is None                       # not one printed line: not run
-    metric = {"steps": [{"id": "s1", "op": "get", "company": "WMT", "metric": "gross_margin", "period": {"fy": 2026}}], "answer": "s1"}
-    assert passage.run_plan(metric, G, None) is None
+    assert [(c, w, s) for _, c, _, w, s in passage.lines_of(change)] == [
+        ("WMT", "fuel-related expenses", {"fy": 2023}), ("WMT", "fuel-related expenses", {"fy": 2026})]
+    concept = {"steps": [{"id": "s1", "op": "get", "company": "WMT", "concept": "ResearchAndDevelopment", "period": {"fy": 2026}}]}
+    assert passage.lines_of(concept)[0][3] == "research and development"       # a concept is asked for by its name in words
+    ranking = {"steps": [{"id": "s1", "op": "rank", "over": ["WMT"], "by": "Revenue", "period": {"fy": 2026}}]}
+    metric = {"steps": [{"id": "s1", "op": "get", "company": "WMT", "metric": "gross_margin", "period": {"fy": 2026}}]}
+    picked = {"steps": [{"id": "s2", "op": "get", "company": "$s1", "item": "x", "period": {"fy": 2026}}]}
+    assert passage.lines_of(ranking) == passage.lines_of(metric) == passage.lines_of(picked) == []
+    assert passage.by_pointing(ranking, G, None) is None                       # nothing to point at: not run
 
 
-def test_a_witnessed_line_two_passage_readings_dispute_is_overruled(road, monkeypatch):
-    # round 8, W02: three planners' plans all reached a reserves row in millions of barrels; the passage
-    # reader and the same plan on passage facts both read 19.3 billion
+def test_a_witnessed_line_the_readers_lines_dispute_is_overruled(road, monkeypatch):
+    # round 8, W02: three planners' plans all reached a reserves row in millions of barrels; the text reader read
+    # 19.3 billion, and the plan on the lines it points at gives 19.3 billion too
     road(reply(19.3e9, unit="count"))
-    monkeypatch.setattr(passage, "run_plan", lambda plan, g, ex, model=None, offline=False: {"value": 19.3e9, "leaves": []})
-    monkeypatch.setattr(readers, "_arbitrate", lambda *a: pytest.fail("settled by the vote: no arbiter call"))
+    pointing(monkeypatch, ran(19.3e9, "count"))
+    monkeypatch.setattr(readers, "_arbitrate", lambda *a: pytest.fail("settled by the lines: no arbiter call"))
     rs = [seen("maker", 36.408e9, tier="WITNESSED"), seen("checker", 36.408e9, tier="WITNESSED")]
     out = readers.second_road("q", G, served(AGREE, "maker", rs), PANEL, {"executor": object()})
     assert out["result"].value == 19.3e9 and out["result"].tier == "FLAGGED"
-    assert out["reading"]["case"] == readers.PASSAGES_OVERRULE
+    assert out["reading"]["case"] == readers.LINES_OVERRULED
 
 
-def test_the_plan_on_passage_facts_does_not_corroborate_against_the_readers_own_dissent(road, monkeypatch):
-    # round 8, W05: the plan dropped "firmwide"; the graph and the plan on passage facts both read the
-    # channel total (52.8), the passage reader, given the whole question, read the firmwide figure (63.4)
+def test_pointed_lines_do_not_corroborate_against_the_readers_own_dissent(road, monkeypatch):
+    # round 8, W05: the plan dropped "firmwide"; the graph and the plan on pointed lines both read the channel
+    # total (52.8), the reader, given the whole question, read the firmwide figure (63.4)
     road(reply(63.4e9))
-    monkeypatch.setattr(passage, "run_plan", lambda plan, g, ex, model=None, offline=False: {"value": 52.8e9, "leaves": []})
+    pointing(monkeypatch, ran(52.8e9))
     rs = [seen("maker", 52.8e9), seen("checker", 52.8e9)]
     out = readers.second_road("q", G, served(AGREE, "maker", rs), PANEL, {"executor": object()})
     assert out["result"].value == 52.8e9 and out["result"].tier == "FLAGGED"
@@ -228,7 +304,7 @@ def test_the_plan_on_passage_facts_does_not_corroborate_against_the_readers_own_
 def test_a_sentence_rounding_of_a_table_figure_is_the_same_figure_not_a_dissent(road, monkeypatch):
     # round 7, U02: the table prints 6,661 million, a sentence says "$6.7 billion"
     road(reply(6.7e9))
-    monkeypatch.setattr(passage, "run_plan", lambda *a, **k: pytest.fail("no dissent: the plan is not rerun"))
+    monkeypatch.setattr(passage, "by_pointing", lambda *a, **k: pytest.fail("no dissent: the plan is not rerun"))
     rs = [seen("maker", 6.661e9), seen("checker", 6.661e9)]
     out = readers.second_road("q", G, served(AGREE, "maker", rs), PANEL, {"executor": object()})
     assert out["result"].value == 6.661e9 and out["result"].tier == "CORROBORATED"
@@ -253,8 +329,8 @@ def test_the_agreement_test_is_not_looser_than_it_says():
     assert not passage.same_number(-0.2, 0.2)
     assert passage.same(Result("number", -9.941e9, "USD"), ("n", 9941.0))         # an outflow, the page's millions left on
     assert passage.same_number(0.4894, 0.4885)                                    # two sums of the same printed figures
-    assert passage.as_answer({"pred": {"kind": "number", "value": None}}, COMPANIES) is None
-    assert passage.as_answer({}, COMPANIES) is None
+    assert passage.as_answer({"pred": {"kind": "number", "value": None}}) is None
+    assert passage.as_answer({}) is None
 
 
 def test_same_figure_across_roads():

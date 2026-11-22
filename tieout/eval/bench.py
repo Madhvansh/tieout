@@ -441,6 +441,8 @@ def run_graph_system(questions: list, g, answer_fn: Callable, label: str = "tieo
             "answer": out["answer"], "correct": both[scorer_mode()],
             "correct_final": both["final"], "correct_strict": both["strict"], "pred": _jsonable(pred),
             "abstained": res.kind == "abstain", "match": fact_match(q, retrieved, g.companies),
+            # the proof leaves, so that scripts/check_brief.py can show each one is a node of the graph
+            "leaves": [{"id": lf.id, "doc": lf.doc, "page": lf.page, "printed": lf.printed} for lf in res.leaves],
             "plan": out.get("plan"), "notes": list(dict.fromkeys(res.notes))[:6],
             # each link with how its pick was made (two pickers agreed, an arbiter settled it, one picker)
             "learned": [{k: e.get(k) for k in ("kind", "ticker", "concept", "phrase", "state", "label", "doc", "page",

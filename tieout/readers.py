@@ -30,18 +30,18 @@ import os
 from typing import Optional
 
 from . import ask
-from .execute import Result, same_name
+from .execute import Result, render, same_name
 from .link import start_question
 from .llm import DailyLimit, impatient
 from .witness import (AGREE, AGREE_OF_THREE, AGREE_ON_ORDER, ARBITER_ALONE, ARBITER_AND_READER,  # noqa: F401
                       ONE_READER, WITNESSED, Panel as Readers)
 
 CORROBORATED = "CORROBORATED"                         # a tier: a FLAGGED answer that a second method repeats
-PASSAGE_ALONE = "the passage reader alone"            # two more cases of a reading, from the second road
 READER_AND_PASSAGE = "one reader and the passage reader agree"
 ARBITER_AND_PASSAGE = "the arbiter and the passage reader agree"
-PLAN_ON_PASSAGES = "a plan on facts read from passages"
-PASSAGES_OVERRULE = "two passage readings against the graph's line"
+POINTED_NODE = "one node the text reader pointed at"  # three cases where a reader of the text named the
+POINTED_LINES = "a plan on lines the text reader pointed at"          # lines and the graph gave the figures
+LINES_OVERRULED = "the text reader's lines against the linker's"
 UNWITNESSED = "the planners read the question differently; this reading has no second witness"
 FIGURES_DIFFER = "two readers rank these in the same order but do not compute every figure the same way"
 
@@ -56,41 +56,39 @@ def answer(question: str, g, readers: Readers, **kw) -> dict:
 
 
 def second_road(question: str, g, served: dict, readers: Readers, kw: dict) -> dict:
-    """A passage reader as a witness of another kind (tieout/passage.py). This function handles an
-    answer the plan road did not end VERIFIED or WITNESSED (those go to _disputed below). The first two
-    rules were simulated on saved results before they were built (rounds 7 to 9, 23 Nov,
-    dev_scripts/fable/two_roads_sim.py: 139 of 178 question-runs right without them, 144 with):
+    """A reader of the text as witness and pointer (tieout/passage.py). It never supplies an answer:
+    the brief asks that answers come from the graph, not from search over text chunks. This function
+    handles an answer the plan road did not end VERIFIED or WITNESSED (those go to _disputed below).
 
-      the plan road has no answer, and no arbiter and no two planners say the filings lack it
-          -> the passage answer, FLAGGED (it is one model reading text; nothing ties it out)
-      the served reading has no second witness (arbiter alone, one reader only) and the passage
-      reader's figure is the figure of another reader's plan
-          -> that reader's answer
+      the planners have no answer, and no arbiter   -> the reader is asked where the answer is printed.
+      and no two planners say the filings lack it      One printed figure: the graph node at the place it
+                                                       names is the answer (passage.as_answer). Otherwise
+                                                       each line a planner's plan is missing is pointed
+                                                       at, linked, and the plan runs on the graph
+                                                       (passage.by_pointing). Both FLAGGED
+      the served reading has no second witness      -> that planner's answer
+      (arbiter alone, one reader only) and the
+      reader's figure is another planner's figure
+      the reader repeats a FLAGGED answer           -> CORROBORATED: two different methods reached it
+                                                       (right 28 of 30 on rounds 7 to 9, against 31 of 53
+                                                       for a FLAGGED answer it does not repeat)
+      the reader says something else                -> one more test: the served plan runs again on the
+                                                       lines the reader points at
+          that run gives the reader's own figure    -> the linker read a wrong line for a right plan:
+                                                       the run on the pointed lines is served, FLAGGED
+          anything else                             -> the served answer stays and names the dissent
 
-    A FLAGGED answer whose figure the passage reader repeats is CORROBORATED: two different methods
-    reached it (right 28 of 30 on those rounds, against 31 of 53 for a FLAGGED answer it does not
-    repeat). When the passage reader says something else, serving its answer lost more than it won
-    (141 of 178), so one more vote is taken: the served plan is run again on facts read from passages
-    (passage.run_plan: the plan road's reading, the passage road's lines).
-
-      that run gives the passage reader's own figure  -> the graph read a wrong line for a right plan:
-                                                         the passage figure is served, FLAGGED
-      that run gives the graph's figure, and the      -> the lines are corroborated: CORROBORATED
-      reading had two planners
-      neither                                         -> the served answer stays and names the second reading
-
-    The same run answers a question the graph has no line for when the passage reader could not answer
-    it whole (several filings, several steps), FLAGGED."""
+    The reader's own answer never replaces a served one: simulated on saved results that lost more than
+    it won (141 of 178 right against 144, dev_scripts/fable/two_roads_sim.py), and it would break the brief."""
     from . import passage
     res, reading = served["result"], served["reading"]
     reading["plan_road"] = {"answer": served["answer"], "tier": res.tier or "ABSTAIN", "kind": res.kind,
                             "value": res.value, "extra": res.extra}
     if res.ok and res.tier in ("VERIFIED", "WITNESSED"):
         return _disputed(question, g, served, readers, kw)
-    offline = kw.get("offline", False)
-    reply = passage.read(question, model=readers.passage, offline=offline)
+    reply = passage.read(question, model=readers.passage, offline=kw.get("offline", False))
     if reply is None:
-        reading["passage"] = {"answer": None, "note": "the passage reader was not available"}
+        reading["passage"] = {"answer": None, "note": "the text reader was not available"}
         return served
     reading["passage"] = {"answer": reply.get("answer"), "abstain": reply.get("abstain"), "pred": reply.get("pred"),
                           "facts_ok": reply.get("facts_ok"), "cited": passage.cited(reply)}
@@ -99,46 +97,36 @@ def second_road(question: str, g, served: dict, readers: Readers, kw: dict) -> d
     shown = passage.head(reply, g.companies) if answers else None
     declines = [s for s in seen if s["declined"]]
     lacking = len(declines) >= 2 or any(s["role"] == "arbiter" for s in declines)   # the planners say it is not stated
-
-    def on_passages(plan):
-        """The plan's answer on facts read from passages, or None."""
-        if kw.get("executor") is None or not isinstance(plan, dict):
-            return None
-        try:
-            return passage.run_plan(plan, g, kw["executor"], model=readers.passage, offline=offline)
-        except Exception:  # noqa: BLE001 - a planner's plan the executor itself refused can be malformed
-            return None
+    pointed = _pointer(g, readers, kw)
 
     if not res.ok:
         if lacking:
             return served
-        out = passage.as_answer(reply, g.companies) if answers else None
-        if out is not None:
-            reading["passage"]["used"] = PASSAGE_ALONE
-            return {**out, "reading": {**reading, "case": PASSAGE_ALONE, "witnessed": False}}
-        for s in seen:                                # no whole answer: a planner's plan on passage facts
-            ran = on_passages(s["plan"])
-            if ran is not None:
-                reading["passage"]["used"] = PLAN_ON_PASSAGES
-                reading["passage"]["plan_on_passages"] = ran["value"]
-                return {**passage.plan_answer(ran, s["plan"]),
-                        "reading": {**reading, "case": PLAN_ON_PASSAGES, "witnessed": False}}
+        out = passage.as_answer(reply, g) if answers else None
+        if out is not None:                           # one printed figure: the node at the place the reader names
+            reading["passage"]["used"] = POINTED_NODE
+            return {**out, "reading": {**reading, "case": POINTED_NODE, "witnessed": False}}
+        for s in seen:                                # a planner's plan, its missing lines pointed at
+            got = pointed(s["plan"], s["result"].missing)
+            if got is not None:
+                return _serve_pointed(got, s["plan"], reading, POINTED_LINES)
         return served
     if not answers:
-        if reading["case"] in WITNESSED:              # the passage reader has no whole answer: check the lines
-            ran = on_passages(served["plan"])
-            if ran is not None and passage.same(res, ("n", ran["value"])):
-                reading["passage"]["plan_on_passages"] = ran["value"]
+        if reading["case"] in WITNESSED:              # the reader has no whole answer: test the plan's lines
+            got = pointed(served["plan"])
+            if got is not None and same_answer(got[0], res):
+                reading["passage"]["pointed"] = got[1]
                 res.tier = CORROBORATED
-                res.tier_reasons = ["the same plan on facts read from passages gives the same figure"] + list(res.tier_reasons)
-                reading["passage"]["used"] = "the plan on passage facts repeats the served answer"
+                res.tier_reasons = ["asked for each line of this plan on its own, a reader of the text points at lines "
+                                    "that give the same answer"] + list(res.tier_reasons)
+                reading["passage"]["used"] = "the pointed lines repeat the served answer"
         return served
     if reading["case"] in (ARBITER_ALONE, ONE_READER) and not passage.same(res, shown):
         for s in seen:
             if s["result"] is not res and s["result"].ok and passage.same(s["result"], shown):
                 other = s["result"]
                 other.tier = CORROBORATED
-                other.tier_reasons = [f"two methods agree: this reader's plan and a passage reader ({passage.cited(reply)}); "
+                other.tier_reasons = [f"two methods agree: this reader's plan and a reader of the text ({passage.cited(reply)}); "
                                       "no second planner shares the reading"] + \
                                      [r for r in other.tier_reasons if r != UNWITNESSED]
                 reading["passage"]["used"] = READER_AND_PASSAGE
@@ -146,26 +134,20 @@ def second_road(question: str, g, served: dict, readers: Readers, kw: dict) -> d
                 return {**base, "result": other, "reading": {**reading, "case": READER_AND_PASSAGE, "witnessed": False}}
     if passage.same(res, shown):
         res.tier = CORROBORATED
-        res.tier_reasons = [f"a second method repeats this figure: a passage reader read it in {passage.cited(reply)}"] \
+        res.tier_reasons = [f"a second method repeats this figure: a reader of the text read it in {passage.cited(reply)}"] \
             + list(res.tier_reasons)
         reading["passage"]["used"] = "repeats the served answer"
         return served
-    ran = on_passages(served["plan"]) if shown is not None and shown[0] == "n" else None
-    if ran is not None:
-        reading["passage"]["plan_on_passages"] = ran["value"]
-        out = passage.as_answer(reply, g.companies) if passage.same_number(ran["value"], shown[1]) else None
-        if out is not None:                               # two passage readings against the graph's line
-            out["result"].tier_reasons = [
-                f"the graph's line gives {served['answer']}; the same plan on facts read from passages and the passage "
-                f"reader's own reading both give this figure ({passage.cited(reply)}). Served on the passages, not tied by arithmetic"]
-            reading["passage"]["used"] = PASSAGES_OVERRULE
-            return {**out, "plan": served["plan"], "learned": [],
-                    "reading": {**reading, "case": PASSAGES_OVERRULE, "witnessed": False}}
-        # The plan on passage facts repeats the graph while the passage reader's own answer differs: the
-        # two roads agree on the line the plan names, and disagree on what the question asks. Not
-        # corroborated (round 8, W05: the plan dropped "firmwide", and both roads read the channel total).
+    got = pointed(served["plan"])
+    if got is not None:
+        reading["passage"]["pointed"] = got[1]
+        if passage.same(got[0], shown) and not same_answer(got[0], res):
+            return _serve_pointed(got, served["plan"], reading, LINES_OVERRULED, _overruled(served, reply))
+        # The plan on the pointed lines repeats the graph while the reader's own answer differs: the two
+        # agree on the lines the plan names and disagree on what the question asks. Not corroborated
+        # (round 8, W05: the plan dropped "firmwide", and both read the channel total).
     res.tier_reasons = list(res.tier_reasons) + [
-        f"second reading: a passage reader answers {str(reply.get('answer'))[:80]!r} ({passage.cited(reply)})"]
+        f"second reading: a reader of the text answers {str(reply.get('answer'))[:80]!r} ({passage.cited(reply)})"]
     reading["passage"].setdefault("used", "differs: not served")
     return served
 
@@ -174,20 +156,27 @@ def _disputed(question: str, g, served: dict, readers: Readers, kw: dict) -> dic
     """A VERIFIED or WITNESSED answer rests on two cheap planners reading the question alike. They can
     share a misreading, and then every number ties out for the wrong question (round 8, W11: "what
     gross margin did Adobe earn on its subscription revenue" was read by both as the company's gross
-    margin). So the passage reader is asked here too. When it gives a different figure, the strongest
-    free model plans the question as well, unless it already has:
+    margin). So the text reader is asked here too. Its answer is never served; a different figure from
+    it has two effects.
+
+    A WITNESSED answer rests on lines two pickers chose from one shortlist. The plan runs again on the
+    lines the reader points at; if that run gives the reader's own figure, the shortlist led both
+    pickers to a wrong line (round 8, W02: a reserves row in millions of barrels that three plans
+    reached) and the run on the pointed lines is served, FLAGGED.
+
+    Otherwise the strongest free model plans the question as well, unless it already has:
 
         the arbiter repeats the two planners      -> the answer stands, with its tier
-        the arbiter repeats the passage reader    -> the arbiter's answer, CORROBORATED
+        the arbiter repeats the text reader       -> the arbiter's answer (its plan, on the graph), CORROBORATED
         the arbiter says a third thing            -> the answer stands, FLAGGED: three readings
         no arbiter has quota left                 -> the answer stands, and names the second reading
 
-    A dissent costs one strong call; agreement or silence of the passage reader costs none."""
+    A dissent costs one strong call; agreement or silence of the reader costs none."""
     from . import passage
     res, reading = served["result"], served["reading"]
     reply = passage.read(question, model=readers.passage, offline=kw.get("offline", False))
     if reply is None:
-        reading["passage"] = {"answer": None, "note": "the passage reader was not available"}
+        reading["passage"] = {"answer": None, "note": "the text reader was not available"}
         return served
     reading["passage"] = {"answer": reply.get("answer"), "abstain": reply.get("abstain"), "pred": reply.get("pred"),
                           "facts_ok": reply.get("facts_ok"), "cited": passage.cited(reply)}
@@ -197,27 +186,14 @@ def _disputed(question: str, g, served: dict, readers: Readers, kw: dict) -> dic
     if passage.same(res, shown):
         reading["passage"]["used"] = "repeats the served answer"
         return served
-    second = f"second reading: a passage reader answers {str(reply.get('answer'))[:80]!r} ({passage.cited(reply)})"
+    second = f"second reading: a reader of the text answers {str(reply.get('answer'))[:80]!r} ({passage.cited(reply)})"
     seen = reading["readers"]
-    if res.tier == "WITNESSED" and shown[0] == "n" and kw.get("executor") is not None:
-        # WITNESSED rests on lines two models chose from one shortlist. The same plan on facts read from
-        # passages is the test of those lines: if it gives the passage reader's figure, the shortlist
-        # led both pickers to a wrong line (round 8, W02: Exxon's reserves, a row in millions of barrels
-        # that three planners' plans all reached)
-        try:
-            ran = passage.run_plan(served["plan"], g, kw["executor"], model=readers.passage, offline=kw.get("offline", False))
-        except Exception:  # noqa: BLE001
-            ran = None
-        if ran is not None:
-            reading["passage"]["plan_on_passages"] = ran["value"]
-            out = passage.as_answer(reply, g.companies) if passage.same_number(ran["value"], shown[1]) else None
-            if out is not None:
-                out["result"].tier_reasons = [
-                    f"the graph's line gives {served['answer']}; the same plan on facts read from passages and the passage "
-                    f"reader's own reading both give this figure ({passage.cited(reply)}). Served on the passages, not tied by arithmetic"]
-                reading["passage"]["used"] = PASSAGES_OVERRULE
-                return {**out, "plan": served["plan"], "learned": [],
-                        "reading": {**reading, "case": PASSAGES_OVERRULE, "witnessed": False}}
+    if res.tier == "WITNESSED":
+        got = _pointer(g, readers, kw)(served["plan"])
+        if got is not None:
+            reading["passage"]["pointed"] = got[1]
+            if passage.same(got[0], shown) and not same_answer(got[0], res):
+                return _serve_pointed(got, served["plan"], reading, LINES_OVERRULED, _overruled(served, reply))
     if any(s["role"] == "arbiter" for s in seen):     # the arbiter has read it, and one planner agreed with it
         reading["passage"]["used"] = "differs; the arbiter had already sided with a planner"
         return served
@@ -234,14 +210,48 @@ def _disputed(question: str, g, served: dict, readers: Readers, kw: dict) -> dic
         other = third["result"]
         other.tier = CORROBORATED
         other.tier_reasons = [f"two cheap planners read the question another way ({served['answer']}); the arbiter's plan and "
-                              f"a passage reader ({passage.cited(reply)}) agree on this figure"] + list(other.tier_reasons)
+                              f"a reader of the text ({passage.cited(reply)}) agree on this figure"] + list(other.tier_reasons)
         reading["passage"]["used"] = ARBITER_AND_PASSAGE
         return {**third, "reading": {**reading, "case": ARBITER_AND_PASSAGE, "witnessed": False}}
     res.tier = "FLAGGED"
-    res.tier_reasons = ["two planners agree, but the arbiter and a passage reader each read the question differently"] \
+    res.tier_reasons = ["two planners agree, but the arbiter and a reader of the text each read the question differently"] \
         + list(res.tier_reasons) + [second]
     reading["passage"]["used"] = "differs; three readings"
     return served
+
+
+def _pointer(g, readers: Readers, kw: dict):
+    """passage.by_pointing for this question: (plan, missing lines or None for every line) ->
+    (the executor's result on the pointed lines, the nodes), or None when the plan cannot be run so."""
+    from . import passage
+
+    def pointed(plan, missing=None):
+        if kw.get("executor") is None or not isinstance(plan, dict):
+            return None
+        try:
+            return passage.by_pointing(plan, g, kw["executor"], model=readers.passage,
+                                       offline=kw.get("offline", False), missing=missing)
+        except Exception:  # noqa: BLE001 - a planner's plan the executor itself refused can be malformed
+            return None
+    return pointed
+
+
+def _overruled(served: dict, reply: dict) -> str:
+    from . import passage
+    return (f"the linker's lines give {served['answer']}; a reader of the text gives another figure ({passage.cited(reply)}), "
+            "and this plan run on the graph lines that reader points at gives that figure too. Every figure here is a "
+            "node of the graph")
+
+
+def _serve_pointed(got: tuple, plan: dict, reading: dict, case: str, why: str = "") -> dict:
+    """An answer the executor computed on lines the text reader pointed at, in the shape ask.answer returns."""
+    res, nodes = got
+    if why:
+        res.tier_reasons = [why] + list(res.tier_reasons)
+    reading["passage"]["used"] = case
+    reading["passage"]["pointed"] = nodes
+    return {"answer": render(res), "result": res, "plan": plan, "learned": [], "seconds": 0.0, "plan_errors": [],
+            "repaired": False, "reading": {**reading, "case": case, "witnessed": False}}
 
 
 def _plan_road(question: str, g, readers: Readers, **kw) -> dict:
