@@ -609,14 +609,16 @@ def breakdown(g: Graph, ticker: str, phrase: str) -> Optional[list]:
 def period_cells(row: dict) -> dict:
     """{period id: the cell index that stands for the row in that period}.
 
-    A period printed over several columns (a year over U.S., Non-U.S. and Total) is one figure for the
-    row: the column headed "total", or else the last of the group, where tables put their totals."""
+    A period printed over several columns is one figure for the row: the column headed "total" when one
+    is (a year over U.S., Non-U.S. and Total), else the first of them (a count before its square feet,
+    three months before nine months)."""
     out: dict = {}
     for j, c in enumerate(row["cells"]):
         pid = _cell_pid(row, j)
         if not pid:
             continue
-        if pid not in out or "total" in (c.get("col") or "").lower()                 or "total" not in (row["cells"][out[pid]].get("col") or "").lower():
+        if pid not in out or ("total" in (c.get("col") or "").lower()
+                              and "total" not in (row["cells"][out[pid]].get("col") or "").lower()):
             out[pid] = j
     return out
 
