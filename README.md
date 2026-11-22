@@ -1,6 +1,6 @@
 # TieOut
 
-Questions about SEC filings, answered from the filing's own arithmetic and checked by a second method that reads the text. Every answer comes with the page and the printed number behind it, and a tier that says how far to trust it.
+Questions about SEC filings, answered from a graph of the filing's own arithmetic. A reader of the text may dispute an answer or point at a line of the graph; it never supplies an answer. Every answer comes with the page and the printed number behind it, and a tier that says how far to trust it.
 
 [[HEADLINE]]
 
@@ -12,43 +12,40 @@ TieOut recovers the formulas from the printed numbers alone, with no model and n
 
 *Merck's balance sheet (10-K page 80), drawn by `python -m tieout show`. Green brackets are recovered formulas. The answer cell is outlined in blue.*
 
-## How a question is answered: two roads
+## How a question is answered
 
-**The plan road (structure).** A language model compiles the question into a typed plan in a small plan language (`benchmark/plan_language.txt`: get, calc, compare, rank, filter, series, members). It never sees a figure. A deterministic executor runs the plan on the graph and returns the answer with its proof leaves (filing, page, printed text), or an abstention that names the fact it could not find.
+**A plan, run on the graph.** A language model compiles the question into a typed plan in a small plan language (`benchmark/plan_language.txt`: get, calc, compare, rank, filter, series, members). It never sees a figure. A deterministic executor runs the plan on the graph and returns the answer with its proof leaves (filing, page, printed text), or an abstention that names the fact it could not find.
 
 "What were Apple's net sales in the fourth quarter of fiscal 2026?" No filing prints that number. The plan is one step: get Revenue for fiscal 2026, quarter 4. The executor finds the equation where it is the only unknown: 478,834 for the year (10-K page 28) minus 364,357 for nine months (third-quarter 10-Q page 4) is $114,477 million, and both sources sit inside passing checks.
 
-**The passage road (text).** The graph cannot answer from a line the build never read, or a fact stated only in a sentence that the linker did not find. A plain retrieval pipeline can: passages of the filings, BM25 and dense vectors fused, one model reads them and does its own arithmetic. That pipeline is this repository's baseline. Alone it is right far less often than the plan road, but on different questions. On the first runs of rounds 3 to 9 (240 questions nobody had seen), the plan road was right on 162, the passage reader on 135, and at least one of the two on 203.
+**A reader of the text, as witness and pointer. It never answers.** The brief asks that answers come from the graph, not from search over text chunks. But the graph cannot answer from a line its linker did not find, and two pickers that choose from one shortlist can agree on a look-alike row. A plain retrieval pipeline (passages of the filings, BM25 and dense vectors fused, one model reads them; it is this repository's baseline) is right far less often than the graph, but on different questions. On the first runs of rounds 3 to 9 (240 questions nobody had seen), the graph's plans were right on 162, the reader on 135, and at least one of the two on 203. So the reader is kept inside the system, with two jobs and one rule (`tieout/passage.py`):
 
-So the baseline is kept inside the system as a witness of another kind (`tieout/passage.py`, `readers.second_road`). It is never trusted alone:
-
-| When | What happens |
+| Job | What happens |
 |---|---|
-| The plan road has no answer, and no planner says the filings lack it | The passage answer is served, FLAGGED. If the passage reader cannot answer the whole question, a planner's plan is run on facts read from passages. |
-| A reading only one planner holds, which the passage reader repeats | That reading is served. |
-| A FLAGGED answer the passage reader repeats | CORROBORATED: two different methods reached it. |
-| The passage reader gives a different figure | The served plan is run again on facts read from passages. Only if that run and the passage reader's own answer agree against the graph's figure is the graph overruled: it read a wrong line for a right plan. |
-| A VERIFIED or WITNESSED answer the passage reader disputes | The strongest free model plans the question too. Its answer is served if it sides with the passage reader. |
+| Witness | Its answer is compared with the graph's. The same figure makes a FLAGGED answer CORROBORATED. A different figure against a VERIFIED or WITNESSED answer sends the question to the strongest free model, which plans it too. |
+| Pointer | It is asked where a line is printed. The place it names (filing, page, figure) is looked up in the graph. The row found there is linked to the plan's phrase exactly as a picker's choice is, and the executor runs the plan again. The reader names the row; the column head still picks the period, the caption the scale, the executor does the arithmetic. This fills an abstention. It overrules the linker's lines only when the plan on the pointed lines gives the reader's own figure. |
 
-Each rule was simulated on saved results before it was built. One passage reading alone never replaces a served answer: tried on saved results, that lost more answers than it won (`dev_scripts/fable/two_roads_sim.py`). Every result row records what the plan road alone served, so each run reports both numbers.
+The rule: nothing the reader writes is ever served. No figure, no name, no ranking. Every served figure is a node of the graph, and one command checks that for a whole run: `python scripts/check_brief.py results/<run>.json` fails if any proof leaf of any served answer is not a node at the filing and page it states. Of 579 figures the reader cited in 279 saved answers, 546 are nodes of the graph (402 table cells, 144 sentence figures). Where no node is there, there is no answer.
 
-## Trust: two planners, two pickers, two roads, five tiers
+On the four latest development rounds (142 questions) the plans alone were right on 114 and the whole system on 122 (`results/h2_r7.json` to `results/h2_r10.json`). Every result row records what the plans alone served, so each run reports both numbers.
 
-No single model's choice is served as fact. Two planners read each question: a free hosted model and a small model fine-tuned on Kaggle that runs on a laptop CPU. Their plans are compared on what they yield, not on their wording. A stronger model, the arbiter, is called only when they disagree. When an answer needs a printed line outside the three statements, two pickers choose it and are compared on the figure each pick yields. The passage road then checks the result from outside.
+## Trust: two planners, two pickers, one outside witness, five tiers
 
-The planners and pickers are not independent, and we measured how much that matters. Both pickers are Gemini flash-lite models. The local planner learned from paraphrases the hosted model wrote. When the two planners disagreed (139 cases over rounds 4 to 8), the hosted one was right 80 times, the local one 29, the arbiter 96, and the served answer 100. The passage road is the one witness that shares none of this: it reads text, not plans.
+No single model's choice is served as fact. Two planners read each question: a free hosted model and a small model fine-tuned on Kaggle that runs on a laptop CPU. Their plans are compared on what they yield, not on their wording. A stronger model, the arbiter, is called only when they disagree. When an answer needs a printed line outside the three statements, two pickers choose it and are compared on the figure each pick yields. The reader of the text then checks the result from outside.
+
+The planners and pickers are not independent, and we measured how much that matters. Both pickers are Gemini flash-lite models. The local planner learned from paraphrases the hosted model wrote. When the two planners disagreed (139 cases over rounds 4 to 8), the hosted one was right 80 times, the local one 29, the arbiter 96, and the served answer 100. The reader of the text is the one witness that shares none of this: it reads text, not plans.
 
 | Tier | What the code promises (`tieout/execute.py` `trust`, `tieout/readers.py`) | Right, [[TIER-SOURCE]] |
 |---|---|---|
 | VERIFIED | Every number is a statement line bound to its concept by a seed binding (no model chose the row), inside a formula that holds on its page or solved from such numbers. Two planners read the question alike. | [[T-VERIFIED]] |
 | WITNESSED | The same, except some lines were chosen by models, and each such choice was made by two models that agreed. | [[T-WITNESSED]] |
-| CORROBORATED | An answer with a weakness (one model's choice, a line outside any formula) that the passage road repeats, or one where the arbiter and the passage road agree. | [[T-CORROBORATED]] |
-| FLAGGED | Answered, with each weakness named, and the passage reader's different answer printed beside it when there is one. | [[T-FLAGGED]] |
+| CORROBORATED | An answer with a weakness (one model's choice, a line outside any formula) that the reader of the text repeats, or one where the arbiter's plan and the reader agree. | [[T-CORROBORATED]] |
+| FLAGGED | Answered, with each weakness named, and the text reader's different answer printed beside it when there is one. Every answer whose line the reader pointed at is here. | [[T-FLAGGED]] |
 | ABSTAIN | Not answered. Says what is missing. | [[T-ABSTAIN]] |
 
 ## The configuration
 
-The headline runs on what the brief allows: one free Gemini key and a laptop CPU. Planner `gemini-3.5-flash-lite` (plans and picks). Second planner `tieout-planner-4b-v3`, our fine-tuned Qwen3-4B, through Ollama on the CPU. Second picker `gemini-3.1-flash-lite`. Arbiter `gemini-3.6-flash`, then `3.5-flash`, then `3-flash-preview`. Passage reader `gemini-3.5-flash-lite` over a hybrid retriever (BM25 plus `bge-small` vectors on the CPU). One command runs it (`dev_scripts/fable/heldout_c.sh`).
+The headline runs on what the brief allows: one free Gemini key and a laptop CPU. Planner `gemini-3.5-flash-lite` (plans and picks). Second planner `tieout-planner-4b-v3`, our fine-tuned Qwen3-4B, through Ollama on the CPU. Second picker `gemini-3.1-flash-lite`. Arbiter `gemini-3.6-flash`, then `3.5-flash`, then `3-flash-preview`. Text reader `gemini-3.5-flash-lite` over a hybrid retriever (BM25 plus `bge-small` vectors on the CPU). One command runs it (`dev_scripts/fable/heldout_c.sh`).
 
 Paid models were used for development throughput and for one question only: is the model the bottleneck? That answer is its own table below. No paid number is mixed into a free one.
 
@@ -80,7 +77,7 @@ Part of the gap is adaptation to development questions. Part may be that fresh q
 | The free setup: two planners, two pickers, arbiter | 31 | 27 |
 | Scaled: Claude Sonnet 5.5 plans and picks, gemini-3.1-pro arbitrates (paid) | 32 | 26 |
 
-All on the code of 22 November, before the second road; round 9 as scored that night (26 and 26 under the final scorer). A stronger model alone gains 3 questions. The design gains 12. Paid models inside the design gain one question on a development round and lose one on unseen questions. On 145 clean row-pick pairs, six models of four families all pick the right row 68 to 73 percent of the time (`dev_scripts/fable/pick_models*.log`). The model is not the bottleneck; a second method was worth more than a stronger model, which is why the last night went into the second road.
+All on the code of 22 November, before the text reader was added; round 9 as scored that night (26 and 26 under the final scorer). A stronger model alone gains 3 questions. The design gains 12. Paid models inside the design gain one question on a development round and lose one on unseen questions. On 145 clean row-pick pairs, six models of four families all pick the right row 68 to 73 percent of the time (`dev_scripts/fable/pick_models*.log`). The model is not the bottleneck; a witness of another kind was worth more than a stronger model.
 
 ## Where it fails, by class
 
@@ -101,7 +98,8 @@ Two further uses were measured and not merged. A vision model laid out the table
 - Tuning on one development set: 84 of 87 there, 56 to 69 percent on fresh questions.
 - Trusting one model's plan or pick. Flash-lite slips on about one plan in eight and often picks a look-alike row.
 - A stronger model alone, or a picker of another family: see the side experiment above.
-- Letting the passage reader replace a served answer whenever it disagrees: 141 of 178 right on saved results, against 144 when it may only fill, break ties and corroborate.
+- Serving an answer the text reader wrote. An earlier version filled abstentions with the reader's own answer. It gained three questions on a fresh round (27 of 35 against 24) and broke the brief's rule that answers come from the graph. It was rebuilt so that the reader can only point at a graph node: the first run of that version on the same round scored 26.
+- Letting the text reader replace a served answer whenever it disagrees: 141 of 178 right on saved results, against 144 when it may only fill, break ties and corroborate.
 - A word rule for "how much did X grow" (the rate or the amount?): the keys of blind authors want the rate in 2 development questions and the amount in 2, so the rule was removed after its red team.
 - A reverse check of a picked row (a model shown only the row's place says what it reports), and a third cheap planner of another family: neither gained on rounds 7 and 8, and the first promoted a wrong answer.
 - The link store on new questions (above).
@@ -118,7 +116,7 @@ Planners fine-tuned on Kaggle GPUs from Qwen3 (LoRA, one epoch, plans written in
 
 Each of these was built or measured and stopped short of the frozen system. The number is what was measured.
 
-- **Run rankings and comparisons on passage facts too.** The plan re-run on passage facts handles get, calc and change steps. Rankings and comparisons of several companies are where the passage reader alone is weakest and the vote is missing.
+- **A judge between two sets of lines.** When the linker's rows and the rows the reader cites give different answers, show both sets to the arbiter with their tables and headings and no figures, and let the executor compute on the set it picks. Today the reader's lines win only when a separate reading of each line agrees with its answer to the whole question.
 - **Periods as intervals.** A twelve-month period that is not the fiscal year, or a quarter restated in a later table, still fails (Bank of America's restated third quarter, round 7). Start and end dates for every column, a quarter as interval subtraction.
 - **Wire the page-image rows into the graph.** 318 rows accepted by arithmetic on 13 pages. Left out because a label is not proven by arithmetic: two operands that trade labels keep every sum.
 - **Read award and option tables.** Share counts there are read as dollars in the money scale. A fix was built and switched off: its red team found the share scale wrong on 11 pages.
@@ -150,7 +148,7 @@ The brief says to use AI tools freely and to say how. The AI (Claude Code: sever
 6. **Resources (D6, D12).** I set up the keys and accounts; extra keys are for development only, so the reported run fits one free key.
 7. **Publication (D7).** Push the public repository.
 8. **No checks by hand (D8).** Checks are automated passes, and this README says so.
-9. **Stop and revamp (D9, D10).** I stopped the first version and ordered a red team of everything it claimed, written failures, and a revamp rather than a patch. On the last night I ordered a second revamp for real gains on unseen questions; the second road came out of it.
+9. **Stop and revamp (D9, D10).** I stopped the first version and ordered a red team of everything it claimed, written failures, and a revamp rather than a patch. On the last night I ordered a second revamp for real gains on unseen questions; the reader of the text as a witness came out of it. I stopped that version when I saw it serve answers the reader had written: the brief says answers come from the graph. I had it rebuilt so that the reader can only point at a graph node.
 10. **The target (D11).** Accuracy on questions nobody has seen, not on development: the reason for the fresh rounds above.
 11. **Research before training (D13).** The lab's plan was to start GPU runs at once. I overruled it: research first, success criteria written before any run, no blind training.
 12. **The learning layer stays (D14),** with a second witness before a link is trusted and a way to withdraw it.
@@ -163,8 +161,8 @@ Two of these overruled the plan the AI had put to me: fine-tuning (D3) and resea
 ```
 tieout/        the package: pdfio, tables, alltables, statements, calc, graph (build); rawlayer, mentions (every
                other table and sentence); concepts, living, link (names and links); plan, planner, readers,
-               witness, execute, ask (the plan road); passage (the second road); restate; eval/
-baseline/      the retrieval pipeline: the baseline, and the reader of the second road
+               witness, execute, ask (plans on the graph); passage (the text reader: witness and pointer); restate; eval/
+baseline/      the retrieval pipeline: the baseline, and the text reader
 benchmark/     every round's questions, the plan language, hand-written plans
 scripts/       build, ledger, evaluate, audit, scale test, coverage, figures
 results/       every result file the numbers above come from
