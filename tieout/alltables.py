@@ -27,11 +27,10 @@ from collections import Counter
 from dataclasses import dataclass, field, replace
 from typing import Optional
 
-from .tables import (CAPTION_RE, DASH_TOKENS, HEADER_HINT, MONTH_ABBR, MONTHS, TITLE_RE, YEAR_RE, Table,
-                     _mostly_years, _scale, build_table, is_numeric, right_edge)
+from .tables import (CAPTION_RE, DASH_TOKENS, DAY_END_RE, HEADER_HINT, LABEL_MARK, MONTH_ABBR, MONTHS, TITLE_RE,
+                     YEAR_RE, Table, _mostly_years, _scale, build_table, is_month, is_numeric, right_edge)
 from .statements import page_lines
 
-LABEL_MARK = "⁠"            # appended to a number that is part of a label, so it stops looking numeric
 VALUE_WORDS = {"$", "%", "NA", "NM", "N/A", "n/a", "nm", "N/M", "n/m", "*", "—%", "-%"}
 MARKER_RE = re.compile(r"^\(?[a-z]\)$|^\(\d{1,2}\)$|^\*{1,3}$")
 # "(in millions)", "(dollars in millions)", "(millions of dollars)", "$ in millions"
@@ -162,8 +161,11 @@ def _classify(ln: list, left: float, right: float) -> Line:
     if all(MARKER_RE.match(w.text) for w in ln) or CONTINUED_RE.search(text):
         return Line(ln, "mark", text)                   # "(g)   (g)" markers over cells, "(Table continued ...)"
     # values count only when set off from the words before them by a wide
-    # gap; "compared to 2025" inside a sentence is not a column
-    set_off = bool(vals) and (j == 0 or ln[j].x0 - ln[j - 1].x1 >= 8)
+    # gap; "compared to 2025" inside a sentence is not a column. A dollar sign
+    # printed against the label ("Balance as of December 31, $   409") is
+    # set off by the gap after it.
+    set_off = bool(vals) and (j == 0 or ln[j].x0 - ln[j - 1].x1 >= 8 or (
+        ln[j].text == "$" and j + 1 < len(ln) and is_numeric(ln[j + 1].text) and ln[j + 1].x0 - ln[j].x1 >= 8))
     if _mostly_years(ln) and (set_off or _date_header(ln)):
         return Line(ln, "hdr", text)                    # "2026  Change  2025  Change  2024"
     if set_off:
@@ -216,6 +218,15 @@ def _new_columns(reg: Region, ln: Line) -> bool:
     return not any(abs(e - f) <= 5 for e in ln.edges for f in reg.edges)
 
 
+def _ends_label(prev: Line, ln: Line) -> bool:
+    """A lone year under a table row whose label stops at a day ("Balance as of December 31,")
+    finishes that label; it is not a year header."""
+    if prev.kind != "num" or len(ln.words) != 1 or not YEAR_RE.match(ln.words[0].text.replace(LABEL_MARK, "")):
+        return False
+    label = " ".join(w.text for w in prev.words[:_value_run(prev.words)]).replace(LABEL_MARK, "")
+    return bool(DAY_END_RE.search(label.rstrip(" $")))
+
+
 def _segment(lines: list) -> list:
     regions, cur = [], None
 
@@ -237,6 +248,8 @@ def _segment(lines: list) -> list:
             cur.end = i
             cur.edges.extend(ln.edges)
         elif ln.kind == "hdr":
+            if i and _ends_label(lines[i - 1], ln):
+                continue                                # "Balance as of December 31," / "2022": the end of a label
             # a year header after values starts the next table
             if cur is not None and cur.nnum:
                 close()
@@ -491,27 +504,44 @@ def _without_columns(region: list, drop: list, cols: list) -> list:
     and on year-header lines every word whose centre is nearer a dropped
     column than a kept one ("Change", "July 25, 2026" over a percent column).
     A second build_table then gives the period headers to the amount columns
-    only. Spanning lines such as "Year Ended December 31," are left alone."""
+    only. Spanning lines such as "Year Ended December 31," are left alone.
+    A year printed over the right half of an (amount, change) pair ("2025"
+    right-aligned over "Increase/(decrease)") is the amount column's year: it
+    is moved over the kept column on its left when that column has no year of
+    its own on the line."""
     def centre(c):
         return (c.x_left + c.x_right) / 2
 
     dropped = {c.idx for c in drop}
 
-    def nearest_dropped(w):
+    def nearest(w):
         xr = right_edge(w) if is_numeric(w.text) else w.x1
         mid = (w.x0 + xr) / 2
-        return min(cols, key=lambda c: abs(centre(c) - mid)).idx in dropped
+        return min(cols, key=lambda c: abs(centre(c) - mid))
 
     def in_col(w, c):
         xr = right_edge(w) if is_numeric(w.text) else w.x1
         return c.x_left - 6 <= (w.x0 + xr) / 2 <= c.x_right + 6
+
+    def onto_amount(w, ln):
+        """The year moved over the kept column left of its dropped column, or None."""
+        c = nearest(w)
+        if not YEAR_RE.match(w.text) or c.idx == 0 or c.idx - 1 in dropped:
+            return None
+        left = cols[c.idx - 1]
+        if any(YEAR_RE.match(v.text) and nearest(v) is left for v in ln.words):
+            return None
+        return replace(w, x0=left.x_right - (w.x1 - w.x0), x1=left.x_right)
 
     out = []
     for ln in region:
         keep = []
         for w in ln.words:
             value = is_numeric(w.text) or w.text in DASH_TOKENS
-            if ln.kind == "hdr" and nearest_dropped(w):
+            if ln.kind == "hdr" and nearest(w).idx in dropped:
+                moved = onto_amount(w, ln)
+                if moved is not None:
+                    keep.append(moved)
                 continue
             if value and ln.kind != "hdr" and any(in_col(w, c) for c in drop):
                 continue
@@ -603,8 +633,8 @@ def _group_headers(t: Table, region: list) -> None:
             for g in groups:
                 lo = min(c.x_left for c in g) - 10
                 hi = max(c.x_right for c in g) + 10
-                if lo <= mid <= hi:
-                    name = " ".join(w.text for w in phrase)
+                name = " ".join(w.text for w in phrase)
+                if lo <= mid <= hi and not all(is_month(w.text) for w in phrase):
                     for c in g:
                         c.group = (getattr(c, "group", "") + " " + name).strip()
     for c in t.columns:
@@ -679,14 +709,31 @@ def _repair_wrapped_labels(t: Table) -> None:
 def _spread_panel_year(t: Table) -> None:
     """One date printed once over category columns ("December 31, 2025" over
     "Level 1  Level 2  Level 3  Total") lands on a single column; it belongs
-    to all of them."""
+    to all of them. A year printed once over each group of the same category
+    columns ("2024" over "U.S.  Non-U.S.  Total", then "2023" over the same
+    three) lands on one column of its group; it belongs to the whole group."""
     dated = [c for c in t.columns if c.year]
-    if t.ncols < 2 or len(dated) != 1 or len(re.findall(r"\b(?:19|20)\d\d\b", t.header_text)) != 1:
+    if t.ncols < 2 or not dated or len(re.findall(r"\b(?:19|20)\d\d\b", t.header_text)) != len(dated):
         return
-    src = dated[0]
-    for c in t.columns:
-        c.year, c.end_date = src.year, src.end_date
-        c.months = c.months or src.months
+    size = t.ncols // len(dated)
+    groups = [t.columns[i:i + size] for i in range(0, t.ncols, size)]
+    names = [[getattr(c, "group", "") for c in g] for g in groups]
+    if len(dated) > 1 and (size < 2 or t.ncols % len(dated) or not all(names[0])
+                           or any(n != names[0] for n in names) or any(sum(1 for c in g if c.year) != 1 for g in groups)):
+        return
+    for g in groups:
+        src = next(c for c in g if c.year)
+        for c in g:
+            if c is not src and re.search(r"\d", _own_header(c)):
+                continue                    # a date of its own, only partly read ("31,"): not this one
+            c.year, c.end_date = src.year, src.end_date
+            c.months = c.months or src.months
+
+
+def _own_header(c) -> str:
+    """The period words build_table read over a column, without the category name put before them."""
+    group = getattr(c, "group", "")
+    return c.header[len(group):].lstrip(" |") if group and c.header.startswith(group) else c.header
 
 
 def _phrases(words: list) -> list:

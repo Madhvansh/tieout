@@ -35,6 +35,7 @@ import json
 import pathlib
 import re
 from collections import Counter, defaultdict
+from dataclasses import replace
 from datetime import date
 from typing import Optional
 
@@ -42,6 +43,7 @@ from . import pdfio
 from .alltables import find_all_tables
 from .calc import PER_SHARE_RE, discover, row_pool, verified_cells
 from .concepts import norm_label
+from .tables import duration, printed_date
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 RAW_PATH = ROOT / "graph" / "raw.json.gz"
@@ -177,8 +179,9 @@ def _cell_scale(t, r, ci: int, unit: str, prof: _Profile) -> float:
     return 1.0
 
 
-def table_rows(doc: str, ticker: str, k: int, t, periods: list, anchors: dict) -> list:
-    """Rows of one parsed table in the raw-layer shape."""
+def table_rows(doc: str, ticker: str, k: int, t, periods: list, anchors: dict, cal=None, form: str = "") -> list:
+    """Rows of one parsed table in the raw-layer shape. With the company's calendar, a date line
+    inside the table dates the rows below it (_marked_periods)."""
     checks = discover(t)
     ok = verified_cells(t, checks)
     passing = [ch for ch in checks if ch.status != "fail"]
@@ -193,11 +196,12 @@ def table_rows(doc: str, ticker: str, k: int, t, periods: list, anchors: dict) -
     for r in t.rows:
         unit = row_unit(t, r, prof)
         cells, ties = [], defaultdict(int)
+        row_periods = _marked_periods(cal, t, r, periods, form) if cal is not None else periods
         for ci in sorted(r.cells):
             cell = r.cells[ci]
             if cell.value is None:
                 continue
-            pid, end = periods[ci]
+            pid, end = row_periods[ci]
             cunit = "percent" if cell.is_percent else unit
             if unit in ("count", "shares") and (cell.has_dollar or "." in cell.text and
                                                 PRICE_COL_RE.search(t.columns[ci].header + " " + t.header_text)):
@@ -265,9 +269,11 @@ def build_raw(g, docs: Optional[list] = None, verbose: bool = True) -> list:
         scales = Counter(t["scale"] for t in g.tables.values() if t["doc"] == doc and t.get("scale"))
         default = scales.most_common(1)[0][0] if scales else None
         n0 = len(rows)
+        fiscal_year = int(f["fiscal_year"].lstrip("FY"))
         for k, t in enumerate(find_all_tables(doc, pages, skip_pages=skip, default_scale=default)):
-            periods = [_period(cal, c, f["form"]) for c in t.columns]
-            rows.extend(table_rows(doc, ticker, k, t, periods, anchors))
+            buckets = _maturity_columns(t, fiscal_year)
+            periods = [(None, None) if c.idx in buckets else _period(cal, c, f["form"]) for c in t.columns]
+            rows.extend(table_rows(doc, ticker, k, t, periods, anchors, cal, f["form"]))
         rows.extend(_primary_rows(g, doc))
         if verbose:
             print(f"raw    {doc:22s} {len(rows) - n0:5d} rows", flush=True)
@@ -326,6 +332,55 @@ def _primary_rows(g, doc: str) -> list:
             rec["children"] = [rid_of(k) for k, _ in children[(table, row)]]
             rec["signs"] = [s for _, s in children[(table, row)]]
         out.append(rec)
+    return out
+
+
+VINTAGE_RE = re.compile(r"\bvintage|origination year|year of origination|by year originated|term loans by", re.I)
+
+
+def _maturity_columns(t, fiscal_year: int) -> set:
+    """Columns whose years are buckets of a schedule, not periods.
+
+    "2026  2027  2028  2029  2030  Thereafter  Total" in a 2025 report says when amounts owed
+    at the report date fall due. A filing reports nothing after its own fiscal year, so years
+    that run upward past it are buckets of a schedule; "Thereafter" and "Total" beside them are
+    buckets too. Every column of such a table keeps its header as the bucket name and gets no
+    period id. In a table of loans by vintage the years say when loans were made.
+    """
+    years = [c.year for c in t.columns if c.year]
+    if VINTAGE_RE.search(" ".join([t.title or "", t.caption or "", t.header_text or ""])):
+        return {c.idx for c in t.columns if c.year}           # years of origination, not periods
+    if len(years) < 2 or max(years) <= fiscal_year or years != sorted(set(years)):
+        return set()
+    return {c.idx for c in t.columns}
+
+
+QUARTER_HEAD_RE = re.compile(r"quarter|\bq[1-4]\b|months|weeks|\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)", re.I)
+
+
+def _marked_periods(cal, t, r, periods: list, form: str) -> list:
+    """The periods of one row's columns when a date line sits above the row inside the table.
+
+    "As of December 2024" between two stacked blocks of the same columns dates the second
+    block; "2025" over a block of segment columns dates columns the header leaves undated.
+    The line replaces the header's period only when the header gives every dated column one
+    and the same period, or gives none (and the columns are not quarters or months).
+    """
+    mark = getattr(r, "period_mark", "")
+    years = re.findall(r"\b((?:19|20)\d\d)\b", mark)
+    if not years:
+        return periods
+    dated = {p for p in periods if p[0]}
+    if len(dated) > 1 or not dated and any(QUARTER_HEAD_RE.search(c.header) for c in t.columns):
+        return periods
+    year = int(years[-1])
+    out = []
+    for c, p in zip(t.columns, periods):
+        if dated and not p[0]:
+            out.append(p)                       # a column the header leaves undated ("Total") stays so
+            continue
+        col = replace(c, year=year, end_date=printed_date(mark, year), months=duration(mark) or c.months)
+        out.append(_period(cal, col, form))
     return out
 
 

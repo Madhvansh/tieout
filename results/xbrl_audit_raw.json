@@ -1,40 +1,40 @@
 {
- "cells_tested": 87193,
+ "cells_tested": 91954,
  "cells": {
-  "unmatched": 63041,
-  "confirmed": 16651,
-  "kind_differs": 7210,
-  "length_differs": 291
+  "unmatched": 64380,
+  "confirmed": 18723,
+  "kind_differs": 8624,
+  "length_differs": 227
  },
- "value_and_date_confirmed_share": 0.27365728900255754,
+ "value_and_date_confirmed_share": 0.29739869934967483,
  "by_unit": {
   "USD": {
-   "unmatched": 60488,
-   "confirmed": 16039,
-   "kind_differs": 7193,
-   "length_differs": 285
+   "unmatched": 61696,
+   "confirmed": 18051,
+   "kind_differs": 8607,
+   "length_differs": 223
   },
   "USD/share": {
-   "confirmed": 423,
-   "unmatched": 724,
-   "length_differs": 6,
+   "confirmed": 468,
+   "unmatched": 690,
+   "length_differs": 4,
    "kind_differs": 3
   },
   "shares": {
-   "confirmed": 175,
-   "unmatched": 52,
+   "confirmed": 187,
+   "unmatched": 55,
    "kind_differs": 4
   },
   "count": {
-   "unmatched": 1777,
-   "confirmed": 14,
+   "unmatched": 1939,
+   "confirmed": 17,
    "kind_differs": 10
   }
  },
- "tables_tested": 3123,
- "tables_with_a_confirmed_cell": 2414,
+ "tables_tested": 3352,
+ "tables_with_a_confirmed_cell": 2766,
  "scale_errors": [],
- "columns_tested": 9987,
+ "columns_tested": 11499,
  "period_errors": [
   {
    "table": "AAPL_FY2025_10K:p46:x23",
@@ -49,66 +49,6 @@
    "tested": 4
   },
   {
-   "table": "AMZN_FY2025_10K:p29:x7",
-   "doc": "AMZN_FY2025_10K",
-   "page": 29,
-   "title": "Dollar is as follows",
-   "column": 3,
-   "pid": "FY2024",
-   "quarters_off": -4,
-   "cells_shifted": 3,
-   "other_length": 0,
-   "tested": 3
-  },
-  {
-   "table": "AMZN_FY2025_10K:p59:x26",
-   "doc": "AMZN_FY2025_10K",
-   "page": 59,
-   "title": "The following summarizes our principal contractual commitments, exclud",
-   "column": 0,
-   "pid": "FY2026",
-   "quarters_off": 4,
-   "cells_shifted": 4,
-   "other_length": 0,
-   "tested": 8
-  },
-  {
-   "table": "AMZN_FY2025_10K:p59:x26",
-   "doc": "AMZN_FY2025_10K",
-   "page": 59,
-   "title": "The following summarizes our principal contractual commitments, exclud",
-   "column": 1,
-   "pid": "FY2027",
-   "quarters_off": 8,
-   "cells_shifted": 4,
-   "other_length": 0,
-   "tested": 8
-  },
-  {
-   "table": "AMZN_FY2025_10K:p59:x26",
-   "doc": "AMZN_FY2025_10K",
-   "page": 59,
-   "title": "The following summarizes our principal contractual commitments, exclud",
-   "column": 2,
-   "pid": "FY2028",
-   "quarters_off": 12,
-   "cells_shifted": 3,
-   "other_length": 0,
-   "tested": 8
-  },
-  {
-   "table": "AMZN_FY2025_10K:p59:x26",
-   "doc": "AMZN_FY2025_10K",
-   "page": 59,
-   "title": "The following summarizes our principal contractual commitments, exclud",
-   "column": 6,
-   "pid": "FY2026",
-   "quarters_off": 4,
-   "cells_shifted": 4,
-   "other_length": 0,
-   "tested": 8
-  },
-  {
    "table": "BAC_FY2025_10K:p124:x92",
    "doc": "BAC_FY2025_10K",
    "page": 124,
@@ -119,30 +59,6 @@
    "cells_shifted": 2,
    "other_length": 0,
    "tested": 4
-  },
-  {
-   "table": "BAC_FY2025_Q3_10Q:p8:x3",
-   "doc": "BAC_FY2025_Q3_10Q",
-   "page": 8,
-   "title": "Table 3 Noninterest Expense",
-   "column": 2,
-   "pid": "FY2025Q3",
-   "quarters_off": 0,
-   "cells_shifted": 0,
-   "other_length": 7,
-   "tested": 8
-  },
-  {
-   "table": "BAC_FY2025_Q3_10Q:p8:x4",
-   "doc": "BAC_FY2025_Q3_10Q",
-   "page": 8,
-   "title": "Table 4 Income Tax Expense",
-   "column": 2,
-   "pid": "FY2025Q3",
-   "quarters_off": 0,
-   "cells_shifted": 0,
-   "other_length": 2,
-   "tested": 2
   },
   {
    "table": "BAC_FY2025_Q3_10Q:p32:x41",
@@ -169,16 +85,40 @@
    "tested": 6
   },
   {
-   "table": "BAC_FY2025_Q3_10Q:p55:x65",
+   "table": "BAC_FY2025_Q3_10Q:p73:x95",
    "doc": "BAC_FY2025_Q3_10Q",
-   "page": 55,
-   "title": "NOTE 2 Net Interest Income and Noninterest Income",
-   "column": 2,
+   "page": 73,
+   "title": "Other Payment Plans Modification Total",
+   "column": 1,
+   "pid": "FY2025Q3YTD",
+   "quarters_off": 0,
+   "cells_shifted": 0,
+   "other_length": 2,
+   "tested": 2
+  },
+  {
+   "table": "BAC_FY2025_Q3_10Q:p75:x98",
+   "doc": "BAC_FY2025_Q3_10Q",
+   "page": 75,
+   "title": "Term Rate Financing Term Rate Financing",
+   "column": 1,
    "pid": "FY2025Q3",
    "quarters_off": 0,
-   "cells_shifted": 1,
-   "other_length": 15,
-   "tested": 29
+   "cells_shifted": 0,
+   "other_length": 2,
+   "tested": 3
+  },
+  {
+   "table": "BAC_FY2025_Q3_10Q:p75:x99",
+   "doc": "BAC_FY2025_Q3_10Q",
+   "page": 75,
+   "title": "Term Rate Financing Term Rate Financing",
+   "column": 8,
+   "pid": "FY2024Q3YTD",
+   "quarters_off": -7,
+   "cells_shifted": 2,
+   "other_length": 0,
+   "tested": 4
   },
   {
    "table": "BLK_FY2025_10K:p56:x40",
@@ -193,18 +133,6 @@
    "tested": 10
   },
   {
-   "table": "BLK_FY2025_10K:p94:x54",
-   "doc": "BLK_FY2025_10K",
-   "page": 94,
-   "title": "Cash, Cash Equivalents, and Restricted Cash The following table provid",
-   "column": 0,
-   "pid": "FY2024",
-   "quarters_off": -4,
-   "cells_shifted": 2,
-   "other_length": 0,
-   "tested": 3
-  },
-  {
    "table": "BLK_FY2025_10K:p104:x72",
    "doc": "BLK_FY2025_10K",
    "page": 104,
@@ -217,43 +145,7 @@
    "tested": 9
   },
   {
-   "table": "CAT_FY2024_10K:p100:x62",
-   "doc": "CAT_FY2024_10K",
-   "page": 100,
-   "title": "The fair value of the pension and other postretirement benefit plan as",
-   "column": 0,
-   "pid": "FY2024",
-   "quarters_off": 12,
-   "cells_shifted": 2,
-   "other_length": 0,
-   "tested": 8
-  },
-  {
-   "table": "CVX_FY2025_10K:p77:x41",
-   "doc": "CVX_FY2025_10K",
-   "page": 77,
-   "title": "Details of the right-of-use assets and lease liabilities for operating",
-   "column": 2,
-   "pid": "FY2025",
-   "quarters_off": 4,
-   "cells_shifted": 6,
-   "other_length": 0,
-   "tested": 7
-  },
-  {
-   "table": "CVX_FY2025_10K:p84:x56",
-   "doc": "CVX_FY2025_10K",
-   "page": 84,
-   "title": "Year ended December 31, 2024",
-   "column": 9,
-   "pid": "FY2024",
-   "quarters_off": 4,
-   "cells_shifted": 9,
-   "other_length": 0,
-   "tested": 14
-  },
-  {
-   "table": "C_FY2025_10K:p235:x188",
+   "table": "C_FY2025_10K:p235:x186",
    "doc": "C_FY2025_10K",
    "page": 235,
    "title": "Securities and Deposits",
@@ -263,174 +155,6 @@
    "cells_shifted": 2,
    "other_length": 0,
    "tested": 9
-  },
-  {
-   "table": "GOOGL_FY2025_Q3_10Q:p17:x10",
-   "doc": "GOOGL_FY2025_Q3_10Q",
-   "page": 17,
-   "title": "The carrying values for marketable and non-marketable equity securitie",
-   "column": 3,
-   "pid": "FY2024",
-   "quarters_off": -3,
-   "cells_shifted": 2,
-   "other_length": 0,
-   "tested": 3
-  },
-  {
-   "table": "GS_FY2024_10K:p80:x18",
-   "doc": "GS_FY2024_10K",
-   "page": 80,
-   "title": "The table below presents our Equity investments net revenues by equity",
-   "column": 0,
-   "pid": "FY2024",
-   "quarters_off": -4,
-   "cells_shifted": 2,
-   "other_length": 0,
-   "tested": 6
-  },
-  {
-   "table": "GS_FY2024_10K:p174:x120",
-   "doc": "GS_FY2024_10K",
-   "page": 174,
-   "title": "Notes to Consolidated Financial Statements",
-   "column": 1,
-   "pid": "FY2023",
-   "quarters_off": -2,
-   "cells_shifted": 2,
-   "other_length": 0,
-   "tested": 5
-  },
-  {
-   "table": "GS_FY2024_10K:p187:x137",
-   "doc": "GS_FY2024_10K",
-   "page": 187,
-   "title": "Offsetting Arrangements",
-   "column": 0,
-   "pid": "FY2024",
-   "quarters_off": 4,
-   "cells_shifted": 5,
-   "other_length": 0,
-   "tested": 10
-  },
-  {
-   "table": "GS_FY2024_10K:p187:x137",
-   "doc": "GS_FY2024_10K",
-   "page": 187,
-   "title": "Offsetting Arrangements",
-   "column": 2,
-   "pid": "FY2024",
-   "quarters_off": 4,
-   "cells_shifted": 5,
-   "other_length": 0,
-   "tested": 10
-  },
-  {
-   "table": "GS_FY2025_10K:p194:x143",
-   "doc": "GS_FY2025_10K",
-   "page": 194,
-   "title": "Offsetting Arrangements",
-   "column": 0,
-   "pid": "FY2025",
-   "quarters_off": 4,
-   "cells_shifted": 5,
-   "other_length": 0,
-   "tested": 10
-  },
-  {
-   "table": "GS_FY2025_10K:p194:x143",
-   "doc": "GS_FY2025_10K",
-   "page": 194,
-   "title": "Offsetting Arrangements",
-   "column": 1,
-   "pid": "FY2025",
-   "quarters_off": 4,
-   "cells_shifted": 5,
-   "other_length": 0,
-   "tested": 10
-  },
-  {
-   "table": "GS_FY2025_10K:p194:x143",
-   "doc": "GS_FY2025_10K",
-   "page": 194,
-   "title": "Offsetting Arrangements",
-   "column": 3,
-   "pid": "FY2025",
-   "quarters_off": 4,
-   "cells_shifted": 4,
-   "other_length": 0,
-   "tested": 10
-  },
-  {
-   "table": "GS_FY2025_10K:p246:x217",
-   "doc": "GS_FY2025_10K",
-   "page": 246,
-   "title": "Allowance for Loan Losses",
-   "column": 0,
-   "pid": "FY2025",
-   "quarters_off": 11,
-   "cells_shifted": 2,
-   "other_length": 0,
-   "tested": 8
-  },
-  {
-   "table": "JNJ_FY2024_10K:p69:x28",
-   "doc": "JNJ_FY2024_10K",
-   "page": 69,
-   "title": "The Company\u2019s significant financial assets and liabilities measured at",
-   "column": 3,
-   "pid": "FY2023",
-   "quarters_off": -4,
-   "cells_shifted": 4,
-   "other_length": 0,
-   "tested": 11
-  },
-  {
-   "table": "JNJ_FY2025_Q3_10Q:p56:x41",
-   "doc": "JNJ_FY2025_Q3_10Q",
-   "page": 56,
-   "title": "Income before tax by segment of business for the fiscal nine months we",
-   "column": 2,
-   "pid": "FY2025",
-   "quarters_off": 1,
-   "cells_shifted": 2,
-   "other_length": 0,
-   "tested": 4
-  },
-  {
-   "table": "JNJ_FY2025_Q3_10Q:p56:x41",
-   "doc": "JNJ_FY2025_Q3_10Q",
-   "page": 56,
-   "title": "Income before tax by segment of business for the fiscal nine months we",
-   "column": 3,
-   "pid": "FY2024",
-   "quarters_off": 1,
-   "cells_shifted": 2,
-   "other_length": 0,
-   "tested": 4
-  },
-  {
-   "table": "JNJ_FY2025_Q3_10Q:p57:x42",
-   "doc": "JNJ_FY2025_Q3_10Q",
-   "page": 57,
-   "title": "\u2022 Gain on the sale of securities of $0.2 billion in 2025 partially off",
-   "column": 2,
-   "pid": "FY2025",
-   "quarters_off": 1,
-   "cells_shifted": 2,
-   "other_length": 0,
-   "tested": 4
-  },
-  {
-   "table": "JNJ_FY2025_Q3_10Q:p57:x42",
-   "doc": "JNJ_FY2025_Q3_10Q",
-   "page": 57,
-   "title": "\u2022 Gain on the sale of securities of $0.2 billion in 2025 partially off",
-   "column": 3,
-   "pid": "FY2024",
-   "quarters_off": 1,
-   "cells_shifted": 2,
-   "other_length": 0,
-   "tested": 4
   },
   {
    "table": "JPM_FY2025_10K:p115:x73",
@@ -445,7 +169,7 @@
    "tested": 7
   },
   {
-   "table": "KO_FY2024_10K:p112:x78",
+   "table": "KO_FY2024_10K:p112:x79",
    "doc": "KO_FY2024_10K",
    "page": 112,
    "title": "Refer to Note 5 for additional information related to the composition ",
@@ -457,7 +181,7 @@
    "tested": 4
   },
   {
-   "table": "KO_FY2024_10K:p120:x91",
+   "table": "KO_FY2024_10K:p120:x92",
    "doc": "KO_FY2024_10K",
    "page": 120,
    "title": "Africa America America Asia Pacific Ventures Investments Corporate Eli",
@@ -469,55 +193,7 @@
    "tested": 7
   },
   {
-   "table": "MCD_FY2025_10K:p20:x0",
-   "doc": "MCD_FY2025_10K",
-   "page": 20,
-   "title": "Operating results",
-   "column": 0,
-   "pid": "FY2023",
-   "quarters_off": -8,
-   "cells_shifted": 8,
-   "other_length": 0,
-   "tested": 18
-  },
-  {
-   "table": "MSFT_FY2025_10K:p71:x27",
-   "doc": "MSFT_FY2025_10K",
-   "page": 71,
-   "title": "Goodwill Impairment",
-   "column": 4,
-   "pid": "FY2025",
-   "quarters_off": -4,
-   "cells_shifted": 2,
-   "other_length": 0,
-   "tested": 5
-  },
-  {
-   "table": "MS_FY2025_10K:p107:x94",
-   "doc": "MS_FY2025_10K",
-   "page": 107,
-   "title": "Difference between Contractual Principal and Fair Value1",
-   "column": 0,
-   "pid": "FY2024",
-   "quarters_off": -4,
-   "cells_shifted": 2,
-   "other_length": 0,
-   "tested": 3
-  },
-  {
-   "table": "PFE_FY2025_10K:p83:x40",
-   "doc": "PFE_FY2025_10K",
-   "page": 83,
-   "title": "Financial Assets and Liabilities Measured at Fair Value on a Recurring",
-   "column": 4,
-   "pid": "FY2025",
-   "quarters_off": 4,
-   "cells_shifted": 8,
-   "other_length": 0,
-   "tested": 25
-  },
-  {
-   "table": "TSLA_FY2025_10K:p72:x14",
+   "table": "TSLA_FY2025_10K:p72:x12",
    "doc": "TSLA_FY2025_10K",
    "page": 72,
    "title": "The cumulative effect of the changes made on our January 1, 2024 conso",
@@ -529,55 +205,43 @@
    "tested": 3
   },
   {
-   "table": "V_FY2026_10K:p83:x31",
-   "doc": "V_FY2026_10K",
-   "page": 83,
-   "title": "Finite-lived and indefinite-lived intangible assets consisted of the f",
-   "column": 3,
-   "pid": "FY2026",
-   "quarters_off": 4,
-   "cells_shifted": 2,
-   "other_length": 0,
-   "tested": 6
-  },
-  {
-   "table": "V_FY2026_10K:p83:x31",
-   "doc": "V_FY2026_10K",
-   "page": 83,
-   "title": "Finite-lived and indefinite-lived intangible assets consisted of the f",
-   "column": 5,
-   "pid": "FY2026",
-   "quarters_off": 4,
-   "cells_shifted": 2,
-   "other_length": 0,
-   "tested": 6
-  },
-  {
-   "table": "WFC_FY2025_10K:p122:x72",
-   "doc": "WFC_FY2025_10K",
-   "page": 122,
-   "title": "Table 3.11: Credit Quality Indicators for Auto Loans by Vintage",
-   "column": 4,
-   "pid": "FY2021",
-   "quarters_off": 4,
-   "cells_shifted": 2,
-   "other_length": 0,
-   "tested": 12
-  },
-  {
-   "table": "WFC_FY2025_10K:p122:x73",
+   "table": "WFC_FY2025_10K:p122:x71",
    "doc": "WFC_FY2025_10K",
    "page": 122,
    "title": "By delinquency status",
    "column": 4,
-   "pid": "FY2020",
-   "quarters_off": 1,
+   "pid": "FY2024",
+   "quarters_off": -5,
    "cells_shifted": 2,
    "other_length": 0,
    "tested": 12
   },
   {
-   "table": "WFC_FY2025_10K:p174:x142",
+   "table": "WFC_FY2025_10K:p145:x107",
+   "doc": "WFC_FY2025_10K",
+   "page": 145,
+   "title": "Total amounts presented in the consolidated statement of income",
+   "column": 0,
+   "pid": "FY2023",
+   "quarters_off": -9,
+   "cells_shifted": 3,
+   "other_length": 0,
+   "tested": 6
+  },
+  {
+   "table": "WFC_FY2025_10K:p173:x139",
+   "doc": "WFC_FY2025_10K",
+   "page": 173,
+   "title": "Table 20.1: Revenue by Operating Segment",
+   "column": 5,
+   "pid": "FY2024",
+   "quarters_off": -3,
+   "cells_shifted": 2,
+   "other_length": 0,
+   "tested": 4
+  },
+  {
+   "table": "WFC_FY2025_10K:p174:x140",
    "doc": "WFC_FY2025_10K",
    "page": 174,
    "title": "Note 20: Revenue and Expenses (continued)",
@@ -587,18 +251,6 @@
    "cells_shifted": 2,
    "other_length": 0,
    "tested": 4
-  },
-  {
-   "table": "WFC_FY2025_10K:p184:x160",
-   "doc": "WFC_FY2025_10K",
-   "page": 184,
-   "title": "Table 24.1: Summary of Other Comprehensive Income",
-   "column": 6,
-   "pid": "FY2025",
-   "quarters_off": 8,
-   "cells_shifted": 3,
-   "other_length": 0,
-   "tested": 15
   },
   {
    "table": "WMT_FY2025_10K:p44:x14",
@@ -625,18 +277,6 @@
    "tested": 9
   },
   {
-   "table": "WMT_FY2025_10K:p71:x40",
-   "doc": "WMT_FY2025_10K",
-   "page": 71,
-   "title": "As of January 31, 2025 and January 31, 2024, the notional amounts and ",
-   "column": 2,
-   "pid": "FY2025",
-   "quarters_off": 4,
-   "cells_shifted": 2,
-   "other_length": 0,
-   "tested": 3
-  },
-  {
    "table": "WMT_FY2026_10K:p43:x12",
    "doc": "WMT_FY2026_10K",
    "page": 43,
@@ -659,47 +299,11 @@
    "cells_shifted": 6,
    "other_length": 0,
    "tested": 9
-  },
-  {
-   "table": "XOM_FY2024_10K:p91:x55",
-   "doc": "XOM_FY2024_10K",
-   "page": 91,
-   "title": "Note 6. Additional Working Capital Information",
-   "column": 0,
-   "pid": "FY2023",
-   "quarters_off": -4,
-   "cells_shifted": 9,
-   "other_length": 0,
-   "tested": 11
-  },
-  {
-   "table": "XOM_FY2024_10K:p94:x58",
-   "doc": "XOM_FY2024_10K",
-   "page": 94,
-   "title": "Note 8. Investments, Advances and Long-Term Receivables",
-   "column": 0,
-   "pid": "FY2023",
-   "quarters_off": -4,
-   "cells_shifted": 4,
-   "other_length": 0,
-   "tested": 6
-  },
-  {
-   "table": "XOM_FY2025_10K:p104:x82",
-   "doc": "XOM_FY2025_10K",
-   "page": 104,
-   "title": "Balance Sheet",
-   "column": 2,
-   "pid": "FY2024",
-   "quarters_off": -4,
-   "cells_shifted": 3,
-   "other_length": 0,
-   "tested": 7
   }
  ],
- "mentions_tested": 7576,
+ "mentions_tested": 7589,
  "mentions": {
-  "unmatched": 2823,
-  "confirmed": 4753
+  "unmatched": 2830,
+  "confirmed": 4759
  }
 }

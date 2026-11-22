@@ -9,6 +9,7 @@ Nothing here knows any accounting. It returns what is printed and where.
 """
 from __future__ import annotations
 
+import calendar
 import re
 from dataclasses import dataclass, field
 from typing import Optional
@@ -34,11 +35,16 @@ MONTHS = {
     )
 }
 MONTH_ABBR = {k[:3]: v for k, v in MONTHS.items()}
+LABEL_MARK = "⁠"     # a word joiner glued to a number that belongs to a label (alltables), not a printed character
 # a line inside a table that holds only a date starts a block of rows for that date
 # ("December 2024" between two stacked blocks of the same columns)
 PERIOD_LINE_RE = re.compile(
     r"^(?:(?:as of|as at|at|years? ended|fiscal years? ended|(?:three|six|nine|twelve) months ended|quarter ended)\s+)?"
     r"(?:(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?\s+(?:\d{1,2},?\s+)?)?(?:19|20)\d\d:?$", re.I)
+# the same with a full date, at the start of a line that goes on with column names
+PERIOD_HEAD_RE = re.compile(
+    r"^(?:(?:as of|as at|at|years? ended|fiscal years? ended|(?:three|six|nine|twelve) months ended|quarter ended)\s+)?"
+    r"(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?\s+\d{1,2},?\s+(?:19|20)\d\d\b", re.I)
 
 
 @dataclass
@@ -241,12 +247,85 @@ def _col_of(w: Word, cols: list, tol: float = 4.5) -> Optional[int]:
 
 # ---------------------------------------------------------------------- header
 
-def _parse_header(header_lines: list, cols: list, context: str = "") -> str:
+DATE_RE = re.compile(r"\b(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?\s+(\d{1,2})(?!\d),?"
+                     r"(?:\s+((?:19|20)\d\d))?", re.I)
+MONTH_YEAR_RE = re.compile(r"\b(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?,?\s+((?:19|20)\d\d)\b", re.I)
+DAY_END_RE = re.compile(r"\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?\s+\d{1,2},?$", re.I)   # "... December 31,"
+DURATIONS = ((r"three months|quarter ended|13 weeks|12 weeks|thirteen weeks|16 weeks", 3),
+             (r"six months|26 weeks|twenty-six weeks|24 weeks|28 weeks", 6),
+             (r"nine months|39 weeks|thirty-nine weeks|36 weeks|40 weeks", 9),
+             (r"years? ended|fiscal years?|twelve months|52 weeks|53 weeks|for the years?", 12))
+
+
+def duration(text: str) -> Optional[int]:
+    """Months of the period a header phrase names ("Nine Months Ended" is 9), or None."""
+    for pat, months in DURATIONS:
+        if re.search(pat, text, re.I):
+            return months
+    return None
+
+
+def _part_year(text: str) -> Optional[int]:
+    """The one period shorter than a year that a title names ("for the fiscal nine months" is 9);
+    None when it names none or several ("the three and nine months ended")."""
+    named = {m for pat, m in DURATIONS if m < 12 and re.search(pat, text, re.I)}
+    if len(named) != 1 or re.search(r"\b(?:three|six|nine)\s+and\s+(?:three|six|nine)\b", text, re.I):
+        return None
+    return named.pop()
+
+
+def printed_date(text: str, year: Optional[int] = None, month_only: bool = True) -> Optional[str]:
+    """ISO date of the first date printed in text, with `year` when the text prints none.
+    "December 2025" (a month without a day) is the last day of that month."""
+    dm = DATE_RE.search(text)
+    if dm:
+        yr = year or (int(dm.group(3)) if dm.group(3) else None)
+        if not yr:
+            return None
+        mon = MONTH_ABBR[dm.group(1)[:3].lower()]
+        return f"{yr:04d}-{mon:02d}-{min(int(dm.group(2)), calendar.monthrange(yr, mon)[1]):02d}"
+    my = MONTH_YEAR_RE.search(text) if month_only else None
+    if my:
+        yr, mon = year or int(my.group(2)), MONTH_ABBR[my.group(1)[:3].lower()]
+        return f"{yr:04d}-{mon:02d}-{calendar.monthrange(yr, mon)[1]:02d}"
+    return None
+
+
+def _phrases_of(ln: list) -> list:
+    """A header line cut into phrases at wide gaps. A phrase that repeats one dated piece
+    ("FISCAL 2026 FISCAL 2025", "2025 2024", "December 31, 2024 December 31, 2023") is one
+    phrase per piece, each ending at its year."""
+    phrases, cur = [], [ln[0]] if ln else []
+    for a, b in zip(ln, ln[1:]):
+        if b.x0 - a.x1 > 9:
+            phrases.append(cur)
+            cur = [b]
+        else:
+            cur.append(b)
+    if cur:
+        phrases.append(cur)
+    out = []
+    for ph in phrases:
+        ends = [k + 1 for k, w in enumerate(ph) if YEAR_RE.match(w.text.replace(LABEL_MARK, ""))]
+        pieces = [ph[a:b] for a, b in zip([0] + ends, ends)]
+        shapes = {tuple(re.sub(r"\d", "#", w.text.replace(LABEL_MARK, "").lower()) for w in p) for p in pieces}
+        if len(ends) < 2 or ends[-1] != len(ph) or len(shapes) != 1:
+            out.append(ph)
+        else:
+            out.extend(pieces)
+    return out
+
+
+def _parse_header(header_lines: list, cols: list, context: str = "", title: str = "") -> str:
     """Attach printed period information to each column.
 
     A header word belongs to a column if its centre falls inside the column's
     horizontal band. Words that span several bands ("Years ended") apply to
-    every column they cover.
+    every column they cover. A date or a year sits over one column, the
+    nearest. The length of a column's period comes from its own words, else
+    from the nearest phrase that names a length ("Three Months Ended" over the
+    first pair of columns, "Nine Months Ended" over the second), else from the
+    caption, else from a title that names one length shorter than a year.
     """
     if not cols:
         return ""
@@ -255,23 +334,15 @@ def _parse_header(header_lines: list, cols: list, context: str = "") -> str:
         left = cols[i - 1].x_right + 2 if i else min(c.x_left, c.x_right - 70) - 25
         bands.append((left, c.x_right + 14))
     full = " ".join(w.text for ln in header_lines for w in ln)
-    span_text = []
     per_col = [[] for _ in cols]
+    lengths = []                                   # (x0, x1, months) of phrases that name a length
     for ln in header_lines:
-        # split the line into phrases separated by wide gaps
-        phrases, cur = [], [ln[0]] if ln else []
-        for a, b in zip(ln, ln[1:]):
-            if b.x0 - a.x1 > 9:
-                phrases.append(cur)
-                cur = [b]
-            else:
-                cur.append(b)
-        if cur:
-            phrases.append(cur)
-        for ph in phrases:
+        for ph in _phrases_of(ln):
             x0, x1 = ph[0].x0, ph[-1].x1
             text = " ".join(w.text for w in ph)
             centre = (x0 + x1) / 2
+            if duration(text):
+                lengths.append((x0, x1, duration(text)))
             dated = bool(re.search(r"(19|20)\d\d|\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)", text, re.I))
             if dated and x1 - x0 < 110:
                 # a date or a year sits over exactly one column: the nearest one
@@ -287,35 +358,23 @@ def _parse_header(header_lines: list, cols: list, context: str = "") -> str:
                 hit = [i for i, (l, r) in enumerate(bands) if not (x1 < l or x0 > r)]
                 for i in hit:
                     per_col[i].append(text)
-                span_text.append(text)
-    date_re = (r"\b(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?\s+(\d{1,2}),?"
-               r"(?:\s+((?:19|20)\d\d))?")
-    wide = (full + " || " + context).lower()
-    # "December 31," printed once above "2025  2024" belongs to every column
-    shared = re.search(date_re, wide)
+    wide = full + " || " + context
     for c, parts in zip(cols, per_col):
         c.header = " ".join(parts).strip()
-        own = c.header.lower()
         ym = re.findall(r"\b((?:19|20)\d\d)\b", c.header)
         if ym:
             c.year = int(ym[-1])
-        dm = re.search(date_re, own) or shared
-        if dm:
-            mon = MONTH_ABBR[dm.group(1)[:3]]
-            yr = c.year or (int(dm.group(3)) if dm.group(3) else None)
-            if yr:
-                c.end_date = f"{yr:04d}-{mon:02d}-{int(dm.group(2)):02d}"
-        # the column's own words win; the shared context is the fallback
-        for text in (own, wide):
-            for pat, m in ((r"three months|quarter ended|13 weeks|12 weeks|thirteen weeks|16 weeks", 3),
-                           (r"six months|26 weeks|twenty-six weeks|24 weeks|28 weeks", 6),
-                           (r"nine months|39 weeks|thirty-nine weeks|36 weeks|40 weeks", 9),
-                           (r"years? ended|fiscal years?|twelve months|52 weeks|53 weeks|for the years?", 12)):
-                if re.search(pat, text):
-                    c.months = m
-                    break
-            if c.months:
-                break
+    several_years = len({c.year for c in cols if c.year}) > 1
+    for c in cols:
+        # "December 31," printed once above "2025  2024" belongs to every column. A column without
+        # a year of its own beside columns of different years ("Thereafter", "Total"), or with only
+        # part of a date of its own ("31,"), is given none.
+        shared = c.year or not (several_years or re.search(r"\d", c.header))
+        c.end_date = printed_date(c.header, c.year) or (
+            printed_date(full, c.year) or printed_date(wide, c.year, month_only=False) if shared else None)
+        mid = (c.x_left + c.x_right) / 2
+        nearest = min(lengths, key=lambda s: max(s[0] - mid, mid - s[1], 0), default=None)
+        c.months = duration(c.header) or (nearest[2] if nearest else None) or duration(wide) or _part_year(title)
     return full
 
 
@@ -393,7 +452,7 @@ def build_table(doc_name: str, page_no: int, lines: list, title: str = "") -> Op
         ln = lines[i]
         text = " ".join(w.text for w in ln)
         in_cols = [w for w in ln if w.x1 > label_limit - 20]
-        if HEADER_HINT.search(" ".join(w.text for w in in_cols)) and in_cols:
+        if in_cols and (HEADER_HINT.search(" ".join(w.text for w in in_cols)) or all(is_month(w.text) for w in in_cols)):
             # the scale caption often shares a line with the years:
             # "(Amounts in millions, except per share data)  2026  2025  2024"
             header_idx.append(i)
@@ -411,18 +470,27 @@ def build_table(doc_name: str, page_no: int, lines: list, title: str = "") -> Op
     header_lines = [[w for w in lines[j] if w.x1 > label_limit - 20] for j in header_idx]
     body_start = header_idx[-1] + 1 if header_idx else first_num
     caption = " ".join(w.text for ln in lines[max(0, i):first_num] for w in ln)
-    header_text = _parse_header(header_lines, cols, context=caption)
+    header_text = _parse_header(header_lines, cols, context=caption, title=title)
     scale, share_scale = _scale(caption + " " + header_text)
 
     rows: list = []
-    section, period_mark = "", ""
+    section = ""
+    # a date-only line above the first row ("2025" over a block of segment columns) dates the rows below it
+    period_mark = next((_plain(ln).rstrip(":") for ln in reversed(lines[max(0, i):first_num])
+                        if PERIOD_LINE_RE.match(_plain(ln))), "")
     pending_label: list = []          # label-only line that may continue below
     for ln in lines[body_start:]:
         found = cells_of(ln)
-        if not found and rows and PERIOD_LINE_RE.match(" ".join(w.text for w in ln).strip()):
-            if pending_label:
-                section, pending_label = " ".join(w.text for w in pending_label), []
-            period_mark = " ".join(w.text for w in ln).strip().rstrip(":")
+        # a block header inside the table: "As of December 2024", or a date before the column
+        # names repeated for the next block ("July 26, 2025  Loan Receivables  Total")
+        head = PERIOD_HEAD_RE.match(_plain(ln)) if rows else None
+        if not found and (PERIOD_LINE_RE.match(_plain(ln)) or head):
+            if YEAR_RE.match(_plain(ln)) and rows and not pending_label and DAY_END_RE.search(rows[-1].label):
+                rows[-1].label += " " + _plain(ln)      # "Balance as of December 31," / "2022": the end of a label
+                continue
+            section = " ".join(w.text for w in pending_label) if pending_label else ""
+            pending_label = []
+            period_mark = head.group(0) if head else _plain(ln).rstrip(":")
             continue
         label_words = [w for w in ln if w.x1 <= label_limit + 2 or
                        (not is_numeric(w.text) and w.text not in DASH_TOKENS and w.text != "$"
@@ -474,6 +542,18 @@ def build_table(doc_name: str, page_no: int, lines: list, title: str = "") -> Op
         return None
     return Table(doc=doc_name, page=page_no, title=title, caption=caption, scale=scale,
                  share_scale=share_scale, columns=cols, rows=rows, header_text=header_text)
+
+
+def _plain(ln: list) -> str:
+    """The printed text of a line."""
+    return " ".join(w.text for w in ln).replace(LABEL_MARK, "").strip()
+
+
+def is_month(text: str) -> bool:
+    """"September", "Sept.", "Dec": a month name with no day ("September" printed over each
+    column, the day and year on the line below)."""
+    t = text.lower().rstrip(".,")
+    return t in MONTHS or t in MONTH_ABBR or t == "sept"
 
 
 JOIN_TAIL = re.compile(r"(,|;|\band|\bof|\bthe|\bto|\bfor|\bin|\bat|\bor|\bby|\bon)$")
