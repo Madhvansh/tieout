@@ -859,6 +859,8 @@ class Executor:
 
 SECOND_READING = {"NetIncome": "ConsolidatedNetIncome", "ConsolidatedNetIncome": "NetIncome",
                   "ShareholdersEquity": "TotalEquity", "TotalEquity": "ShareholdersEquity"}
+SCALE_FLAGS = {"unscaled": "the sentence prints no scale; its amount is read in the scale of the filing's statements",
+               "scaled_from_table": "the sentence's scale is taken from the table printed above it"}
 _WEAK_NOTES = ("matched by wording only", "not covered by any check", "covered ", "prints no period column",
                "second reading:", "only one filing reports")
 
@@ -883,6 +885,9 @@ def trust(r: Result) -> tuple:
     for lf in r.leaves:
         if str(lf.what).startswith(("item:", "said:", "line:")):
             linked = True
+            if lf.status in SCALE_FLAGS:              # a sentence amount whose scale the sentence does not print
+                reasons.append(f"{lf.ticker}: {SCALE_FLAGS[lf.status]} ({lf.doc} page {lf.page})")
+                continue
             if lf.witnessed and lf.status == "verified":
                 continue
             reasons.append(f"{lf.ticker}: the line was chosen by the linker from its words"

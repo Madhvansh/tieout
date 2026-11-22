@@ -21,3 +21,14 @@ def test_a_region_or_the_total_named_in_the_phrase():
 def test_nothing_named_leaves_the_choice_to_the_pickers():
     assert named_columns(SPANS, "earnings") == []
     assert len(named_columns(SPANS, "Non-U.S. earnings")) == 2     # ambiguous: the pickers' column decides
+
+
+def test_sentence_amounts_with_no_printed_scale_are_read_in_the_statements_scale_and_flagged():
+    # B's census, 22 Nov: 199 sentence amounts print the statements' millions without saying so
+    from tieout.execute import Leaf, Result, trust
+    from tieout.link import _unit_fit
+    assert _unit_fit("USD_scale_unknown", "USD") > 0
+    leaf = Leaf("COST:p26:s2:n1", "COST", "said:gross margin", "FY2026", "COST_FY2026_10K", 26, "s", "$3,501", "unscaled",
+                3501e6, witnessed=True)
+    tier, reasons = trust(Result("number", 3501e6, "USD", [leaf], [], {}))
+    assert tier == "FLAGGED" and "prints no scale" in reasons[0]

@@ -32,6 +32,7 @@ import datetime
 import gzip
 import hashlib
 import json
+import math
 import os
 import pathlib
 import re
@@ -206,6 +207,8 @@ def _unit_fit(unit: str, want_unit: Optional[str]) -> float:
     same = {"percent": {"percent", "ratio"}, "count": {"count"}, "USD": {"USD"}}[want_unit]
     if unit in same:
         return 1.5
+    if unit == "USD_scale_unknown" and want_unit == "USD":
+        return 1.0                                    # an amount whose sentence prints no scale (see apply_link)
     if unit in ("number", "year", "date") or (unit == "shares" and want_unit == "count"):
         return 0.5 if want_unit == "count" and unit in ("number", "shares") else 0.0
     return -3.0 if {unit, want_unit} & {"percent", "ratio"} or want_unit == "count" else -1.0
@@ -564,7 +567,8 @@ def shown_sentence(m: dict) -> str:
     text = m["masked"]
     for n in sorted(m["numbers"], key=lambda n: -len(n["slot"])):    # <n10> before <n1>
         inner = n["slot"].strip("<>")
-        shown = n["text"] if n.get("unit") in ("date", "year") else f"<{inner} {n.get('unit') or 'number'}>"
+        unit = "USD, scale not printed" if n.get("unit") == "USD_scale_unknown" else (n.get("unit") or "number")
+        shown = n["text"] if n.get("unit") in ("date", "year") else f"<{inner} {unit}>"
         text = text.replace(n["slot"], shown)
     return text
 
@@ -937,6 +941,25 @@ def _same_line(first: Optional[dict], row: dict, namesakes: list, member: Option
     return len({heading_key(r) for r in same_doc}) == 1
 
 
+def statement_scale(g: Graph, doc: str) -> Optional[float]:
+    """The scale a filing's primary statements print in (1e6 for "in millions"): a statement cell's
+    value over its printed figure, the commonest power of ten. None if the filing has no statements."""
+    cache = g.__dict__.setdefault("_statement_scale", {})
+    if doc not in cache:
+        seen: dict = defaultdict(int)
+        for r in g.readings.values():
+            if r.doc != doc or r.kind not in ("IS", "BS", "CF") or not isinstance(r.value, (int, float)) or not r.value:
+                continue
+            printed = re.sub(r"[^\d.]", "", str(r.text))
+            if printed and float(printed):
+                ratio = abs(r.value) / float(printed)
+                power = round(math.log10(ratio)) if ratio > 0 else None
+                if power is not None and abs(ratio - 10 ** power) <= 1e-6 * 10 ** power:
+                    seen[power] += 1
+        cache[doc] = float(10 ** max(seen, key=seen.get)) if seen else None
+    return cache[doc]
+
+
 def _only_printer(first: dict, row: dict, pool: list, member: Optional[int]) -> bool:
     """Is `row` the one row of its filing, among rows of this label and table title, that prints a
     period the linked line `first` prints (in the column the link names)?"""
@@ -1007,10 +1030,20 @@ def apply_link(g: Graph, entry: dict) -> int:
             return 0
         rid = f"{m['id']}:{entry['slot']}"
         pid = entry.get("period") or TIMELESS         # the period the sentence states for the figure, if it states one
+        value, unit, status = number["value"], number["unit"], "verified" if m.get("ties") else "text"
+        if unit == "USD_scale_unknown":
+            # "$2,842 and $2,670" in a note that prints the statements' millions without saying so: read in
+            # the scale of the filing's own statements, and never trusted beyond FLAGGED
+            scale = statement_scale(g, m["doc"])
+            if abs(value) >= 1e7:                     # "$346,760,150,000" (a market value) is printed in dollars
+                scale = 1.0
+            value, unit, status = (value * scale if scale else value), "USD", "unscaled"
+        elif number.get("scale_from"):
+            status = "scaled_from_table"              # the scale was taken from the table printed above
         g.readings.setdefault(rid, Reading(
             id=rid, doc=m["doc"], ticker=ticker, page=m["page"], bbox=[], table=f"{m['doc']}:text", kind="TEXT",
-            row=0, col=0, label=m["sentence"][:200], section="", text=number["text"], value=number["value"],
-            unit=number["unit"], period=pid, period_end="", status="verified" if m.get("ties") else "text"))
+            row=0, col=0, label=m["sentence"][:200], section="", text=number["text"], value=value,
+            unit=unit, period=pid, period_end="", status=status))
         fact = g.facts.setdefault(f"{ticker}|{key}|{pid}", Fact(ticker, key, pid, [], "active"))
         if rid not in fact.readings:
             fact.readings.append(rid)
