@@ -103,6 +103,8 @@ def main():
     ap.add_argument("--arbiter", default="", help="comma-separated arbiter models, strongest first")
     ap.add_argument("--third", default="", help="a third cheap reader, asked only when the first two differ and "
                                                 "before any arbiter call (item 8, 23 Nov)")
+    ap.add_argument("--passage", default="", help="model of the second road, a passage reader asked when the plan "
+                                                  "road does not end VERIFIED or WITNESSED (tieout/passage.py)")
     ap.add_argument("--pick-checker", default=None,
                     help="second, independent model for row picks (the four-eyes rule in tieout/link.py); the "
                          "arbiters above settle its disagreements with the first picker")
@@ -134,7 +136,8 @@ def main():
     if a.oracle:
         oracle = json.loads(pathlib.Path(a.oracle).read_text(encoding="utf-8"))
 
-    panel = (readers.Readers(a.model, a.checker, tuple(m for m in a.arbiter.split(",") if m), third=a.third)
+    panel = (readers.Readers(a.model, a.checker, tuple(m for m in a.arbiter.split(",") if m), third=a.third,
+                             passage=a.passage)
              if a.checker else None)
 
     def run(q):
@@ -187,6 +190,9 @@ def main():
               + f"; wrong while WITNESSED: {table['overall'].get('witnessed_wrong', 0)}")
         print(f"scorers: final {table['overall']['correct_final']}/{table['overall']['n']}, "
               f"strict (as of 21 Nov) {table['overall']['correct_strict']}/{table['overall']['n']}")
+        if table["overall"].get("plan_road_correct") is not None:
+            print(f"roads: the plan road alone {table['overall']['plan_road_correct']}/{table['overall']['n']}, "
+                  f"with the passage reader as second road {table['overall']['correct']}/{table['overall']['n']}")
     for r in rows:
         if not r["correct"]:
             print(f"  x {r['id']} [{r['type']}] [{r.get('tier', '')}] gold={str(r['gold'])[:40]!r} got={r['answer'][:70]!r}")

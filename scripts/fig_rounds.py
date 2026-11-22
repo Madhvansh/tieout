@@ -4,8 +4,10 @@ misses were fixed by class, with the held-out round beside them.
     python scripts/fig_rounds.py            # writes report/fig_rounds.png and results/rounds.json
 
 Every bar is read from a result file in results/ (named in ROUNDS below). A first run is the one run
-made before any fix for that round; "after" is the same round on the final code, when it had become
-a development set. The held-out round has a first run only: nothing was fixed against it.
+made before any fix for that round; "after" is the same round on the frozen code (results/c2_final_r<N>.json,
+the last pass over every round in order), when it had become a development set. Round 9's misses were read
+only after the frozen code was complete, so no fix was aimed at it. The held-out round has a first run
+only: nothing was fixed against it.
 """
 from __future__ import annotations
 
@@ -20,16 +22,18 @@ import matplotlib.pyplot as plt  # noqa: E402
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 # (label, first-run result file, final-code result file or None, note)
 ROUNDS = [
-    ("round 3", "first_runs/round3.json", "final_round3.json", ""),
-    ("round 4", "first_runs/round4.json", "final_round4.json", ""),
-    ("round 5", "first_runs/round5.json", "final_round5.json", "arbiter quota spent"),
-    ("round 6", "first_runs/round6.json", "final_round6.json", "27 of 35 run"),
-    ("round 7", "first_runs/round7.json", "final_round7.json", ""),
-    ("round 8", "first_runs/round8.json", "final_round8.json", ""),
+    ("round 3", "first_runs/round3.json", "c2_final_r3.json", ""),
+    ("round 4", "first_runs/round4.json", "c2_final_r4.json", ""),
+    ("round 5", "first_runs/round5.json", "c2_final_r5.json", "arbiter quota spent"),
+    ("round 6", "first_runs/round6.json", "c2_final_r6.json", "27 of 35 run"),
+    ("round 7", "first_runs/round7.json", "c2_final_r7.json", ""),
+    ("round 8", "first_runs/round8.json", "c2_final_r8.json", ""),
+    ("round 9", "first_runs/round9.json", "c2_final_r9.json", "no fix aimed at it"),
+    ("round 10", "first_runs/round10.json", None, "second road on"),
     ("held-out", "heldout_v2.json", None, "run once"),
 ]
-TIERS = ("VERIFIED", "WITNESSED", "FLAGGED")
-SHADE = {"VERIFIED": "#1b5e20", "WITNESSED": "#66bb6a", "FLAGGED": "#c8e6c9"}
+TIERS = ("VERIFIED", "WITNESSED", "CORROBORATED", "FLAGGED")
+SHADE = {"VERIFIED": "#1b5e20", "WITNESSED": "#43a047", "CORROBORATED": "#81c784", "FLAGGED": "#dcedc8"}
 
 
 def read(name: str):

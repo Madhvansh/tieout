@@ -96,7 +96,8 @@ def main() -> None:
     if held:
         o = held["score"]["overall"]
         bt = o["by_tier"]
-        tier_line = ", ".join(f"{t} {bt[t]['correct']}/{bt[t]['n']}" for t in ("VERIFIED", "WITNESSED", "FLAGGED", "ABSTAIN") if t in bt)
+        tier_line = ", ".join(f"{t} {bt[t]['correct']}/{bt[t]['n']}"
+                              for t in ("VERIFIED", "WITNESSED", "CORROBORATED", "FLAGGED", "ABSTAIN") if t in bt)
         tier_line += f"; wrong while VERIFIED: {o.get('silent_wrong', 0)}; wrong while WITNESSED: {o.get('witnessed_wrong', 0)}"
         c = calls(held)
         cost_line = (f"{c['calls_per_question']} model calls and {c['seconds_per_question']} s per question; "
@@ -120,7 +121,8 @@ def main() -> None:
                           f"{t['round']} & n/a & n/a \\\\")
     summary["rounds"] = rounds
     store = {}
-    for key, name in (("empty", "first_runs/round8.json"), ("learned", "store_round8.json")):
+    # round 8 on one code version (d776eb9), with the seed store and with the links learned on rounds 1 to 7
+    for key, name in (("empty", "nolinks_round8.json"), ("learned", "store_round8.json")):
         d = load(name)
         if d:
             store[key] = {"right": d["score"]["overall"]["correct"], "n": d["score"]["overall"]["n"], **calls(d),
@@ -141,9 +143,19 @@ def main() -> None:
             summary["scale_test"] = o
     # 23 Nov (Session A): both scorers, the exact McNemar test against the baseline, the scaled side
     # experiment and the store's transfer split
-    strict_line = mcnemar_line = scaled_line = transfer_line = "n/a"
+    strict_line = mcnemar_line = scaled_line = transfer_line = road_line = "n/a"
     if held:
         o = held["score"]["overall"]
+        if o.get("plan_road_correct") is not None:      # 23 Nov: the second road; every row keeps the plan road's answer
+            used = {}
+            for r in held["rows"]:
+                how = (r.get("passage") or {}).get("used")
+                if how:
+                    used[how] = used.get(how, 0) + 1
+            road_line = (f"the plan road alone {o['plan_road_correct']}/{o['n']}; with the passage reader as second road "
+                         f"{o['correct']}/{o['n']}")
+            summary["second_road"] = {"plan_road_alone": o["plan_road_correct"], "with_second_road": o["correct"],
+                                      "n": o["n"], "how_the_passage_reader_was_used": used}
         strict_line = (f"final scorer {o.get('correct_final', o['correct'])}/{o['n']}, strict scorer (the 21 Nov rules) "
                        f"{o.get('correct_strict', o['correct'])}/{o['n']}, 95\\% interval (final) "
                        f"{pct(o['accuracy_ci95'][0])} to {pct(o['accuracy_ci95'][1])}")
@@ -176,7 +188,7 @@ def main() -> None:
     macros = {"HeldRows": "\n".join(rows_tex), "TierLine": tex(tier_line), "CostLine": tex(cost_line),
               "CaseLine": tex(case_line), "RoundRows": "\n".join(round_rows), "StoreLine": tex(store_line),
               "ScaleLine": tex(scale_line), "StrictLine": strict_line, "McNemarLine": tex(mcnemar_line),
-              "ScaledLine": tex(scaled_line), "TransferLine": tex(transfer_line)}
+              "ScaledLine": tex(scaled_line), "TransferLine": tex(transfer_line), "RoadLine": tex(road_line)}
     (ROOT / "report" / "numbers.tex").write_text(
         "".join(f"\\newcommand{{\\{k}}}{{{v}}}\n" for k, v in macros.items()), encoding="utf-8")
     (RES / "summary.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")

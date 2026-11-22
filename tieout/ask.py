@@ -50,7 +50,7 @@ def answer(question: str, g: Graph, model: Optional[str] = None, allow_learning:
                       offline=offline, persist=persist)
     word_rules = not os.environ.get("TIEOUT_NO_WORD_RULES")   # ablation: no check that reads the question's words
     if planned_here and word_rules:
-        plan = year_end_not_quarter(question, plan)
+        plan = growth_is_a_rate(question, year_end_not_quarter(question, plan))
     res, learned = _execute(plan, g, ex, **learn_args)
     repaired = False
     misfit = shape_misfit(question, plan, res) if word_rules else ""
@@ -320,6 +320,36 @@ def fix_periods(question: str, plan: dict) -> dict:
 
 
 _ANY_QUARTER = re.compile(r"\bquarter|\bQ[1-4]\b|\bthree months\b|\b(13|14) weeks\b", re.I)
+
+
+_GREW = re.compile(r"\b(grow|grew|grown|growing)\b", re.I)
+_AN_AMOUNT = re.compile(r"\$|\bdollars?\b|\bhow many\b|\bin (absolute|dollar) terms\b|\b(percentage )?points?\b", re.I)
+_DIFFERENCE = re.compile(r"^\s*(s\d+)\s*-\s*(s\d+)\s*$")
+
+
+def growth_is_a_rate(question: str, plan: dict) -> dict:
+    """"How much did X grow" asks for the growth rate unless the question names an amount.
+    Round 9 (23 Nov), X15 and X18: two of three readers answered "By how much did Apple's Services
+    gross profit grow from fiscal 2023 to fiscal 2026?" with the dollar change; the blind author's key
+    is the rate. Over every development round the verb "grow" with no unit named wants the rate in
+    3 of 3 cases, while "increase", "fall" and "change" want the amount in 10 of 10
+    (dev_scripts/fable/grow_words.py), so only "grow" is read this way. The answering step alone is
+    changed: a change in amount becomes a change in percent, a difference of two steps becomes that
+    difference over the earlier figure."""
+    if not _GREW.search(question) or _AN_AMOUNT.search(question) or not isinstance(plan.get("steps"), list):
+        return plan
+    steps = [dict(s) if isinstance(s, dict) else s for s in plan["steps"]]
+    last = next((s for s in steps if isinstance(s, dict) and s.get("id") == plan.get("answer")), None)
+    if last is None:
+        return plan
+    if last.get("op") == "change" and last.get("mode") == "abs":
+        last["mode"] = "pct"
+    elif last.get("op") == "calc" and _DIFFERENCE.match(str(last.get("expr") or "")):
+        later, earlier = _DIFFERENCE.match(last["expr"]).groups()
+        last["expr"] = f"({later} - {earlier}) / {earlier}"
+    else:
+        return plan
+    return {**plan, "steps": steps}
 
 
 def year_end_not_quarter(question: str, plan: dict) -> dict:

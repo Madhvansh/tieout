@@ -171,11 +171,12 @@ def read_result(path: Path) -> dict:
             "ok_ids": sorted(r["id"] for r in rows if r.get("correct"))}
 
 
-# The declared configuration (README, "Four eyes, four tiers"): two readers, two pickers, an arbiter chain.
-# Offline, every one of these calls comes from cache/llm, so no key and no local model server is needed.
+# The declared configuration (README, "The configuration"): two readers, two pickers, an arbiter chain, and
+# the passage reader as second road. Offline, every model call comes from cache/llm and every passage reply
+# from cache/passage, so no key, no local model server and no retrieval index is needed.
 DECLARED = ["--model", "gemini:gemini-3.5-flash-lite", "--checker", "ollama:tieout-planner-4b-v3",
             "--arbiter", "gemini:gemini-3.6-flash,gemini:gemini-3.5-flash,gemini:gemini-3-flash-preview",
-            "--pick-checker", "gemini:gemini-3.1-flash-lite"]
+            "--pick-checker", "gemini:gemini-3.1-flash-lite", "--passage", "gemini:gemini-3.5-flash-lite"]
 DECLARED_ENV = {"TIEOUT_LINK_LLM": "gemini:gemini-3.5-flash-lite"}
 
 
@@ -206,7 +207,7 @@ def replay(cwd: Path, py: str, bench: str, oracle: str | None, out_json: Path) -
 
 
 def do_replays(dest: Path, compare: bool, wt_python: str):
-    cases = [("round 8 (the last fresh round), declared configuration", "benchmark/round8/dev.jsonl", None),
+    cases = [("round 10 (the last fresh round), declared configuration", "benchmark/round10/dev.jsonl", None),
              ("round-2 development, declared configuration", "benchmark/round2/dev.jsonl", None),
              ("round 1, declared configuration", "benchmark/questions.jsonl", None)]
     if HELDOUT:                                       # only after the freeze and the one held-out run

@@ -369,9 +369,12 @@ def score(rows: list) -> dict:
             "abstained": sum(1 for r in subset if r["abstained"]),
             "by_tier": {t: {"n": sum(1 for r in subset if r.get("tier") == t),
                             "correct": sum(1 for r in subset if r.get("tier") == t and r["correct"])}
-                        for t in ("VERIFIED", "WITNESSED", "FLAGGED", "ABSTAIN")},
+                        for t in ("VERIFIED", "WITNESSED", "CORROBORATED", "FLAGGED", "ABSTAIN")},
             "silent_wrong": sum(1 for r in subset if r.get("tier") == "VERIFIED" and not r["correct"]),
             "witnessed_wrong": sum(1 for r in subset if r.get("tier") == "WITNESSED" and not r["correct"]),
+            # the same questions as the plan road alone served them, before the second road (readers.second_road)
+            "plan_road_correct": (sum(1 for r in subset if (r.get("plan_road") or {}).get("correct"))
+                                  if any(r.get("plan_road") for r in subset) else None),
             "answered_accuracy": (sum(1 for r in subset if r["correct"] and not r["abstained"]) /
                                   max(1, sum(1 for r in subset if not r["abstained"]))),
         }
@@ -453,4 +456,11 @@ def run_graph_system(questions: list, g, answer_fn: Callable, label: str = "tieo
                  "correct": is_correct(q, {"kind": s["result"].kind, "value": s["result"].value,
                                            "extra": s["result"].extra}, g.companies)}
                 for s in out["reading"]["readers"]]
+            road = out["reading"].get("plan_road")
+            if road:                                  # what the plan road alone served, before the second road
+                rows[-1]["plan_road"] = {"answer": road["answer"], "tier": road["tier"],
+                                         "correct": is_correct(q, {"kind": road["kind"], "value": road["value"],
+                                                                   "extra": road["extra"]}, g.companies)}
+            if out["reading"].get("passage"):
+                rows[-1]["passage"] = _jsonable(out["reading"]["passage"])
     return rows

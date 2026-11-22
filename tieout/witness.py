@@ -45,6 +45,7 @@ class Panel:
     arbiters: tuple = ()             # strongest first; the next is tried when one's daily quota is spent
     third: str = ""                  # item 8 (23 Nov): a third cheap reader of another family, asked only when
                                      # the first two differ, before any arbiter call (readers.answer)
+    passage: str = ""                # the model of the second road (tieout/passage.py); "" switches the road off
 
 
 def choose(ask: Callable, panel: Panel, same: Callable = lambda a, b: a == b) -> tuple:
