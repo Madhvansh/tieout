@@ -64,10 +64,13 @@ COUNT_RE = re.compile(r"\b(?:stores?|store counts?|warehouses?|clubs|locations|r
                       r"employees|employed|employment|"
                       r"headcount|staff|associates|members|cardholders|vehicles|deliveries|square (?:feet|footage)|"
                       r"sq\.?\s*ft|(?:distribution|fulfillment|supply chain|manufacturing) (?:centers|facilities)|"
-                      r"branches|atms|restaurants|subscribers|barrels|wells|acres|number of)\b", re.I)
-# things that are counted, not paid; a row label needs a stronger cue than a table
+                      r"branches|atms|restaurants|subscribers|users|barrels|wells|acres|number of)\b", re.I)
+# things that are counted, not paid; a row label needs a stronger cue than a table. "#" in a label's
+# parenthesis is the filing saying "a number of": "Retail bank branches (#, period-end)" (WFC p26, read as
+# $4.09 billion before), "Active digital banking users (in thousands)"
 ROW_COUNT_RE = re.compile(r"\bnumber of\b|\bcounts?\b|headcount|\bemployees\b|direct staff|\bstaff \(|\(actual\)|"
-                          r"square feet|\bmembers\b|cardholders|\bprocessed transactions\b", re.I)
+                          r"square feet|\bmembers\b|cardholders|\bprocessed transactions\b|\(\s*#\s*[,)]|"
+                          r"\b(?:banking|mobile|digital|active) users\b", re.I)
 # a table titled with money words holds money even when it prints no dollar sign
 MONEY_TITLE_RE = re.compile(r"expenditure|capital|revenue|\bcosts?\b|expense|income|earnings|cash|dollars|price|fees|"
                             r"compensation|amounts?\b", re.I)
@@ -578,8 +581,8 @@ def build_raw(g, docs: Optional[list] = None, verbose: bool = True) -> list:
             else:
                 k, base, extra = base, base + 1, 0
             buckets = _maturity_columns(t, fiscal_year)
-            periods = [(None, None) if c.idx in buckets else _period(cal, c, f["form"], f["period_end"], _heading(t))
-                       for c in t.columns]
+            periods = [(None, None) if c.idx in buckets or _comparison(c.header)
+                       else _period(cal, c, f["form"], f["period_end"], _heading(t)) for c in t.columns]
             rows.extend(table_rows(doc, ticker, k, t, periods, anchors, cal, f["form"], f["period_end"]))
         rows.extend(_primary_rows(g, doc))
         if verbose:
@@ -715,6 +718,19 @@ def member_of(header: str) -> str:
             break
         text = cut
     return text if re.search(r"[A-Za-z]", text) else ""
+
+
+COMPARISON_RE = re.compile(r"(?:19|20)\d\d\s*(?:vs\.?|versus|v\.|compared (?:to|with))(?:\s|$)|"
+                           r"(?:19|20)\d\d\s*(?:/|to)\s*'?(?:(?:19|20)\d\d|\d\d)\b", re.I)
+
+
+def _comparison(header: str) -> bool:
+    """A column whose header line nearest the figures compares two years ("Change | 2025 vs. 2024",
+    "2025/ 2024", "$ Change 2024 to 2025") holds a difference, not a figure of either year, so it gets no
+    period id: a change of 353 must never answer for 2025 (AXP p49), nor WFC's branch change "(2)" (p26).
+    Only that last header line is read: words from the lines above drift onto neighbouring columns, and a
+    bare "Change" over a real year column (Nike p40 "CHANGE CHANGES" over fiscal 2024) is such a drift."""
+    return bool(COMPARISON_RE.search((header or "").split("|")[-1]))
 
 
 def _period(cal, col, form: str, filing_end: Optional[str] = None, heading: str = "") -> tuple:

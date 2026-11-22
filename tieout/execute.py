@@ -589,6 +589,10 @@ class Executor:
                     if not b:
                         raise PlanTypeError("division by zero")
                     return a / b, "ratio" if ua == ub or not ua else (ua if not ub else f"{ua} per {ub.rstrip('s')}")
+                if isinstance(node.op, ast.Pow):      # a compound rate: (end / start) ** (1 / years)
+                    if ub not in ("", "ratio") or (a < 0 and b != int(b)):
+                        raise PlanTypeError("a power needs a plain number as exponent and a base that is not negative")
+                    return a ** b, ua
             if isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.USub):
                 a, ua = term(node.operand)
                 return -a, ua

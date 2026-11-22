@@ -214,7 +214,7 @@ def normalize(plan: dict) -> dict:
 
 
 _CALC_NODES = (ast.Expression, ast.BinOp, ast.UnaryOp, ast.USub, ast.UAdd, ast.Add, ast.Sub, ast.Mult, ast.Div,
-               ast.Call, ast.Name, ast.Load, ast.Constant)
+               ast.Pow, ast.Call, ast.Name, ast.Load, ast.Constant)
 
 
 def calc_errors(expr, defined: set, sid: str) -> list:
@@ -228,7 +228,7 @@ def calc_errors(expr, defined: set, sid: str) -> list:
     errs = []
     for node in ast.walk(tree):
         if not isinstance(node, _CALC_NODES):
-            errs.append(f"{sid}: calc expr may only use + - * / ( ), numbers, step ids and abs()")
+            errs.append(f"{sid}: calc expr may only use + - * / ** ( ), numbers, step ids and abs()")
             break
         if isinstance(node, ast.Call) and getattr(node.func, "id", "") != "abs":
             errs.append(f"{sid}: the only function a calc may call is abs()")

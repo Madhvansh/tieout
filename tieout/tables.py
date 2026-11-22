@@ -170,25 +170,47 @@ def parse_number(tok: str) -> Optional[float]:
 
 # --------------------------------------------------------------------- columns
 
-def find_columns(lines: list, tol: float = 3.5, min_hits: int = 3) -> list:
-    """Cluster the right edges of numeric tokens into value columns."""
+def find_columns(lines: list, tol: float = 3.5, min_hits: int = 3, merge_ragged: bool = False) -> list:
+    """Cluster the right edges of numeric tokens into value columns.
+
+    merge_ragged: two neighbouring clusters a few points apart that never meet on one line are one
+    column whose rows end at slightly different points: a rate printed with "%" after it stops one
+    character short of the amounts above it (AXP p56: "2.5 %" under "$ 114,368"). Used for the tables
+    outside the primary statements only."""
     edges = []
-    for ln in lines:
+    for li, ln in enumerate(lines):
         for w in ln:
             if is_numeric(w.text) and not (YEAR_RE.match(w.text) and len(ln) < 12 and _mostly_years(ln)):
-                edges.append((right_edge(w), w.x0))
+                edges.append((right_edge(w), w.x0, li))
             elif w.text in DASH_TOKENS:
-                edges.append((w.x1, w.x0))
+                edges.append((w.x1, w.x0, li))
     edges.sort()
     clusters: list = []
-    for xr, x0 in edges:
+    for xr, x0, li in edges:
         if clusters and xr - clusters[-1]["hi"] <= tol:
             c = clusters[-1]
             c["hi"] = xr
             c["xs"].append(xr)
             c["x0s"].append(x0)
+            c["lines"].add(li)
         else:
-            clusters.append({"hi": xr, "xs": [xr], "x0s": [x0]})
+            clusters.append({"hi": xr, "xs": [xr], "x0s": [x0], "lines": {li}})
+    if merge_ragged:
+        merged: list = []
+        for c in clusters:
+            p = merged[-1] if merged else None
+            # the merged column stays narrow enough for every token to sit within _col_of's 4.5 points of
+            # its midpoint (two stacked blocks offset by 5 points, CVX p84, merge; two columns never do)
+            if p is not None and min(c["xs"]) - p["hi"] <= 6 and c["hi"] - min(p["xs"]) <= 8 \
+                    and not (p["lines"] & c["lines"]) and min(len(p["xs"]), len(c["xs"])) >= 2:
+                p["hi"] = c["hi"]
+                p["xs"].extend(c["xs"])
+                p["x0s"].extend(c["x0s"])
+                p["lines"] |= c["lines"]
+                p["mid"] = True
+            else:
+                merged.append(c)
+        clusters = merged
     # Numbers inside long labels ("100,000 shares authorized; 10,731 issued")
     # sometimes line up three times by chance. A real value column is hit by a
     # large share of the rows, so thin clusters are dropped.
@@ -198,7 +220,8 @@ def find_columns(lines: list, tol: float = 3.5, min_hits: int = 3) -> list:
     for c in clusters:
         if len(c["xs"]) >= need:
             xs = sorted(c["xs"])
-            cols.append((xs[len(xs) // 2], min(c["x0s"])))
+            xr = (xs[0] + xs[-1]) / 2 if c.get("mid") else xs[len(xs) // 2]
+            cols.append((xr, min(c["x0s"])))
     return [Column(i, xr, xl) for i, (xr, xl) in enumerate(cols)]
 
 
@@ -408,10 +431,11 @@ def _scale(caption: str) -> tuple:
     return scale, share_scale
 
 
-def build_table(doc_name: str, page_no: int, lines: list, title: str = "", min_hits: int = 3) -> Optional[Table]:
+def build_table(doc_name: str, page_no: int, lines: list, title: str = "", min_hits: int = 3,
+                merge_ragged: bool = False) -> Optional[Table]:
     """Turn the text lines of one table region into a Table. `min_hits`: values a column needs (a
-    one-line table under a year header has one value per column)."""
-    cols = find_columns(lines, min_hits=min_hits)
+    one-line table under a year header has one value per column). `merge_ragged`: see find_columns."""
+    cols = find_columns(lines, min_hits=min_hits, merge_ragged=merge_ragged)
     if not cols:
         return None
     label_limit = min(c.x_left for c in cols) - 4

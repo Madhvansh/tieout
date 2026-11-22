@@ -30,7 +30,7 @@ from .llm import ask_json
 from .plan import metric_defs, normalize, validate, vocabulary
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-PROMPT_VERSION = "p14"
+PROMPT_VERSION = "p15"
 N_EXAMPLES = 6
 
 RULES = """Translate a question about US public companies into a query plan over a knowledge graph of their
@@ -40,7 +40,8 @@ from your own knowledge; the only numbers you write are thresholds stated in the
 STEPS (each has "id" s1, s2, ... and "op")
 get      {"op":"get","company":T,"concept":C,"period":P}; instead of "concept": "metric":M, "item":"words"
          or "by":MEASURE. "as":"first_reported" reads the figure as first printed
-calc     {"op":"calc","expr":"s1 / s2"}  + - * / ( ) abs() over earlier steps
+calc     {"op":"calc","expr":"s1 / s2"}  + - * / ** ( ) abs() over earlier steps; a compound annual growth
+         rate over n years is "(s2 / s1) ** (1 / n) - 1"
 change   {"op":"change","company":T,"concept":C,"from":P,"to":P,"mode":"pct"|"abs"}
 rank     {"op":"rank","over":SET,"by":MEASURE,"period":P,"order":"desc"|"asc","k":N}
 compare  {"op":"compare","of":["s3","s6"],"order":"desc"|"asc"}  orders figures worked out in earlier steps,
@@ -77,6 +78,8 @@ RULES
    subtract periods yourself, even when the question explains the derivation.
 3. Ratios, shares, margins, per-unit figures, growth and differences are computed: a metric only when it
    means exactly what is asked, otherwise get the parts and calc, or a growth, delta or ratio measure.
+   The exception is a percentage or rate the question says the filing itself states ("what share does
+   the company say ...", a capital ratio, a comparable-sales change): that is an item, read as printed.
 4. "Which company has the highest X": rank, k=1. "Rank A, B and C": rank over them, k = their number.
 5. "Which of A or B had more X (and by how much)": rank over [A,B], k=2; it gives both values, the winner
    and the gap. Also when X is a growth rate or a ratio. When each side needs its own words or its own

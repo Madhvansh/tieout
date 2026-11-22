@@ -66,6 +66,13 @@ def _bind_label_numbers(ln: list) -> list:
     """
     out = []
     for k, w in enumerate(ln):
+        # a dash between words of a label ("Net write-off rate — principal only (a)") is punctuation, not an
+        # empty cell: once such rows read as table rows (a glued footnote marker no longer hides the gap
+        # before the values), six of them line up and would make a column of dashes (AXP p56)
+        if w.text in DASH_TOKENS and 0 < k < len(ln) - 1 and _wordy(ln[k - 1].text) and \
+                ln[k + 1].text[:1].isalpha() and w.x0 - ln[k - 1].x1 < 8 and ln[k + 1].x0 - w.x1 < 8:
+            out.append(replace(w, text=w.text + LABEL_MARK))
+            continue
         if is_numeric(w.text):
             prev = ln[k - 1] if k else None
             nxt = ln[k + 1] if k + 1 < len(ln) else None
@@ -80,20 +87,26 @@ def _bind_label_numbers(ln: list) -> list:
                 and nxt.x0 - w.x1 < 15
             lead_year = k == 0 and YEAR_RE.match(w.text) and any(
                 is_numeric(x.text) and not YEAR_RE.match(x.text) for x in ln[1:])
-            if glued_prev or glued_next or lead_label or lead_year:
+            # "2025 vs. 2024" is a change header, its years are not part of a label
+            versus = YEAR_RE.match(w.text) and ((prev is not None and prev.text.lower() in VERSUS) or
+                                                (nxt is not None and nxt.text.lower() in VERSUS))
+            if (glued_prev or glued_next or lead_label or lead_year) and not versus:
                 w = replace(w, text=w.text + LABEL_MARK)
         out.append(w)
     return out
 
 
-def _strip_percent_signs(ln: list, pct: set) -> list:
-    """Drop stand-alone "%" tokens ("11 %") and remember which number they follow."""
+def _strip_percent_signs(ln: list, pct: set, signs: Optional[dict] = None) -> list:
+    """Drop stand-alone "%" tokens ("11 %") and remember which number they follow (and, in `signs`, where
+    the sign ended)."""
     out = []
     for w in ln:
         if w.text == "%" and out and (is_numeric(out[-1].text) or out[-1].text in DASH_TOKENS) \
                 and w.x0 - out[-1].x1 < 8:
             p = out[-1]
             pct.add((round(p.x0, 1), round(p.y0, 1)))
+            if signs is not None:
+                signs[(round(p.x0, 1), round(p.y0, 1))] = w.x1     # where the sign ends, see _align_rates
             continue
         out.append(w)
     return out
@@ -108,6 +121,7 @@ class Line:
     text: str
     edges: list = field(default_factory=list)     # right edges of the values on a num line
     split: int = 0                                # label line with column headers after a wide gap
+    alt: list = field(default_factory=list)       # the same edges with a rate's "%" sign counted in
 
     @property
     def y0(self) -> float:
@@ -132,23 +146,37 @@ def _value_run(ln: list) -> int:
             j -= 1
         else:
             break
+    # a footnote marker glued to the label ("Beauty (b)   13,214", "Segment cost of sales (a)   10,564")
+    # belongs to the label: counted as the first value it hid the gap before the values, the line read
+    # as prose and the table was cut there (TGT p57, PEP p68)
+    while 0 < j < len(ln) - 1 and MARKER_RE.match(ln[j].text) and ln[j].x0 - ln[j - 1].x1 < 6 and \
+            re.search(r"[A-Za-z]", ln[j - 1].text) and not MARKER_RE.match(ln[j - 1].text):
+        j += 1
     return j
 
 
 DAY_RE = re.compile(r"^\d{1,2},?$")
 
 
+VERSUS = {"vs.", "vs", "v.", "versus"}
+
+
 def _date_header(ln: list) -> bool:
     """"Years Ended  July 25, 2026  July 26, 2025  July 27, 2024": two or more
     years, and from the first year on only dates and capitalised column words.
-    "during 2026 compared to 2025" fails on "compared"."""
+    "during 2026 compared to 2025" fails on "compared". A change header between
+    two years ("2025 vs. 2024") is a column word too: without it the header line
+    "(Millions, except percentages) 2025 2024 2023 2025 vs. 2024 2024 vs. 2023"
+    read as prose, and its table lost both its years and its scale (AXP p56)."""
     first = next((k for k, w in enumerate(ln) if YEAR_RE.match(w.text)), None)
     if first is None or sum(1 for w in ln if YEAR_RE.match(w.text)) < 2:
         return False
-    for w in ln[first:]:
+    for k, w in enumerate(ln[first:], first):
         t = w.text.rstrip(",")
         month = t.lower() in MONTHS or (len(t.rstrip(".")) <= 4 and t.lower()[:3] in MONTH_ABBR)
-        if not (YEAR_RE.match(t) or DAY_RE.match(w.text) or month or t[:1].isupper() or t in VALUE_WORDS):
+        versus = t.lower() in VERSUS and 0 < k < len(ln) - 1 and YEAR_RE.match(ln[k - 1].text.lstrip("'")) \
+            and YEAR_RE.match(ln[k + 1].text.rstrip(",").lstrip("'"))
+        if not (YEAR_RE.match(t) or DAY_RE.match(w.text) or month or t[:1].isupper() or t in VALUE_WORDS or versus):
             return False
     return True
 
@@ -213,10 +241,13 @@ def _big_gap(a: Line, b: Line) -> bool:
 
 def _new_columns(reg: Region, ln: Line) -> bool:
     """A num line whose values share no column edge with the region so far
-    starts another table (two tables with different layouts, no gap)."""
+    starts another table (two tables with different layouts, no gap). A rate
+    printed "0.9 %" may be aligned on its digits or on its sign, so both edges
+    count (TGT p5 sets the sign under the amounts, AXP p56 lets it hang)."""
     if reg.nnum < 2:
         return False
-    return not any(abs(e - f) <= 5 for e in ln.edges for f in reg.edges)
+    mine = ln.edges + ln.alt
+    return not any(abs(e - f) <= 5 for e in mine for f in reg.edges)
 
 
 def _ends_label(prev: Line, ln: Line) -> bool:
@@ -250,7 +281,7 @@ def _segment(lines: list) -> list:
                 cur = Region(start=i)
             cur.nnum += 1
             cur.end = i
-            cur.edges.extend(ln.edges)
+            cur.edges.extend(ln.edges)        # a sign edge only lets a rate line match; it never widens the table
         elif ln.kind == "hdr":
             if i and _ends_label(lines[i - 1], ln):
                 continue                                # "Balance as of December 31," / "2022": the end of a label
@@ -495,6 +526,12 @@ def _percent_columns(t: Table) -> list:
         if not cells:
             continue
         frac = sum(1 for x in cells if x.is_percent) / len(cells)
+        # a year column of a summary table holds amounts ("$ 114,368", "72,229") and a block of rate rows
+        # ("2.5 %"); with dollar signs or half its cells amounts over 100 it takes a clear majority of
+        # percents to be a change column (AXP p56, WFC p46)
+        amounts = sum(1 for x in cells if not x.is_percent and x.value is not None and abs(x.value) > 100.5)
+        if (any(x.has_dollar for x in cells) or amounts * 2 >= len(cells)) and frac < 0.6:
+            continue
         small = all(x.value is None or abs(x.value) <= 100.5 for x in cells)
         headed = re.search(r"%|\bpercent", c.header, re.I)       # "% Change '25 vs. '24"
         if frac >= 0.3 or (frac > 0 and small and not any(x.has_dollar for x in cells)) \
@@ -527,6 +564,12 @@ def _without_columns(region: list, drop: list, cols: list) -> list:
         xr = right_edge(w) if is_numeric(w.text) else w.x1
         return c.x_left - 6 <= (w.x0 + xr) / 2 <= c.x_right + 6
 
+    def nearest_edge(w):
+        """The column whose right edge the value ends at: a wide amount ("107,412") reaches into the span of a
+        narrow dropped column beside it (TGT p35) but still ends at its own column's edge."""
+        xr = right_edge(w) if is_numeric(w.text) else w.x1
+        return min(cols, key=lambda c: abs(c.x_right - xr))
+
     def onto_amount(w, ln):
         """The year moved over the kept column left of its dropped column, or None."""
         c = nearest(w)
@@ -547,7 +590,7 @@ def _without_columns(region: list, drop: list, cols: list) -> list:
                 if moved is not None:
                     keep.append(moved)
                 continue
-            if value and ln.kind != "hdr" and any(in_col(w, c) for c in drop):
+            if value and ln.kind != "hdr" and any(in_col(w, c) for c in drop) and nearest_edge(w).idx in dropped:
                 continue
             keep.append(w)
         if keep:
@@ -573,16 +616,46 @@ def _defuse_titles(region: list) -> list:
     return out
 
 
+def _align_rates(region: list, signs: dict) -> list:
+    """A rate printed "0.9 %" ends at its digits in the word boxes, with the sign dropped. In a table that
+    also prints amounts, the column is aligned either on the sign (TGT p5: "0.9 %" ends where "250,518"
+    ends) or on the digits with the sign hanging (AXP p56). Each rate takes the edge, digits or sign, that
+    lies nearer an amount's edge in the same table, so the rate lands in the amounts' column. A table of
+    rates only is left as printed."""
+    if not signs:
+        return region
+    amounts = [right_edge(w) for ln in region if ln.kind == "num" for w in ln.words
+               if is_numeric(w.text) and (round(w.x0, 1), round(w.y0, 1)) not in signs]
+    if not amounts:
+        return region
+    out = []
+    for ln in region:
+        if ln.kind != "num":
+            out.append(ln)
+            continue
+        words, moved = [], False
+        for w in ln.words:
+            sign = signs.get((round(w.x0, 1), round(w.y0, 1))) if is_numeric(w.text) else None
+            if sign is not None:
+                digits = right_edge(w)
+                if min(abs(a - sign) for a in amounts) + 0.5 < min(abs(a - digits) for a in amounts) \
+                        and min(abs(a - sign) for a in amounts) <= 5:
+                    w, moved = replace(w, x1=sign), True
+            words.append(w)
+        out.append(replace(ln, words=words) if moved else ln)
+    return out
+
+
 def _build(doc_id: str, page_no: int, region: list, title: str, pct: set, min_hits: int = 3) -> Optional[Table]:
     """build_table, then once more without the percent-change columns."""
     region = _defuse_titles(region)
-    t = build_table(doc_id, page_no, [ln.words for ln in region], title, min_hits=min_hits)
+    t = build_table(doc_id, page_no, [ln.words for ln in region], title, min_hits=min_hits, merge_ragged=True)
     if t is None:
         return None
     _mark_percent_cells(t, pct)
     drop = _percent_columns(t)
     if drop:
-        t = build_table(doc_id, page_no, _without_columns(region, drop, t.columns), title, min_hits=min_hits)
+        t = build_table(doc_id, page_no, _without_columns(region, drop, t.columns), title, min_hits=min_hits, merge_ragged=True)
         if t is None:
             return None
         _mark_percent_cells(t, pct)
@@ -1060,9 +1133,10 @@ def _stream_tables(doc_id: str, page_no: int, raw: list, default_scale: float,
                    prev_title: str, ctx: Optional[_Context], earlier: list) -> list:
     """Segment one stream of lines into tables and build them."""
     pct: set = set()
+    signs: dict = {}
     prepared = []
     for ln in raw:
-        ln = _strip_percent_signs(_bind_label_numbers(ln), pct)
+        ln = _strip_percent_signs(_bind_label_numbers(ln), pct, signs)
         if ln:
             prepared.append(ln)
     if not prepared:
@@ -1070,6 +1144,11 @@ def _stream_tables(doc_id: str, page_no: int, raw: list, default_scale: float,
     left = min(ln[0].x0 for ln in prepared)
     right = max(ln[-1].x1 for ln in prepared)
     lines = [_classify(ln, left, right) for ln in prepared]
+    for ln in lines:
+        if ln.kind == "num" and signs:
+            j = _value_run(ln.words)
+            vals = [w for w in ln.words[j:] if is_numeric(w.text) or w.text in DASH_TOKENS]
+            ln.alt = [signs[k] for w in vals if (k := (round(w.x0, 1), round(w.y0, 1))) in signs]
     _demote_superscripts(lines)
     out, floor = [], -1
     regions = _segment(lines)
@@ -1090,7 +1169,15 @@ def _stream_tables(doc_id: str, page_no: int, raw: list, default_scale: float,
                 if ln.kind == "label":
                     ctx.feed(ln)
         floor = reg.end
-        t = _build(doc_id, page_no, region, title, pct, min_hits=1 if reg.single else 3)
+        # a column needs three values, except under a printed year header: a one-line table needs one, and
+        # a two-line table two ("Interest paid" and "Income taxes paid, net of refunds (a)", PEP p110, which
+        # was a one-line table until its footnote marker stopped hiding the second row)
+        # (only when no other line of the region carries numbers: "≥ 740  55 55 56" read as a label line would
+        # then make its 740 a column, C p91)
+        two = reg.nnum == 2 and any(ln.kind == "hdr" for ln in region) and not any(
+            ln.kind not in ("num", "hdr") and any(is_numeric(w.text) for w in ln.words) for ln in region)
+        t = _build(doc_id, page_no, _align_rates(region, signs), title, pct,
+                   min_hits=1 if reg.single else 2 if two else 3)
         if t is None:
             continue
         if not title:
