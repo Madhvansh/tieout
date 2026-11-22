@@ -140,6 +140,13 @@ def is_correct(q: dict, pred: dict, companies: dict) -> bool:
             return True                               # 3.72 points stated as the fraction 0.0372
         if abs(v - gold) <= slack or (unit == "USD" and abs(abs(v) - abs(gold)) <= slack):
             return True
+        # a count the key keeps in the page's own scale ("1,927" in a table of thousands of barrels a day)
+        # is the same quantity as the graph's full-unit figure (1,927,000): matched when every supporting
+        # fact states that scale and is recorded as printed (dated 22 Nov 22:25, round 8, W17; corrected
+        # before the held-out run)
+        scale = as_printed_scale(q) if unit == "count" else None
+        if scale and abs(v - gold * scale) <= slack * scale:
+            return True
         # a fall asked for as a size ("by how many turns did coverage fall": 3.53) is answered by a change
         # of minus that size (dated 22 Nov 22:10, round 7, U11; corrected before the held-out run)
         return gold > 0 > v and abs(-v - gold) <= slack and bool(_DECLINE.search(q.get("question", "")))
@@ -159,6 +166,25 @@ def is_correct(q: dict, pred: dict, companies: dict) -> bool:
         return company_to_ticker(pred["value"], companies) == want
     g, p = _norm_text(gold), _norm_text(pred["value"])
     return bool(g) and bool(p) and (g == p or g in p or p in g)
+
+
+_SCALE_WORD = re.compile(r"\b(thousand|million|billion)s?\b", re.I)
+
+
+def as_printed_scale(q: dict) -> Optional[float]:
+    """The scale a count's answer key was left in, when it was left as printed: 1000.0 if every
+    supporting fact says "thousands ..." and records the printed digits as its value. None when the
+    key is already in full units, states no scale, or mixes scales."""
+    scales = set()
+    for sf in q.get("supporting_facts") or []:
+        word = _SCALE_WORD.search(str(sf.get("scale") or ""))
+        digits = re.search(r"\d[\d,]*\.?\d*", str(sf.get("printed") or ""))
+        if not word or not digits or not isinstance(sf.get("value"), (int, float)):
+            return None
+        if abs(float(digits.group(0).replace(",", "")) - abs(sf["value"])) > 1e-9 * max(1.0, abs(sf["value"])):
+            return None                               # the key already converted this figure to full units
+        scales.add({"thousand": 1e3, "million": 1e6, "billion": 1e9}[word.group(1).lower()])
+    return scales.pop() if len(scales) == 1 else None
 
 
 def printed_slack(q: dict) -> float:
