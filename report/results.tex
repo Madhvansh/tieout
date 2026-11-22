@@ -19,18 +19,20 @@
 \renewcommand{\arraystretch}{1.1}
 % every number below is written by scripts/report_numbers.py from the files in results/
 \input{numbers}
+% failure classes and evidence rows, written by the write-up (Session B)
+\input{failures}
 \begin{document}
 \small
 
 {\Large\bfseries TieOut: the knowledge graph is the filing's own arithmetic}\par\vspace{2pt}
 {\normalsize Madhvansh Choksi \quad\textbar\quad Genloop tech intern take-home \quad\textbar\quad code: \texttt{github.com/Madhvansh/tieout}}\par\vspace{3pt}
 
-\textbf{The idea.} A 10-K is a spreadsheet whose formulas were erased; its numbers still over-determine each other. TieOut recovers the formulas from the printed numbers alone (no model, no XBRL), down the rows and across the columns, and keeps them as the graph. That structure verifies a number, solves for one printed nowhere, names a row that has no label and finds the total column of a segment table. A language model only compiles the question into a typed plan and picks a printed line among masked candidates; it never sees or writes a number, and none of its choices is trusted alone: two independent models make each one and a third is called only when they differ.\par\vspace{3pt}
+\textbf{The idea.} A 10-K is a spreadsheet whose formulas were erased; its numbers still over-determine each other. TieOut recovers the formulas from the printed numbers alone (no model, no XBRL), down the rows and across the columns, and keeps them as the graph. That structure verifies a number, solves for one printed nowhere, names a row that has no label and finds the total column of a segment table. A language model only compiles the question into a typed plan and picks a printed line among masked candidates; it never sees or writes a number. No choice stands on one model's word: two models make each one and a third is called only when they differ. Then a second, different method checks the result from outside: a passage reader, the retrieval baseline kept inside the system as a witness. The two roads fail on different questions, and that is measured below.\par\vspace{3pt}
 
 \begin{minipage}[t]{0.585\textwidth}
 \vspace{0pt}
 \head{1. Held-out questions, run once}
-30 questions by blind authors who never saw the system, committed before any run, gold re-derived by another blind agent, run once on the frozen code (tag \texttt{frozen-v2}) with one free API key and a laptop CPU. Cells are right/asked; precision and recall are macro averages over questions of the facts each answer rests on.
+30 questions by blind authors who never saw the system, committed before any run, gold re-derived by another blind agent, run once on the frozen code (tag \texttt{frozen-v2}) with one free API key and a laptop CPU. \StrictLine. Cells are right/asked; precision and recall are macro averages over questions of the facts each answer rests on.
 
 \vspace{2pt}
 {\scriptsize\setlength{\tabcolsep}{2.6pt}
@@ -53,10 +55,12 @@
 \end{minipage}
 
 \head{2. We measured our own overfitting}
-The first development set flattered the system: 84 of 87 there, and 25 of 36 on the first batch of questions it had never seen. So the work ran in rounds. Blind authors (agents that read only the PDFs and the list of used questions; a new persona each round: analyst, auditor, credit analyst, journalist, test engineer) write a round; a gate drops near copies of held-out questions without anyone reading them; the system runs once and that number is recorded; only then are the misses fixed, by class, with general rules, never a rule about one company. First-run accuracy stayed 15 to 30 points below the same day's development numbers. Part of that is adaptation; part may be that fresh questions are different (Recht et al.\ 2019 saw the same drop with no reuse at all), so we report both and do not call the gap overfitting alone. What the rounds taught, one class each: the total column is the one that sums the others; a year printed once over three columns; a fourth quarter of any line as year minus nine months; a quarterly header that spans two columns; one company's segment against another's (\texttt{compare}); a figure dated by the date printed beside it in a sentence; a count stated with a scale in its row label; a table cut where a row carries a footnote marker; an equal value that is a coincidence, not a tie.
+The first development set flattered the system: 84 of 87 there, and 25 of 36 on the first batch of questions it had never seen. So the work ran in rounds. Blind authors (agents that read only the PDFs and the list of used questions; a new persona each round: analyst, auditor, credit analyst, journalist, test engineer) write a round; a gate drops near copies of held-out questions without anyone reading them; the system runs once and that number is recorded; only then are the misses fixed, by class, each fix with a test (three began as one company's miss and were rewritten for their class). First-run accuracy stayed below the same day's development numbers (gap computed by script in the README). Part of that is adaptation; part may be that fresh questions are different (Recht et al.\ 2019 saw the same drop with no reuse at all), so we report both and do not call the gap overfitting alone. What the rounds taught, one class each: the total column is the one that sums the others; a year printed once over three columns; a fourth quarter of any line as year minus nine months; a quarterly header that spans two columns; one company's segment against another's (\texttt{compare}); a figure dated by the date printed beside it in a sentence; a count stated with a scale in its row label; a table cut where a row carries a footnote marker; an equal value that is a coincidence, not a tie.
 
-\head{3. The graph learns}
-A link from a phrase to a printed line is kept only when the answer it led to matched its gold, and only then reused. On the last fresh round, same code and same questions: \StoreLine.
+\head{3. Two roads}
+On the first runs of rounds 3 to 9 (240 unseen questions) the graph path was right on 162, a plain passage reader on 135, at least one of them on 203. So the passage reader is used, and never trusted alone: it fills an abstention; it breaks the tie for a reading only one planner holds; a flagged answer it repeats is CORROBORATED; the graph's figure is overruled only when two passage readings agree against it (the reader's own answer, and the served plan re-run on facts read from passages); a VERIFIED answer it disputes goes to the strongest free model. Every rule was simulated on saved results before it was built; letting the passage reader replace a served answer whenever it disagrees lost more than it won. Held-out: \RoadLine. \RoundTenLine
+
+\sub{A negative result.} Links from a question's words to a printed line are kept when the answer they led to was right. On a fresh round they changed nothing: \StoreLine.
 
 \newpage
 \head{4. Method}
@@ -66,8 +70,10 @@ A link from a phrase to a printed line is kept only when the answer it led to ma
 \item \emph{Names.} 47 concepts kept as data; a label proposes, structure confirms. Every other table row and every numeric sentence is a node, linked to a phrase the first time a question needs it.
 \item \emph{Solve.} A number printed nowhere comes from the one equation where it is the only unknown (a fourth quarter, an identity).
 \item \emph{Plan.} A model writes a typed plan (get, calc, compare, rank, filter, members ...); a deterministic executor returns the answer with proof leaves (filing, page, printed text).
-\item \emph{Four eyes.} Two readers plan each question: a free hosted model and a 4B model fine-tuned on Kaggle on paraphrased questions, run on the laptop. Plans are compared on what they compute. Two pickers choose each printed line, compared on the figure the pick yields. A strong free model (about 20 calls a day) arbitrates only disagreements.
-\item \emph{Tiers.} VERIFIED: every number inside a passing equation, no line chosen by a model. WITNESSED: the numbers tie out and two models chose the same line. FLAGGED: answered, weakness named. ABSTAIN: says what is missing.
+\item \emph{Four eyes.} Two planners read each question: a free hosted model and a 4B model fine-tuned on Kaggle on paraphrased questions, run on the laptop. Plans are compared on what they compute. Two pickers choose each printed line, compared on the figure the pick yields. A strong free model (about 20 calls a day) arbitrates only disagreements.
+\item \emph{Second road.} Hybrid retrieval (BM25 and \texttt{bge-small} vectors on the CPU); the free model reads 48,000 characters of passages and answers with the pages it used; each cited figure must be printed in its passage. A planner's plan can also be run on facts read this way, one small question per line.
+\item \emph{Tiers.} VERIFIED: every number a statement line bound by a seed binding (no model chose the row), inside a formula that holds or solved from such numbers. WITNESSED: the same, but some lines were chosen by models, each choice by two models that agreed. CORROBORATED: an answer with a named weakness that the passage road repeats. FLAGGED: answered, each weakness named. ABSTAIN: says what is missing.
+\item \emph{A ledger of what the build failed to read.} Every number on every page is either a node or a listed gap (\texttt{scripts/ledger.py}): of 231,273 printed quantities 86.4\% are held by a node (88.0\% in the body of the filings); matching against another page's nodes holds 2.8\%, so a match is rarely luck. It found the three build cases left open (HD p37, BAC p35, JPM p70), now fixed.
 \end{tight}
 
 \head{5. Where it fails, by class}

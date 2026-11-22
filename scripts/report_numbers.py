@@ -16,9 +16,10 @@ RES = ROOT / "results"
 TYPES = ("single_fact", "multi_hop", "cross_filing", "overall")
 # (row label in the table, result file, what was switched off)
 SYSTEMS = [
-    ("TieOut, declared configuration", "heldout_v2.json", ""),
+    ("TieOut, declared configuration (two roads)", "heldout_v2.json", ""),
+    ("Baseline: hybrid retrieval, same model reads (this is the second road, alone)", "heldout_baseline_hybrid.json", ""),
     ("Baseline: dense retrieval, same model reads", "heldout_baseline_dense.json", "baseline"),
-    ("TieOut, one reader (no second reader, no arbiter)", "heldout_abl_onereader.json", "ablation"),
+    ("TieOut, one planner (no second planner, no arbiter)", "heldout_abl_onereader.json", "ablation"),
     ("TieOut, one picker (no second picker)", "heldout_abl_onepicker.json", "ablation"),
     ("TieOut, no arbiter", "heldout_abl_noarbiter.json", "ablation"),
     ("TieOut, empty link store", "heldout_abl_store.json", "ablation"),
@@ -89,6 +90,19 @@ def main() -> None:
                                    "ci95": o.get("accuracy_ci95")})
         rows_tex.append(f"{tex(label)} & {cell(sc, 'single_fact')} & {cell(sc, 'multi_hop')} & {cell(sc, 'cross_filing')} & "
                         f"\\textbf{{{cell(sc, 'overall')}}} & {pct(o.get('precision_macro'))} & {pct(o.get('recall_macro'))} \\\\")
+        if name == "heldout_v2.json" and any(r.get("plan_road") for r in d.get("rows", [])):
+            # the same run with the second road taken away: what the plan road alone served, question by question
+            by = {t: [0, 0] for t in TYPES}
+            for r in d["rows"]:
+                for t in (r.get("type"), "overall"):
+                    if t in by:
+                        by[t][0] += bool((r.get("plan_road") or {}).get("correct"))
+                        by[t][1] += 1
+            show = {t: f"{k}/{n}" for t, (k, n) in by.items()}
+            rows_tex.append(f"TieOut, plan road alone (no second road) & {show['single_fact']} & {show['multi_hop']} & "
+                            f"{show['cross_filing']} & \\textbf{{{show['overall']}}} & -- & -- \\\\")
+            summary["systems"].append({"label": "TieOut, plan road alone (no second road)", "file": name,
+                                       "kind": "ablation", **show})
         if kind == "baseline":
             rows_tex.append("\\midrule")
     held = load("heldout_v2.json")
@@ -159,7 +173,7 @@ def main() -> None:
         strict_line = (f"final scorer {o.get('correct_final', o['correct'])}/{o['n']}, strict scorer (the 21 Nov rules) "
                        f"{o.get('correct_strict', o['correct'])}/{o['n']}, 95\\% interval (final) "
                        f"{pct(o['accuracy_ci95'][0])} to {pct(o['accuracy_ci95'][1])}")
-        base = load("heldout_baseline_dense.json")
+        base = load("heldout_baseline_hybrid.json") or load("heldout_baseline_dense.json")
         if base:
             mine = {r["id"]: bool(r.get("correct")) for r in held["rows"]}
             theirs = {r["id"]: bool(r.get("correct")) for r in base.get("rows", []) if "id" in r}
@@ -168,7 +182,7 @@ def main() -> None:
             c = sum(1 for i in ids if theirs[i] and not mine[i])
             p = mcnemar_exact(b, c)
             summary["mcnemar_vs_dense_baseline"] = {"n": len(ids), "only_tieout": b, "only_baseline": c, "p_two_sided": p}
-            mcnemar_line = (f"on the {len(ids)} held-out questions TieOut alone is right on {b}, the dense baseline alone on "
+            mcnemar_line = (f"on the {len(ids)} held-out questions TieOut alone is right on {b}, the retrieval baseline alone on "
                             f"{c}; exact McNemar two-sided p = {p:.4f}")
     scaled = load("heldout_v2_scaled.json")
     if scaled:
@@ -185,7 +199,19 @@ def main() -> None:
                          f"stored pair {t.get('with_store')} vs {t.get('without_store')}, on the other {u.get('n', 0)} "
                          f"{u.get('with_store')} vs {u.get('without_store')}")
         summary["transfer"] = transfer
+    round10_line = "n/a"
+    r10 = load("first_runs/round10.json")              # the one fresh round run with the second road on
+    if r10:
+        o = r10["score"]["overall"]
+        bt = o["by_tier"]
+        round10_line = (f"Round 10 (35 questions nobody had seen, first run): the plan road alone "
+                        f"{o.get('plan_road_correct')}/{o['n']}, with the second road {o['correct']}/{o['n']}; "
+                        + ", ".join(f"{t} {bt[t]['correct']}/{bt[t]['n']}"
+                                    for t in ("VERIFIED", "WITNESSED", "CORROBORATED", "FLAGGED", "ABSTAIN") if t in bt) + ".")
+        summary["round10_first_run"] = {"plan_road_alone": o.get("plan_road_correct"), "with_second_road": o["correct"],
+                                        "n": o["n"], "by_tier": bt, "correct_strict": o.get("correct_strict")}
     macros = {"HeldRows": "\n".join(rows_tex), "TierLine": tex(tier_line), "CostLine": tex(cost_line),
+              "RoundTenLine": tex(round10_line),
               "CaseLine": tex(case_line), "RoundRows": "\n".join(round_rows), "StoreLine": tex(store_line),
               "ScaleLine": tex(scale_line), "StrictLine": strict_line, "McNemarLine": tex(mcnemar_line),
               "ScaledLine": tex(scaled_line), "TransferLine": tex(transfer_line), "RoadLine": tex(road_line)}

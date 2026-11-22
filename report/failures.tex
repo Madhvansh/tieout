@@ -1,0 +1,13 @@
+% Written by Session B (the write-up). Failure classes come from Session A's analysis of the held-out and fresh-round
+% misses (takehome/RESULTS_FOR_WRITEUP.md); evidence rows from result files named in each row.
+\newcommand{\FailRows}{%
+Right number, wrong line & Structure proves a number, not its meaning. CVX ``Net sales (purchases) of treasury shares'' served as share repurchases (10-K cash-flow statement). Fix: a second reading of the label against the question's item, served FLAGGED when they differ. \\
+Look-alike rows & The same label in two tables (two segments, two definitions); six models of four families pick the right one 68 to 73\% of the time on 145 clean pairs. Fix: scope tags (parent, child, sibling) and the next reading printed beside the answer. \\
+Odd periods & A twelve-month period that is not the fiscal year (Visa), a quarter printed only in a 10-K table (BAC p35, fixed this night). Fix: periods as intervals (start and end dates), a quarter as interval subtraction. \\
+A line the build never read & The ledger lists 26,045 body numbers no node holds; three named misses (HD p37, BAC p35, JPM p70) are fixed. Fix: the page image as a second parser accepted only by arithmetic (318 rows on 13 pages, control 0), not yet merged. \\
+}
+\newcommand{\EvidenceRows}{%
+Recovered formulas against the SEC calculation linkbase & 416 of 418 declared relations whose lines are printed (\texttt{results/lab\_linkbase.json}) \\
+Scale test, SEC-keyed, no model & 8,667 questions: 8,083 right (93.3\%), 517 abstained, 0 unverified wrong, 67 silent wrong (\texttt{results/scale\_test.json}) \\
+Every printed number a node or a listed gap & 231,273 printed quantities, 86.4\% held by a node; body 88.0\%; matching against another page's nodes holds 2.8\% (\texttt{results/ledger.csv}) \\
+}
