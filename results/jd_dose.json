@@ -1,0 +1,112 @@
+{
+ "what": "share p of numeric nodes damaged in every layer, rounds 7 to 10 (142 questions) replayed offline through the full configuration from cached model calls; see the docstring of scripts/jd_dose.py",
+ "command": "python scripts/jd_dose.py --rate P --seed S --round R (each), then --summary",
+ "levels": [
+  {
+   "rate": 0.0,
+   "seed": 1,
+   "n": 142,
+   "right": 122,
+   "wrong": 16,
+   "abstain": 4,
+   "accuracy": 0.859,
+   "plan_road_alone": 114,
+   "tiers": {
+    "ABSTAIN": "7/11",
+    "CORROBORATED": "44/45",
+    "FLAGGED": "26/40",
+    "VERIFIED": "15/15",
+    "WITNESSED": "30/31"
+   },
+   "wrong_while_verified": 0,
+   "wrong_while_witnessed_or_corroborated": 2,
+   "errors": 0,
+   "questions_with_a_cache_miss": 0,
+   "right_among_questions_without_a_miss": 122,
+   "questions_without_a_miss": 142,
+   "same_as_reported_run": "142/142",
+   "statement_cells_verified_share": null,
+   "row_cells_ok_share": null,
+   "seconds": 295.6
+  },
+  {
+   "rate": 0.1,
+   "seed": 1,
+   "n": 142,
+   "right": 88,
+   "wrong": 22,
+   "abstain": 32,
+   "accuracy": 0.62,
+   "plan_road_alone": 73,
+   "tiers": {
+    "ABSTAIN": "7/39",
+    "CORROBORATED": "39/40",
+    "FLAGGED": "26/46",
+    "VERIFIED": "5/5",
+    "WITNESSED": "11/12"
+   },
+   "wrong_while_verified": 0,
+   "wrong_while_witnessed_or_corroborated": 2,
+   "errors": 0,
+   "questions_with_a_cache_miss": 71,
+   "right_among_questions_without_a_miss": 63,
+   "questions_without_a_miss": 71,
+   "same_as_reported_run": "106/142",
+   "statement_cells_verified_share": 0.371,
+   "row_cells_ok_share": 0.236,
+   "seconds": 301.6
+  },
+  {
+   "rate": 0.25,
+   "seed": 1,
+   "n": 142,
+   "right": 65,
+   "wrong": 32,
+   "abstain": 45,
+   "accuracy": 0.458,
+   "plan_road_alone": 42,
+   "tiers": {
+    "ABSTAIN": "7/52",
+    "CORROBORATED": "25/27",
+    "FLAGGED": "28/57",
+    "WITNESSED": "5/6"
+   },
+   "wrong_while_verified": 0,
+   "wrong_while_witnessed_or_corroborated": 3,
+   "errors": 0,
+   "questions_with_a_cache_miss": 95,
+   "right_among_questions_without_a_miss": 34,
+   "questions_without_a_miss": 47,
+   "same_as_reported_run": "83/142",
+   "statement_cells_verified_share": 0.167,
+   "row_cells_ok_share": 0.085,
+   "seconds": 251.4
+  },
+  {
+   "rate": 0.5,
+   "seed": 1,
+   "n": 142,
+   "right": 47,
+   "wrong": 39,
+   "abstain": 56,
+   "accuracy": 0.331,
+   "plan_road_alone": 30,
+   "tiers": {
+    "ABSTAIN": "7/63",
+    "CORROBORATED": "21/27",
+    "FLAGGED": "18/50",
+    "WITNESSED": "1/2"
+   },
+   "wrong_while_verified": 0,
+   "wrong_while_witnessed_or_corroborated": 7,
+   "errors": 0,
+   "questions_with_a_cache_miss": 104,
+   "right_among_questions_without_a_miss": 25,
+   "questions_without_a_miss": 38,
+   "same_as_reported_run": "65/142",
+   "statement_cells_verified_share": 0.067,
+   "row_cells_ok_share": 0.017,
+   "seconds": 334.6
+  }
+ ]
+}

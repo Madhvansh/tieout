@@ -1,0 +1,163 @@
+{
+ "rounds": [
+  {
+   "round": 3,
+   "n": 36,
+   "first_run_final": 25,
+   "first_run_strict": 25,
+   "first_run_plan_road_alone": null,
+   "after_frozen_code": 36,
+   "after_n": 36
+  },
+  {
+   "round": 4,
+   "n": 34,
+   "first_run_final": 23,
+   "first_run_strict": 22,
+   "first_run_plan_road_alone": null,
+   "after_frozen_code": 35,
+   "after_n": 35
+  },
+  {
+   "round": 5,
+   "n": 36,
+   "first_run_final": 20,
+   "first_run_strict": 20,
+   "first_run_plan_road_alone": null,
+   "after_frozen_code": 35,
+   "after_n": 36
+  },
+  {
+   "round": 6,
+   "n": 27,
+   "first_run_final": 17,
+   "first_run_strict": 17,
+   "first_run_plan_road_alone": null,
+   "after_frozen_code": 30,
+   "after_n": 35
+  },
+  {
+   "round": 7,
+   "n": 36,
+   "first_run_final": 23,
+   "first_run_strict": 20,
+   "first_run_plan_road_alone": null,
+   "after_frozen_code": 35,
+   "after_n": 36
+  },
+  {
+   "round": 8,
+   "n": 35,
+   "first_run_final": 29,
+   "first_run_strict": 27,
+   "first_run_plan_road_alone": null,
+   "after_frozen_code": 34,
+   "after_n": 35
+  },
+  {
+   "round": 9,
+   "n": 36,
+   "first_run_final": 26,
+   "first_run_strict": 21,
+   "first_run_plan_road_alone": null,
+   "after_frozen_code": 31,
+   "after_n": 36
+  },
+  {
+   "round": 10,
+   "n": 35,
+   "first_run_final": 27,
+   "first_run_strict": 22,
+   "first_run_plan_road_alone": 24,
+   "after_frozen_code": 28,
+   "after_n": 35
+  },
+  {
+   "round": 11,
+   "n": 36,
+   "first_run_final": 29,
+   "first_run_strict": 26,
+   "first_run_plan_road_alone": 26,
+   "after_frozen_code": 31,
+   "after_n": 36
+  }
+ ],
+ "pooled_tiers": {
+  "VERIFIED": {
+   "right": 41,
+   "n": 42,
+   "ci95": [
+    0.8768,
+    0.9958
+   ],
+   "right_strict": 36
+  },
+  "WITNESSED": {
+   "right": 35,
+   "n": 43,
+   "ci95": [
+    0.6738,
+    0.9026
+   ],
+   "right_strict": 30
+  },
+  "CORROBORATED": {
+   "right": 19,
+   "n": 19,
+   "ci95": [
+    0.8318,
+    1.0
+   ],
+   "right_strict": 17
+  },
+  "FLAGGED": {
+   "right": 107,
+   "n": 162,
+   "ci95": [
+    0.5846,
+    0.7289
+   ],
+   "right_strict": 100
+  },
+  "ABSTAIN": {
+   "right": 17,
+   "n": 45,
+   "ci95": [
+    0.2511,
+    0.5237
+   ],
+   "right_strict": 17
+  }
+ },
+ "development": [
+  {
+   "set": "round 1 development",
+   "right": 18,
+   "n": 18,
+   "file": "ff_r1dev.json"
+  },
+  {
+   "set": "round 1",
+   "right": 30,
+   "n": 30,
+   "file": "ff_r1.json"
+  },
+  {
+   "set": "round 2 development",
+   "right": 39,
+   "n": 39,
+   "file": "ff_r2dev.json"
+  }
+ ],
+ "pooled": {
+  "n": 311,
+  "right_final": 219,
+  "right_strict": 200,
+  "ci95_final": [
+   0.6512,
+   0.7522
+  ]
+ },
+ "after_files": "results/ff_r<N>.json",
+ "gap_points": 29.6
+}

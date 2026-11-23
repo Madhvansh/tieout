@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was NVIDIA's employee turnover rate in fiscal year 2026 (the year ended January 25, 2026)?",
+ "abstain": false,
+ "answer": "3.7 percent",
+ "pred": {
+  "kind": "number",
+  "value": 0.037
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "NVDA",
+   "doc": "NVDA_FY2026_10K",
+   "page": 99,
+   "value": 0.037,
+   "label": "turnover rate",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

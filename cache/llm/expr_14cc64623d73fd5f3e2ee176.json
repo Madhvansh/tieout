@@ -1,0 +1,13 @@
+{
+ "model": "gemini:gemini-3.5-flash-lite",
+ "system": "You answered a question about SEC filings from passages. Below are the figures you cited, numbered f1, f2, ..., each with its label, filing, page, the figure as printed and its value in full units (a percentage as a fraction: 12.5% is 0.125). Write the arithmetic that gives YOUR answer as ONE expression over these names: + - * / ** abs( ) parentheses, the names f1..fn and plain numbers only. If your answer is one of the figures, the expression is that name alone. If no expression over these figures gives your answer, write null. Reply JSON {\"expr\": \"<expression>\" or null}.",
+ "user": "Question: Whose data center business grew faster, NVIDIA's in fiscal 2026 or AMD's in 2025, and by how many percentage points?\n\nYour answer: NVIDIA's data center business grew faster than AMD's in their respective periods (NVIDIA's grew 68% in fiscal 2026, while AMD's Data Center net revenue grew 32% in 2025), outperforming AMD by 36 percentage points. (as a number: 36.0)\n\nThe figures you cited:\nf1: 'Data Center revenue for fiscal year 2026 was up 68% from a year ago.' (you called it 'Data Center revenue growth for fiscal year 2026') | NVDA_FY2026_10K page 125 | period not stated | printed 68% | value 0.68 ratio\nf2: 'Data Center net revenue of $16.6 billion increased by 32% compared to $12.6 billion in 2024, primarily driven ' (you called it 'Data Center net revenue increase in 2025') | AMD_FY2025_10K page 50 | period not stated | printed 32% | value 0.32 ratio",
+ "answer": {
+  "expr": "(f1 - f2) * 100"
+ },
+ "seconds": 1.36,
+ "usage": {
+  "in": 435,
+  "out": 16
+ }
+}

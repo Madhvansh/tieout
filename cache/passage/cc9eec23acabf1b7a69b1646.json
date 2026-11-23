@@ -1,0 +1,56 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Comparing each company's fiscal 2026 annual report, which grew total revenue faster over its prior fiscal year, Oracle or Salesforce, and by how many percentage points?",
+ "abstain": false,
+ "answer": "Salesforce grew total revenue faster than Oracle over its prior fiscal year by 2.6 percentage points.",
+ "pred": {
+  "kind": "number",
+  "value": 2.6
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "CRM",
+   "doc": "CRM_FY2026_10K",
+   "page": 5,
+   "value": 41500000000.0,
+   "label": "revenue for fiscal 2026",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "CRM",
+   "doc": "CRM_FY2026_10K",
+   "page": 5,
+   "value": 0.1,
+   "label": "revenue growth year-over-year",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "CRM",
+   "doc": "CRM_FY2026_10K",
+   "page": 79,
+   "value": 41525000000.0,
+   "label": "Total Revenue by Geographic Locations 2026",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "CRM",
+   "doc": "CRM_FY2026_10K",
+   "page": 79,
+   "value": 37895000000.0,
+   "label": "Total Revenue by Geographic Locations 2025",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

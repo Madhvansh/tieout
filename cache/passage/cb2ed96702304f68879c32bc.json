@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How many Home Depot stores were there in Canada at the end of fiscal 2025?",
+ "abstain": false,
+ "answer": "182",
+ "pred": {
+  "kind": "number",
+  "value": 182.0
+ },
+ "unit": "count",
+ "facts": [
+  {
+   "ticker": "HD",
+   "doc": "HD_FY2025_10K",
+   "page": 33,
+   "value": 182.0,
+   "label": "Total Canada Stores",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

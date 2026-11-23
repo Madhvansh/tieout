@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How many Target stores were operating in California at the end of fiscal 2025?",
+ "abstain": false,
+ "answer": "321",
+ "pred": {
+  "kind": "number",
+  "value": 321.0
+ },
+ "unit": "count",
+ "facts": [
+  {
+   "ticker": "TGT",
+   "doc": "TGT_FY2025_10K",
+   "page": 29,
+   "value": 321.0,
+   "label": "Stores as of January 31, 2026 for California",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

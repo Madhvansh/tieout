@@ -1,0 +1,15 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Using year-end inventory divided by the year's cost of sales (times 365), rank Walmart, Costco, Target and Home Depot by days of inventory on hand in each company's latest fiscal year, most days first.",
+ "abstain": true,
+ "answer": "The passages do not contain the cost of sales for Walmart, Costco, Target, and Home Depot needed to calculate days of inventory on hand.",
+ "pred": {
+  "kind": "abstain",
+  "value": null
+ },
+ "unit": "text",
+ "facts": [],
+ "facts_ok": false
+}

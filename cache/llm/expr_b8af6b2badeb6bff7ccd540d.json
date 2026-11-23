@@ -1,0 +1,13 @@
+{
+ "model": "gemini:gemini-3.5-flash-lite",
+ "system": "You answered a question about SEC filings from passages. Below are the figures you cited, numbered f1, f2, ..., each with its label, filing, page, the figure as printed and its value in full units (a percentage as a fraction: 12.5% is 0.125). Write the arithmetic that gives YOUR answer as ONE expression over these names: + - * / ** abs( ) parentheses, the names f1..fn and plain numbers only. If your answer is one of the figures, the expression is that name alone. If no expression over these figures gives your answer, write null. Reply JSON {\"expr\": \"<expression>\" or null}.",
+ "user": "Question: By how many employees did The Coca-Cola Company's year-end headcount fall between December 31, 2023 and December 31, 2025? The 2023 figure appears only in the 2024 annual report.\n\nYour answer: 13200 (as a number: 13200.0)\n\nThe figures you cited:\nf1: 'As of December 31, 2024 and 2023, our Company had approximately 69,700 and 79,100 employees, respectively, of ' (you called it 'employees as of December 31, 2023') | KO_FY2024_10K page 12 | period not stated | printed 79,100 | value 79100.0 count\nf2: 'As of December 31, 2025 and 2024, our Company had approximately 65,900 and 69,700 employees, respectively, of ' (you called it 'employees as of December 31, 2025') | KO_FY2025_10K page 12 | period not stated | printed 65,900 | value 65900.0 count",
+ "answer": {
+  "expr": "f1 - f2"
+ },
+ "seconds": 1.34,
+ "usage": {
+  "in": 448,
+  "out": 10
+ }
+}

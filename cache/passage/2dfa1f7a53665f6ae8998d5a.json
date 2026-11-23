@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was compensation and benefits of Goldman Sachs Group Inc. for fiscal year 2025 (for a balance: at the end of fiscal year 2025)? Give the one figure the filing prints for it.",
+ "abstain": false,
+ "answer": "18906000000",
+ "pred": {
+  "kind": "number",
+  "value": 18906000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "GS",
+   "doc": "GS_FY2025_10K",
+   "page": 75,
+   "value": 18906000000.0,
+   "label": "Compensation and benefits",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

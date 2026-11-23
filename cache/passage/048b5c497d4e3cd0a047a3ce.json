@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was number of employees of The Coca-Cola Company for fiscal year 2023 (for a balance: at the end of fiscal year 2023)? Give the one figure the filing prints for it.",
+ "abstain": false,
+ "answer": "79,100",
+ "pred": {
+  "kind": "number",
+  "value": 79100.0
+ },
+ "unit": "count",
+ "facts": [
+  {
+   "ticker": "KO",
+   "doc": "KO_FY2024_10K",
+   "page": 12,
+   "value": 79100.0,
+   "label": "As of December 31, 2024 and 2023, our Company had approximately 69,700 and 79,100 employees, respectively",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

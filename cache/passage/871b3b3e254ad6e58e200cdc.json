@@ -1,0 +1,15 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Of Visa, Mastercard, American Express and BlackRock, which had the largest total assets at its latest fiscal year-end in the set, and which accounting firm audits it?",
+ "abstain": true,
+ "answer": "Based on the provided passages, total asset figures for Visa, Mastercard, American Express, and BlackRock are not explicitly listed, so the passages do not contain what is needed to determine which company had the largest total assets.",
+ "pred": {
+  "kind": "abstain",
+  "value": null
+ },
+ "unit": "none",
+ "facts": [],
+ "facts_ok": false
+}

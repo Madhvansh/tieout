@@ -1,0 +1,15 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How much did Bank of America's total loans and leases grow in the last three months of 2025, from September 30 to December 31, 2025?",
+ "abstain": true,
+ "answer": "None",
+ "pred": {
+  "kind": "abstain",
+  "value": null
+ },
+ "unit": "none",
+ "facts": [],
+ "facts_ok": false
+}

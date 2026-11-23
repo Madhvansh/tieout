@@ -1,0 +1,34 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Leaving out the SRS distribution business, roughly how much in net sales did Home Depot's store-based Primary segment generate per store in fiscal 2025, using the year-end store count?",
+ "abstain": false,
+ "answer": "64419.67",
+ "pred": {
+  "kind": "number",
+  "value": 64419.67
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "HD",
+   "doc": "HD_FY2025_10K",
+   "page": 59,
+   "value": 151966000000.0,
+   "label": "Primary segment Net sales",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "HD",
+   "doc": "HD_FY2025_10K",
+   "page": 9,
+   "value": 2359.0,
+   "label": "stores",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

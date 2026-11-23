@@ -1,16 +1,17 @@
 """Figure: accuracy on each round of blind questions, the first time the system saw it and after the
 misses were fixed by class, with the held-out round beside them.
 
-    python scripts/fig_rounds.py            # writes report/fig_rounds.png and results/rounds.json
+    python scripts/fig_rounds.py [--after h3]   # writes report/fig_rounds.png and results/rounds.json
 
 Every bar is read from a result file in results/ (named in ROUNDS below). A first run is the one run
-made before any fix for that round; "after" is the same round on the frozen code (results/c2_final_r<N>.json,
-the last pass over every round in order), when it had become a development set. Round 9's misses were read
-only after the frozen code was complete, so no fix was aimed at it. The held-out round has a first run
-only: nothing was fixed against it.
+made before any fix for that round; "after" is the same round on the frozen code (results/<after>_r<N>.json,
+one run of every round on the frozen commit; `--after` names the prefix, h3 = commit 5431e1c), when it had
+become a development set. Round 9's misses were read only after the frozen code was complete, so no fix was
+aimed at it. The held-out round has a first run only: nothing was fixed against it.
 """
 from __future__ import annotations
 
+import argparse
 import json
 import pathlib
 
@@ -20,16 +21,18 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-# (label, first-run result file, final-code result file or None, note)
+# (label, first-run result file, final-code result file or None, note); "{after}" is the prefix of the
+# frozen commit's per-round files (--after)
 ROUNDS = [
-    ("round 3", "first_runs/round3.json", "c2_final_r3.json", ""),
-    ("round 4", "first_runs/round4.json", "c2_final_r4.json", ""),
-    ("round 5", "first_runs/round5.json", "c2_final_r5.json", "arbiter quota spent"),
-    ("round 6", "first_runs/round6.json", "c2_final_r6.json", "27 of 35 run"),
-    ("round 7", "first_runs/round7.json", "c2_final_r7.json", ""),
-    ("round 8", "first_runs/round8.json", "c2_final_r8.json", ""),
-    ("round 9", "first_runs/round9.json", "c2_final_r9.json", "no fix aimed at it"),
-    ("round 10", "first_runs/round10_pointer.json", None, "text reader as pointer"),
+    ("round 3", "first_runs/round3.json", "{after}_r3.json", ""),
+    ("round 4", "first_runs/round4.json", "{after}_r4.json", ""),
+    ("round 5", "first_runs/round5.json", "{after}_r5.json", "arbiter quota spent"),
+    ("round 6", "first_runs/round6.json", "{after}_r6.json", "27 of 35 run"),
+    ("round 7", "first_runs/round7.json", "{after}_r7.json", ""),
+    ("round 8", "first_runs/round8.json", "{after}_r8.json", ""),
+    ("round 9", "first_runs/round9.json", "{after}_r9.json", "no fix aimed at it"),
+    ("round 10", "first_runs/round10_pointer.json", "{after}_r10.json", "text reader as pointer"),
+    ("round 11", "first_runs/round11.json", "{after}_r11.json", ""),
     ("held-out", "heldout_v2.json", None, "run once"),
 ]
 TIERS = ("VERIFIED", "WITNESSED", "CORROBORATED", "FLAGGED")
@@ -50,8 +53,12 @@ def read(name: str):
 
 
 def main() -> None:
+    ap = argparse.ArgumentParser(description="first runs against the frozen code, round by round")
+    ap.add_argument("--after", default="h3", help="prefix of the frozen commit's per-round files results/<after>_r<N>.json")
+    after = ap.parse_args().after
     table = []
     for label, first, final, note in ROUNDS:
+        final = final.format(after=after) if final else None
         table.append({"round": label, "note": note, "first_run": read(first), "final_code": read(final) if final else None,
                       "first_file": first, "final_file": final})
     (ROOT / "results" / "rounds.json").write_text(json.dumps(table, indent=1), encoding="utf-8")

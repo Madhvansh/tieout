@@ -1,0 +1,36 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "PepsiCo says it employed approximately 306,000 people worldwide as of December 27, 2025, including a number within the United States. What share of PepsiCo's workforce was employed outside the United States?",
+ "abstain": false,
+ "answer": "0.5915",
+ "pred": {
+  "kind": "number",
+  "value": 0.5915032679738562
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "PEP",
+   "doc": "PEP_FY2025_10K",
+   "page": 12,
+   "value": 306000.0,
+   "label": "We employed approximately 306,000 people worldwide as of December 27, 2025",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "PEP",
+   "doc": "PEP_FY2025_10K",
+   "page": 12,
+   "value": 125000.0,
+   "label": "approximately 125,000 people within the United States",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

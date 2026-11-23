@@ -1,15 +1,17 @@
 """The fresh rounds in one table, and the trust tiers pooled over every first run.
 
-    python scripts/pooled_first_runs.py        # prints the tables, writes results/pooled_first_runs.json
+    python scripts/pooled_first_runs.py [--after h3]   # prints the tables, writes results/pooled_first_runs.json
 
 A first run is the one run made on a round before any of its answers was read
 (results/first_runs/round<N>.json). Each is rescored here under both scorers of tieout/eval/bench.py
 ("final" and "strict", the rules of 21 Nov), from the answer it stored, so that every round is judged by
 the same rules whatever the scorer was on the night it ran. "After" is the same round on the frozen code
-(results/c2_final_r<N>.json), when the round had become development material. No model call is made.
+(results/<after>_r<N>.json, one run of every round on the frozen commit; `--after` names the prefix, h3 =
+commit 5431e1c), when the round had become development material. No model call is made.
 """
 from __future__ import annotations
 
+import argparse
 import importlib.util
 import json
 import pathlib
@@ -22,10 +24,9 @@ from tieout.eval.bench import is_correct, load_benchmark, wilson  # noqa: E402
 from tieout.graph import Graph  # noqa: E402
 
 RES = ROOT / "results"
-ROUNDS = [3, 4, 5, 6, 7, 8, 9, 10]
+ROUNDS = [3, 4, 5, 6, 7, 8, 9, 10, 11]
 TIERS = ("VERIFIED", "WITNESSED", "CORROBORATED", "FLAGGED", "ABSTAIN")
-DEVELOPMENT = [("round 1 development", "c2_final_r1dev.json"), ("round 1", "c2_final_r1.json"),
-               ("round 2 development", "c2_final_r2dev.json")]
+DEVELOPMENT = [("round 1 development", "r1dev"), ("round 1", "r1"), ("round 2 development", "r2dev")]
 
 
 def _parser():
@@ -41,6 +42,9 @@ def rows_of(name: str):
 
 
 def main() -> None:
+    ap = argparse.ArgumentParser(description="first runs of every fresh round, pooled")
+    ap.add_argument("--after", default="h3", help="prefix of the frozen commit's per-round files results/<after>_r<N>.json")
+    after_prefix = ap.parse_args().after
     companies = Graph.load().companies
     parse = _parser()
     out: dict = {"rounds": [], "pooled_tiers": {}, "development": []}
@@ -70,7 +74,7 @@ def main() -> None:
                 pooled[tier][1] += 1
                 pooled_strict[tier][0] += ok["strict"]
                 pooled_strict[tier][1] += 1
-        after = rows_of(f"c2_final_r{n}.json")
+        after = rows_of(f"{after_prefix}_r{n}.json")
         after_right = sum(bool(r.get("correct")) for r in after) if after else None
         total[0] += right
         total[1] += strict
@@ -93,13 +97,15 @@ def main() -> None:
             print(f"  {t:13s} {k:3d} of {m:3d}   {lo:.0%} to {hi:.0%}   (strict scorer: {pooled_strict[t][0]})")
     print("\ndevelopment sets on the frozen code:")
     dev = [0, 0]
-    for label, name in DEVELOPMENT:
+    out["after_files"] = f"results/{after_prefix}_r<N>.json"
+    for label, short in DEVELOPMENT:
+        name = f"{after_prefix}_{short}.json"
         rows = rows_of(name)
         if rows:
             k = sum(bool(r.get("correct")) for r in rows)
             dev[0] += k
             dev[1] += len(rows)
-            out["development"].append({"set": label, "right": k, "n": len(rows)})
+            out["development"].append({"set": label, "right": k, "n": len(rows), "file": name})
             print(f"  {label:22s} {k}/{len(rows)}")
     if dev[1] and total[2]:
         gap = dev[0] / dev[1] - total[0] / total[2]

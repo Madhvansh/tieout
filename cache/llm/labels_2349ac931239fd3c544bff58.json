@@ -1,0 +1,18 @@
+{
+ "model": "gemini:gemini-3.5-flash-lite",
+ "system": "You say how an SEC filing would label a financial item. Given an item phrase from a question\nand the company, list up to 4 other labels the company's annual or quarterly report might print for the\nsame item: its own term for it, a synonym, an abbreviation spelled out or the reverse. Never a number.\nAnswer as JSON: {\"labels\": [\"...\", \"...\"]}",
+ "user": "Company: JPMorgan Chase & Co. (JPM)\nItem: Basel III common equity tier 1 capital ratio Standardized approach",
+ "answer": {
+  "labels": [
+   "Common equity tier 1 capital ratio",
+   "CET1 capital ratio",
+   "Basel III common equity tier 1 ratio",
+   "Standardized approach CET1 ratio"
+  ]
+ },
+ "seconds": 7.5,
+ "usage": {
+  "in": 107,
+  "out": 53
+ }
+}

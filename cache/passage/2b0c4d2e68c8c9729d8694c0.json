@@ -1,0 +1,150 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Of Coca-Cola, PepsiCo, Procter & Gamble, Nike, Target and Costco, how many earned less net income attributable to the company in their latest fiscal year than in the year before, and which ones?",
+ "abstain": false,
+ "answer": "Two of the companies, PepsiCo and Target, earned less net income attributable to the company in their latest fiscal year than in the year before.",
+ "pred": {
+  "kind": "companies",
+  "value": [
+   [
+    "PepsiCo",
+    null
+   ],
+   [
+    "Target",
+    null
+   ]
+  ]
+ },
+ "unit": "company",
+ "facts": [
+  {
+   "ticker": "KO",
+   "doc": "KO_FY2025_10K",
+   "page": 63,
+   "value": 13107000000.0,
+   "label": "Net Income Attributable to Shareowners of The Coca-Cola Company (2025)",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "KO",
+   "doc": "KO_FY2025_10K",
+   "page": 63,
+   "value": 10631000000.0,
+   "label": "Net Income Attributable to Shareowners of The Coca-Cola Company (2024)",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "PEP",
+   "doc": "PEP_FY2025_10K",
+   "page": 44,
+   "value": 8240000000.0,
+   "label": "Net Income Attributable to PepsiCo (2025)",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "PEP",
+   "doc": "PEP_FY2025_10K",
+   "page": 44,
+   "value": 9578000000.0,
+   "label": "Net Income Attributable to PepsiCo (2024)",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "PG",
+   "doc": "PG_FY2026_10K",
+   "page": 21,
+   "value": 16046000000.0,
+   "label": "Net earnings attributable to Procter & Gamble (2026)",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "PG",
+   "doc": "PG_FY2026_10K",
+   "page": 21,
+   "value": 15974000000.0,
+   "label": "Net earnings attributable to Procter & Gamble (2025)",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "NKE",
+   "doc": "NKE_FY2026_10K",
+   "page": 34,
+   "value": 3108000000.0,
+   "label": "Net income (2026)",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "NKE",
+   "doc": "NKE_FY2026_10K",
+   "page": 34,
+   "value": 3219000000.0,
+   "label": "Net income (2025)",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "TGT",
+   "doc": "TGT_FY2025_10K",
+   "page": 34,
+   "value": 8.13,
+   "label": "GAAP diluted earnings per share (2025)",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "TGT",
+   "doc": "TGT_FY2025_10K",
+   "page": 34,
+   "value": 8.86,
+   "label": "GAAP diluted earnings per share (2024)",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "TGT",
+   "doc": "TGT_FY2025_10K",
+   "page": 41,
+   "value": 6600000000.0,
+   "label": "Cash flows provided by operating activities (2025)",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "COST",
+   "doc": "COST_FY2026_10K",
+   "page": 61,
+   "value": 9226000000.0,
+   "label": "Net income (2026)",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "COST",
+   "doc": "COST_FY2026_10K",
+   "page": 61,
+   "value": 8099000000.0,
+   "label": "Net income (2025)",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

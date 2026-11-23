@@ -1,0 +1,170 @@
+{
+ "what": "pruning and consolidation measured on the shipped graph; see the docstring of scripts/jd_prune.py",
+ "command": "python scripts/jd_prune.py --analyze",
+ "statement_cells": {
+  "cells": 13384,
+  "exact_formula_equations": 2523,
+  "equations_not_exact (rounded)": 66,
+  "droppable_one_per_equation": 1649,
+  "share": 0.1232
+ },
+ "duplicate_readings": {
+  "TIE pairs (printed twice in one filing)": 361,
+  "CARRY pairs (one figure in two filings, equal)": 1276,
+  "facts held by readings of two or more filings": 532
+ },
+ "row_cells": {
+  "rows": 52819,
+  "cells": 192920,
+  "exact_formula_equations": 15751,
+  "equations_not_exact (rounded)": 512,
+  "droppable_one_per_equation": 11967,
+  "share": 0.062
+ },
+ "sizes_bytes_gzip": {
+  "statement_readings_all": 500399,
+  "statement_readings_without_droppable": 441359,
+  "row_layer_all": 5569923,
+  "row_layer_without_droppable": 5346283
+ },
+ "solvable_facts": {
+  "facts": 4263,
+  "droppable": 213,
+  "by_concept": {
+   "CostOfRevenue": 55,
+   "TotalAssets": 93,
+   "TotalEquity": 65
+  }
+ },
+ "consolidation": {
+  "sentences": 15813,
+  "sentence_figures": 44829,
+  "sentences_whose_figure_restates_a_table_cell": 9794,
+  "table_cells_restated_by_a_sentence": 33271
+ },
+ "conflicts": {
+  "events": 18,
+  "by_kind": {
+   "reclassification": 6,
+   "presentation": 7,
+   "restatement": 5
+  },
+  "carry_checks_restated": 32,
+  "examples": [
+   {
+    "ticker": "AAPL",
+    "statement": "BS",
+    "period": "FY2025@end",
+    "kind": "reclassification",
+    "old_doc": "AAPL_FY2025_10K",
+    "new_doc": "AAPL_FY2026_10K",
+    "line": "Other non-current assets"
+   },
+   {
+    "ticker": "AAPL",
+    "statement": "CF",
+    "period": "FY2024",
+    "kind": "presentation",
+    "old_doc": "AAPL_FY2025_10K",
+    "new_doc": "AAPL_FY2026_10K",
+    "line": "Cash paid for income taxes, net"
+   },
+   {
+    "ticker": "AAPL",
+    "statement": "CF",
+    "period": "FY2025",
+    "kind": "presentation",
+    "old_doc": "AAPL_FY2025_10K",
+    "new_doc": "AAPL_FY2026_10K",
+    "line": "Cash paid for income taxes, net"
+   },
+   {
+    "ticker": "BAC",
+    "statement": "BS",
+    "period": "FY2024@end",
+    "kind": "restatement",
+    "old_doc": "BAC_FY2024_10K",
+    "new_doc": "BAC_FY2025_10K",
+    "line": "Other assets (includes and"
+   },
+   {
+    "ticker": "BAC",
+    "statement": "CF",
+    "period": "FY2023",
+    "kind": "restatement",
+    "old_doc": "BAC_FY2024_10K",
+    "new_doc": "BAC_FY2025_10K",
+    "line": "Net income"
+   },
+   {
+    "ticker": "BAC",
+    "statement": "CF",
+    "period": "FY2023",
+    "kind": "presentation",
+    "old_doc": "BAC_FY2024_10K",
+    "new_doc": "BAC_FY2025_10K",
+    "line": "Income taxes paid, net"
+   }
+  ]
+ },
+ "replays": {
+  "solvable": {
+   "right": 125,
+   "n": 142,
+   "unpruned_right": 122,
+   "unpruned_n": 142,
+   "answers_changed": 3,
+   "changed": [
+    "r7 U07",
+    "r8 V07",
+    "r8 W05"
+   ],
+   "questions_with_a_cache_miss": 0,
+   "seconds_per_answer": 0.41,
+   "unpruned_seconds_per_answer": 0.46,
+   "dropped": {
+    "facts dropped": 213,
+    "by_concept": {
+     "CostOfRevenue": 55,
+     "TotalAssets": 93,
+     "TotalEquity": 65
+    }
+   }
+  },
+  "rowcells": {
+   "right": 102,
+   "n": 142,
+   "unpruned_right": 122,
+   "unpruned_n": 142,
+   "answers_changed": 26,
+   "changed": [
+    "r7 T17",
+    "r7 U05",
+    "r7 U07",
+    "r7 U08",
+    "r7 U09",
+    "r7 U10",
+    "r7 U13",
+    "r8 V07",
+    "r8 V10",
+    "r8 V12",
+    "r8 W05",
+    "r8 W09",
+    "r9 X07",
+    "r9 X10",
+    "r9 X13",
+    "r9 Y07",
+    "r9 Y12",
+    "r9 Y18",
+    "r10 M07",
+    "r10 M09"
+   ],
+   "questions_with_a_cache_miss": 83,
+   "seconds_per_answer": 0.37,
+   "unpruned_seconds_per_answer": 0.46,
+   "dropped": {
+    "row cells dropped": 11967
+   }
+  }
+ }
+}

@@ -1,0 +1,52 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "In the facilities table by segment in Item 2 of Amazon's 2025 Form 10-K (segment amounts exclude corporate facilities), what share of the total square footage, leased plus owned, belonged to the AWS segment at December 31, 2025?",
+ "abstain": false,
+ "answer": "0.07365636353982888",
+ "pred": {
+  "kind": "number",
+  "value": 0.07365636353982888
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "AMZN",
+   "doc": "AMZN_FY2025_10K",
+   "page": 18,
+   "value": 28370.0,
+   "label": "AWS Leased Square Footage",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "AMZN",
+   "doc": "AMZN_FY2025_10K",
+   "page": 18,
+   "value": 28469.0,
+   "label": "AWS Owned Square Footage",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "AMZN",
+   "doc": "AMZN_FY2025_10K",
+   "page": 18,
+   "value": 684022.0,
+   "label": "Total Leased Square Footage",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "AMZN",
+   "doc": "AMZN_FY2025_10K",
+   "page": 18,
+   "value": 67169.0,
+   "label": "Total Owned Square Footage",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

@@ -1,0 +1,35 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What revenue did Microsoft's Intelligent Cloud segment bring in for fiscal 2026?",
+ "abstain": false,
+ "answer": "$137,791 million",
+ "pred": {
+  "kind": "number",
+  "value": 137791000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "MSFT",
+   "doc": "MSFT_FY2026_10K",
+   "page": 38,
+   "value": 137791000000.0,
+   "label": "Intelligent Cloud Revenue",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "MSFT",
+   "doc": "MSFT_FY2026_10K",
+   "page": 84,
+   "value": 137791000000.0,
+   "label": "Intelligent Cloud Revenue",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

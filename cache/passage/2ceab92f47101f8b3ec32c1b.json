@@ -1,0 +1,26 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How many Class A shares did Facebook's parent have outstanding per the cover of its 2025 annual report?",
+ "abstain": false,
+ "answer": "2,187,177,748",
+ "pred": {
+  "kind": "number",
+  "value": 2187177748.0
+ },
+ "unit": "shares",
+ "facts": [
+  {
+   "ticker": "META",
+   "doc": "META_FY2025_10K",
+   "page": 1,
+   "value": 2187177748.0,
+   "label": "shares of Class A common stock ... outstanding",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

@@ -1,0 +1,26 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How much net new money did BlackRock take in during 2025 across all of its products?",
+ "abstain": false,
+ "answer": "$698,261 million",
+ "pred": {
+  "kind": "number",
+  "value": 698261000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "BLK",
+   "doc": "BLK_FY2025_10K",
+   "page": 8,
+   "value": 698261000000.0,
+   "label": "Total Net inflows (outflows)",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

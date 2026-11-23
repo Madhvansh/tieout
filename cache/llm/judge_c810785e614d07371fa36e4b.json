@@ -1,0 +1,14 @@
+{
+ "model": "gemini:gemini-3.6-flash",
+ "system": "You audit answers to questions about SEC filings. Two derivations, A and B, answer the same question from figures printed in the filings; each lists the printed figures it read (label, filing, page, period), its arithmetic and its result. Decide which derivation answers the question AS ASKED: the lines the question names (not a look-alike line, a segment instead of a total, or a total instead of a part), the company and the period the question asks for, the arithmetic the question implies (a ratio, a change, a sum, a margin), and a plausible scale for the result. Do not compute an answer of your own. If neither answers the question as asked, say neither. Reply JSON {\"pick\": \"A\" | \"B\" | \"neither\", \"reason\": \"one or two sentences\"}.",
+ "user": "Question: By how many employees did The Coca-Cola Company's year-end headcount fall between December 31, 2023 and December 31, 2025? The 2023 figure appears only in the 2024 annual report.\n\nDerivation A\nfigures read:\n  - 'employees' | KO_FY2025_10K page 12 | period not stated | printed As of December 31, 2025 and 2024, our Company had approximately 65,900 and 69,700 employees, respectively, of which approximately 8,900 were located in the Unit\narithmetic: restated KO employees latest minus first reported of (attr KO employees; attr KO employees)\nplan: [{\"id\": \"s1\", \"op\": \"restated\", \"company\": \"KO\", \"attr\": \"employees\", \"period\": {\"fy\": 2023}}]\nresult: Only one filing reports this period: 65,900 employees (KO_FY2025_10K)\n\nDerivation B\nfigures read:\n  - f1 = 'As of December 31, 2024 and 2023, our Company had approximately 69,700 and 79,100 employees, respectively, of which approximately 8,900 and ' | KO_FY2024_10K page 12 | period not stated | printed 79,100\n  - f2 = 'As of December 31, 2025 and 2024, our Company had approximately 65,900 and 69,700 employees, respectively, of which approximately 8,900 were' | KO_FY2025_10K page 12 | period not stated | printed 65,900\narithmetic: the expression f1 - f2\nresult: 13,200 count",
+ "answer": {
+  "pick": "B",
+  "reason": "Derivation B correctly reads the year-end employee counts for December 31, 2023 (79,100) from the 2024 10-K and December 31, 2025 (65,900) from the 2025 10-K, and calculates the decrease of 13,200 employees as asked."
+ },
+ "seconds": 2.04,
+ "usage": {
+  "in": 625,
+  "out": 373
+ }
+}

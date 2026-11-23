@@ -1,0 +1,18 @@
+{
+ "model": "gemini:gemini-3.5-flash-lite",
+ "system": "You say how an SEC filing would label a financial item. Given an item phrase from a question\nand the company, list up to 4 other labels the company's annual or quarterly report might print for the\nsame item: its own term for it, a synonym, an abbreviation spelled out or the reverse. Never a number.\nAnswer as JSON: {\"labels\": [\"...\", \"...\"]}",
+ "user": "Company: Chevron Corp (CVX)\nItem: Total Consolidated Companies United States operable refining capacity",
+ "answer": {
+  "labels": [
+   "U.S. Refineries Net Operable Capacity",
+   "United States Refinery Production Capacity",
+   "Total U.S. Refining Capacity",
+   "Domestic Operable Refining Capacity"
+  ]
+ },
+ "seconds": 1.3,
+ "usage": {
+  "in": 100,
+  "out": 55
+ }
+}

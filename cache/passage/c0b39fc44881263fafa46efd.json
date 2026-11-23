@@ -1,0 +1,35 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How many times bigger was Costco's membership fee income in fiscal 2026 than the membership and other income of Walmart's Sam's Club U.S. in Walmart's fiscal 2026?",
+ "abstain": false,
+ "answer": "Costco's membership fee income in fiscal 2026 was 2.34 times bigger than the membership and other income of Walmart's Sam's Club U.S. in Walmart's fiscal 2026.",
+ "pred": {
+  "kind": "number",
+  "value": 2.3394059405940593
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "COST",
+   "doc": "COST_FY2026_10K",
+   "page": 26,
+   "value": 5907.0,
+   "label": "Membership fees",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "WMT",
+   "doc": "WMT_FY2026_10K",
+   "page": 77,
+   "value": 2525.0,
+   "label": "Membership and other income",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

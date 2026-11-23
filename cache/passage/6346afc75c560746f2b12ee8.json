@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How much revenue did Amazon's advertising business bring in during 2025?",
+ "abstain": false,
+ "answer": "$68,635 million",
+ "pred": {
+  "kind": "number",
+  "value": 68635000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "AMZN",
+   "doc": "AMZN_FY2025_10K",
+   "page": 69,
+   "value": 68635.0,
+   "label": "Advertising services (4)",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

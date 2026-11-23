@@ -1,0 +1,36 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "By what percent did BlackRock's base fee revenue from private markets grow in 2025?",
+ "abstain": false,
+ "answer": "96.49%",
+ "pred": {
+  "kind": "number",
+  "value": 0.964883
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "BLK",
+   "doc": "BLK_FY2025_10K",
+   "page": 11,
+   "value": 2350.0,
+   "label": "Private markets base fee revenue for 2025",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "BLK",
+   "doc": "BLK_FY2025_10K",
+   "page": 53,
+   "value": 1196.0,
+   "label": "Private markets base fee revenue for 2024",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

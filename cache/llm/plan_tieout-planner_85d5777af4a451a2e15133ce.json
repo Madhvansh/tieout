@@ -1,0 +1,24 @@
+{
+ "model": "ollama:tieout-planner-4b-v3",
+ "system": "Translate the question into a TieOut query plan. Output JSON only: {\"steps\": [...], \"answer\": \"<step id>\"} or {\"steps\": [], \"answer\": null, \"cannot\": \"<why>\"}.\nOPS: get, metric, calc, change, rank, filter, count, agg, series, members, attr, restated.\nMEASURES: concept, metric, item (a line outside the three statements, in the filing's words), attr, growth, delta, ratio, value (of a line).\nCOMPANIES: AAPL (Apple), MSFT (Microsoft), GOOGL (Alphabet), AMZN (Amazon), META (Meta), NVDA (Nvidia), AMD (AMD), ORCL (Oracle), CRM (Salesforce), ADBE (Adobe), CSCO (Cisco), JPM (JPMorgan), BAC (Bank of America), C (Citigroup), WFC (Wells Fargo), GS (Goldman Sachs), MS (Morgan Stanley), V (Visa), MA (Mastercard), AXP (American Express), BLK (BlackRock), WMT (Walmart), COST (Costco), TGT (Target), KO (Coca-Cola), PEP (PepsiCo), PG (Procter & Gamble), NKE (Nike), MCD (McDonald's), HD (Home Depot), JNJ (Johnson & Johnson), PFE (Pfizer), MRK (Merck), UNH (UnitedHealth), TSLA (Tesla), F (Ford), GM (General Motors), XOM (Exxon Mobil), CVX (Chevron), CAT (Caterpillar)\nCLUSTERS: big_tech, banks_finance, consumer_retail, health, industrial_auto_energy\nCONCEPTS: Revenue, CostOfRevenue, GrossProfit, ResearchAndDevelopment, SellingGeneralAdmin, OperatingIncome, PretaxIncome, IncomeTax, NetIncome, ConsolidatedNetIncome, EPSDiluted, EPSBasic, SharesDiluted, SharesBasic, InterestExpense, SalesAndMarketing, GeneralAndAdministrative, NoninterestIncome, NetInterestIncome, ProvisionForCreditLosses, NoninterestExpense, Cash, TotalCurrentAssets, TotalAssets, TotalCurrentLiabilities, TotalLiabilities, ShareholdersEquity, TotalEquity, AccountsReceivable, PropertyPlantEquipment, IntangibleAssets, AccountsPayable, RetainedEarnings, Loans, TotalLiabilitiesAndEquity, Inventory, Goodwill, LongTermDebt, Deposits, OperatingCashFlow, InvestingCashFlow, FinancingCashFlow, CapitalExpenditures, DepreciationAmortization, StockBasedCompensation, DividendsPaid, ShareRepurchases\nMETRICS: gross_margin, gross_profit, operating_margin, net_margin, rnd_intensity, effective_tax_rate, free_cash_flow, capex_intensity, return_on_equity, return_on_assets, current_ratio, total_liabilities, liabilities_to_equity, asset_turnover, cash_conversion, shareholder_payout, sbc_share_of_revenue\nATTRIBUTES: auditor, auditor_since, auditor_location, state_of_incorporation, fiscal_year_end, hq_city, hq_state, exchange, trading_symbol, employees, shares_outstanding, public_float_usd, ceo, cfo",
+ "user": "Goldman Sachs' 2025 annual report shows a different 2024 pre-tax profit for Global Banking & Markets than its 2024 annual report did. By how much was the 2024 figure changed?",
+ "answer": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "restated",
+    "company": "GS",
+    "item": "Global Banking & Markets operating income",
+    "period": {
+     "fy": 2024
+    }
+   }
+  ],
+  "answer": "s1"
+ },
+ "seconds": 0.0,
+ "usage": {
+  "out": 42
+ },
+ "source": "Kaggle GPU Ollama, finetune/v3"
+}

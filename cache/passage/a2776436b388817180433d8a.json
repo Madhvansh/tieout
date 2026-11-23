@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was Google advertising revenue of Alphabet Inc. for fiscal year 2024 (for a balance: at the end of fiscal year 2024)? Give the one figure the filing prints for it.",
+ "abstain": false,
+ "answer": "264,590 million",
+ "pred": {
+  "kind": "number",
+  "value": 264590000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "GOOGL",
+   "doc": "GOOGL_FY2024_10K",
+   "page": 37,
+   "value": 264590.0,
+   "label": "Google advertising",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

@@ -92,10 +92,12 @@ def heldout_block() -> tuple:
         tiers = ", ".join(f"{t} {bt[t]['correct']}/{bt[t]['n']}" for t in TIERS if bt.get(t, {}).get("n"))
         notes.append(f"Right by tier: {tiers}. Wrong while VERIFIED: {o.get('silent_wrong', 0)}.")
         lo, hi = o.get("accuracy_ci95") or (None, None)
-        notes.append(f"Under the strict scorer of 21 November: {o.get('correct_strict', o['correct'])}/{o['n']}. "
+        notes.append(f"Under the strict scorer (the rules of 21 November, before six were relaxed after misses were "
+                     f"read): {o.get('correct_strict', o['correct'])}/{o['n']}. "
                      f"95% interval of the accuracy: {pct(lo)} to {pct(hi)}.")
     else:
-        notes.append(f"Right by tier: {GAP}. Under the strict scorer of 21 November: {GAP}.")
+        notes.append(f"Right by tier: {GAP}. Under the strict scorer (the rules of 21 November, before six were "
+                     f"relaxed after misses were read): {GAP}.")
     chk = brief_check(["heldout_v2.json"]).get("heldout_v2.json")
     notes.append(f"`python scripts/check_brief.py results/heldout_v2.json`: {chk[0]} answers served, {chk[1]} proof "
                  f"leaves, {chk[2]} of them graph nodes." if chk else
@@ -132,7 +134,7 @@ def rounds_block(prefix: str) -> tuple:
     tex = []
     tot = [0, 0, 0, 0, 0]
     pooled = {r["round"]: r for r in (load("pooled_first_runs.json") or {}).get("rounds", [])}
-    for r in range(3, 11):
+    for r in range(3, 12):
         p = pooled.get(r) if r != 10 else None
         if p:
             n, fin, strict = p["n"], p["first_run_final"], p["first_run_strict"]
@@ -159,6 +161,11 @@ def rounds_block(prefix: str) -> tuple:
             f"`results/first_runs/`, `results/{prefix}_r<N>.json` (current code). Round 10's row is the first run of "
             "the corrected design, made before anyone read the round's answers; a version withdrawn the same night "
             "(it served answers the text reader wrote) had run it once before.")
+    judged = score(load("first_runs/round11_judge.json")).get("overall")
+    if judged:                                        # round 11 was answered twice before anyone read an answer
+        note += (f" Round 11's row is its first run, on the code before the judge between two derivations was merged; "
+                 f"run once more with the judge, still before anyone had read an answer, it scored "
+                 f"{judged['correct']}/{judged['n']} (`results/first_runs/round11_judge.json`).")
     return "\n".join(lines) + "\n\n" + note, "\n".join(tex)
 
 

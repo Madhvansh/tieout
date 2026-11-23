@@ -1,0 +1,18 @@
+{
+ "model": "gemini:gemini-3.5-flash-lite",
+ "system": "You say how an SEC filing would label a financial item. Given an item phrase from a question\nand the company, list up to 4 other labels the company's annual or quarterly report might print for the\nsame item: its own term for it, a synonym, an abbreviation spelled out or the reverse. Never a number.\nAnswer as JSON: {\"labels\": [\"...\", \"...\"]}",
+ "user": "Company: BlackRock Inc. (BLK)\nItem: Private markets base fee revenue",
+ "answer": {
+  "labels": [
+   "Private equity fee income",
+   "Illiquid alternative management fees",
+   "Private markets advisory and transactional fees",
+   "Private markets revenue"
+  ]
+ },
+ "seconds": 12.47,
+ "usage": {
+  "in": 98,
+  "out": 47
+ }
+}

@@ -1,0 +1,15 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What share of JPMorgan Chase's 2025 net income came from its Commercial & Investment Bank?",
+ "abstain": true,
+ "answer": "The provided passages do not contain the net income for the Commercial & Investment Bank segment for 2025.",
+ "pred": {
+  "kind": "abstain",
+  "value": null
+ },
+ "unit": "none",
+ "facts": [],
+ "facts_ok": false
+}

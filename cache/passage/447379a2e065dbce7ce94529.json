@@ -1,0 +1,76 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Mastercard has been leaning on its services business. By how many percentage points did value-added services and solutions grow as a share of its net revenue from 2024 to 2025?",
+ "abstain": false,
+ "answer": "Value-added services and solutions grew as a share of net revenue by approximately 2.16 percentage points from 2024 to 2025.",
+ "pred": {
+  "kind": "number",
+  "value": 0.02158021021200508
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "MA",
+   "doc": "MA_FY2025_10K",
+   "page": 57,
+   "value": 19476.0,
+   "label": "Payment network",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "MA",
+   "doc": "MA_FY2025_10K",
+   "page": 57,
+   "value": 13315.0,
+   "label": "Value-added services and solutions",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "MA",
+   "doc": "MA_FY2025_10K",
+   "page": 57,
+   "value": 32791.0,
+   "label": "Net revenue",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "MA",
+   "doc": "MA_FY2025_10K",
+   "page": 57,
+   "value": 17335.0,
+   "label": "Payment network",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "MA",
+   "doc": "MA_FY2025_10K",
+   "page": 57,
+   "value": 10832.0,
+   "label": "Value-added services and solutions",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "MA",
+   "doc": "MA_FY2025_10K",
+   "page": 57,
+   "value": 28167.0,
+   "label": "Net revenue",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

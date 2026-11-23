@@ -1,0 +1,34 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What share of Nike's total fiscal 2026 revenue came from Greater China?",
+ "abstain": false,
+ "answer": "0.126018362645",
+ "pred": {
+  "kind": "number",
+  "value": 0.126018362645
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "NKE",
+   "doc": "NKE_FY2026_10K",
+   "page": 39,
+   "value": 5847.0,
+   "label": "Greater China Revenues, fiscal 2026",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "NKE",
+   "doc": "NKE_FY2026_10K",
+   "page": 39,
+   "value": 46398.0,
+   "label": "TOTAL NIKE, INC. REVENUES, fiscal 2026",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

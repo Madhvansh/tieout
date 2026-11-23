@@ -1,0 +1,15 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was Commercial & Investment Bank net income of JPMorgan Chase & Co. for fiscal year 2025 (for a balance: at the end of fiscal year 2025)? Give the one figure the filing prints for it.",
+ "abstain": true,
+ "answer": "For fiscal year 2025, JPMorgan Chase & Co.'s Commercial & Investment Bank net income was not explicitly printed as a separate line item in the provided passages; however, segment results show net income for the segments collectively or the passages abstain from giving the exact CIB net income figure.",
+ "pred": {
+  "kind": "abstain",
+  "value": null
+ },
+ "unit": "USD",
+ "facts": [],
+ "facts_ok": false
+}

@@ -1,0 +1,34 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Caterpillar has been buying back a lot of stock. By what percent did its diluted share count used for EPS shrink from 2022 to 2025?",
+ "abstain": false,
+ "answer": "10.96%",
+ "pred": {
+  "kind": "number",
+  "value": 0.109577677224
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "CAT",
+   "doc": "CAT_FY2025_10K",
+   "page": 108,
+   "value": 530400000.0,
+   "label": "Average common shares outstanding for fully diluted computation (C)",
+   "in_context": true,
+   "printed": false
+  },
+  {
+   "ticker": "CAT",
+   "doc": "CAT_FY2025_10K",
+   "page": 108,
+   "value": 472300000.0,
+   "label": "Average common shares outstanding for fully diluted computation (C)",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": false
+}

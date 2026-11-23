@@ -5,3 +5,4 @@ out_*/
 .venv/
 __pycache__/
 *.log
+b2_snap/

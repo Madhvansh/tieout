@@ -1,0 +1,61 @@
+{
+ "what": "figures the text reader cites that are nodes of the graph (passage.node_for), over saved replies",
+ "command": "python scripts/jd_resolve_rate.py --files results/jd_resolve_rate_files.txt",
+ "before": null,
+ "file_list": "results/jd_resolve_rate_files.txt",
+ "files": 369,
+ "all_replies": {
+  "replies": 369,
+  "answers": 279,
+  "cited figures": 579,
+  "cited figures that are nodes": 546,
+  "control: figures with a page to move": 579,
+  "numeric answers": 255,
+  "numeric answers that are one node": 129,
+  "answers that are a ranking or words": 24,
+  "abstains or facts not on their pages": 90,
+  "control: nodes found on the moved page": 15,
+  "node_kinds": {
+   "row": 402,
+   "sentence": 144
+  },
+  "share_of_cited_figures_that_are_nodes": 0.943,
+  "control_share_on_a_page_moved_by_7": 0.0259
+ },
+ "whole_questions": {
+  "replies": 276,
+  "answers": 213,
+  "cited figures": 505,
+  "cited figures that are nodes": 479,
+  "control: figures with a page to move": 505,
+  "numeric answers": 191,
+  "numeric answers that are one node": 78,
+  "answers that are a ranking or words": 22,
+  "abstains or facts not on their pages": 63,
+  "control: nodes found on the moved page": 13,
+  "node_kinds": {
+   "row": 341,
+   "sentence": 138
+  },
+  "share_of_cited_figures_that_are_nodes": 0.9485,
+  "control_share_on_a_page_moved_by_7": 0.0257
+ },
+ "one_line_of_a_plan": {
+  "replies": 93,
+  "answers": 66,
+  "cited figures": 74,
+  "cited figures that are nodes": 67,
+  "control: figures with a page to move": 74,
+  "numeric answers": 64,
+  "numeric answers that are one node": 51,
+  "abstains or facts not on their pages": 27,
+  "control: nodes found on the moved page": 2,
+  "answers that are a ranking or words": 2,
+  "node_kinds": {
+   "row": 61,
+   "sentence": 6
+  },
+  "share_of_cited_figures_that_are_nodes": 0.9054,
+  "control_share_on_a_page_moved_by_7": 0.027
+ }
+}

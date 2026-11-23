@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How much did Chevron spend on capital expenditures in 2025 according to its cash flow statement?",
+ "abstain": false,
+ "answer": "17,347 million",
+ "pred": {
+  "kind": "number",
+  "value": 17347000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "CVX",
+   "doc": "CVX_FY2025_10K",
+   "page": 69,
+   "value": 17347000000.0,
+   "label": "Capital expenditures",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

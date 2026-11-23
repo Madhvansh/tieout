@@ -1,0 +1,44 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Which carmaker had the larger workforce at the end of 2025, Ford or GM, and by roughly how many people?",
+ "abstain": false,
+ "answer": "Ford had the larger workforce at the end of 2025 by roughly 14,000 people.",
+ "pred": {
+  "kind": "companies",
+  "value": [
+   [
+    "Ford",
+    null
+   ],
+   [
+    "14000",
+    null
+   ]
+  ]
+ },
+ "unit": "text",
+ "facts": [
+  {
+   "ticker": "F",
+   "doc": "F_FY2025_10K",
+   "page": 5,
+   "value": 169.0,
+   "label": "Total Company",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "GM",
+   "doc": "GM_FY2025_10K",
+   "page": 10,
+   "value": 155.0,
+   "label": "Total Worldwide",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

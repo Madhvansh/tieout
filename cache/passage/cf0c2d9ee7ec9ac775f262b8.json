@@ -1,0 +1,26 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How much revenue did AMD's Data Center segment generate in 2025?",
+ "abstain": false,
+ "answer": "16,635 million USD",
+ "pred": {
+  "kind": "number",
+  "value": 16635000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "AMD",
+   "doc": "AMD_FY2025_10K",
+   "page": 55,
+   "value": 16635.0,
+   "label": "Net revenue: Data Center",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

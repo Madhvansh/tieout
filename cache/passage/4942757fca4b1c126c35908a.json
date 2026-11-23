@@ -1,0 +1,26 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How much contracted but not yet recognized revenue (total remaining performance obligation) did Salesforce have at the end of fiscal 2026?",
+ "abstain": false,
+ "answer": "Salesforce had $72.4 billion of total remaining performance obligation at the end of fiscal 2026.",
+ "pred": {
+  "kind": "number",
+  "value": 72400000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "CRM",
+   "doc": "CRM_FY2026_10K",
+   "page": 3,
+   "value": 72.4,
+   "label": "Remaining performance obligation Total As of January 31, 2026",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

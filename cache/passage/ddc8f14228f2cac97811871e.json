@@ -1,0 +1,15 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Which bank earned more in 2025, Wells Fargo or U.S. Bancorp, and by how much?",
+ "abstain": true,
+ "answer": "The provided passages do not contain financial information for U.S. Bancorp to determine which bank earned more or by how much.",
+ "pred": {
+  "kind": "abstain",
+  "value": null
+ },
+ "unit": "none",
+ "facts": [],
+ "facts_ok": false
+}

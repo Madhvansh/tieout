@@ -9,7 +9,7 @@
    "restated",
    "rank"
   ],
-  "seconds": 9.1,
+  "seconds": 12.1,
   "executor_errors": 0,
   "correct_by_magnitude_only": 48,
   "restated_questions_whose_key_is_not_zero": 14,
@@ -337,68 +337,68 @@
  "summary": {
   "overall": {
    "n": 8667,
-   "correct": 7833,
-   "abstained": 709,
+   "correct": 8083,
+   "abstained": 517,
    "wrong_unverified": 0,
-   "wrong_silent": 125,
+   "wrong_silent": 67,
    "silent_wrong_equal_to_second_definition": 46,
-   "accuracy": 0.9038,
-   "accuracy_when_answered": 0.9843,
-   "silent_wrong_rate": 0.0144
+   "accuracy": 0.9326,
+   "accuracy_when_answered": 0.9918,
+   "silent_wrong_rate": 0.0077
   },
   "by_family": {
    "fact": {
     "n": 4016,
-    "correct": 3599,
-    "abstained": 377,
+    "correct": 3721,
+    "abstained": 263,
     "wrong_unverified": 0,
-    "wrong_silent": 40,
+    "wrong_silent": 32,
     "silent_wrong_equal_to_second_definition": 23,
-    "accuracy": 0.8962,
-    "accuracy_when_answered": 0.989,
-    "silent_wrong_rate": 0.01
+    "accuracy": 0.9265,
+    "accuracy_when_answered": 0.9915,
+    "silent_wrong_rate": 0.008
    },
    "growth": {
     "n": 2337,
-    "correct": 2061,
-    "abstained": 222,
+    "correct": 2161,
+    "abstained": 157,
     "wrong_unverified": 0,
-    "wrong_silent": 54,
+    "wrong_silent": 19,
     "silent_wrong_equal_to_second_definition": 14,
-    "accuracy": 0.8819,
-    "accuracy_when_answered": 0.9745,
-    "silent_wrong_rate": 0.0231
+    "accuracy": 0.9247,
+    "accuracy_when_answered": 0.9913,
+    "silent_wrong_rate": 0.0081
    },
    "metric": {
     "n": 1675,
-    "correct": 1620,
-    "abstained": 33,
+    "correct": 1636,
+    "abstained": 28,
     "wrong_unverified": 0,
-    "wrong_silent": 22,
+    "wrong_silent": 11,
     "silent_wrong_equal_to_second_definition": 9,
-    "accuracy": 0.9672,
-    "accuracy_when_answered": 0.9866,
-    "silent_wrong_rate": 0.0131
+    "accuracy": 0.9767,
+    "accuracy_when_answered": 0.9933,
+    "silent_wrong_rate": 0.0066
    },
    "rank": {
     "n": 163,
-    "correct": 114,
+    "correct": 118,
     "abstained": 40,
     "wrong_unverified": 0,
-    "wrong_silent": 9,
+    "wrong_silent": 5,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.6994,
-    "accuracy_when_answered": 0.9268,
-    "silent_wrong_rate": 0.0552
+    "accuracy": 0.7239,
+    "accuracy_when_answered": 0.9593,
+    "silent_wrong_rate": 0.0307
    },
    "restated": {
     "n": 320,
-    "correct": 291,
-    "abstained": 29,
+    "correct": 299,
+    "abstained": 21,
     "wrong_unverified": 0,
     "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.9094,
+    "accuracy": 0.9344,
     "accuracy_when_answered": 1.0,
     "silent_wrong_rate": 0.0
    },
@@ -417,47 +417,47 @@
   "by_company": {
    "AAPL": {
     "n": 490,
-    "correct": 452,
-    "abstained": 32,
+    "correct": 451,
+    "abstained": 39,
     "wrong_unverified": 0,
-    "wrong_silent": 6,
+    "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.9224,
-    "accuracy_when_answered": 0.9869,
-    "silent_wrong_rate": 0.0122
+    "accuracy": 0.9204,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
    },
    "ADBE": {
     "n": 178,
-    "correct": 166,
-    "abstained": 10,
+    "correct": 176,
+    "abstained": 0,
     "wrong_unverified": 0,
     "wrong_silent": 2,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.9326,
-    "accuracy_when_answered": 0.9881,
+    "accuracy": 0.9888,
+    "accuracy_when_answered": 0.9888,
     "silent_wrong_rate": 0.0112
    },
    "AMD": {
     "n": 185,
-    "correct": 163,
+    "correct": 165,
     "abstained": 5,
     "wrong_unverified": 0,
-    "wrong_silent": 17,
+    "wrong_silent": 15,
     "silent_wrong_equal_to_second_definition": 15,
-    "accuracy": 0.8811,
-    "accuracy_when_answered": 0.9056,
-    "silent_wrong_rate": 0.0919
+    "accuracy": 0.8919,
+    "accuracy_when_answered": 0.9167,
+    "silent_wrong_rate": 0.0811
    },
    "AMZN": {
     "n": 158,
-    "correct": 149,
+    "correct": 156,
     "abstained": 2,
     "wrong_unverified": 0,
-    "wrong_silent": 7,
+    "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.943,
-    "accuracy_when_answered": 0.9551,
-    "silent_wrong_rate": 0.0443
+    "accuracy": 0.9873,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
    },
    "AXP": {
     "n": 152,
@@ -472,25 +472,25 @@
    },
    "BAC": {
     "n": 330,
-    "correct": 294,
-    "abstained": 36,
+    "correct": 330,
+    "abstained": 0,
     "wrong_unverified": 0,
     "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.8909,
+    "accuracy": 1.0,
     "accuracy_when_answered": 1.0,
     "silent_wrong_rate": 0.0
    },
    "BLK": {
     "n": 148,
-    "correct": 129,
-    "abstained": 15,
+    "correct": 136,
+    "abstained": 10,
     "wrong_unverified": 0,
-    "wrong_silent": 4,
+    "wrong_silent": 2,
     "silent_wrong_equal_to_second_definition": 2,
-    "accuracy": 0.8716,
-    "accuracy_when_answered": 0.9699,
-    "silent_wrong_rate": 0.027
+    "accuracy": 0.9189,
+    "accuracy_when_answered": 0.9855,
+    "silent_wrong_rate": 0.0135
    },
    "C": {
     "n": 146,
@@ -516,36 +516,36 @@
    },
    "COST": {
     "n": 176,
-    "correct": 171,
+    "correct": 173,
     "abstained": 3,
     "wrong_unverified": 0,
-    "wrong_silent": 2,
+    "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.9716,
-    "accuracy_when_answered": 0.9884,
-    "silent_wrong_rate": 0.0114
+    "accuracy": 0.983,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
    },
    "CRM": {
     "n": 185,
-    "correct": 170,
-    "abstained": 10,
+    "correct": 185,
+    "abstained": 0,
     "wrong_unverified": 0,
-    "wrong_silent": 5,
+    "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.9189,
-    "accuracy_when_answered": 0.9714,
-    "silent_wrong_rate": 0.027
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
    },
    "CSCO": {
     "n": 200,
-    "correct": 188,
+    "correct": 190,
     "abstained": 10,
     "wrong_unverified": 0,
-    "wrong_silent": 2,
+    "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.94,
-    "accuracy_when_answered": 0.9895,
-    "silent_wrong_rate": 0.01
+    "accuracy": 0.95,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
    },
    "CVX": {
     "n": 159,
@@ -593,12 +593,12 @@
    },
    "GS": {
     "n": 255,
-    "correct": 227,
-    "abstained": 28,
+    "correct": 243,
+    "abstained": 12,
     "wrong_unverified": 0,
     "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.8902,
+    "accuracy": 0.9529,
     "accuracy_when_answered": 1.0,
     "silent_wrong_rate": 0.0
    },
@@ -615,23 +615,23 @@
    },
    "JNJ": {
     "n": 420,
-    "correct": 331,
-    "abstained": 88,
-    "wrong_unverified": 0,
-    "wrong_silent": 1,
-    "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.7881,
-    "accuracy_when_answered": 0.997,
-    "silent_wrong_rate": 0.0024
-   },
-   "JPM": {
-    "n": 138,
-    "correct": 117,
-    "abstained": 21,
+    "correct": 402,
+    "abstained": 18,
     "wrong_unverified": 0,
     "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.8478,
+    "accuracy": 0.9571,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "JPM": {
+    "n": 138,
+    "correct": 127,
+    "abstained": 11,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9203,
     "accuracy_when_answered": 1.0,
     "silent_wrong_rate": 0.0
    },
@@ -648,25 +648,25 @@
    },
    "MA": {
     "n": 158,
-    "correct": 153,
+    "correct": 155,
     "abstained": 0,
     "wrong_unverified": 0,
-    "wrong_silent": 5,
+    "wrong_silent": 3,
     "silent_wrong_equal_to_second_definition": 3,
-    "accuracy": 0.9684,
-    "accuracy_when_answered": 0.9684,
-    "silent_wrong_rate": 0.0316
+    "accuracy": 0.981,
+    "accuracy_when_answered": 0.981,
+    "silent_wrong_rate": 0.019
    },
    "MCD": {
     "n": 153,
-    "correct": 125,
-    "abstained": 25,
+    "correct": 139,
+    "abstained": 8,
     "wrong_unverified": 0,
-    "wrong_silent": 3,
+    "wrong_silent": 6,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.817,
-    "accuracy_when_answered": 0.9766,
-    "silent_wrong_rate": 0.0196
+    "accuracy": 0.9085,
+    "accuracy_when_answered": 0.9586,
+    "silent_wrong_rate": 0.0392
    },
    "META": {
     "n": 180,
@@ -714,36 +714,36 @@
    },
    "NKE": {
     "n": 169,
-    "correct": 154,
-    "abstained": 15,
+    "correct": 164,
+    "abstained": 5,
     "wrong_unverified": 0,
     "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.9112,
+    "accuracy": 0.9704,
     "accuracy_when_answered": 1.0,
     "silent_wrong_rate": 0.0
    },
    "NVDA": {
     "n": 195,
-    "correct": 193,
+    "correct": 195,
     "abstained": 0,
     "wrong_unverified": 0,
-    "wrong_silent": 2,
+    "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.9897,
-    "accuracy_when_answered": 0.9897,
-    "silent_wrong_rate": 0.0103
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
    },
    "ORCL": {
     "n": 169,
-    "correct": 151,
+    "correct": 153,
     "abstained": 11,
     "wrong_unverified": 0,
-    "wrong_silent": 7,
+    "wrong_silent": 5,
     "silent_wrong_equal_to_second_definition": 5,
-    "accuracy": 0.8935,
-    "accuracy_when_answered": 0.9557,
-    "silent_wrong_rate": 0.0414
+    "accuracy": 0.9053,
+    "accuracy_when_answered": 0.9684,
+    "silent_wrong_rate": 0.0296
    },
    "PEP": {
     "n": 197,
@@ -758,78 +758,78 @@
    },
    "PFE": {
     "n": 162,
-    "correct": 150,
-    "abstained": 7,
-    "wrong_unverified": 0,
-    "wrong_silent": 5,
-    "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.9259,
-    "accuracy_when_answered": 0.9677,
-    "silent_wrong_rate": 0.0309
-   },
-   "PG": {
-    "n": 181,
-    "correct": 161,
-    "abstained": 18,
+    "correct": 148,
+    "abstained": 12,
     "wrong_unverified": 0,
     "wrong_silent": 2,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.8895,
-    "accuracy_when_answered": 0.9877,
-    "silent_wrong_rate": 0.011
+    "accuracy": 0.9136,
+    "accuracy_when_answered": 0.9867,
+    "silent_wrong_rate": 0.0123
    },
-   "TGT": {
-    "n": 156,
-    "correct": 143,
-    "abstained": 13,
+   "PG": {
+    "n": 181,
+    "correct": 163,
+    "abstained": 18,
     "wrong_unverified": 0,
     "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.9167,
+    "accuracy": 0.9006,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "TGT": {
+    "n": 156,
+    "correct": 153,
+    "abstained": 3,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9808,
     "accuracy_when_answered": 1.0,
     "silent_wrong_rate": 0.0
    },
    "TSLA": {
     "n": 182,
-    "correct": 172,
+    "correct": 174,
     "abstained": 3,
     "wrong_unverified": 0,
-    "wrong_silent": 7,
+    "wrong_silent": 5,
     "silent_wrong_equal_to_second_definition": 5,
-    "accuracy": 0.9451,
-    "accuracy_when_answered": 0.9609,
-    "silent_wrong_rate": 0.0385
+    "accuracy": 0.956,
+    "accuracy_when_answered": 0.9721,
+    "silent_wrong_rate": 0.0275
    },
    "UNH": {
     "n": 173,
-    "correct": 158,
+    "correct": 165,
     "abstained": 8,
-    "wrong_unverified": 0,
-    "wrong_silent": 7,
-    "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.9133,
-    "accuracy_when_answered": 0.9576,
-    "silent_wrong_rate": 0.0405
-   },
-   "V": {
-    "n": 146,
-    "correct": 133,
-    "abstained": 3,
-    "wrong_unverified": 0,
-    "wrong_silent": 10,
-    "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.911,
-    "accuracy_when_answered": 0.9301,
-    "silent_wrong_rate": 0.0685
-   },
-   "WFC": {
-    "n": 139,
-    "correct": 116,
-    "abstained": 23,
     "wrong_unverified": 0,
     "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.8345,
+    "accuracy": 0.9538,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "V": {
+    "n": 146,
+    "correct": 138,
+    "abstained": 8,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9452,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "WFC": {
+    "n": 139,
+    "correct": 131,
+    "abstained": 8,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9424,
     "accuracy_when_answered": 1.0,
     "silent_wrong_rate": 0.0
    },
@@ -857,46 +857,46 @@
    },
    "cluster:banks_finance": {
     "n": 30,
-    "correct": 18,
-    "abstained": 8,
+    "correct": 19,
+    "abstained": 9,
     "wrong_unverified": 0,
-    "wrong_silent": 4,
+    "wrong_silent": 2,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.6,
-    "accuracy_when_answered": 0.8182,
-    "silent_wrong_rate": 0.1333
+    "accuracy": 0.6333,
+    "accuracy_when_answered": 0.9048,
+    "silent_wrong_rate": 0.0667
    },
    "cluster:big_tech": {
     "n": 37,
     "correct": 28,
+    "abstained": 8,
+    "wrong_unverified": 0,
+    "wrong_silent": 1,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.7568,
+    "accuracy_when_answered": 0.9655,
+    "silent_wrong_rate": 0.027
+   },
+   "cluster:consumer_retail": {
+    "n": 36,
+    "correct": 28,
+    "abstained": 8,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.7778,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "cluster:health": {
+    "n": 28,
+    "correct": 19,
     "abstained": 7,
     "wrong_unverified": 0,
     "wrong_silent": 2,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.7568,
-    "accuracy_when_answered": 0.9333,
-    "silent_wrong_rate": 0.0541
-   },
-   "cluster:consumer_retail": {
-    "n": 36,
-    "correct": 26,
-    "abstained": 9,
-    "wrong_unverified": 0,
-    "wrong_silent": 1,
-    "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.7222,
-    "accuracy_when_answered": 0.963,
-    "silent_wrong_rate": 0.0278
-   },
-   "cluster:health": {
-    "n": 28,
-    "correct": 18,
-    "abstained": 8,
-    "wrong_unverified": 0,
-    "wrong_silent": 2,
-    "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.6429,
-    "accuracy_when_answered": 0.9,
+    "accuracy": 0.6786,
+    "accuracy_when_answered": 0.9048,
     "silent_wrong_rate": 0.0714
    },
    "cluster:industrial_auto_energy": {
@@ -969,12 +969,12 @@
    },
    "CostOfRevenue": {
     "n": 179,
-    "correct": 177,
-    "abstained": 2,
+    "correct": 179,
+    "abstained": 0,
     "wrong_unverified": 0,
     "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.9888,
+    "accuracy": 1.0,
     "accuracy_when_answered": 1.0,
     "silent_wrong_rate": 0.0
    },
@@ -1002,23 +1002,23 @@
    },
    "EPSBasic": {
     "n": 250,
-    "correct": 179,
-    "abstained": 69,
+    "correct": 215,
+    "abstained": 33,
     "wrong_unverified": 0,
     "wrong_silent": 2,
     "silent_wrong_equal_to_second_definition": 2,
-    "accuracy": 0.716,
-    "accuracy_when_answered": 0.989,
+    "accuracy": 0.86,
+    "accuracy_when_answered": 0.9908,
     "silent_wrong_rate": 0.008
    },
    "EPSDiluted": {
     "n": 250,
-    "correct": 193,
-    "abstained": 57,
+    "correct": 211,
+    "abstained": 39,
     "wrong_unverified": 0,
     "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.772,
+    "accuracy": 0.844,
     "accuracy_when_answered": 1.0,
     "silent_wrong_rate": 0.0
    },
@@ -1057,36 +1057,36 @@
    },
    "GrossProfit": {
     "n": 97,
-    "correct": 95,
-    "abstained": 2,
+    "correct": 97,
+    "abstained": 0,
     "wrong_unverified": 0,
     "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.9794,
+    "accuracy": 1.0,
     "accuracy_when_answered": 1.0,
     "silent_wrong_rate": 0.0
    },
    "IncomeTax": {
     "n": 265,
-    "correct": 255,
-    "abstained": 2,
+    "correct": 261,
+    "abstained": 0,
     "wrong_unverified": 0,
-    "wrong_silent": 8,
+    "wrong_silent": 4,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.9623,
-    "accuracy_when_answered": 0.9696,
-    "silent_wrong_rate": 0.0302
+    "accuracy": 0.9849,
+    "accuracy_when_answered": 0.9849,
+    "silent_wrong_rate": 0.0151
    },
    "InterestExpense": {
     "n": 184,
-    "correct": 108,
-    "abstained": 48,
+    "correct": 136,
+    "abstained": 46,
     "wrong_unverified": 0,
-    "wrong_silent": 28,
+    "wrong_silent": 2,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.587,
-    "accuracy_when_answered": 0.7941,
-    "silent_wrong_rate": 0.1522
+    "accuracy": 0.7391,
+    "accuracy_when_answered": 0.9855,
+    "silent_wrong_rate": 0.0109
    },
    "Inventory": {
     "n": 96,
@@ -1112,23 +1112,23 @@
    },
    "LongTermDebt": {
     "n": 91,
-    "correct": 78,
-    "abstained": 6,
-    "wrong_unverified": 0,
-    "wrong_silent": 7,
-    "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.8571,
-    "accuracy_when_answered": 0.9176,
-    "silent_wrong_rate": 0.0769
-   },
-   "NetIncome": {
-    "n": 250,
-    "correct": 248,
-    "abstained": 2,
+    "correct": 77,
+    "abstained": 14,
     "wrong_unverified": 0,
     "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.992,
+    "accuracy": 0.8462,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "NetIncome": {
+    "n": 250,
+    "correct": 250,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
     "accuracy_when_answered": 1.0,
     "silent_wrong_rate": 0.0
    },
@@ -1189,25 +1189,25 @@
    },
    "PretaxIncome": {
     "n": 255,
-    "correct": 248,
-    "abstained": 2,
+    "correct": 250,
+    "abstained": 0,
     "wrong_unverified": 0,
     "wrong_silent": 5,
     "silent_wrong_equal_to_second_definition": 5,
-    "accuracy": 0.9725,
-    "accuracy_when_answered": 0.9802,
+    "accuracy": 0.9804,
+    "accuracy_when_answered": 0.9804,
     "silent_wrong_rate": 0.0196
    },
    "PropertyPlantEquipment": {
     "n": 123,
     "correct": 107,
-    "abstained": 10,
+    "abstained": 15,
     "wrong_unverified": 0,
-    "wrong_silent": 6,
+    "wrong_silent": 1,
     "silent_wrong_equal_to_second_definition": 0,
     "accuracy": 0.8699,
-    "accuracy_when_answered": 0.9469,
-    "silent_wrong_rate": 0.0488
+    "accuracy_when_answered": 0.9907,
+    "silent_wrong_rate": 0.0081
    },
    "ResearchAndDevelopment": {
     "n": 114,
@@ -1233,12 +1233,12 @@
    },
    "Revenue": {
     "n": 265,
-    "correct": 263,
-    "abstained": 2,
+    "correct": 265,
+    "abstained": 0,
     "wrong_unverified": 0,
     "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.9925,
+    "accuracy": 1.0,
     "accuracy_when_answered": 1.0,
     "silent_wrong_rate": 0.0
    },
@@ -1255,13 +1255,13 @@
    },
    "SellingGeneralAdmin": {
     "n": 144,
-    "correct": 130,
-    "abstained": 13,
+    "correct": 132,
+    "abstained": 11,
     "wrong_unverified": 0,
     "wrong_silent": 1,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.9028,
-    "accuracy_when_answered": 0.9924,
+    "accuracy": 0.9167,
+    "accuracy_when_answered": 0.9925,
     "silent_wrong_rate": 0.0069
    },
    "ShareRepurchases": {
@@ -1288,24 +1288,24 @@
    },
    "SharesBasic": {
     "n": 250,
-    "correct": 115,
-    "abstained": 135,
+    "correct": 184,
+    "abstained": 63,
     "wrong_unverified": 0,
-    "wrong_silent": 0,
+    "wrong_silent": 3,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.46,
-    "accuracy_when_answered": 1.0,
-    "silent_wrong_rate": 0.0
+    "accuracy": 0.736,
+    "accuracy_when_answered": 0.984,
+    "silent_wrong_rate": 0.012
    },
    "SharesDiluted": {
     "n": 242,
-    "correct": 110,
-    "abstained": 127,
+    "correct": 172,
+    "abstained": 65,
     "wrong_unverified": 0,
     "wrong_silent": 5,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.4545,
-    "accuracy_when_answered": 0.9565,
+    "accuracy": 0.7107,
+    "accuracy_when_answered": 0.9718,
     "silent_wrong_rate": 0.0207
    },
    "StockBasedCompensation": {
@@ -1355,13 +1355,13 @@
    "TotalEquity": {
     "n": 160,
     "correct": 151,
-    "abstained": 0,
+    "abstained": 4,
     "wrong_unverified": 0,
-    "wrong_silent": 9,
+    "wrong_silent": 5,
     "silent_wrong_equal_to_second_definition": 5,
     "accuracy": 0.9437,
-    "accuracy_when_answered": 0.9437,
-    "silent_wrong_rate": 0.0563
+    "accuracy_when_answered": 0.9679,
+    "silent_wrong_rate": 0.0312
    },
    "TotalLiabilities": {
     "n": 125,
@@ -1376,14 +1376,14 @@
    },
    "TotalLiabilitiesAndEquity": {
     "n": 160,
-    "correct": 156,
+    "correct": 160,
     "abstained": 0,
     "wrong_unverified": 0,
-    "wrong_silent": 4,
+    "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.975,
-    "accuracy_when_answered": 0.975,
-    "silent_wrong_rate": 0.025
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
    },
    "asset_turnover": {
     "n": 100,
@@ -1398,24 +1398,24 @@
    },
    "capex_intensity": {
     "n": 125,
-    "correct": 123,
-    "abstained": 2,
+    "correct": 124,
+    "abstained": 1,
     "wrong_unverified": 0,
     "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.984,
+    "accuracy": 0.992,
     "accuracy_when_answered": 1.0,
     "silent_wrong_rate": 0.0
    },
    "cash_conversion": {
     "n": 132,
-    "correct": 129,
-    "abstained": 2,
+    "correct": 130,
+    "abstained": 1,
     "wrong_unverified": 0,
     "wrong_silent": 1,
     "silent_wrong_equal_to_second_definition": 1,
-    "accuracy": 0.9773,
-    "accuracy_when_answered": 0.9923,
+    "accuracy": 0.9848,
+    "accuracy_when_answered": 0.9924,
     "silent_wrong_rate": 0.0076
    },
    "current_ratio": {
@@ -1431,14 +1431,14 @@
    },
    "effective_tax_rate": {
     "n": 144,
-    "correct": 132,
-    "abstained": 1,
+    "correct": 142,
+    "abstained": 0,
     "wrong_unverified": 0,
-    "wrong_silent": 11,
+    "wrong_silent": 2,
     "silent_wrong_equal_to_second_definition": 2,
-    "accuracy": 0.9167,
-    "accuracy_when_answered": 0.9231,
-    "silent_wrong_rate": 0.0764
+    "accuracy": 0.9861,
+    "accuracy_when_answered": 0.9861,
+    "silent_wrong_rate": 0.0139
    },
    "free_cash_flow": {
     "n": 125,
@@ -1453,45 +1453,45 @@
    },
    "gross_margin": {
     "n": 55,
-    "correct": 54,
-    "abstained": 1,
+    "correct": 55,
+    "abstained": 0,
     "wrong_unverified": 0,
     "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.9818,
+    "accuracy": 1.0,
     "accuracy_when_answered": 1.0,
     "silent_wrong_rate": 0.0
    },
    "gross_profit": {
     "n": 55,
-    "correct": 54,
-    "abstained": 1,
+    "correct": 55,
+    "abstained": 0,
     "wrong_unverified": 0,
     "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.9818,
+    "accuracy": 1.0,
     "accuracy_when_answered": 1.0,
     "silent_wrong_rate": 0.0
    },
    "liabilities_to_equity": {
     "n": 74,
     "correct": 70,
-    "abstained": 0,
+    "abstained": 2,
     "wrong_unverified": 0,
-    "wrong_silent": 4,
+    "wrong_silent": 2,
     "silent_wrong_equal_to_second_definition": 2,
     "accuracy": 0.9459,
-    "accuracy_when_answered": 0.9459,
-    "silent_wrong_rate": 0.0541
+    "accuracy_when_answered": 0.9722,
+    "silent_wrong_rate": 0.027
    },
    "net_margin": {
     "n": 142,
-    "correct": 141,
-    "abstained": 1,
+    "correct": 142,
+    "abstained": 0,
     "wrong_unverified": 0,
     "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.993,
+    "accuracy": 1.0,
     "accuracy_when_answered": 1.0,
     "silent_wrong_rate": 0.0
    },
@@ -1541,12 +1541,12 @@
    },
    "sbc_share_of_revenue": {
     "n": 119,
-    "correct": 112,
-    "abstained": 7,
+    "correct": 113,
+    "abstained": 6,
     "wrong_unverified": 0,
     "wrong_silent": 0,
     "silent_wrong_equal_to_second_definition": 0,
-    "accuracy": 0.9412,
+    "accuracy": 0.9496,
     "accuracy_when_answered": 1.0,
     "silent_wrong_rate": 0.0
    },
@@ -1576,340 +1576,13 @@
  },
  "wrong": [
   {
-   "id": "fact:AAPL:LongTermDebt:FY2026@end",
-   "family": "fact",
-   "company": "AAPL",
-   "concept": "LongTermDebt",
-   "period": "FY2026@end",
-   "key": 68208000000,
-   "got": 9906000000,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "get",
-      "company": "AAPL",
-      "concept": "LongTermDebt",
-      "period": {
-       "fy": 2026
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "LongTermDebt",
-     "period": "FY2026@end",
-     "as": "latest",
-     "tag": "LongTermDebtNoncurrent",
-     "value": 68208000000,
-     "form": "10-K",
-     "filed": "2026-11-03"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "AAPL_FY2026_10K",
-     "page": 37,
-     "label": "Term debt",
-     "printed": "9,906",
-     "period": "FY2026@end",
-     "value": 9906000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "fact:AAPL:LongTermDebt:FY2025@end",
-   "family": "fact",
-   "company": "AAPL",
-   "concept": "LongTermDebt",
-   "period": "FY2025@end",
-   "key": 78328000000,
-   "got": 12350000000,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "get",
-      "company": "AAPL",
-      "concept": "LongTermDebt",
-      "period": {
-       "fy": 2025
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "LongTermDebt",
-     "period": "FY2025@end",
-     "as": "latest",
-     "tag": "LongTermDebtNoncurrent",
-     "value": 78328000000,
-     "form": "10-K",
-     "filed": "2026-11-03"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "AAPL_FY2026_10K",
-     "page": 37,
-     "label": "Term debt",
-     "printed": "12,350",
-     "period": "FY2025@end",
-     "value": 12350000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "fact:AAPL:LongTermDebt:FY2026Q3@end",
-   "family": "fact",
-   "company": "AAPL",
-   "concept": "LongTermDebt",
-   "period": "FY2026Q3@end",
-   "key": 71340000000,
-   "got": 11007000000,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "get",
-      "company": "AAPL",
-      "concept": "LongTermDebt",
-      "period": {
-       "fy": 2026,
-       "q": 3
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "LongTermDebt",
-     "period": "FY2026Q3@end",
-     "as": "latest",
-     "tag": "LongTermDebtNoncurrent",
-     "value": 71340000000,
-     "form": "10-Q",
-     "filed": "2026-07-31"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "AAPL_FY2026_Q3_10Q",
-     "page": 6,
-     "label": "Term debt",
-     "printed": "11,007",
-     "period": "FY2026Q3@end",
-     "value": 11007000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "fact:AAPL:LongTermDebt:FY2024@end",
-   "family": "fact",
-   "company": "AAPL",
-   "concept": "LongTermDebt",
-   "period": "FY2024@end",
-   "key": 85750000000,
-   "got": 10912000000,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "get",
-      "company": "AAPL",
-      "concept": "LongTermDebt",
-      "period": {
-       "fy": 2024
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "LongTermDebt",
-     "period": "FY2024@end",
-     "as": "latest",
-     "tag": "LongTermDebtNoncurrent",
-     "value": 85750000000,
-     "form": "10-K",
-     "filed": "2025-10-31"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "AAPL_FY2025_10K",
-     "page": 34,
-     "label": "Term debt",
-     "printed": "10,912",
-     "period": "FY2024@end",
-     "value": 10912000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:AAPL:LongTermDebt:FY2026@end",
-   "family": "growth",
-   "company": "AAPL",
-   "concept": "LongTermDebt",
-   "period": "FY2026@end",
-   "key": -0.1292,
-   "got": -0.197895,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "AAPL",
-      "concept": "LongTermDebt",
-      "from": {
-       "fy": 2025
-      },
-      "to": {
-       "fy": 2026
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "LongTermDebt",
-     "period": "FY2025@end",
-     "as": "latest",
-     "tag": "LongTermDebtNoncurrent",
-     "value": 78328000000,
-     "form": "10-K",
-     "filed": "2026-11-03"
-    },
-    {
-     "concept": "LongTermDebt",
-     "period": "FY2026@end",
-     "as": "latest",
-     "tag": "LongTermDebtNoncurrent",
-     "value": 68208000000,
-     "form": "10-K",
-     "filed": "2026-11-03"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "AAPL_FY2026_10K",
-     "page": 37,
-     "label": "Term debt",
-     "printed": "12,350",
-     "period": "FY2025@end",
-     "value": 12350000000,
-     "status": "verified"
-    },
-    {
-     "doc": "AAPL_FY2026_10K",
-     "page": 37,
-     "label": "Term debt",
-     "printed": "9,906",
-     "period": "FY2026@end",
-     "value": 9906000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:AAPL:LongTermDebt:FY2025@end",
-   "family": "growth",
-   "company": "AAPL",
-   "concept": "LongTermDebt",
-   "period": "FY2025@end",
-   "key": -0.0865539,
-   "got": 0.131782,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "AAPL",
-      "concept": "LongTermDebt",
-      "from": {
-       "fy": 2024
-      },
-      "to": {
-       "fy": 2025
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "LongTermDebt",
-     "period": "FY2024@end",
-     "as": "latest",
-     "tag": "LongTermDebtNoncurrent",
-     "value": 85750000000,
-     "form": "10-K",
-     "filed": "2025-10-31"
-    },
-    {
-     "concept": "LongTermDebt",
-     "period": "FY2025@end",
-     "as": "latest",
-     "tag": "LongTermDebtNoncurrent",
-     "value": 78328000000,
-     "form": "10-K",
-     "filed": "2026-11-03"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "AAPL_FY2025_10K",
-     "page": 34,
-     "label": "Term debt",
-     "printed": "10,912",
-     "period": "FY2024@end",
-     "value": 10912000000,
-     "status": "verified"
-    },
-    {
-     "doc": "AAPL_FY2026_10K",
-     "page": 37,
-     "label": "Term debt",
-     "printed": "12,350",
-     "period": "FY2025@end",
-     "value": 12350000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:ADBE:InterestExpense:FY2025",
+   "id": "growth:ADBE:SharesDiluted:FY2025",
    "family": "growth",
    "company": "ADBE",
-   "concept": "InterestExpense",
+   "concept": "SharesDiluted",
    "period": "FY2025",
-   "key": 0.556213,
-   "got": -0.556213,
+   "key": -0.0504781,
+   "got": -0.0511111,
    "class": "wrong_silent",
    "alt_definition": false,
    "plan": {
@@ -1918,7 +1591,7 @@
       "id": "s1",
       "op": "change",
       "company": "ADBE",
-      "concept": "InterestExpense",
+      "concept": "SharesDiluted",
       "from": {
        "fy": 2024
       },
@@ -1932,20 +1605,20 @@
    },
    "key_terms": [
     {
-     "concept": "InterestExpense",
+     "concept": "SharesDiluted",
      "period": "FY2024",
      "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 169000000,
+     "tag": "WeightedAverageNumberOfDilutedSharesOutstanding",
+     "value": 449700000,
      "form": "10-K",
      "filed": "2026-01-15"
     },
     {
-     "concept": "InterestExpense",
+     "concept": "SharesDiluted",
      "period": "FY2025",
      "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 263000000,
+     "tag": "WeightedAverageNumberOfDilutedSharesOutstanding",
+     "value": 427000000,
      "form": "10-K",
      "filed": "2026-01-15"
     }
@@ -1954,31 +1627,31 @@
     {
      "doc": "ADBE_FY2025_10K",
      "page": 48,
-     "label": "Interest expense",
-     "printed": "(169)",
+     "label": "Shares used to compute diluted net income per share",
+     "printed": "450",
      "period": "FY2024",
-     "value": -169000000,
+     "value": 450000000,
      "status": "verified"
     },
     {
      "doc": "ADBE_FY2025_10K",
      "page": 48,
-     "label": "Interest expense",
-     "printed": "(263)",
+     "label": "Shares used to compute diluted net income per share",
+     "printed": "427",
      "period": "FY2025",
-     "value": -263000000,
+     "value": 427000000,
      "status": "verified"
     }
    ]
   },
   {
-   "id": "growth:ADBE:InterestExpense:FY2024",
+   "id": "growth:ADBE:SharesDiluted:FY2024",
    "family": "growth",
    "company": "ADBE",
-   "concept": "InterestExpense",
+   "concept": "SharesDiluted",
    "period": "FY2024",
-   "key": 0.495575,
-   "got": -0.495575,
+   "key": -0.0204748,
+   "got": -0.0196078,
    "class": "wrong_silent",
    "alt_definition": false,
    "plan": {
@@ -1987,7 +1660,7 @@
       "id": "s1",
       "op": "change",
       "company": "ADBE",
-      "concept": "InterestExpense",
+      "concept": "SharesDiluted",
       "from": {
        "fy": 2023
       },
@@ -2001,20 +1674,20 @@
    },
    "key_terms": [
     {
-     "concept": "InterestExpense",
+     "concept": "SharesDiluted",
      "period": "FY2023",
      "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 113000000,
+     "tag": "WeightedAverageNumberOfDilutedSharesOutstanding",
+     "value": 459100000,
      "form": "10-K",
      "filed": "2026-01-15"
     },
     {
-     "concept": "InterestExpense",
+     "concept": "SharesDiluted",
      "period": "FY2024",
      "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 169000000,
+     "tag": "WeightedAverageNumberOfDilutedSharesOutstanding",
+     "value": 449700000,
      "form": "10-K",
      "filed": "2026-01-15"
     }
@@ -2023,19 +1696,19 @@
     {
      "doc": "ADBE_FY2025_10K",
      "page": 48,
-     "label": "Interest expense",
-     "printed": "(113)",
+     "label": "Shares used to compute diluted net income per share",
+     "printed": "459",
      "period": "FY2023",
-     "value": -113000000,
+     "value": 459000000,
      "status": "verified"
     },
     {
      "doc": "ADBE_FY2025_10K",
      "page": 48,
-     "label": "Interest expense",
-     "printed": "(169)",
+     "label": "Shares used to compute diluted net income per share",
+     "printed": "450",
      "period": "FY2024",
-     "value": -169000000,
+     "value": 450000000,
      "status": "verified"
     }
    ]
@@ -2318,144 +1991,6 @@
      "printed": "492",
      "period": "FY2023",
      "value": 492000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:AMD:InterestExpense:FY2025",
-   "family": "growth",
-   "company": "AMD",
-   "concept": "InterestExpense",
-   "period": "FY2025",
-   "key": 0.423913,
-   "got": -0.423913,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "AMD",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2024
-      },
-      "to": {
-       "fy": 2025
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "InterestExpense",
-     "value": 92000000,
-     "form": "10-K",
-     "filed": "2026-02-04"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "InterestExpense",
-     "value": 131000000,
-     "form": "10-K",
-     "filed": "2026-02-04"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "AMD_FY2025_10K",
-     "page": 61,
-     "label": "Interest expense",
-     "printed": "(92)",
-     "period": "FY2024",
-     "value": -92000000,
-     "status": "verified"
-    },
-    {
-     "doc": "AMD_FY2025_10K",
-     "page": 61,
-     "label": "Interest expense",
-     "printed": "(131)",
-     "period": "FY2025",
-     "value": -131000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:AMD:InterestExpense:FY2024",
-   "family": "growth",
-   "company": "AMD",
-   "concept": "InterestExpense",
-   "period": "FY2024",
-   "key": -0.132075,
-   "got": 0.132075,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "AMD",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2023
-      },
-      "to": {
-       "fy": 2024
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2023",
-     "as": "latest",
-     "tag": "InterestExpense",
-     "value": 106000000,
-     "form": "10-K",
-     "filed": "2026-02-04"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "InterestExpense",
-     "value": 92000000,
-     "form": "10-K",
-     "filed": "2026-02-04"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "AMD_FY2025_10K",
-     "page": 61,
-     "label": "Interest expense",
-     "printed": "(106)",
-     "period": "FY2023",
-     "value": -106000000,
-     "status": "verified"
-    },
-    {
-     "doc": "AMD_FY2025_10K",
-     "page": 61,
-     "label": "Interest expense",
-     "printed": "(92)",
-     "period": "FY2024",
-     "value": -92000000,
      "status": "verified"
     }
    ]
@@ -2811,8 +2346,8 @@
    "company": "AMD",
    "concept": "effective_tax_rate",
    "period": "FY2023",
-   "key": -0.681102,
-   "got": -0.703252,
+   "key": 0.681102,
+   "got": 0.703252,
    "class": "wrong_silent",
    "alt_definition": true,
    "plan": {
@@ -3066,477 +2601,6 @@
    ]
   },
   {
-   "id": "growth:AMZN:IncomeTax:FY2025",
-   "family": "growth",
-   "company": "AMZN",
-   "concept": "IncomeTax",
-   "period": "FY2025",
-   "key": 1.06012,
-   "got": -1.06012,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "AMZN",
-      "concept": "IncomeTax",
-      "from": {
-       "fy": 2024
-      },
-      "to": {
-       "fy": 2025
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "IncomeTax",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "IncomeTaxExpenseBenefit",
-     "value": 9265000000,
-     "form": "10-K",
-     "filed": "2026-02-06"
-    },
-    {
-     "concept": "IncomeTax",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "IncomeTaxExpenseBenefit",
-     "value": 19087000000,
-     "form": "10-K",
-     "filed": "2026-02-06"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "AMZN_FY2025_10K",
-     "page": 37,
-     "label": "Provision for income taxes",
-     "printed": "(9,265)",
-     "period": "FY2024",
-     "value": -9265000000,
-     "status": "verified"
-    },
-    {
-     "doc": "AMZN_FY2025_10K",
-     "page": 37,
-     "label": "Provision for income taxes",
-     "printed": "(19,087)",
-     "period": "FY2025",
-     "value": -19087000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:AMZN:IncomeTax:FY2024",
-   "family": "growth",
-   "company": "AMZN",
-   "concept": "IncomeTax",
-   "period": "FY2024",
-   "key": 0.301264,
-   "got": -0.301264,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "AMZN",
-      "concept": "IncomeTax",
-      "from": {
-       "fy": 2023
-      },
-      "to": {
-       "fy": 2024
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "IncomeTax",
-     "period": "FY2023",
-     "as": "latest",
-     "tag": "IncomeTaxExpenseBenefit",
-     "value": 7120000000,
-     "form": "10-K",
-     "filed": "2026-02-06"
-    },
-    {
-     "concept": "IncomeTax",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "IncomeTaxExpenseBenefit",
-     "value": 9265000000,
-     "form": "10-K",
-     "filed": "2026-02-06"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "AMZN_FY2025_10K",
-     "page": 37,
-     "label": "Provision for income taxes",
-     "printed": "(7,120)",
-     "period": "FY2023",
-     "value": -7120000000,
-     "status": "verified"
-    },
-    {
-     "doc": "AMZN_FY2025_10K",
-     "page": 37,
-     "label": "Provision for income taxes",
-     "printed": "(9,265)",
-     "period": "FY2024",
-     "value": -9265000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:AMZN:InterestExpense:FY2025",
-   "family": "growth",
-   "company": "AMZN",
-   "concept": "InterestExpense",
-   "period": "FY2025",
-   "key": -0.0548628,
-   "got": 0.0548628,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "AMZN",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2024
-      },
-      "to": {
-       "fy": 2025
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 2406000000,
-     "form": "10-K",
-     "filed": "2026-02-06"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 2274000000,
-     "form": "10-K",
-     "filed": "2026-02-06"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "AMZN_FY2025_10K",
-     "page": 37,
-     "label": "Interest expense",
-     "printed": "(2,406)",
-     "period": "FY2024",
-     "value": -2406000000,
-     "status": "verified"
-    },
-    {
-     "doc": "AMZN_FY2025_10K",
-     "page": 37,
-     "label": "Interest expense",
-     "printed": "(2,274)",
-     "period": "FY2025",
-     "value": -2274000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:AMZN:InterestExpense:FY2024",
-   "family": "growth",
-   "company": "AMZN",
-   "concept": "InterestExpense",
-   "period": "FY2024",
-   "key": -0.243872,
-   "got": 0.243872,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "AMZN",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2023
-      },
-      "to": {
-       "fy": 2024
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2023",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 3182000000,
-     "form": "10-K",
-     "filed": "2026-02-06"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 2406000000,
-     "form": "10-K",
-     "filed": "2026-02-06"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "AMZN_FY2025_10K",
-     "page": 37,
-     "label": "Interest expense",
-     "printed": "(3,182)",
-     "period": "FY2023",
-     "value": -3182000000,
-     "status": "verified"
-    },
-    {
-     "doc": "AMZN_FY2025_10K",
-     "page": 37,
-     "label": "Interest expense",
-     "printed": "(2,406)",
-     "period": "FY2024",
-     "value": -2406000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "metric:AMZN:effective_tax_rate:FY2023",
-   "family": "metric",
-   "company": "AMZN",
-   "concept": "effective_tax_rate",
-   "period": "FY2023",
-   "key": 0.189579,
-   "got": -0.189579,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "metric",
-      "company": "AMZN",
-      "metric": "effective_tax_rate",
-      "period": {
-       "fy": 2023
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "IncomeTax",
-     "period": "FY2023",
-     "as": "latest",
-     "tag": "IncomeTaxExpenseBenefit",
-     "value": 7120000000,
-     "form": "10-K",
-     "filed": "2026-02-06"
-    },
-    {
-     "concept": "PretaxIncome",
-     "period": "FY2023",
-     "as": "latest",
-     "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesMinorityInterestAndIncomeLossFromEquityMethodInvestments",
-     "value": 37557000000,
-     "form": "10-K",
-     "filed": "2026-02-06"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "AMZN_FY2025_10K",
-     "page": 37,
-     "label": "Provision for income taxes",
-     "printed": "(7,120)",
-     "period": "FY2023",
-     "value": -7120000000,
-     "status": "verified"
-    },
-    {
-     "doc": "AMZN_FY2025_10K",
-     "page": 37,
-     "label": "Income before income taxes",
-     "printed": "37,557",
-     "period": "FY2023",
-     "value": 37557000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "metric:AMZN:effective_tax_rate:FY2024",
-   "family": "metric",
-   "company": "AMZN",
-   "concept": "effective_tax_rate",
-   "period": "FY2024",
-   "key": 0.135031,
-   "got": -0.135031,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "metric",
-      "company": "AMZN",
-      "metric": "effective_tax_rate",
-      "period": {
-       "fy": 2024
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "IncomeTax",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "IncomeTaxExpenseBenefit",
-     "value": 9265000000,
-     "form": "10-K",
-     "filed": "2026-02-06"
-    },
-    {
-     "concept": "PretaxIncome",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesMinorityInterestAndIncomeLossFromEquityMethodInvestments",
-     "value": 68614000000,
-     "form": "10-K",
-     "filed": "2026-02-06"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "AMZN_FY2025_10K",
-     "page": 37,
-     "label": "Provision for income taxes",
-     "printed": "(9,265)",
-     "period": "FY2024",
-     "value": -9265000000,
-     "status": "verified"
-    },
-    {
-     "doc": "AMZN_FY2025_10K",
-     "page": 37,
-     "label": "Income before income taxes",
-     "printed": "68,614",
-     "period": "FY2024",
-     "value": 68614000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "metric:AMZN:effective_tax_rate:FY2025",
-   "family": "metric",
-   "company": "AMZN",
-   "concept": "effective_tax_rate",
-   "period": "FY2025",
-   "key": 0.196144,
-   "got": -0.196144,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "metric",
-      "company": "AMZN",
-      "metric": "effective_tax_rate",
-      "period": {
-       "fy": 2025
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "IncomeTax",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "IncomeTaxExpenseBenefit",
-     "value": 19087000000,
-     "form": "10-K",
-     "filed": "2026-02-06"
-    },
-    {
-     "concept": "PretaxIncome",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesMinorityInterestAndIncomeLossFromEquityMethodInvestments",
-     "value": 97311000000,
-     "form": "10-K",
-     "filed": "2026-02-06"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "AMZN_FY2025_10K",
-     "page": 37,
-     "label": "Provision for income taxes",
-     "printed": "(19,087)",
-     "period": "FY2025",
-     "value": -19087000000,
-     "status": "verified"
-    },
-    {
-     "doc": "AMZN_FY2025_10K",
-     "page": 37,
-     "label": "Income before income taxes",
-     "printed": "97,311",
-     "period": "FY2025",
-     "value": 97311000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
    "id": "fact:BLK:TotalEquity:FY2025@end",
    "family": "fact",
    "company": "BLK",
@@ -3626,753 +2690,6 @@
      "printed": "47,495",
      "period": "FY2024@end",
      "value": 47495000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:BLK:InterestExpense:FY2025",
-   "family": "growth",
-   "company": "BLK",
-   "concept": "InterestExpense",
-   "period": "FY2025",
-   "key": 0.141264,
-   "got": -0.141264,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "BLK",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2024
-      },
-      "to": {
-       "fy": 2025
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 538000000,
-     "form": "10-K",
-     "filed": "2026-02-25"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 614000000,
-     "form": "10-K",
-     "filed": "2026-02-25"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "BLK_FY2025_10K",
-     "page": 80,
-     "label": "Interest expense",
-     "printed": "(538)",
-     "period": "FY2024",
-     "value": -538000000,
-     "status": "verified"
-    },
-    {
-     "doc": "BLK_FY2025_10K",
-     "page": 80,
-     "label": "Interest expense",
-     "printed": "(614)",
-     "period": "FY2025",
-     "value": -614000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:BLK:InterestExpense:FY2024",
-   "family": "growth",
-   "company": "BLK",
-   "concept": "InterestExpense",
-   "period": "FY2024",
-   "key": 0.842466,
-   "got": -0.842466,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "BLK",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2023
-      },
-      "to": {
-       "fy": 2024
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2023",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 292000000,
-     "form": "10-K",
-     "filed": "2026-02-25"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 538000000,
-     "form": "10-K",
-     "filed": "2026-02-25"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "BLK_FY2025_10K",
-     "page": 80,
-     "label": "Interest expense",
-     "printed": "(292)",
-     "period": "FY2023",
-     "value": -292000000,
-     "status": "verified"
-    },
-    {
-     "doc": "BLK_FY2025_10K",
-     "page": 80,
-     "label": "Interest expense",
-     "printed": "(538)",
-     "period": "FY2024",
-     "value": -538000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:COST:InterestExpense:FY2026",
-   "family": "growth",
-   "company": "COST",
-   "concept": "InterestExpense",
-   "period": "FY2026",
-   "key": -0.0584416,
-   "got": 0.0584416,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "COST",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2025
-      },
-      "to": {
-       "fy": 2026
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "InterestExpense",
-     "value": 154000000,
-     "form": "10-K",
-     "filed": "2026-10-07"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2026",
-     "as": "latest",
-     "tag": "InterestExpense",
-     "value": 145000000,
-     "form": "10-K",
-     "filed": "2026-10-07"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "COST_FY2026_10K",
-     "page": 38,
-     "label": "Interest expense",
-     "printed": "(154)",
-     "period": "FY2025",
-     "value": -154000000,
-     "status": "verified"
-    },
-    {
-     "doc": "COST_FY2026_10K",
-     "page": 38,
-     "label": "Interest expense",
-     "printed": "(145)",
-     "period": "FY2026",
-     "value": -145000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:COST:InterestExpense:FY2025",
-   "family": "growth",
-   "company": "COST",
-   "concept": "InterestExpense",
-   "period": "FY2025",
-   "key": -0.0887574,
-   "got": 0.0887574,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "COST",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2024
-      },
-      "to": {
-       "fy": 2025
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "InterestExpense",
-     "value": 169000000,
-     "form": "10-K",
-     "filed": "2026-10-07"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "InterestExpense",
-     "value": 154000000,
-     "form": "10-K",
-     "filed": "2026-10-07"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "COST_FY2026_10K",
-     "page": 38,
-     "label": "Interest expense",
-     "printed": "(169)",
-     "period": "FY2024",
-     "value": -169000000,
-     "status": "verified"
-    },
-    {
-     "doc": "COST_FY2026_10K",
-     "page": 38,
-     "label": "Interest expense",
-     "printed": "(154)",
-     "period": "FY2025",
-     "value": -154000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:CRM:IncomeTax:FY2026",
-   "family": "growth",
-   "company": "CRM",
-   "concept": "IncomeTax",
-   "period": "FY2026",
-   "key": 0.662369,
-   "got": -0.662369,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "CRM",
-      "concept": "IncomeTax",
-      "from": {
-       "fy": 2025
-      },
-      "to": {
-       "fy": 2026
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "IncomeTax",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "IncomeTaxExpenseBenefit",
-     "value": 1241000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    },
-    {
-     "concept": "IncomeTax",
-     "period": "FY2026",
-     "as": "latest",
-     "tag": "IncomeTaxExpenseBenefit",
-     "value": 2063000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "CRM_FY2026_10K",
-     "page": 67,
-     "label": "Provision for income taxes",
-     "printed": "(1,241)",
-     "period": "FY2025",
-     "value": -1241000000,
-     "status": "verified"
-    },
-    {
-     "doc": "CRM_FY2026_10K",
-     "page": 67,
-     "label": "Provision for income taxes",
-     "printed": "(2,063)",
-     "period": "FY2026",
-     "value": -2063000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:CRM:IncomeTax:FY2025",
-   "family": "growth",
-   "company": "CRM",
-   "concept": "IncomeTax",
-   "period": "FY2025",
-   "key": 0.52457,
-   "got": -0.52457,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "CRM",
-      "concept": "IncomeTax",
-      "from": {
-       "fy": 2024
-      },
-      "to": {
-       "fy": 2025
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "IncomeTax",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "IncomeTaxExpenseBenefit",
-     "value": 814000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    },
-    {
-     "concept": "IncomeTax",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "IncomeTaxExpenseBenefit",
-     "value": 1241000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "CRM_FY2026_10K",
-     "page": 67,
-     "label": "Provision for income taxes",
-     "printed": "(814)",
-     "period": "FY2024",
-     "value": -814000000,
-     "status": "verified"
-    },
-    {
-     "doc": "CRM_FY2026_10K",
-     "page": 67,
-     "label": "Provision for income taxes",
-     "printed": "(1,241)",
-     "period": "FY2025",
-     "value": -1241000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "metric:CRM:effective_tax_rate:FY2024",
-   "family": "metric",
-   "company": "CRM",
-   "concept": "effective_tax_rate",
-   "period": "FY2024",
-   "key": 0.164444,
-   "got": -0.164444,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "metric",
-      "company": "CRM",
-      "metric": "effective_tax_rate",
-      "period": {
-       "fy": 2024
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "IncomeTax",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "IncomeTaxExpenseBenefit",
-     "value": 814000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    },
-    {
-     "concept": "PretaxIncome",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
-     "value": 4950000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "CRM_FY2026_10K",
-     "page": 67,
-     "label": "Provision for income taxes",
-     "printed": "(814)",
-     "period": "FY2024",
-     "value": -814000000,
-     "status": "verified"
-    },
-    {
-     "doc": "CRM_FY2026_10K",
-     "page": 67,
-     "label": "Income before provision for income taxes",
-     "printed": "4,950",
-     "period": "FY2024",
-     "value": 4950000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "metric:CRM:effective_tax_rate:FY2025",
-   "family": "metric",
-   "company": "CRM",
-   "concept": "effective_tax_rate",
-   "period": "FY2025",
-   "key": 0.166846,
-   "got": -0.166846,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "metric",
-      "company": "CRM",
-      "metric": "effective_tax_rate",
-      "period": {
-       "fy": 2025
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "IncomeTax",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "IncomeTaxExpenseBenefit",
-     "value": 1241000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    },
-    {
-     "concept": "PretaxIncome",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
-     "value": 7438000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "CRM_FY2026_10K",
-     "page": 67,
-     "label": "Provision for income taxes",
-     "printed": "(1,241)",
-     "period": "FY2025",
-     "value": -1241000000,
-     "status": "verified"
-    },
-    {
-     "doc": "CRM_FY2026_10K",
-     "page": 67,
-     "label": "Income before provision for income taxes",
-     "printed": "7,438",
-     "period": "FY2025",
-     "value": 7438000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "metric:CRM:effective_tax_rate:FY2026",
-   "family": "metric",
-   "company": "CRM",
-   "concept": "effective_tax_rate",
-   "period": "FY2026",
-   "key": 0.216702,
-   "got": -0.216702,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "metric",
-      "company": "CRM",
-      "metric": "effective_tax_rate",
-      "period": {
-       "fy": 2026
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "IncomeTax",
-     "period": "FY2026",
-     "as": "latest",
-     "tag": "IncomeTaxExpenseBenefit",
-     "value": 2063000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    },
-    {
-     "concept": "PretaxIncome",
-     "period": "FY2026",
-     "as": "latest",
-     "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
-     "value": 9520000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "CRM_FY2026_10K",
-     "page": 67,
-     "label": "Provision for income taxes",
-     "printed": "(2,063)",
-     "period": "FY2026",
-     "value": -2063000000,
-     "status": "verified"
-    },
-    {
-     "doc": "CRM_FY2026_10K",
-     "page": 67,
-     "label": "Income before provision for income taxes",
-     "printed": "9,520",
-     "period": "FY2026",
-     "value": 9520000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:CSCO:InterestExpense:FY2026",
-   "family": "growth",
-   "company": "CSCO",
-   "concept": "InterestExpense",
-   "period": "FY2026",
-   "key": -0.0772128,
-   "got": 0.0772128,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "CSCO",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2025
-      },
-      "to": {
-       "fy": 2026
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 1593000000,
-     "form": "10-K",
-     "filed": "2026-09-02"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2026",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 1470000000,
-     "form": "10-K",
-     "filed": "2026-09-02"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "CSCO_FY2026_10K",
-     "page": 76,
-     "label": "Interest expense............................................",
-     "printed": "(1,593)",
-     "period": "FY2025",
-     "value": -1593000000,
-     "status": "verified"
-    },
-    {
-     "doc": "CSCO_FY2026_10K",
-     "page": 76,
-     "label": "Interest expense............................................",
-     "printed": "(1,470)",
-     "period": "FY2026",
-     "value": -1470000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:CSCO:InterestExpense:FY2025",
-   "family": "growth",
-   "company": "CSCO",
-   "concept": "InterestExpense",
-   "period": "FY2025",
-   "key": 0.583499,
-   "got": -0.583499,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "CSCO",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2024
-      },
-      "to": {
-       "fy": 2025
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 1006000000,
-     "form": "10-K",
-     "filed": "2026-09-02"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 1593000000,
-     "form": "10-K",
-     "filed": "2026-09-02"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "CSCO_FY2026_10K",
-     "page": 76,
-     "label": "Interest expense............................................",
-     "printed": "(1,006)",
-     "period": "FY2024",
-     "value": -1006000000,
-     "status": "verified"
-    },
-    {
-     "doc": "CSCO_FY2026_10K",
-     "page": 76,
-     "label": "Interest expense............................................",
-     "printed": "(1,593)",
-     "period": "FY2025",
-     "value": -1593000000,
      "status": "verified"
     }
    ]
@@ -4834,54 +3151,6 @@
    ]
   },
   {
-   "id": "fact:JNJ:PropertyPlantEquipment:FY2025Q3@end",
-   "family": "fact",
-   "company": "JNJ",
-   "concept": "PropertyPlantEquipment",
-   "period": "FY2025Q3@end",
-   "key": 22338000000,
-   "got": 53375000000,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "get",
-      "company": "JNJ",
-      "concept": "PropertyPlantEquipment",
-      "period": {
-       "fy": 2025,
-       "q": 3
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "PropertyPlantEquipment",
-     "period": "FY2025Q3@end",
-     "as": "latest",
-     "tag": "PropertyPlantAndEquipmentNet",
-     "value": 22338000000,
-     "form": "10-Q",
-     "filed": "2025-10-22"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "JNJ_FY2025_Q3_10Q",
-     "page": 6,
-     "label": "Property, plant and equipment at cost",
-     "printed": "53,375",
-     "period": "FY2025Q3@end",
-     "value": 53375000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
    "id": "fact:MA:ShareholdersEquity:FY2025@end",
    "family": "fact",
    "company": "MA",
@@ -4976,144 +3245,6 @@
    ]
   },
   {
-   "id": "growth:MA:InterestExpense:FY2025",
-   "family": "growth",
-   "company": "MA",
-   "concept": "InterestExpense",
-   "period": "FY2025",
-   "key": 0.117647,
-   "got": -0.117647,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "MA",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2024
-      },
-      "to": {
-       "fy": 2025
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 646000000,
-     "form": "10-K",
-     "filed": "2026-02-11"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 722000000,
-     "form": "10-K",
-     "filed": "2026-02-11"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "MA_FY2025_10K",
-     "page": 69,
-     "label": "Interest expense",
-     "printed": "(646)",
-     "period": "FY2024",
-     "value": -646000000,
-     "status": "verified"
-    },
-    {
-     "doc": "MA_FY2025_10K",
-     "page": 69,
-     "label": "Interest expense",
-     "printed": "(722)",
-     "period": "FY2025",
-     "value": -722000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:MA:InterestExpense:FY2024",
-   "family": "growth",
-   "company": "MA",
-   "concept": "InterestExpense",
-   "period": "FY2024",
-   "key": 0.123478,
-   "got": -0.123478,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "MA",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2023
-      },
-      "to": {
-       "fy": 2024
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2023",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 575000000,
-     "form": "10-K",
-     "filed": "2026-02-11"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 646000000,
-     "form": "10-K",
-     "filed": "2026-02-11"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "MA_FY2025_10K",
-     "page": 69,
-     "label": "Interest expense",
-     "printed": "(575)",
-     "period": "FY2023",
-     "value": -575000000,
-     "status": "verified"
-    },
-    {
-     "doc": "MA_FY2025_10K",
-     "page": 69,
-     "label": "Interest expense",
-     "printed": "(646)",
-     "period": "FY2024",
-     "value": -646000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
    "id": "growth:MA:ShareholdersEquity:FY2025@end",
    "family": "growth",
    "company": "MA",
@@ -5183,13 +3314,13 @@
    ]
   },
   {
-   "id": "fact:MCD:PropertyPlantEquipment:FY2025@end",
+   "id": "fact:MCD:SharesDiluted:FY2025",
    "family": "fact",
    "company": "MCD",
-   "concept": "PropertyPlantEquipment",
-   "period": "FY2025@end",
-   "key": 28241000000,
-   "got": 49290000000,
+   "concept": "SharesDiluted",
+   "period": "FY2025",
+   "key": 716.4,
+   "got": 716400000,
    "class": "wrong_silent",
    "alt_definition": false,
    "plan": {
@@ -5198,7 +3329,7 @@
       "id": "s1",
       "op": "get",
       "company": "MCD",
-      "concept": "PropertyPlantEquipment",
+      "concept": "SharesDiluted",
       "period": {
        "fy": 2025
       }
@@ -5208,11 +3339,11 @@
    },
    "key_terms": [
     {
-     "concept": "PropertyPlantEquipment",
-     "period": "FY2025@end",
+     "concept": "SharesDiluted",
+     "period": "FY2025",
      "as": "latest",
-     "tag": "PropertyPlantAndEquipmentNet",
-     "value": 28241000000,
+     "tag": "WeightedAverageNumberOfDilutedSharesOutstanding",
+     "value": 716.4,
      "form": "10-K",
      "filed": "2026-02-24"
     }
@@ -5220,23 +3351,23 @@
    "leaves": [
     {
      "doc": "MCD_FY2025_10K",
-     "page": 49,
-     "label": "Property and equipment, at cost",
-     "printed": "49,290",
-     "period": "FY2025@end",
-     "value": 49290000000,
+     "page": 47,
+     "label": "Weighted-average shares outstanding\ufffddiluted",
+     "printed": "716.4",
+     "period": "FY2025",
+     "value": 716400000,
      "status": "verified"
     }
    ]
   },
   {
-   "id": "fact:MCD:PropertyPlantEquipment:FY2024@end",
+   "id": "fact:MCD:SharesDiluted:FY2024",
    "family": "fact",
    "company": "MCD",
-   "concept": "PropertyPlantEquipment",
-   "period": "FY2024@end",
-   "key": 25295000000,
-   "got": 44177000000,
+   "concept": "SharesDiluted",
+   "period": "FY2024",
+   "key": 721.9,
+   "got": 721900000,
    "class": "wrong_silent",
    "alt_definition": false,
    "plan": {
@@ -5245,7 +3376,7 @@
       "id": "s1",
       "op": "get",
       "company": "MCD",
-      "concept": "PropertyPlantEquipment",
+      "concept": "SharesDiluted",
       "period": {
        "fy": 2024
       }
@@ -5255,11 +3386,11 @@
    },
    "key_terms": [
     {
-     "concept": "PropertyPlantEquipment",
-     "period": "FY2024@end",
+     "concept": "SharesDiluted",
+     "period": "FY2024",
      "as": "latest",
-     "tag": "PropertyPlantAndEquipmentNet",
-     "value": 25295000000,
+     "tag": "WeightedAverageNumberOfDilutedSharesOutstanding",
+     "value": 721.9,
      "form": "10-K",
      "filed": "2026-02-24"
     }
@@ -5267,59 +3398,46 @@
    "leaves": [
     {
      "doc": "MCD_FY2025_10K",
-     "page": 49,
-     "label": "Property and equipment, at cost",
-     "printed": "44,177",
-     "period": "FY2024@end",
-     "value": 44177000000,
+     "page": 47,
+     "label": "Weighted-average shares outstanding\ufffddiluted",
+     "printed": "721.9",
+     "period": "FY2024",
+     "value": 721900000,
      "status": "verified"
     }
    ]
   },
   {
-   "id": "growth:MCD:PropertyPlantEquipment:FY2025@end",
-   "family": "growth",
+   "id": "fact:MCD:SharesDiluted:FY2023",
+   "family": "fact",
    "company": "MCD",
-   "concept": "PropertyPlantEquipment",
-   "period": "FY2025@end",
-   "key": 0.116466,
-   "got": 0.115739,
+   "concept": "SharesDiluted",
+   "period": "FY2023",
+   "key": 732.3,
+   "got": 732300000,
    "class": "wrong_silent",
    "alt_definition": false,
    "plan": {
     "steps": [
      {
       "id": "s1",
-      "op": "change",
+      "op": "get",
       "company": "MCD",
-      "concept": "PropertyPlantEquipment",
-      "from": {
-       "fy": 2024
-      },
-      "to": {
-       "fy": 2025
-      },
-      "mode": "pct"
+      "concept": "SharesDiluted",
+      "period": {
+       "fy": 2023
+      }
      }
     ],
     "answer": "s1"
    },
    "key_terms": [
     {
-     "concept": "PropertyPlantEquipment",
-     "period": "FY2024@end",
+     "concept": "SharesDiluted",
+     "period": "FY2023",
      "as": "latest",
-     "tag": "PropertyPlantAndEquipmentNet",
-     "value": 25295000000,
-     "form": "10-K",
-     "filed": "2026-02-24"
-    },
-    {
-     "concept": "PropertyPlantEquipment",
-     "period": "FY2025@end",
-     "as": "latest",
-     "tag": "PropertyPlantAndEquipmentNet",
-     "value": 28241000000,
+     "tag": "WeightedAverageNumberOfDilutedSharesOutstanding",
+     "value": 732.3,
      "form": "10-K",
      "filed": "2026-02-24"
     }
@@ -5327,20 +3445,152 @@
    "leaves": [
     {
      "doc": "MCD_FY2025_10K",
-     "page": 49,
-     "label": "Property and equipment, at cost",
-     "printed": "44,177",
-     "period": "FY2024@end",
-     "value": 44177000000,
+     "page": 47,
+     "label": "Weighted-average shares outstanding\ufffddiluted",
+     "printed": "732.3",
+     "period": "FY2023",
+     "value": 732300000,
      "status": "verified"
-    },
+    }
+   ]
+  },
+  {
+   "id": "fact:MCD:SharesBasic:FY2025",
+   "family": "fact",
+   "company": "MCD",
+   "concept": "SharesBasic",
+   "period": "FY2025",
+   "key": 713.4,
+   "got": 713400000,
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "MCD",
+      "concept": "SharesBasic",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "SharesBasic",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "WeightedAverageNumberOfSharesOutstandingBasic",
+     "value": 713.4,
+     "form": "10-K",
+     "filed": "2026-02-24"
+    }
+   ],
+   "leaves": [
     {
      "doc": "MCD_FY2025_10K",
-     "page": 49,
-     "label": "Property and equipment, at cost",
-     "printed": "49,290",
-     "period": "FY2025@end",
-     "value": 49290000000,
+     "page": 47,
+     "label": "Weighted-average shares outstanding\ufffdbasic",
+     "printed": "713.4",
+     "period": "FY2025",
+     "value": 713400000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:MCD:SharesBasic:FY2024",
+   "family": "fact",
+   "company": "MCD",
+   "concept": "SharesBasic",
+   "period": "FY2024",
+   "key": 718.3,
+   "got": 718300000,
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "MCD",
+      "concept": "SharesBasic",
+      "period": {
+       "fy": 2024
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "SharesBasic",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "WeightedAverageNumberOfSharesOutstandingBasic",
+     "value": 718.3,
+     "form": "10-K",
+     "filed": "2026-02-24"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "MCD_FY2025_10K",
+     "page": 47,
+     "label": "Weighted-average shares outstanding\ufffdbasic",
+     "printed": "718.3",
+     "period": "FY2024",
+     "value": 718300000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:MCD:SharesBasic:FY2023",
+   "family": "fact",
+   "company": "MCD",
+   "concept": "SharesBasic",
+   "period": "FY2023",
+   "key": 727.9,
+   "got": 727900000,
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "MCD",
+      "concept": "SharesBasic",
+      "period": {
+       "fy": 2023
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "SharesBasic",
+     "period": "FY2023",
+     "as": "latest",
+     "tag": "WeightedAverageNumberOfSharesOutstandingBasic",
+     "value": 727.9,
+     "form": "10-K",
+     "filed": "2026-02-24"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "MCD_FY2025_10K",
+     "page": 47,
+     "label": "Weighted-average shares outstanding\ufffdbasic",
+     "printed": "727.9",
+     "period": "FY2023",
+     "value": 727900000,
      "status": "verified"
     }
    ]
@@ -5388,144 +3638,6 @@
      "printed": "37,619",
      "period": "FY2023",
      "value": 37619000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:NVDA:InterestExpense:FY2026",
-   "family": "growth",
-   "company": "NVDA",
-   "concept": "InterestExpense",
-   "period": "FY2026",
-   "key": 0.048583,
-   "got": -0.048583,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "NVDA",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2025
-      },
-      "to": {
-       "fy": 2026
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 247000000,
-     "form": "10-K",
-     "filed": "2026-02-25"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2026",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 259000000,
-     "form": "10-K",
-     "filed": "2026-02-25"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "NVDA_FY2026_10K",
-     "page": 139,
-     "label": "Interest expense",
-     "printed": "(247)",
-     "period": "FY2025",
-     "value": -247000000,
-     "status": "verified"
-    },
-    {
-     "doc": "NVDA_FY2026_10K",
-     "page": 139,
-     "label": "Interest expense",
-     "printed": "(259)",
-     "period": "FY2026",
-     "value": -259000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:NVDA:InterestExpense:FY2025",
-   "family": "growth",
-   "company": "NVDA",
-   "concept": "InterestExpense",
-   "period": "FY2025",
-   "key": -0.0389105,
-   "got": 0.0389105,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "NVDA",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2024
-      },
-      "to": {
-       "fy": 2025
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 257000000,
-     "form": "10-K",
-     "filed": "2026-02-25"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 247000000,
-     "form": "10-K",
-     "filed": "2026-02-25"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "NVDA_FY2026_10K",
-     "page": 139,
-     "label": "Interest expense",
-     "printed": "(257)",
-     "period": "FY2024",
-     "value": -257000000,
-     "status": "verified"
-    },
-    {
-     "doc": "NVDA_FY2026_10K",
-     "page": 139,
-     "label": "Interest expense",
-     "printed": "(247)",
-     "period": "FY2025",
-     "value": -247000000,
      "status": "verified"
     }
    ]
@@ -5810,82 +3922,13 @@
    ]
   },
   {
-   "id": "growth:ORCL:InterestExpense:FY2026",
+   "id": "growth:PFE:IncomeTax:FY2025",
    "family": "growth",
-   "company": "ORCL",
-   "concept": "InterestExpense",
-   "period": "FY2026",
-   "key": 0.285355,
-   "got": -0.285355,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "ORCL",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2025
-      },
-      "to": {
-       "fy": 2026
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "InterestExpense",
-     "value": 3578000000,
-     "form": "10-K",
-     "filed": "2026-06-22"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2026",
-     "as": "latest",
-     "tag": "InterestExpense",
-     "value": 4599000000,
-     "form": "10-K",
-     "filed": "2026-06-22"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "ORCL_FY2026_10K",
-     "page": 67,
-     "label": "Interest expense............................................",
-     "printed": "(3,578)",
-     "period": "FY2025",
-     "value": -3578000000,
-     "status": "verified"
-    },
-    {
-     "doc": "ORCL_FY2026_10K",
-     "page": 67,
-     "label": "Interest expense............................................",
-     "printed": "(4,599)",
-     "period": "FY2026",
-     "value": -4599000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:ORCL:InterestExpense:FY2025",
-   "family": "growth",
-   "company": "ORCL",
-   "concept": "InterestExpense",
+   "company": "PFE",
+   "concept": "IncomeTax",
    "period": "FY2025",
-   "key": 0.0182129,
-   "got": -0.0182129,
+   "key": -8.5,
+   "got": 8.5,
    "class": "wrong_silent",
    "alt_definition": false,
    "plan": {
@@ -5893,8 +3936,8 @@
      {
       "id": "s1",
       "op": "change",
-      "company": "ORCL",
-      "concept": "InterestExpense",
+      "company": "PFE",
+      "concept": "IncomeTax",
       "from": {
        "fy": 2024
       },
@@ -5908,76 +3951,20 @@
    },
    "key_terms": [
     {
-     "concept": "InterestExpense",
+     "concept": "IncomeTax",
      "period": "FY2024",
      "as": "latest",
-     "tag": "InterestExpense",
-     "value": 3514000000,
+     "tag": "IncomeTaxExpenseBenefit",
+     "value": -28000000,
      "form": "10-K",
-     "filed": "2026-06-22"
+     "filed": "2026-02-26"
     },
     {
-     "concept": "InterestExpense",
+     "concept": "IncomeTax",
      "period": "FY2025",
      "as": "latest",
-     "tag": "InterestExpense",
-     "value": 3578000000,
-     "form": "10-K",
-     "filed": "2026-06-22"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "ORCL_FY2026_10K",
-     "page": 67,
-     "label": "Interest expense............................................",
-     "printed": "(3,514)",
-     "period": "FY2024",
-     "value": -3514000000,
-     "status": "verified"
-    },
-    {
-     "doc": "ORCL_FY2026_10K",
-     "page": 67,
-     "label": "Interest expense............................................",
-     "printed": "(3,578)",
-     "period": "FY2025",
-     "value": -3578000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "fact:PFE:SharesDiluted:FY2025",
-   "family": "fact",
-   "company": "PFE",
-   "concept": "SharesDiluted",
-   "period": "FY2025",
-   "key": 5713000000,
-   "got": 5683000000,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "get",
-      "company": "PFE",
-      "concept": "SharesDiluted",
-      "period": {
-       "fy": 2025
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "SharesDiluted",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "WeightedAverageNumberOfDilutedSharesOutstanding",
-     "value": 5713000000,
+     "tag": "IncomeTaxExpenseBenefit",
+     "value": -266000000,
      "form": "10-K",
      "filed": "2026-02-26"
     }
@@ -5986,116 +3973,31 @@
     {
      "doc": "PFE_FY2025_10K",
      "page": 58,
-     "label": "Weighted-average shares\u2013\u2013basic",
-     "printed": "5,683",
+     "label": "Provision/(benefit) for taxes on income",
+     "printed": "(28)",
+     "period": "FY2024",
+     "value": -28000000,
+     "status": "verified"
+    },
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 58,
+     "label": "Provision/(benefit) for taxes on income",
+     "printed": "(266)",
      "period": "FY2025",
-     "value": 5683000000,
+     "value": -266000000,
      "status": "verified"
     }
    ]
   },
   {
-   "id": "fact:PFE:SharesDiluted:FY2024",
-   "family": "fact",
+   "id": "growth:PFE:IncomeTax:FY2024",
+   "family": "growth",
    "company": "PFE",
-   "concept": "SharesDiluted",
+   "concept": "IncomeTax",
    "period": "FY2024",
-   "key": 5700000000,
-   "got": 5664000000,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "get",
-      "company": "PFE",
-      "concept": "SharesDiluted",
-      "period": {
-       "fy": 2024
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "SharesDiluted",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "WeightedAverageNumberOfDilutedSharesOutstanding",
-     "value": 5700000000,
-     "form": "10-K",
-     "filed": "2026-02-26"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "PFE_FY2025_10K",
-     "page": 58,
-     "label": "Weighted-average shares\u2013\u2013basic",
-     "printed": "5,664",
-     "period": "FY2024",
-     "value": 5664000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "fact:PFE:SharesDiluted:FY2023",
-   "family": "fact",
-   "company": "PFE",
-   "concept": "SharesDiluted",
-   "period": "FY2023",
-   "key": 5709000000,
-   "got": 5643000000,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "get",
-      "company": "PFE",
-      "concept": "SharesDiluted",
-      "period": {
-       "fy": 2023
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "SharesDiluted",
-     "period": "FY2023",
-     "as": "latest",
-     "tag": "WeightedAverageNumberOfDilutedSharesOutstanding",
-     "value": 5709000000,
-     "form": "10-K",
-     "filed": "2026-02-26"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "PFE_FY2025_10K",
-     "page": 58,
-     "label": "Weighted-average shares\u2013\u2013basic",
-     "printed": "5,643",
-     "period": "FY2023",
-     "value": 5643000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:PFE:SharesDiluted:FY2025",
-   "family": "growth",
-   "company": "PFE",
-   "concept": "SharesDiluted",
-   "period": "FY2025",
-   "key": 0.0022807,
-   "got": 0.00335452,
+   "key": 0.974888,
+   "got": -0.974888,
    "class": "wrong_silent",
    "alt_definition": false,
    "plan": {
@@ -6104,76 +4006,7 @@
       "id": "s1",
       "op": "change",
       "company": "PFE",
-      "concept": "SharesDiluted",
-      "from": {
-       "fy": 2024
-      },
-      "to": {
-       "fy": 2025
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "SharesDiluted",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "WeightedAverageNumberOfDilutedSharesOutstanding",
-     "value": 5700000000,
-     "form": "10-K",
-     "filed": "2026-02-26"
-    },
-    {
-     "concept": "SharesDiluted",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "WeightedAverageNumberOfDilutedSharesOutstanding",
-     "value": 5713000000,
-     "form": "10-K",
-     "filed": "2026-02-26"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "PFE_FY2025_10K",
-     "page": 58,
-     "label": "Weighted-average shares\u2013\u2013basic",
-     "printed": "5,664",
-     "period": "FY2024",
-     "value": 5664000000,
-     "status": "verified"
-    },
-    {
-     "doc": "PFE_FY2025_10K",
-     "page": 58,
-     "label": "Weighted-average shares\u2013\u2013basic",
-     "printed": "5,683",
-     "period": "FY2025",
-     "value": 5683000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:PFE:SharesDiluted:FY2024",
-   "family": "growth",
-   "company": "PFE",
-   "concept": "SharesDiluted",
-   "period": "FY2024",
-   "key": -0.00157646,
-   "got": 0.00372142,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "PFE",
-      "concept": "SharesDiluted",
+      "concept": "IncomeTax",
       "from": {
        "fy": 2023
       },
@@ -6187,20 +4020,20 @@
    },
    "key_terms": [
     {
-     "concept": "SharesDiluted",
+     "concept": "IncomeTax",
      "period": "FY2023",
      "as": "latest",
-     "tag": "WeightedAverageNumberOfDilutedSharesOutstanding",
-     "value": 5709000000,
+     "tag": "IncomeTaxExpenseBenefit",
+     "value": -1115000000,
      "form": "10-K",
      "filed": "2026-02-26"
     },
     {
-     "concept": "SharesDiluted",
+     "concept": "IncomeTax",
      "period": "FY2024",
      "as": "latest",
-     "tag": "WeightedAverageNumberOfDilutedSharesOutstanding",
-     "value": 5700000000,
+     "tag": "IncomeTaxExpenseBenefit",
+     "value": -28000000,
      "form": "10-K",
      "filed": "2026-02-26"
     }
@@ -6209,157 +4042,19 @@
     {
      "doc": "PFE_FY2025_10K",
      "page": 58,
-     "label": "Weighted-average shares\u2013\u2013basic",
-     "printed": "5,643",
+     "label": "Provision/(benefit) for taxes on income",
+     "printed": "(1,115)",
      "period": "FY2023",
-     "value": 5643000000,
+     "value": -1115000000,
      "status": "verified"
     },
     {
      "doc": "PFE_FY2025_10K",
      "page": 58,
-     "label": "Weighted-average shares\u2013\u2013basic",
-     "printed": "5,664",
+     "label": "Provision/(benefit) for taxes on income",
+     "printed": "(28)",
      "period": "FY2024",
-     "value": 5664000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:PG:InterestExpense:FY2026",
-   "family": "growth",
-   "company": "PG",
-   "concept": "InterestExpense",
-   "period": "FY2026",
-   "key": -0.0330761,
-   "got": 0.0330761,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "PG",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2025
-      },
-      "to": {
-       "fy": 2026
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 907000000,
-     "form": "10-K",
-     "filed": "2026-08-04"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2026",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 877000000,
-     "form": "10-K",
-     "filed": "2026-08-04"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "PG_FY2026_10K",
-     "page": 39,
-     "label": "Interest expense",
-     "printed": "(907)",
-     "period": "FY2025",
-     "value": -907000000,
-     "status": "verified"
-    },
-    {
-     "doc": "PG_FY2026_10K",
-     "page": 39,
-     "label": "Interest expense",
-     "printed": "(877)",
-     "period": "FY2026",
-     "value": -877000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:PG:InterestExpense:FY2025",
-   "family": "growth",
-   "company": "PG",
-   "concept": "InterestExpense",
-   "period": "FY2025",
-   "key": -0.0194595,
-   "got": 0.0194595,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "PG",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2024
-      },
-      "to": {
-       "fy": 2025
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 925000000,
-     "form": "10-K",
-     "filed": "2026-08-04"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 907000000,
-     "form": "10-K",
-     "filed": "2026-08-04"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "PG_FY2026_10K",
-     "page": 39,
-     "label": "Interest expense",
-     "printed": "(925)",
-     "period": "FY2024",
-     "value": -925000000,
-     "status": "verified"
-    },
-    {
-     "doc": "PG_FY2026_10K",
-     "page": 39,
-     "label": "Interest expense",
-     "printed": "(907)",
-     "period": "FY2025",
-     "value": -907000000,
+     "value": -28000000,
      "status": "verified"
     }
    ]
@@ -6454,144 +4149,6 @@
      "printed": "72,913",
      "period": "FY2024@end",
      "value": 72913000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:TSLA:InterestExpense:FY2025",
-   "family": "growth",
-   "company": "TSLA",
-   "concept": "InterestExpense",
-   "period": "FY2025",
-   "key": -0.0342857,
-   "got": 0.0342857,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "TSLA",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2024
-      },
-      "to": {
-       "fy": 2025
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 350000000,
-     "form": "10-K",
-     "filed": "2026-01-29"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 338000000,
-     "form": "10-K",
-     "filed": "2026-01-29"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "TSLA_FY2025_10K",
-     "page": 53,
-     "label": "Interest expense",
-     "printed": "(350)",
-     "period": "FY2024",
-     "value": -350000000,
-     "status": "verified"
-    },
-    {
-     "doc": "TSLA_FY2025_10K",
-     "page": 53,
-     "label": "Interest expense",
-     "printed": "(338)",
-     "period": "FY2025",
-     "value": -338000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:TSLA:InterestExpense:FY2024",
-   "family": "growth",
-   "company": "TSLA",
-   "concept": "InterestExpense",
-   "period": "FY2024",
-   "key": 1.24359,
-   "got": -1.24359,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "TSLA",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2023
-      },
-      "to": {
-       "fy": 2024
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2023",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 156000000,
-     "form": "10-K",
-     "filed": "2026-01-29"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 350000000,
-     "form": "10-K",
-     "filed": "2026-01-29"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "TSLA_FY2025_10K",
-     "page": 53,
-     "label": "Interest expense",
-     "printed": "(156)",
-     "period": "FY2023",
-     "value": -156000000,
-     "status": "verified"
-    },
-    {
-     "doc": "TSLA_FY2025_10K",
-     "page": 53,
-     "label": "Interest expense",
-     "printed": "(350)",
-     "period": "FY2024",
-     "value": -350000000,
      "status": "verified"
     }
    ]
@@ -6791,1107 +4348,6 @@
      "printed": "82,137",
      "period": "FY2025@end",
      "value": 82137000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:UNH:IncomeTax:FY2025",
-   "family": "growth",
-   "company": "UNH",
-   "concept": "IncomeTax",
-   "period": "FY2025",
-   "key": -0.608615,
-   "got": 0.608615,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "UNH",
-      "concept": "IncomeTax",
-      "from": {
-       "fy": 2024
-      },
-      "to": {
-       "fy": 2025
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "IncomeTax",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "IncomeTaxExpenseBenefit",
-     "value": 4829000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    },
-    {
-     "concept": "IncomeTax",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "IncomeTaxExpenseBenefit",
-     "value": 1890000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "UNH_FY2025_10K",
-     "page": 44,
-     "label": "Provision for income taxes .................................",
-     "printed": "(4,829)",
-     "period": "FY2024",
-     "value": -4829000000,
-     "status": "verified"
-    },
-    {
-     "doc": "UNH_FY2025_10K",
-     "page": 44,
-     "label": "Provision for income taxes .................................",
-     "printed": "(1,890)",
-     "period": "FY2025",
-     "value": -1890000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:UNH:IncomeTax:FY2024",
-   "family": "growth",
-   "company": "UNH",
-   "concept": "IncomeTax",
-   "period": "FY2024",
-   "key": -0.190851,
-   "got": 0.190851,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "UNH",
-      "concept": "IncomeTax",
-      "from": {
-       "fy": 2023
-      },
-      "to": {
-       "fy": 2024
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "IncomeTax",
-     "period": "FY2023",
-     "as": "latest",
-     "tag": "IncomeTaxExpenseBenefit",
-     "value": 5968000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    },
-    {
-     "concept": "IncomeTax",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "IncomeTaxExpenseBenefit",
-     "value": 4829000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "UNH_FY2025_10K",
-     "page": 44,
-     "label": "Provision for income taxes .................................",
-     "printed": "(5,968)",
-     "period": "FY2023",
-     "value": -5968000000,
-     "status": "verified"
-    },
-    {
-     "doc": "UNH_FY2025_10K",
-     "page": 44,
-     "label": "Provision for income taxes .................................",
-     "printed": "(4,829)",
-     "period": "FY2024",
-     "value": -4829000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:UNH:InterestExpense:FY2025",
-   "family": "growth",
-   "company": "UNH",
-   "concept": "InterestExpense",
-   "period": "FY2025",
-   "key": 0.0245776,
-   "got": -0.0245776,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "UNH",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2024
-      },
-      "to": {
-       "fy": 2025
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "InterestExpense",
-     "value": 3906000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "InterestExpense",
-     "value": 4002000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "UNH_FY2025_10K",
-     "page": 44,
-     "label": "Interest expense ...........................................",
-     "printed": "(3,906)",
-     "period": "FY2024",
-     "value": -3906000000,
-     "status": "verified"
-    },
-    {
-     "doc": "UNH_FY2025_10K",
-     "page": 44,
-     "label": "Interest expense ...........................................",
-     "printed": "(4,002)",
-     "period": "FY2025",
-     "value": -4002000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:UNH:InterestExpense:FY2024",
-   "family": "growth",
-   "company": "UNH",
-   "concept": "InterestExpense",
-   "period": "FY2024",
-   "key": 0.203327,
-   "got": -0.203327,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "UNH",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2023
-      },
-      "to": {
-       "fy": 2024
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2023",
-     "as": "latest",
-     "tag": "InterestExpense",
-     "value": 3246000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "InterestExpense",
-     "value": 3906000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "UNH_FY2025_10K",
-     "page": 44,
-     "label": "Interest expense ...........................................",
-     "printed": "(3,246)",
-     "period": "FY2023",
-     "value": -3246000000,
-     "status": "verified"
-    },
-    {
-     "doc": "UNH_FY2025_10K",
-     "page": 44,
-     "label": "Interest expense ...........................................",
-     "printed": "(3,906)",
-     "period": "FY2024",
-     "value": -3906000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "metric:UNH:effective_tax_rate:FY2023",
-   "family": "metric",
-   "company": "UNH",
-   "concept": "effective_tax_rate",
-   "period": "FY2023",
-   "key": 0.205001,
-   "got": -0.205001,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "metric",
-      "company": "UNH",
-      "metric": "effective_tax_rate",
-      "period": {
-       "fy": 2023
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "IncomeTax",
-     "period": "FY2023",
-     "as": "latest",
-     "tag": "IncomeTaxExpenseBenefit",
-     "value": 5968000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    },
-    {
-     "concept": "PretaxIncome",
-     "period": "FY2023",
-     "as": "latest",
-     "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
-     "value": 29112000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "UNH_FY2025_10K",
-     "page": 44,
-     "label": "Provision for income taxes .................................",
-     "printed": "(5,968)",
-     "period": "FY2023",
-     "value": -5968000000,
-     "status": "verified"
-    },
-    {
-     "doc": "UNH_FY2025_10K",
-     "page": 44,
-     "label": "Earnings before income taxes................................",
-     "printed": "29,112",
-     "period": "FY2023",
-     "value": 29112000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "metric:UNH:effective_tax_rate:FY2024",
-   "family": "metric",
-   "company": "UNH",
-   "concept": "effective_tax_rate",
-   "period": "FY2024",
-   "key": 0.240596,
-   "got": -0.240596,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "metric",
-      "company": "UNH",
-      "metric": "effective_tax_rate",
-      "period": {
-       "fy": 2024
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "IncomeTax",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "IncomeTaxExpenseBenefit",
-     "value": 4829000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    },
-    {
-     "concept": "PretaxIncome",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
-     "value": 20071000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "UNH_FY2025_10K",
-     "page": 44,
-     "label": "Provision for income taxes .................................",
-     "printed": "(4,829)",
-     "period": "FY2024",
-     "value": -4829000000,
-     "status": "verified"
-    },
-    {
-     "doc": "UNH_FY2025_10K",
-     "page": 44,
-     "label": "Earnings before income taxes................................",
-     "printed": "20,071",
-     "period": "FY2024",
-     "value": 20071000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "metric:UNH:effective_tax_rate:FY2025",
-   "family": "metric",
-   "company": "UNH",
-   "concept": "effective_tax_rate",
-   "period": "FY2025",
-   "key": 0.128598,
-   "got": -0.128598,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "metric",
-      "company": "UNH",
-      "metric": "effective_tax_rate",
-      "period": {
-       "fy": 2025
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "IncomeTax",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "IncomeTaxExpenseBenefit",
-     "value": 1890000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    },
-    {
-     "concept": "PretaxIncome",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
-     "value": 14697000000,
-     "form": "10-K",
-     "filed": "2026-03-02"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "UNH_FY2025_10K",
-     "page": 44,
-     "label": "Provision for income taxes .................................",
-     "printed": "(1,890)",
-     "period": "FY2025",
-     "value": -1890000000,
-     "status": "verified"
-    },
-    {
-     "doc": "UNH_FY2025_10K",
-     "page": 44,
-     "label": "Earnings before income taxes................................",
-     "printed": "14,697",
-     "period": "FY2025",
-     "value": 14697000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "fact:V:TotalEquity:FY2026@end",
-   "family": "fact",
-   "company": "V",
-   "concept": "TotalEquity",
-   "period": "FY2026@end",
-   "key": 36111000000,
-   "got": -53900000000,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "get",
-      "company": "V",
-      "concept": "TotalEquity",
-      "period": {
-       "fy": 2026
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "TotalEquity",
-     "period": "FY2026@end",
-     "as": "latest",
-     "tag": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
-     "value": 36111000000,
-     "form": "10-K",
-     "filed": "2026-11-05"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "V_FY2026_10K",
-     "page": 59,
-     "label": "Customer collateral",
-     "printed": "4,349",
-     "period": "FY2026@end",
-     "value": 4349000000,
-     "status": "verified"
-    },
-    {
-     "doc": "V_FY2026_10K",
-     "page": 59,
-     "label": "Total liabilities",
-     "printed": "58,249",
-     "period": "FY2026@end",
-     "value": 58249000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "fact:V:TotalEquity:FY2025@end",
-   "family": "fact",
-   "company": "V",
-   "concept": "TotalEquity",
-   "period": "FY2025@end",
-   "key": 37909000000,
-   "got": -58093000000,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "get",
-      "company": "V",
-      "concept": "TotalEquity",
-      "period": {
-       "fy": 2025
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "TotalEquity",
-     "period": "FY2025@end",
-     "as": "latest",
-     "tag": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
-     "value": 37909000000,
-     "form": "10-K",
-     "filed": "2026-11-05"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "V_FY2026_10K",
-     "page": 59,
-     "label": "Customer collateral",
-     "printed": "3,625",
-     "period": "FY2025@end",
-     "value": 3625000000,
-     "status": "verified"
-    },
-    {
-     "doc": "V_FY2026_10K",
-     "page": 59,
-     "label": "Total liabilities",
-     "printed": "61,718",
-     "period": "FY2025@end",
-     "value": 61718000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "fact:V:TotalLiabilitiesAndEquity:FY2026@end",
-   "family": "fact",
-   "company": "V",
-   "concept": "TotalLiabilitiesAndEquity",
-   "period": "FY2026@end",
-   "key": 94360000000,
-   "got": 4349000000,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "get",
-      "company": "V",
-      "concept": "TotalLiabilitiesAndEquity",
-      "period": {
-       "fy": 2026
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "TotalLiabilitiesAndEquity",
-     "period": "FY2026@end",
-     "as": "latest",
-     "tag": "LiabilitiesAndStockholdersEquity",
-     "value": 94360000000,
-     "form": "10-K",
-     "filed": "2026-11-05"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "V_FY2026_10K",
-     "page": 59,
-     "label": "Customer collateral",
-     "printed": "4,349",
-     "period": "FY2026@end",
-     "value": 4349000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "fact:V:TotalLiabilitiesAndEquity:FY2025@end",
-   "family": "fact",
-   "company": "V",
-   "concept": "TotalLiabilitiesAndEquity",
-   "period": "FY2025@end",
-   "key": 99627000000,
-   "got": 3625000000,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "get",
-      "company": "V",
-      "concept": "TotalLiabilitiesAndEquity",
-      "period": {
-       "fy": 2025
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "TotalLiabilitiesAndEquity",
-     "period": "FY2025@end",
-     "as": "latest",
-     "tag": "LiabilitiesAndStockholdersEquity",
-     "value": 99627000000,
-     "form": "10-K",
-     "filed": "2026-11-05"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "V_FY2026_10K",
-     "page": 59,
-     "label": "Customer collateral",
-     "printed": "3,625",
-     "period": "FY2025@end",
-     "value": 3625000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:V:InterestExpense:FY2026",
-   "family": "growth",
-   "company": "V",
-   "concept": "InterestExpense",
-   "period": "FY2026",
-   "key": 0.286927,
-   "got": -0.286927,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "V",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2025
-      },
-      "to": {
-       "fy": 2026
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 589000000,
-     "form": "10-K",
-     "filed": "2026-11-05"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2026",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 758000000,
-     "form": "10-K",
-     "filed": "2026-11-05"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "V_FY2026_10K",
-     "page": 60,
-     "label": "Interest expense",
-     "printed": "(589)",
-     "period": "FY2025",
-     "value": -589000000,
-     "status": "verified"
-    },
-    {
-     "doc": "V_FY2026_10K",
-     "page": 60,
-     "label": "Interest expense",
-     "printed": "(758)",
-     "period": "FY2026",
-     "value": -758000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:V:InterestExpense:FY2025",
-   "family": "growth",
-   "company": "V",
-   "concept": "InterestExpense",
-   "period": "FY2025",
-   "key": -0.0811232,
-   "got": 0.0811232,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "V",
-      "concept": "InterestExpense",
-      "from": {
-       "fy": 2024
-      },
-      "to": {
-       "fy": 2025
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "InterestExpense",
-     "period": "FY2024",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 641000000,
-     "form": "10-K",
-     "filed": "2026-11-05"
-    },
-    {
-     "concept": "InterestExpense",
-     "period": "FY2025",
-     "as": "latest",
-     "tag": "InterestExpenseNonoperating",
-     "value": 589000000,
-     "form": "10-K",
-     "filed": "2026-11-05"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "V_FY2026_10K",
-     "page": 60,
-     "label": "Interest expense",
-     "printed": "(641)",
-     "period": "FY2024",
-     "value": -641000000,
-     "status": "verified"
-    },
-    {
-     "doc": "V_FY2026_10K",
-     "page": 60,
-     "label": "Interest expense",
-     "printed": "(589)",
-     "period": "FY2025",
-     "value": -589000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:V:TotalEquity:FY2026@end",
-   "family": "growth",
-   "company": "V",
-   "concept": "TotalEquity",
-   "period": "FY2026@end",
-   "key": -0.0474294,
-   "got": 0.0721774,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "V",
-      "concept": "TotalEquity",
-      "from": {
-       "fy": 2025
-      },
-      "to": {
-       "fy": 2026
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "TotalEquity",
-     "period": "FY2025@end",
-     "as": "latest",
-     "tag": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
-     "value": 37909000000,
-     "form": "10-K",
-     "filed": "2026-11-05"
-    },
-    {
-     "concept": "TotalEquity",
-     "period": "FY2026@end",
-     "as": "latest",
-     "tag": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
-     "value": 36111000000,
-     "form": "10-K",
-     "filed": "2026-11-05"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "V_FY2026_10K",
-     "page": 59,
-     "label": "Customer collateral",
-     "printed": "3,625",
-     "period": "FY2025@end",
-     "value": 3625000000,
-     "status": "verified"
-    },
-    {
-     "doc": "V_FY2026_10K",
-     "page": 59,
-     "label": "Total liabilities",
-     "printed": "61,718",
-     "period": "FY2025@end",
-     "value": 61718000000,
-     "status": "verified"
-    },
-    {
-     "doc": "V_FY2026_10K",
-     "page": 59,
-     "label": "Customer collateral",
-     "printed": "4,349",
-     "period": "FY2026@end",
-     "value": 4349000000,
-     "status": "verified"
-    },
-    {
-     "doc": "V_FY2026_10K",
-     "page": 59,
-     "label": "Total liabilities",
-     "printed": "58,249",
-     "period": "FY2026@end",
-     "value": 58249000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "growth:V:TotalLiabilitiesAndEquity:FY2026@end",
-   "family": "growth",
-   "company": "V",
-   "concept": "TotalLiabilitiesAndEquity",
-   "period": "FY2026@end",
-   "key": -0.0528672,
-   "got": 0.199724,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "change",
-      "company": "V",
-      "concept": "TotalLiabilitiesAndEquity",
-      "from": {
-       "fy": 2025
-      },
-      "to": {
-       "fy": 2026
-      },
-      "mode": "pct"
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "TotalLiabilitiesAndEquity",
-     "period": "FY2025@end",
-     "as": "latest",
-     "tag": "LiabilitiesAndStockholdersEquity",
-     "value": 99627000000,
-     "form": "10-K",
-     "filed": "2026-11-05"
-    },
-    {
-     "concept": "TotalLiabilitiesAndEquity",
-     "period": "FY2026@end",
-     "as": "latest",
-     "tag": "LiabilitiesAndStockholdersEquity",
-     "value": 94360000000,
-     "form": "10-K",
-     "filed": "2026-11-05"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "V_FY2026_10K",
-     "page": 59,
-     "label": "Customer collateral",
-     "printed": "3,625",
-     "period": "FY2025@end",
-     "value": 3625000000,
-     "status": "verified"
-    },
-    {
-     "doc": "V_FY2026_10K",
-     "page": 59,
-     "label": "Customer collateral",
-     "printed": "4,349",
-     "period": "FY2026@end",
-     "value": 4349000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "metric:V:liabilities_to_equity:FY2025",
-   "family": "metric",
-   "company": "V",
-   "concept": "liabilities_to_equity",
-   "period": "FY2025",
-   "key": 1.62806,
-   "got": -1.0624,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "metric",
-      "company": "V",
-      "metric": "liabilities_to_equity",
-      "period": {
-       "fy": 2025
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "TotalLiabilities",
-     "period": "FY2025@end",
-     "as": "latest",
-     "tag": "Liabilities",
-     "value": 61718000000,
-     "form": "10-K",
-     "filed": "2026-11-05"
-    },
-    {
-     "concept": "TotalEquity",
-     "period": "FY2025@end",
-     "as": "latest",
-     "tag": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
-     "value": 37909000000,
-     "form": "10-K",
-     "filed": "2026-11-05"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "V_FY2026_10K",
-     "page": 59,
-     "label": "Total liabilities",
-     "printed": "61,718",
-     "period": "FY2025@end",
-     "value": 61718000000,
-     "status": "verified"
-    },
-    {
-     "doc": "V_FY2026_10K",
-     "page": 59,
-     "label": "Customer collateral",
-     "printed": "3,625",
-     "period": "FY2025@end",
-     "value": 3625000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "metric:V:liabilities_to_equity:FY2026",
-   "family": "metric",
-   "company": "V",
-   "concept": "liabilities_to_equity",
-   "period": "FY2026",
-   "key": 1.61305,
-   "got": -1.08069,
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "metric",
-      "company": "V",
-      "metric": "liabilities_to_equity",
-      "period": {
-       "fy": 2026
-      }
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [
-    {
-     "concept": "TotalLiabilities",
-     "period": "FY2026@end",
-     "as": "latest",
-     "tag": "Liabilities",
-     "value": 58249000000,
-     "form": "10-K",
-     "filed": "2026-11-05"
-    },
-    {
-     "concept": "TotalEquity",
-     "period": "FY2026@end",
-     "as": "latest",
-     "tag": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
-     "value": 36111000000,
-     "form": "10-K",
-     "filed": "2026-11-05"
-    }
-   ],
-   "leaves": [
-    {
-     "doc": "V_FY2026_10K",
-     "page": 59,
-     "label": "Total liabilities",
-     "printed": "58,249",
-     "period": "FY2026@end",
-     "value": 58249000000,
-     "status": "verified"
-    },
-    {
-     "doc": "V_FY2026_10K",
-     "page": 59,
-     "label": "Customer collateral",
-     "printed": "4,349",
-     "period": "FY2026@end",
-     "value": 4349000000,
      "status": "verified"
     }
    ]
@@ -8830,325 +5286,6 @@
    ]
   },
   {
-   "id": "rank:banks_finance:TotalEquity:latest",
-   "family": "rank",
-   "company": "cluster:banks_finance",
-   "concept": "TotalEquity",
-   "period": "latest",
-   "key": [
-    "JPM",
-    "BAC",
-    "C",
-    "WFC",
-    "GS",
-    "MS",
-    "BLK",
-    "V",
-    "AXP",
-    "MA"
-   ],
-   "got": [
-    "JPM",
-    "BAC",
-    "C",
-    "WFC",
-    "GS",
-    "MS",
-    "BLK",
-    "AXP",
-    "MA",
-    "V"
-   ],
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "rank",
-      "over": [
-       "AXP",
-       "BAC",
-       "BLK",
-       "C",
-       "GS",
-       "JPM",
-       "MA",
-       "MS",
-       "V",
-       "WFC"
-      ],
-      "by": {
-       "concept": "TotalEquity"
-      },
-      "period": {
-       "fy": "latest"
-      },
-      "order": "desc",
-      "k": 10
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [],
-   "leaves": [
-    {
-     "doc": "AXP_FY2025_10K",
-     "page": 97,
-     "label": "Total shareholders\u2019 equity",
-     "printed": "33,474",
-     "period": "FY2025@end",
-     "value": 33474000000,
-     "status": "verified"
-    },
-    {
-     "doc": "BAC_FY2025_10K",
-     "page": 94,
-     "label": "Total shareholders\u2019 equity",
-     "printed": "303,243",
-     "period": "FY2025@end",
-     "value": 303243000000,
-     "status": "verified"
-    },
-    {
-     "doc": "BLK_FY2025_10K",
-     "page": 79,
-     "label": "Total BlackRock, Inc. stockholders\u2019 equity",
-     "printed": "55,888",
-     "period": "FY2025@end",
-     "value": 55888000000,
-     "status": "verified"
-    },
-    {
-     "doc": "C_FY2025_10K",
-     "page": 149,
-     "label": "Total equity",
-     "printed": "213,822",
-     "period": "FY2025@end",
-     "value": 213822000000,
-     "status": "verified"
-    },
-    {
-     "doc": "GS_FY2025_10K",
-     "page": 142,
-     "label": "Total shareholders\u2019 equity",
-     "printed": "124,972",
-     "period": "FY2025@end",
-     "value": 124972000000,
-     "status": "verified"
-    },
-    {
-     "doc": "JPM_FY2025_10K",
-     "page": 169,
-     "label": "Total stockholders\u2019 equity",
-     "printed": "362,438",
-     "period": "FY2025@end",
-     "value": 362438000000,
-     "status": "verified"
-    },
-    {
-     "doc": "MA_FY2025_10K",
-     "page": 71,
-     "label": "Total Equity",
-     "printed": "7,746",
-     "period": "FY2025@end",
-     "value": 7746000000,
-     "status": "verified"
-    },
-    {
-     "doc": "MS_FY2025_10K",
-     "page": 81,
-     "label": "Total equity",
-     "printed": "112,652",
-     "period": "FY2025@end",
-     "value": 112652000000,
-     "status": "verified"
-    },
-    {
-     "doc": "V_FY2026_10K",
-     "page": 59,
-     "label": "Customer collateral",
-     "printed": "4,349",
-     "period": "FY2026@end",
-     "value": 4349000000,
-     "status": "verified"
-    },
-    {
-     "doc": "V_FY2026_10K",
-     "page": 59,
-     "label": "Total liabilities",
-     "printed": "58,249",
-     "period": "FY2026@end",
-     "value": 58249000000,
-     "status": "verified"
-    },
-    {
-     "doc": "WFC_FY2025_10K",
-     "page": 93,
-     "label": "Total equity",
-     "printed": "183,038",
-     "period": "FY2025@end",
-     "value": 183038000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "rank:banks_finance:TotalLiabilitiesAndEquity:latest",
-   "family": "rank",
-   "company": "cluster:banks_finance",
-   "concept": "TotalLiabilitiesAndEquity",
-   "period": "latest",
-   "key": [
-    "JPM",
-    "BAC",
-    "C",
-    "WFC",
-    "GS",
-    "MS",
-    "AXP",
-    "BLK",
-    "V",
-    "MA"
-   ],
-   "got": [
-    "JPM",
-    "BAC",
-    "C",
-    "WFC",
-    "GS",
-    "MS",
-    "AXP",
-    "BLK",
-    "MA",
-    "V"
-   ],
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "rank",
-      "over": [
-       "AXP",
-       "BAC",
-       "BLK",
-       "C",
-       "GS",
-       "JPM",
-       "MA",
-       "MS",
-       "V",
-       "WFC"
-      ],
-      "by": {
-       "concept": "TotalLiabilitiesAndEquity"
-      },
-      "period": {
-       "fy": "latest"
-      },
-      "order": "desc",
-      "k": 10
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [],
-   "leaves": [
-    {
-     "doc": "AXP_FY2025_10K",
-     "page": 97,
-     "label": "Total liabilities and shareholders\u2019 equity",
-     "printed": "300,052",
-     "period": "FY2025@end",
-     "value": 300052000000,
-     "status": "verified"
-    },
-    {
-     "doc": "BAC_FY2025_10K",
-     "page": 94,
-     "label": "Total liabilities and shareholders\u2019 equity",
-     "printed": "3,411,738",
-     "period": "FY2025@end",
-     "value": 3411738000000,
-     "status": "verified"
-    },
-    {
-     "doc": "BLK_FY2025_10K",
-     "page": 79,
-     "label": "Total liabilities, temporary equity and permanent equity",
-     "printed": "169,998",
-     "period": "FY2025@end",
-     "value": 169998000000,
-     "status": "verified"
-    },
-    {
-     "doc": "C_FY2025_10K",
-     "page": 149,
-     "label": "Total liabilities and equity",
-     "printed": "2,657,202",
-     "period": "FY2025@end",
-     "value": 2657202000000,
-     "status": "verified"
-    },
-    {
-     "doc": "GS_FY2025_10K",
-     "page": 142,
-     "label": "Total liabilities and shareholders\u2019 equity",
-     "printed": "1,809,320",
-     "period": "FY2025@end",
-     "value": 1809320000000,
-     "status": "verified"
-    },
-    {
-     "doc": "JPM_FY2025_10K",
-     "page": 169,
-     "label": "Total liabilities and stockholders\u2019 equity",
-     "printed": "4,424,900",
-     "period": "FY2025@end",
-     "value": 4424900000000,
-     "status": "verified"
-    },
-    {
-     "doc": "MA_FY2025_10K",
-     "page": 71,
-     "label": "Total Liabilities and Equity",
-     "printed": "54,157",
-     "period": "FY2025@end",
-     "value": 54157000000,
-     "status": "verified"
-    },
-    {
-     "doc": "MS_FY2025_10K",
-     "page": 81,
-     "label": "Total liabilities and equity",
-     "printed": "1,420,270",
-     "period": "FY2025@end",
-     "value": 1420270000000,
-     "status": "verified"
-    },
-    {
-     "doc": "V_FY2026_10K",
-     "page": 59,
-     "label": "Customer collateral",
-     "printed": "4,349",
-     "period": "FY2026@end",
-     "value": 4349000000,
-     "status": "verified"
-    },
-    {
-     "doc": "WFC_FY2025_10K",
-     "page": 93,
-     "label": "Total liabilities and equity",
-     "printed": "2,148,631",
-     "period": "FY2025@end",
-     "value": 2148631000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
    "id": "rank:big_tech:IncomeTax:latest",
    "family": "rank",
    "company": "cluster:big_tech",
@@ -9311,268 +5448,6 @@
      "printed": "2,467",
      "period": "FY2026",
      "value": 2467000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "rank:big_tech:LongTermDebt:latest",
-   "family": "rank",
-   "company": "cluster:big_tech",
-   "concept": "LongTermDebt",
-   "period": "latest",
-   "key": [
-    "AAPL",
-    "AMZN",
-    "META",
-    "GOOGL",
-    "MSFT",
-    "CSCO",
-    "CRM",
-    "NVDA",
-    "AMD"
-   ],
-   "got": [
-    "AMZN",
-    "META",
-    "GOOGL",
-    "MSFT",
-    "CSCO",
-    "CRM",
-    "AAPL",
-    "NVDA",
-    "AMD"
-   ],
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "rank",
-      "over": [
-       "AAPL",
-       "AMD",
-       "AMZN",
-       "CRM",
-       "CSCO",
-       "GOOGL",
-       "META",
-       "MSFT",
-       "NVDA"
-      ],
-      "by": {
-       "concept": "LongTermDebt"
-      },
-      "period": {
-       "fy": "latest"
-      },
-      "order": "desc",
-      "k": 9
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [],
-   "leaves": [
-    {
-     "doc": "AAPL_FY2026_10K",
-     "page": 37,
-     "label": "Term debt",
-     "printed": "9,906",
-     "period": "FY2026@end",
-     "value": 9906000000,
-     "status": "verified"
-    },
-    {
-     "doc": "AMD_FY2025_10K",
-     "page": 63,
-     "label": "Long-term debt, net of current portion",
-     "printed": "2,348",
-     "period": "FY2025@end",
-     "value": 2348000000,
-     "status": "verified"
-    },
-    {
-     "doc": "AMZN_FY2025_10K",
-     "page": 39,
-     "label": "Long-term debt",
-     "printed": "65,648",
-     "period": "FY2025@end",
-     "value": 65648000000,
-     "status": "verified"
-    },
-    {
-     "doc": "CRM_FY2026_10K",
-     "page": 66,
-     "label": "Noncurrent debt",
-     "printed": "10,439",
-     "period": "FY2026@end",
-     "value": 10439000000,
-     "status": "verified"
-    },
-    {
-     "doc": "CSCO_FY2026_10K",
-     "page": 75,
-     "label": "Long-term debt..............................................",
-     "printed": "19,372",
-     "period": "FY2026@end",
-     "value": 19372000000,
-     "status": "verified"
-    },
-    {
-     "doc": "GOOGL_FY2025_10K",
-     "page": 49,
-     "label": "Long-term debt",
-     "printed": "46,547",
-     "period": "FY2025@end",
-     "value": 46547000000,
-     "status": "verified"
-    },
-    {
-     "doc": "META_FY2025_10K",
-     "page": 89,
-     "label": "Long-term debt",
-     "printed": "58,744",
-     "period": "FY2025@end",
-     "value": 58744000000,
-     "status": "verified"
-    },
-    {
-     "doc": "MSFT_FY2026_10K",
-     "page": 52,
-     "label": "Long-term debt",
-     "printed": "31,067",
-     "period": "FY2026@end",
-     "value": 31067000000,
-     "status": "verified"
-    },
-    {
-     "doc": "NVDA_FY2026_10K",
-     "page": 141,
-     "label": "Long-term debt",
-     "printed": "7,469",
-     "period": "FY2026@end",
-     "value": 7469000000,
-     "status": "verified"
-    }
-   ]
-  },
-  {
-   "id": "rank:consumer_retail:PropertyPlantEquipment:latest",
-   "family": "rank",
-   "company": "cluster:consumer_retail",
-   "concept": "PropertyPlantEquipment",
-   "period": "latest",
-   "key": [
-    "WMT",
-    "COST",
-    "PEP",
-    "MCD",
-    "PG",
-    "KO",
-    "NKE"
-   ],
-   "got": [
-    "WMT",
-    "MCD",
-    "COST",
-    "PEP",
-    "PG",
-    "KO",
-    "NKE"
-   ],
-   "class": "wrong_silent",
-   "alt_definition": false,
-   "plan": {
-    "steps": [
-     {
-      "id": "s1",
-      "op": "rank",
-      "over": [
-       "COST",
-       "KO",
-       "MCD",
-       "NKE",
-       "PEP",
-       "PG",
-       "WMT"
-      ],
-      "by": {
-       "concept": "PropertyPlantEquipment"
-      },
-      "period": {
-       "fy": "latest"
-      },
-      "order": "desc",
-      "k": 7
-     }
-    ],
-    "answer": "s1"
-   },
-   "key_terms": [],
-   "leaves": [
-    {
-     "doc": "COST_FY2026_10K",
-     "page": 40,
-     "label": "Property and equipment, net",
-     "printed": "35,633",
-     "period": "FY2026@end",
-     "value": 35633000000,
-     "status": "verified"
-    },
-    {
-     "doc": "KO_FY2025_10K",
-     "page": 65,
-     "label": "Property, plant and equipment \u2014 net",
-     "printed": "9,613",
-     "period": "FY2025@end",
-     "value": 9613000000,
-     "status": "verified"
-    },
-    {
-     "doc": "MCD_FY2025_10K",
-     "page": 49,
-     "label": "Property and equipment, at cost",
-     "printed": "49,290",
-     "period": "FY2025@end",
-     "value": 49290000000,
-     "status": "verified"
-    },
-    {
-     "doc": "NKE_FY2026_10K",
-     "page": 60,
-     "label": "Property, plant and equipment, net",
-     "printed": "4,796",
-     "period": "FY2026@end",
-     "value": 4796000000,
-     "status": "verified"
-    },
-    {
-     "doc": "PEP_FY2025_10K",
-     "page": 64,
-     "label": "Property, Plant and Equipment, net",
-     "printed": "29,905",
-     "period": "FY2025@end",
-     "value": 29905000000,
-     "status": "verified"
-    },
-    {
-     "doc": "PG_FY2026_10K",
-     "page": 40,
-     "label": "PROPERTY, PLANT AND EQUIPMENT, NET",
-     "printed": "25,360",
-     "period": "FY2026@end",
-     "value": 25360000000,
-     "status": "verified"
-    },
-    {
-     "doc": "WMT_FY2026_10K",
-     "page": 54,
-     "label": "Property and equipment, net",
-     "printed": "136,083",
-     "period": "FY2026@end",
-     "value": 136083000000,
      "status": "verified"
     }
    ]

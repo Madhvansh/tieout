@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "In the Item 2 (Properties) disclosure of Amazon's 2025 Form 10-K, how many of the physical stores it operated in North America at December 31, 2025 does the footnote to the facilities table count?",
+ "abstain": false,
+ "answer": "615",
+ "pred": {
+  "kind": "number",
+  "value": 615.0
+ },
+ "unit": "count",
+ "facts": [
+  {
+   "ticker": "AMZN",
+   "doc": "AMZN_FY2025_10K",
+   "page": 18,
+   "value": 615.0,
+   "label": "This includes 615 North America and 8 International stores as of December 31, 2025.",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

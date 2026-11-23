@@ -1,0 +1,26 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What net income did Costco report for fiscal 2026?",
+ "abstain": false,
+ "answer": "$9,226 million",
+ "pred": {
+  "kind": "number",
+  "value": 9226.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "COST",
+   "doc": "COST_FY2026_10K",
+   "page": 26,
+   "value": 9226.0,
+   "label": "NET INCOME",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

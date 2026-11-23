@@ -1,0 +1,34 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Using the Item 2 retail-unit table in Walmart's fiscal 2026 Form 10-K (as of January 31, 2026, with most international units as of December 31, 2025), what was the average gross square feet per Walmart International retail unit, computed from the retail line's total square feet and unit count (not the printed average selling area)?",
+ "abstain": false,
+ "answer": "43,759.54",
+ "pred": {
+  "kind": "number",
+  "value": 43759.540199999996
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "WMT",
+   "doc": "WMT_FY2026_10K",
+   "page": 29,
+   "value": 236214000.0,
+   "label": "Walmart International Retail Square Feet Total",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "WMT",
+   "doc": "WMT_FY2026_10K",
+   "page": 29,
+   "value": 5398.0,
+   "label": "Walmart International Retail Unit Count",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

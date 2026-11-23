@@ -1,0 +1,18 @@
+{
+ "model": "gemini:gemini-3.5-flash-lite",
+ "system": "You say how an SEC filing would label a financial item. Given an item phrase from a question\nand the company, list up to 4 other labels the company's annual or quarterly report might print for the\nsame item: its own term for it, a synonym, an abbreviation spelled out or the reverse. Never a number.\nAnswer as JSON: {\"labels\": [\"...\", \"...\"]}",
+ "user": "Company: The Home Depot Inc. (HD)\nItem: customer transactions excluding HD Supply and SRS",
+ "answer": {
+  "labels": [
+   "Customer transactions",
+   "Customer transactions excluding HD Supply",
+   "Total customer transactions",
+   "Number of customer transactions"
+  ]
+ },
+ "seconds": 1.67,
+ "usage": {
+  "in": 101,
+  "out": 42
+ }
+}

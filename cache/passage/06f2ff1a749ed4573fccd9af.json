@@ -1,0 +1,71 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Rank JPMorgan, Bank of America, Citigroup and Wells Fargo by deposits at the end of 2025, largest first.",
+ "abstain": false,
+ "answer": "['JPMorgan', 'Bank of America', 'Wells Fargo', 'Citigroup']",
+ "pred": {
+  "kind": "companies",
+  "value": [
+   [
+    "JPMorgan",
+    null
+   ],
+   [
+    "Bank of America",
+    null
+   ],
+   [
+    "Wells Fargo",
+    null
+   ],
+   [
+    "Citigroup",
+    null
+   ]
+  ]
+ },
+ "unit": "company",
+ "facts": [
+  {
+   "ticker": "JPM",
+   "doc": "JPM_FY2025_10K",
+   "page": 105,
+   "value": 2559320.0,
+   "label": "Total Firm period-end deposits as of December 31, 2025",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "BAC",
+   "doc": "BAC_FY2025_10K",
+   "page": 59,
+   "value": 2020000000000.0,
+   "label": "Corporations's deposits at December 31, 2025",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "WFC",
+   "doc": "WFC_FY2025_10K",
+   "page": 39,
+   "value": 1426207.0,
+   "label": "Total deposits at Dec 31, 2025",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "C",
+   "doc": "C_FY2025_10K",
+   "page": 105,
+   "value": 1404.0,
+   "label": "Total Citigroup deposits (EOP) for 4Q25",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

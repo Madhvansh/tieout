@@ -1,0 +1,83 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "The competition chart in Visa's fiscal 2026 Form 10-K compares networks for calendar year 2025 on payments volume, transactions and cards. Rank Visa, American Express and Mastercard by payments volume per card (payments volume divided by cards), highest first.",
+ "abstain": false,
+ "answer": "Visa, Mastercard, American Express",
+ "pred": {
+  "kind": "companies",
+  "value": [
+   [
+    "Visa",
+    null
+   ],
+   [
+    "Mastercard",
+    null
+   ],
+   [
+    "American Express",
+    null
+   ]
+  ]
+ },
+ "unit": "company",
+ "facts": [
+  {
+   "ticker": "V",
+   "doc": "V_FY2026_10K",
+   "page": 19,
+   "value": 14567.0,
+   "label": "Payments Volume ($B)",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "V",
+   "doc": "V_FY2026_10K",
+   "page": 19,
+   "value": 5142.0,
+   "label": "Cards (M)(3)",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "V",
+   "doc": "V_FY2026_10K",
+   "page": 19,
+   "value": 1888.0,
+   "label": "Payments Volume ($B)",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "V",
+   "doc": "V_FY2026_10K",
+   "page": 19,
+   "value": 153.0,
+   "label": "Cards (M)(3)",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "V",
+   "doc": "V_FY2026_10K",
+   "page": 19,
+   "value": 8812.0,
+   "label": "Payments Volume ($B)",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "V",
+   "doc": "V_FY2026_10K",
+   "page": 19,
+   "value": 3377.0,
+   "label": "Cards (M)(3)",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

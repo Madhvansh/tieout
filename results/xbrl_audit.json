@@ -1,14 +1,14 @@
 {
- "readings_checked": 12160,
- "confirmed": 10714,
- "confirmed_share": 0.8810855263157895,
+ "readings_checked": 12189,
+ "confirmed": 10741,
+ "confirmed_share": 0.8812043645910247,
  "by_status": {
   "verified": {
-   "confirmed": 10538,
-   "not_confirmed": 1347
+   "confirmed": 10568,
+   "not_confirmed": 1349
   },
   "unverified": {
-   "confirmed": 171,
+   "confirmed": 168,
    "not_confirmed": 96
   },
   "failed": {
@@ -16,7 +16,7 @@
    "not_confirmed": 3
   }
  },
- "period_not_in_xbrl": 90,
+ "period_not_in_xbrl": 106,
  "bindings_compared": 2912,
  "bindings_agree": 2874,
  "bindings_agree_share": 0.9869505494505495,
@@ -24,41 +24,41 @@
   "Revenue": {
    "agree": 143,
    "disagree": 5,
-   "no_xbrl_value": 1
+   "no_xbrl_value": 2
   },
   "CostOfRevenue": {
    "agree": 99,
-   "no_xbrl_value": 1,
+   "no_xbrl_value": 2,
    "disagree": 0
   },
   "GrossProfit": {
    "agree": 53,
-   "no_xbrl_value": 1,
+   "no_xbrl_value": 2,
    "disagree": 0
   },
   "ResearchAndDevelopment": {
    "agree": 48,
-   "no_xbrl_value": 10,
+   "no_xbrl_value": 11,
    "disagree": 3
   },
   "OperatingIncome": {
    "agree": 98,
-   "no_xbrl_value": 4,
+   "no_xbrl_value": 1,
    "disagree": 0
   },
   "IncomeTax": {
    "agree": 148,
-   "no_xbrl_value": 1,
+   "no_xbrl_value": 2,
    "disagree": 0
   },
   "NetIncome": {
    "agree": 147,
-   "no_xbrl_value": 2,
+   "no_xbrl_value": 3,
    "disagree": 0
   },
   "ConsolidatedNetIncome": {
    "agree": 143,
-   "no_xbrl_value": 1,
+   "no_xbrl_value": 2,
    "disagree": 5
   },
   "AccountsReceivable": {
@@ -96,7 +96,6 @@
   },
   "TotalLiabilities": {
    "agree": 74,
-   "no_xbrl_value": 2,
    "disagree": 0
   },
   "TotalCurrentLiabilities": {
@@ -153,7 +152,7 @@
   },
   "InterestExpense": {
    "agree": 78,
-   "no_xbrl_value": 23,
+   "no_xbrl_value": 24,
    "disagree": 2
   },
   "Goodwill": {
@@ -831,23 +830,23 @@
    "confirmed_unverified": 5
   },
   "JNJ": {
-   "confirmed": 516,
-   "confirmed_verified": 507,
-   "not_confirmed": 69,
-   "not_confirmed_verified": 62,
+   "confirmed": 543,
+   "confirmed_verified": 534,
+   "not_confirmed": 71,
+   "not_confirmed_verified": 64,
    "not_confirmed_unverified": 4,
    "confirmed_failed": 5,
    "not_confirmed_failed": 3,
    "confirmed_unverified": 4,
-   "period_not_in_xbrl": 47
+   "period_not_in_xbrl": 63
   },
   "JPM": {
    "confirmed": 231,
-   "confirmed_verified": 222,
+   "confirmed_verified": 225,
    "not_confirmed": 59,
    "not_confirmed_verified": 57,
-   "confirmed_unverified": 9,
-   "not_confirmed_unverified": 2
+   "not_confirmed_unverified": 2,
+   "confirmed_unverified": 6
   },
   "KO": {
    "confirmed": 564,

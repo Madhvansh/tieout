@@ -1,0 +1,26 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was revenue of Costco Wholesale Corp for fiscal year 2026 (for a balance: at the end of fiscal year 2026)? Give the one figure the filing prints for it.",
+ "abstain": false,
+ "answer": "303,154 million",
+ "pred": {
+  "kind": "number",
+  "value": 303154000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "COST",
+   "doc": "COST_FY2026_10K",
+   "page": 38,
+   "value": 303154.0,
+   "label": "Total revenue",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}
