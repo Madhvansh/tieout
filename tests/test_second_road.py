@@ -583,3 +583,20 @@ def test_a_judge_with_no_quota_leaves_the_served_answer(road, monkeypatch):
     monkeypatch.setattr(llm, "ask_json", lambda system, user, **k: spent() if k.get("tag") == "judge" else {"expr": "f1 - f2"})
     out = readers.second_road("q", G, one, PANEL, {"executor": object()})
     assert out["result"].value == 54e6 and out["reading"]["passage"]["judge"]["pick"] is None
+
+
+def test_a_fall_asked_as_a_size_is_reported_as_a_size():
+    # round 11, J08: "by how many percentage points did the margin fall" was served -1.52; every key states the size
+    from tieout import ask
+    assert ask.fall_as_size("By how many percentage points did Home Depot's operating margin fall between 2023 and 2025?")
+    assert ask.fall_as_size("By what percent did Tesla's operating income fall in 2025 compared with 2024?")
+    assert not ask.fall_as_size("Did the margin decline or improve, and by how much?")      # the direction is open
+    assert not ask.fall_as_size("By how much did revenue grow in 2025?")
+    assert not ask.fall_as_size("What was the change in net income between 2024 and 2025?")
+    fell = Result("number", -0.0152, "ratio")
+    out = readers._as_asked("By how many percentage points did the margin fall?", {"result": fell, "answer": "-1.52%"})
+    assert out["result"].value == 0.0152 and "size of a fall" in out["result"].notes[-1]
+    rose = Result("number", 0.02, "ratio")                # asked as a fall, but it rose: left as computed
+    assert readers._as_asked("By how much did the margin fall?", {"result": rose, "answer": "2.00%"})["result"].value == 0.02
+    signed = Result("number", -5.0, "USD")
+    assert readers._as_asked("What was the change in cash?", {"result": signed, "answer": "-5"})["result"].value == -5.0

@@ -162,6 +162,18 @@ _QUARTER = re.compile(r"\b(first|second|third|fourth|1st|2nd|3rd|4th)\s+(fiscal\
 _SO_FAR = re.compile(r"\b(nine|six|three)\s+months\b|\byear[- ]to[- ]date\b|\bfirst (half|nine months)\b", re.I)
 
 
+_FALL = re.compile(r"\b(?:by )?how (?:much|many)\b[^?]*\b(?:fall|fell|fallen|declin\w*|decreas\w*|drop(?:ped)?|shr[aiu]nk|narrow\w*)\b"
+                   r"|\bby what (?:percent\w*|amount)\b[^?]*\b(?:fall|fell|fallen|declin\w*|decreas\w*|drop(?:ped)?|shr[aiu]nk)\b", re.I)
+_RISE = re.compile(r"\b(?:ris\w*|rose|increas\w*|grow\w*|grew|improv\w*|gain\w*|expand\w*|widen\w*)\b", re.I)
+
+
+def fall_as_size(question: str) -> bool:
+    """Does the question ask for the SIZE of a fall ("by how many points did the margin fall")? Then a
+    negative change is reported as its size, the way the question's own words put it. Not when the words
+    leave the direction open ("did it decline or improve", "rise or fall")."""
+    return bool(_FALL.search(question)) and not _RISE.search(question)
+
+
 def shape_misfit(question: str, plan: dict, res: Result) -> str:
     """Why the answer's type cannot answer the question, or "" if it can (or the plan did not run).
 

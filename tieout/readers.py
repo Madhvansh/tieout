@@ -78,6 +78,19 @@ def answer(question: str, g, readers: Readers, **kw) -> dict:
     served = _plan_road(question, g, readers, **kw)
     if getattr(readers, "passage", ""):
         served = second_road(question, g, served, readers, kw)
+    return _as_asked(question, served)
+
+
+def _as_asked(question: str, served: dict) -> dict:
+    """A fall asked as a size ("by how many points did the margin fall") is reported as a size: every key
+    of the development rounds states it so (14 of 14 such questions, dev_scripts/fable3/fall_words.py). Applied
+    once, to the served answer; the readings are compared as the plans computed them."""
+    res = served["result"]
+    if res.ok and res.kind == "number" and _is_number(res.value) and res.value < 0 and ask.fall_as_size(question) \
+            and not os.environ.get("TIEOUT_NO_WORD_RULES"):
+        res.value = -res.value
+        res.notes = list(res.notes) + ["the question asks for the size of a fall: the change is reported as its size"]
+        served = {**served, "answer": render(res)}
     return served
 
 
