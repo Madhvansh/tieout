@@ -2,6 +2,8 @@
 
 Questions about SEC filings, answered from a knowledge graph of the filings' own arithmetic. Every answer is read from graph nodes and comes with its proof (the filing, the page and the printed figure behind each number) and a tier that says how far to trust it. 55 filings of 40 companies. The reported run uses one free Gemini key and a laptop CPU.
 
+**Results PDF (2 pages): [`report/results.pdf`](report/results.pdf).** Optional research note: [`report/note.pdf`](report/note.pdf). Where the code is: [repository map](#repository-map).
+
 ## Results: 30 held-out questions, run once
 
 Written by blind authors and committed before any run (`benchmark/round2/questions.jsonl`; how: [below](#how-the-benchmark-was-made)), run once on the frozen code (tag `frozen-v2`), reported as it came. **Precision**: of the facts an answer rests on (its proof leaves: the printed figures it was computed from), the share that are gold supporting facts. **Recall**: of the gold supporting facts, the share the answer retrieved. Both are means over questions, computed by `tieout/eval/bench.py`. No model judges an answer.
@@ -38,6 +40,23 @@ TIEOUT_LINK_LLM=gemini:gemini-3.5-flash-lite python scripts/run_benchmark.py --b
 ```
 
 Without `--offline` the last command answers new questions: it needs a free `GEMINI_API_KEY` in `.env` and the fine-tuned planner in Ollama (`finetune/README.md`). Rebuild the graph from the PDFs with `python scripts/fetch_corpus.py`, `python -m tieout build`, `python scripts/build_raw.py`, `python scripts/add_headings.py`, `python scripts/ledger.py`.
+
+## Repository map
+
+| Path | What is in it |
+|---|---|
+| `tieout/` | The system. Building the graph: `pdfio.py`, `tables.py`, `statements.py`, `rawlayer.py`, `textfacts.py`, `graph.py`. Answering: `planner.py` and `plan.py` (a model writes a typed plan), `link.py` (plan lines to graph nodes), `execute.py` (runs the plan on the graph, returns the answer and its proof), `readers.py` and `passage.py` (the second planner, the text reader as witness and pointer, the judge), `witness.py` (tiers). |
+| `tieout/eval/` | Scoring: `bench.py` (accuracy, precision, recall), `brief.py` (is every proof leaf a graph node), fault and noise tests. |
+| `scripts/` | Entry points: `run_benchmark.py`, `run_baseline.py`, `check_brief.py`, `report_numbers.py`, `clean_clone_check.py`, `check_leakage.py`, and the graph build steps. |
+| `benchmark/` | The questions with gold answers and supporting facts. `round2/questions.jsonl` is the held-out set; `round3/` to `round11/` are the development rounds. |
+| `baseline/` | The retrieval baseline (passages read by the same free model). |
+| `graph/`, `data/` | The built graph and the filings' extracted pages. |
+| `results/` | One JSON file per reported run; `first_runs/` holds each development round's first run. |
+| `cache/` | Every model call of the headline run, so it replays with no key. |
+| `finetune/` | Training data, notebooks and model card of the fine-tuned planner. |
+| `report/` | The results PDF, the research note and their LaTeX sources. |
+| `tests/` | 280 unit tests (`python -m pytest -q`). |
+| `DECISIONS.md` | The design decisions D1 to D15 and why each was made. |
 
 ## One answer, end to end
 
