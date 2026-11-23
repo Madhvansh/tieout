@@ -219,7 +219,13 @@ def do_replays(dest: Path, compare: bool, wt_python: str):
                 clone_res, err, needs_path = replay(dest, str(venv_python(dest)), bench, oracle, dest / "results" / f"cc_replay_{i}.json")
                 rec = {"label": label, "bench": bench, "oracle": oracle, "clone": clone_res, "clone_error": err,
                        "needs_pythonpath_in_clone": needs_path}
-                if compare:
+                held = bench.endswith("round2/questions.jsonl")
+                if held:
+                    # The held-out run happened once. Its replay is compared with the RECORDED run (the committed
+                    # result file), not with a replay in this working tree: the working tree's cache also holds
+                    # calls that later side runs made, which the run itself never had (the free key refused them)
+                    rec["recorded"] = read_result(dest / "results" / "heldout_v2.json")
+                elif compare:
                     wt_res, werr, _ = replay(ROOT, wt_python, bench, oracle, tmp / f"wt_{i}.json")
                     rec["worktree"], rec["worktree_error"] = wt_res, werr
                 REPLAYS.append(rec)
@@ -233,7 +239,15 @@ def do_replays(dest: Path, compare: bool, wt_python: str):
                     notes.append(f"{clone_res['live']} live LLM calls")
                 if clone_res["complete"] is False:
                     notes.append("incomplete")
-                if compare:
+                if held:
+                    r = rec["recorded"]
+                    if r is None:
+                        notes.append("results/heldout_v2.json is missing in the clone")
+                    else:
+                        acc += f" (the recorded run {r['correct']}/{r['n']})"
+                        if r["ok_ids"] != clone_res["ok_ids"]:
+                            notes.append("differs from the recorded run on " + ",".join(sorted(set(r["ok_ids"]) ^ set(clone_res["ok_ids"]))[:12]))
+                elif compare:
                     w = rec["worktree"]
                     if w is None:
                         notes.append(f"worktree run failed: {rec['worktree_error'][-80:]}")
