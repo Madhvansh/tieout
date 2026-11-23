@@ -1,0 +1,34 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What share of Merck's total 2025 sales came from Keytruda (including Keytruda Qlex)?",
+ "abstain": false,
+ "answer": "0.4873",
+ "pred": {
+  "kind": "number",
+  "value": 0.48731476057896356
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "MRK",
+   "doc": "MRK_FY2025_10K",
+   "page": 3,
+   "value": 65011.0,
+   "label": "Total Sales",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "MRK",
+   "doc": "MRK_FY2025_10K",
+   "page": 3,
+   "value": 31680.0,
+   "label": "Keytruda/Keytruda Qlex",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

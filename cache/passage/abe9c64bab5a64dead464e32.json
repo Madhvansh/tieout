@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What share of American Express's worldwide Card Member loans was tied to its Delta co-brand cards at the end of 2025?",
+ "abstain": false,
+ "answer": "21 percent",
+ "pred": {
+  "kind": "number",
+  "value": 0.21
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "AXP",
+   "doc": "AXP_FY2025_10K",
+   "page": 7,
+   "value": 0.21,
+   "label": "Delta cobrand portfolio percentage of worldwide Card Member loans",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

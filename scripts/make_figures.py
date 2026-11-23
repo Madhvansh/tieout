@@ -55,7 +55,7 @@ def main():
     # ---- A: one series, sorted, value at the end of each bar
     bars = [("Hand-written plans (blind)", correct("benchmark_oracle")),
             ("TieOut, frozen first run", correct("benchmark_tieout")),
-            ("Living layer off", correct("tieout_no-living")),
+            ("Living layer off", correct("tieout_no-living_seed_only")),
             ("Derivations off", correct("tieout_no-derivations")),
             ("Concept layer off", correct("tieout_no-concepts")),
             ("Chunk-retrieval baseline", baseline_correct())]

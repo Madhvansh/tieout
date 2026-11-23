@@ -1,0 +1,35 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Roughly how much automotive sales revenue did Tesla book per consumer vehicle delivered in 2025?",
+ "abstain": false,
+ "answer": "$40,134.76",
+ "pred": {
+  "kind": "number",
+  "value": 40134.75609756098
+ },
+ "unit": "USD/share",
+ "facts": [
+  {
+   "ticker": "TSLA",
+   "doc": "TSLA_FY2025_10K",
+   "page": 40,
+   "value": 65821000000.0,
+   "label": "Automotive sales",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "TSLA",
+   "doc": "TSLA_FY2025_10K",
+   "page": 34,
+   "value": 1640000.0,
+   "label": "delivered approximately 1.64 million consumer vehicles",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

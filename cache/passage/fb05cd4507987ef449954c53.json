@@ -1,0 +1,35 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Goldman Sachs' 2025 annual report shows a different 2024 pre-tax profit for Global Banking & Markets than its 2024 annual report did. By how much was the 2024 figure changed?",
+ "abstain": false,
+ "answer": "394 million",
+ "pred": {
+  "kind": "number",
+  "value": 394000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "GS",
+   "doc": "GS_FY2024_10K",
+   "page": 74,
+   "value": 14923000000.0,
+   "label": "Pre-tax earnings",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "GS",
+   "doc": "GS_FY2025_10K",
+   "page": 77,
+   "value": 14529000000.0,
+   "label": "Pre-tax earnings",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

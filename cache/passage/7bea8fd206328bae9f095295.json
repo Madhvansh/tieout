@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How many of JPMorgan Chase's employees were based in Asia-Pacific at the end of 2025?",
+ "abstain": false,
+ "answer": "At the end of 2025, JPMorgan Chase had 96,499 employees based in Asia-Pacific.",
+ "pred": {
+  "kind": "number",
+  "value": 96499.0
+ },
+ "unit": "count",
+ "facts": [
+  {
+   "ticker": "JPM",
+   "doc": "JPM_FY2025_10K",
+   "page": 9,
+   "value": 96499.0,
+   "label": "Asia-Pacific Employees",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

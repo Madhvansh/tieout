@@ -1,0 +1,34 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What 2024 net income did Bank of America originally report, what does its 2025 annual report now show for 2024, and why the difference?",
+ "abstain": false,
+ "answer": "Bank of America originally reported 2024 net income of $27,132 million in its 2024 annual report (Form 10-K). Its 2025 annual report now shows 2024 net income of $26,973 million. The difference is a decrease of $159 million, resulting from retrospective adjustments or restatements reported in the 2025 Form 10-K.",
+ "pred": {
+  "kind": "text",
+  "value": "27132 million originally, 26973 million subsequently"
+ },
+ "unit": "text",
+ "facts": [
+  {
+   "ticker": "BAC",
+   "doc": "BAC_FY2024_10K",
+   "page": 92,
+   "value": 27132.0,
+   "label": "Net income",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "BAC",
+   "doc": "BAC_FY2025_10K",
+   "page": 93,
+   "value": 26973.0,
+   "label": "Net income",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

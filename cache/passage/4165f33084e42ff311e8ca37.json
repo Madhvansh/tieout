@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was data center revenue of NVIDIA Corp for fiscal year 2026 (for a balance: at the end of fiscal year 2026)? Give the one figure the filing prints for it.",
+ "abstain": false,
+ "answer": "$193,737 million",
+ "pred": {
+  "kind": "number",
+  "value": 193737000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "NVDA",
+   "doc": "NVDA_FY2026_10K",
+   "page": 167,
+   "value": 193737000000.0,
+   "label": "Data Center",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

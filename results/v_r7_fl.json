@@ -1,0 +1,3817 @@
+{
+ "name": "v_r7_fl",
+ "args": {
+  "bench": "benchmark/round7/dev.jsonl",
+  "oracle": null,
+  "ablate": null,
+  "strict": false,
+  "noise": 0.0,
+  "seed": 1,
+  "offline": false,
+  "no_learning": false,
+  "model": "gemini:gemini-3.5-flash-lite",
+  "name": "v_r7_fl",
+  "ids": null,
+  "no_repair": false,
+  "persist": false,
+  "checker": null,
+  "arbiter": "",
+  "pick_checker": null
+ },
+ "complete": true,
+ "score": {
+  "overall": {
+   "n": 36,
+   "correct": 19,
+   "accuracy": 0.5277777777777778,
+   "accuracy_ci95": [
+    0.3701,
+    0.6801
+   ],
+   "precision_macro": 0.7645502645502646,
+   "recall_macro": 0.5374649859943978,
+   "precision_micro": 0.8181818181818182,
+   "recall_micro": 0.5818181818181818,
+   "page_exact_share": 0.9523809523809523,
+   "abstained": 7,
+   "by_tier": {
+    "VERIFIED": {
+     "n": 5,
+     "correct": 3
+    },
+    "WITNESSED": {
+     "n": 0,
+     "correct": 0
+    },
+    "FLAGGED": {
+     "n": 24,
+     "correct": 14
+    },
+    "ABSTAIN": {
+     "n": 7,
+     "correct": 2
+    }
+   },
+   "silent_wrong": 2,
+   "witnessed_wrong": 0,
+   "answered_accuracy": 0.5862068965517241
+  },
+  "single_fact": {
+   "n": 12,
+   "correct": 6,
+   "accuracy": 0.5,
+   "accuracy_ci95": [
+    0.2538,
+    0.7462
+   ],
+   "precision_macro": 0.4166666666666667,
+   "recall_macro": 0.2,
+   "precision_micro": 0.18181818181818182,
+   "recall_micro": 0.25,
+   "page_exact_share": 1.0,
+   "abstained": 3,
+   "by_tier": {
+    "VERIFIED": {
+     "n": 0,
+     "correct": 0
+    },
+    "WITNESSED": {
+     "n": 0,
+     "correct": 0
+    },
+    "FLAGGED": {
+     "n": 9,
+     "correct": 4
+    },
+    "ABSTAIN": {
+     "n": 3,
+     "correct": 2
+    }
+   },
+   "silent_wrong": 0,
+   "witnessed_wrong": 0,
+   "answered_accuracy": 0.4444444444444444
+  },
+  "multi_hop": {
+   "n": 12,
+   "correct": 6,
+   "accuracy": 0.5,
+   "accuracy_ci95": [
+    0.2538,
+    0.7462
+   ],
+   "precision_macro": 0.8908730158730158,
+   "recall_macro": 0.6755952380952381,
+   "precision_micro": 0.8666666666666667,
+   "recall_micro": 0.5652173913043478,
+   "page_exact_share": 0.8846153846153846,
+   "abstained": 2,
+   "by_tier": {
+    "VERIFIED": {
+     "n": 1,
+     "correct": 0
+    },
+    "WITNESSED": {
+     "n": 0,
+     "correct": 0
+    },
+    "FLAGGED": {
+     "n": 9,
+     "correct": 6
+    },
+    "ABSTAIN": {
+     "n": 2,
+     "correct": 0
+    }
+   },
+   "silent_wrong": 1,
+   "witnessed_wrong": 0,
+   "answered_accuracy": 0.6
+  },
+  "cross_filing": {
+   "n": 12,
+   "correct": 7,
+   "accuracy": 0.5833333333333334,
+   "accuracy_ci95": [
+    0.3195,
+    0.8067
+   ],
+   "precision_macro": 0.9861111111111112,
+   "recall_macro": 0.6805555555555555,
+   "precision_micro": 0.9722222222222222,
+   "recall_micro": 0.6730769230769231,
+   "page_exact_share": 1.0,
+   "abstained": 2,
+   "by_tier": {
+    "VERIFIED": {
+     "n": 4,
+     "correct": 3
+    },
+    "WITNESSED": {
+     "n": 0,
+     "correct": 0
+    },
+    "FLAGGED": {
+     "n": 6,
+     "correct": 4
+    },
+    "ABSTAIN": {
+     "n": 2,
+     "correct": 0
+    }
+   },
+   "silent_wrong": 1,
+   "witnessed_wrong": 0,
+   "answered_accuracy": 0.7
+  }
+ },
+ "rows": [
+  {
+   "id": "T01",
+   "type": "single_fact",
+   "question": "In the Competitive Position and Vehicle Sales discussion of General Motors' 2025 Form 10-K, what share of GM's wholesale vehicle sales volume for the year ended December 31, 2025 does the company say was generated outside the U.S.?",
+   "gold": "GM says 27.5% of its 2025 wholesale vehicle sales volume was generated outside the U.S.",
+   "answer": "0.0000 number per count",
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 0,
+    "gold": 1,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "GM",
+      "item": "wholesale vehicle sales volume outside the U.S.",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "GM",
+      "item": "total wholesale vehicle sales volume",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 / s2"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "GM FY2025 ends 2025-12-31"
+   ],
+   "learned": [
+    {
+     "kind": "mention",
+     "ticker": "GM",
+     "concept": null,
+     "phrase": "wholesale vehicle sales volume outside the U.S.",
+     "state": "flagged",
+     "label": "In the year ended <n1>, <n2>% of our wholesale vehicle sales volume was generated outside the U.S. The following table summarizes wholesale vehicle sales by our",
+     "doc": "GM_FY2025_10K",
+     "page": 5,
+     "picked": ""
+    },
+    {
+     "kind": "item",
+     "ticker": "GM",
+     "concept": null,
+     "phrase": "total wholesale vehicle sales volume",
+     "state": "active",
+     "label": "Total",
+     "doc": "GM_FY2025_10K",
+     "page": 5,
+     "picked": ""
+    }
+   ],
+   "seconds": 0.34,
+   "system": "v_r7_fl",
+   "tags": [
+    "single_fact",
+    "GM",
+    "sentence_only",
+    "operating_metric",
+    "volume",
+    "look_alike_trap"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "GM: the line was chosen by the linker from its words and its number is not inside a passing formula (GM_FY2025_10K page 5)",
+    "GM: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (GM_FY2025_10K page 5)"
+   ],
+   "llm_calls": 3,
+   "llm_live": 0,
+   "tokens_in": 8318,
+   "tokens_out": 191,
+   "llm_seconds": 8.23,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1,
+    "link": 2
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 3
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "T02",
+   "type": "single_fact",
+   "question": "In the Animal Health segment discussion of the MD&A in Merck's 2025 Form 10-K, what were 2025 sales of the Bravecto line of products?",
+   "gold": "Sales of the Bravecto line of products were $1.1 billion in 2025, up 1% from 2024.",
+   "answer": "$1.100 billion",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 1
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "MRK",
+      "item": "Animal Health sales of the Bravecto line of products",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [],
+   "learned": [
+    {
+     "kind": "mention",
+     "ticker": "MRK",
+     "concept": null,
+     "phrase": "Animal Health sales of the Bravecto line of products",
+     "state": "active",
+     "label": "Sales of the Bravecto line of products were $<n1> billion in <n2>, an increase of <n3>% compared with <n4>.",
+     "doc": "MRK_FY2025_10K",
+     "page": 62,
+     "picked": ""
+    }
+   ],
+   "seconds": 0.54,
+   "system": "v_r7_fl",
+   "tags": [
+    "single_fact",
+    "MRK",
+    "sentence_only",
+    "product",
+    "segment"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "MRK: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (MRK_FY2025_10K page 62)"
+   ],
+   "llm_calls": 3,
+   "llm_live": 0,
+   "tokens_in": 6375,
+   "tokens_out": 127,
+   "llm_seconds": 19.32,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1,
+    "labels": 1,
+    "link": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 3
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "T03",
+   "type": "single_fact",
+   "question": "Item 2 (Properties) of Costco's fiscal 2026 Form 10-K splits the 939 warehouses it operated at August 30, 2026 between owned land and building and leased land and/or building. How many of the leased warehouses are land-only leases where Costco owns the building?",
+   "gold": "136 of the 184 leased warehouses are land-only leases where Costco owns the building.",
+   "answer": "1 number",
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 0,
+    "gold": 2,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "COST",
+      "item": "warehouses with leased land and/or building where Costco owns the building",
+      "period": {
+       "fy": 2026
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "COST 'warehouses with leased land and/or building where Costco owns the building': the source prints no period column for this figure"
+   ],
+   "learned": [
+    {
+     "kind": "mention",
+     "ticker": "COST",
+     "concept": null,
+     "phrase": "warehouses with leased land and/or building where Costco owns the building",
+     "state": "flagged",
+     "label": "_______________ (<n1>) <n2> of the <n3> leases are land-only leases, where Costco owns the building.",
+     "doc": "COST_FY2026_10K",
+     "page": 21,
+     "picked": ""
+    }
+   ],
+   "seconds": 0.28,
+   "system": "v_r7_fl",
+   "tags": [
+    "single_fact",
+    "COST",
+    "footnote",
+    "operating_metric",
+    "stores",
+    "leases"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "COST: the line was chosen by the linker from its words and its number is not inside a passing formula (COST_FY2026_10K page 21)",
+    "COST 'warehouses with leased land and/or building where Costco owns the building': the source prints no period column for this figure"
+   ],
+   "llm_calls": 3,
+   "llm_live": 0,
+   "tokens_in": 6243,
+   "tokens_out": 140,
+   "llm_seconds": 29.51,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1,
+    "labels": 1,
+    "link": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 3
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "T04",
+   "type": "single_fact",
+   "question": "In the selected financial and sales data table of Home Depot's fiscal 2025 Form 10-K (fiscal year ended February 1, 2026), what average ticket is reported for fiscal 2025?",
+   "gold": "Average ticket was $90.56 in fiscal 2025 (against $89.31 in fiscal 2024); the measure excludes HD Supply and SRS (including GMS).",
+   "answer": "ABSTAIN: no link yet for 'average ticket' at HD",
+   "correct": false,
+   "abstained": true,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 1,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "HD",
+      "item": "average ticket",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "no link yet for 'average ticket' at HD"
+   ],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "HD",
+     "concept": null,
+     "phrase": "average ticket",
+     "state": "rejected",
+     "label": null,
+     "doc": null,
+     "page": null,
+     "picked": null
+    }
+   ],
+   "seconds": 0.18,
+   "system": "v_r7_fl",
+   "tags": [
+    "single_fact",
+    "HD",
+    "md&a_table",
+    "operating_metric"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "ABSTAIN",
+   "tier_reasons": [
+    "no link yet for 'average ticket' at HD"
+   ],
+   "llm_calls": 3,
+   "llm_live": 0,
+   "tokens_in": 9297,
+   "tokens_out": 124,
+   "llm_seconds": 6.09,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 2,
+    "link": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 3
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "T05",
+   "type": "single_fact",
+   "question": "Note 10 (Inventory) to Target's fiscal 2025 consolidated financial statements discloses the LIFO provision. What was the LIFO provision as of January 31, 2026?",
+   "gold": "The LIFO provision was $201 million as of January 31, 2026 (against $183 million as of February 1, 2025).",
+   "answer": "$201.0 million",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 1,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "TGT",
+      "item": "LIFO provision",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [],
+   "learned": [
+    {
+     "kind": "mention",
+     "ticker": "TGT",
+     "concept": null,
+     "phrase": "LIFO provision",
+     "state": "active",
+     "label": "The LIFO provision is calculated based on inventory levels, markup rates, and internally measured retail price indices, and was $<n1> million and $<n2> million ",
+     "doc": "TGT_FY2025_10K",
+     "page": 61,
+     "picked": ""
+    }
+   ],
+   "seconds": 0.17,
+   "system": "v_r7_fl",
+   "tags": [
+    "single_fact",
+    "TGT",
+    "sentence_only",
+    "note",
+    "inventory"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "TGT: the line was chosen by the linker from its words and its number is not inside a passing formula (TGT_FY2025_10K page 61)"
+   ],
+   "llm_calls": 2,
+   "llm_live": 0,
+   "tokens_in": 4274,
+   "tokens_out": 85,
+   "llm_seconds": 7.49,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1,
+    "link": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 2
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "T06",
+   "type": "single_fact",
+   "question": "What net revenue did PepsiCo's Gatorade brand generate in 2025, according to PepsiCo's 2025 Form 10-K?",
+   "gold": "Not disclosed: the 2025 10-K names Gatorade only in brand lists and subsidiary names and reports net revenue by segment, by country and as a beverage versus convenient-food percentage, never by brand.",
+   "answer": "ABSTAIN: no link yet for 'Gatorade brand net revenue' at PEP",
+   "correct": true,
+   "abstained": true,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 0,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "PEP",
+      "item": "Gatorade brand net revenue",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "no link yet for 'Gatorade brand net revenue' at PEP"
+   ],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "PEP",
+     "concept": null,
+     "phrase": "Gatorade brand net revenue",
+     "state": "rejected",
+     "label": null,
+     "doc": null,
+     "page": null,
+     "picked": null
+    }
+   ],
+   "seconds": 0.75,
+   "system": "v_r7_fl",
+   "tags": [
+    "single_fact",
+    "PEP",
+    "unanswerable"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "ABSTAIN",
+   "tier_reasons": [
+    "no link yet for 'Gatorade brand net revenue' at PEP"
+   ],
+   "llm_calls": 4,
+   "llm_live": 0,
+   "tokens_in": 9939,
+   "tokens_out": 156,
+   "llm_seconds": 21.07,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 2,
+    "labels": 1,
+    "link": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 4
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "T07",
+   "type": "multi_hop",
+   "question": "Alphabet does not present a fourth-quarter cash flow statement. Using 'Purchases of property and equipment' in the consolidated statements of cash flows of its 2025 Form 10-K (year ended December 31, 2025) and of its third-quarter 2025 Form 10-Q (nine months ended September 30, 2025), how much did Alphabet spend on purchases of property and equipment in the fourth quarter of 2025?",
+   "gold": "$27,851 million: $91,447 million for full-year 2025 less $63,596 million for the nine months ended September 30, 2025.",
+   "answer": "$27.851 billion",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "GOOGL",
+      "item": "Purchases of property and equipment",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "GOOGL",
+      "item": "Purchases of property and equipment",
+      "period": {
+       "fy": 2025,
+       "q": 3,
+       "ytd": true
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 - s2"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "GOOGL FY2025 ends 2025-12-31",
+    "GOOGL FY2025Q3YTD ends 2025-09-30"
+   ],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "GOOGL",
+     "concept": null,
+     "phrase": "Purchases of property and equipment",
+     "state": "active",
+     "label": "Purchases of property and equipment",
+     "doc": "GOOGL_FY2025_10K",
+     "page": 53,
+     "picked": ""
+    }
+   ],
+   "seconds": 35.79,
+   "system": "v_r7_fl",
+   "tags": [
+    "multi_hop",
+    "GOOGL",
+    "q4_derivation",
+    "cash_flow_statement",
+    "10-K_with_10-Q"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "GOOGL: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (GOOGL_FY2025_10K page 53)",
+    "GOOGL: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (GOOGL_FY2025_Q3_10Q page 11)"
+   ],
+   "llm_calls": 2,
+   "llm_live": 1,
+   "tokens_in": 5596,
+   "tokens_out": 150,
+   "llm_seconds": 37.34,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1,
+    "link": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 2
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1
+   }
+  },
+  {
+   "id": "T08",
+   "type": "multi_hop",
+   "question": "Table 5 (Selected Card-Related Statistical Information) in American Express's 2025 Form 10-K prints discount revenue as 2.24% of billed business for 2025. Recompute that ratio from 2025 discount revenue on the consolidated statements of income and 2025 billed business in Table 5. What ratio do you get, and does it tie to the printed figure?",
+   "gold": "Discount revenue of $37,401 million over billed business of $1,669.8 billion gives 2.2398%, which rounds to the printed 2.24%, so it ties.",
+   "answer": "2.24%",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 3,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "AXP",
+      "item": "discount revenue",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "AXP",
+      "item": "billed business",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 / s2"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "AXP FY2025 ends 2025-12-31",
+    "AXP item:billed-business@table-5-selected-card-related-statistical-inform FY2025: reading is not covered by any check"
+   ],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "AXP",
+     "concept": null,
+     "phrase": "discount revenue",
+     "state": "active",
+     "label": "Discount revenue",
+     "doc": "AXP_FY2025_10K",
+     "page": 95,
+     "picked": ""
+    },
+    {
+     "kind": "item",
+     "ticker": "AXP",
+     "concept": null,
+     "phrase": "billed business",
+     "state": "flagged",
+     "label": "Billed business",
+     "doc": "AXP_FY2025_10K",
+     "page": 51,
+     "picked": ""
+    }
+   ],
+   "seconds": 14.92,
+   "system": "v_r7_fl",
+   "tags": [
+    "multi_hop",
+    "AXP",
+    "ratio",
+    "text_vs_table_tieout",
+    "income_statement",
+    "operating_metric"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "AXP: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (AXP_FY2025_10K page 95)",
+    "AXP: the line was chosen by the linker from its words and its number is not inside a passing formula (AXP_FY2025_10K page 51)",
+    "AXP item:billed-business@table-5-selected-card-related-statistical-inform FY2025: reading is not covered by any check"
+   ],
+   "llm_calls": 3,
+   "llm_live": 3,
+   "tokens_in": 8624,
+   "tokens_out": 166,
+   "llm_seconds": 14.59,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1,
+    "link": 2
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 3
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 3
+   }
+  },
+  {
+   "id": "T09",
+   "type": "multi_hop",
+   "question": "NIKE's consolidated balance sheet at May 31, 2026 (fiscal 2026 Form 10-K) has no total-liabilities line. Recompute total liabilities from the liability lines and confirm it equals total liabilities and shareholders' equity less total shareholders' equity. What is total liabilities?",
+   "gold": "$23,545 million: total current liabilities 12,547 + long-term debt 5,942 + operating lease liabilities 2,613 + deferred income taxes and other liabilities 2,443 (redeemable preferred stock nil), which ties to 38,410 - 14,865.",
+   "answer": "ABSTAIN: no breakdown linked yet for 'liabilities' at NKE",
+   "correct": false,
+   "abstained": true,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 6,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "members",
+      "company": "NKE",
+      "of": "liabilities",
+      "period": {
+       "fy": 2026
+      }
+     },
+     {
+      "id": "s2",
+      "op": "agg",
+      "over": "$s1",
+      "by": {
+       "value": true
+      },
+      "period": {
+       "fy": 2026
+      },
+      "fn": "sum"
+     },
+     {
+      "id": "s3",
+      "op": "get",
+      "company": "NKE",
+      "concept": "TotalLiabilitiesAndEquity",
+      "period": {
+       "fy": 2026
+      }
+     },
+     {
+      "id": "s4",
+      "op": "get",
+      "company": "NKE",
+      "concept": "ShareholdersEquity",
+      "period": {
+       "fy": 2026
+      }
+     },
+     {
+      "id": "s5",
+      "op": "calc",
+      "expr": "s3 - s4"
+     }
+    ],
+    "answer": "s2"
+   },
+   "notes": [
+    "no breakdown linked yet for 'liabilities' at NKE"
+   ],
+   "learned": [
+    {
+     "kind": "breakdown",
+     "ticker": "NKE",
+     "concept": null,
+     "phrase": "liabilities",
+     "state": "rejected",
+     "label": null,
+     "doc": null,
+     "page": null,
+     "picked": null
+    }
+   ],
+   "seconds": 9.27,
+   "system": "v_r7_fl",
+   "tags": [
+    "multi_hop",
+    "NKE",
+    "subtotal_recompute",
+    "balance_sheet",
+    "sum"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "ABSTAIN",
+   "tier_reasons": [],
+   "llm_calls": 4,
+   "llm_live": 4,
+   "tokens_in": 12802,
+   "tokens_out": 361,
+   "llm_seconds": 9.17,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 3,
+    "breakdown": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 4
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 4
+   }
+  },
+  {
+   "id": "T10",
+   "type": "multi_hop",
+   "question": "Chevron's Human Capital Management table in its 2025 Form 10-K gives non-service station employees by region at December 31, 2025. Adding the five regions outside the U.S. and dividing by total non-service station employees, what share of Chevron's non-service station employees worked outside the U.S.?",
+   "gold": "48.85%: Other Americas 3,945 + Africa 3,311 + Asia 7,905 + Australia 1,879 + Europe 1,454 = 18,494, over 37,860 total non-service station employees (the six regions including the U.S. at 19,366 foot to 37,860).",
+   "answer": "ABSTAIN: plan rejected: s2: filter needs where {attr, eq} or where {by, period, gt|lt|ge|le}",
+   "correct": false,
+   "abstained": true,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 7,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "members",
+      "company": "CVX",
+      "of": "non-service station employees by region",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "filter",
+      "over": "$s1",
+      "where": {
+       "item": "U.S."
+      },
+      "eq": "U.S."
+     },
+     {
+      "id": "s3",
+      "op": "agg",
+      "over": "$s1",
+      "by": {
+       "value": true
+      },
+      "period": {
+       "fy": 2025
+      },
+      "fn": "sum"
+     },
+     {
+      "id": "s4",
+      "op": "calc",
+      "expr": "s3 - s2"
+     },
+     {
+      "id": "s5",
+      "op": "calc",
+      "expr": "s4 / s3"
+     }
+    ],
+    "answer": "s5"
+   },
+   "notes": [
+    "plan rejected: s2: filter needs where {attr, eq} or where {by, period, gt|lt|ge|le}"
+   ],
+   "learned": [],
+   "seconds": 40.01,
+   "system": "v_r7_fl",
+   "tags": [
+    "multi_hop",
+    "CVX",
+    "share_of_total",
+    "total_vs_parts",
+    "operating_metric",
+    "employees"
+   ],
+   "repaired": false,
+   "plan_errors": [
+    "s2: filter needs where {attr, eq} or where {by, period, gt|lt|ge|le}"
+   ],
+   "tier": "ABSTAIN",
+   "tier_reasons": [],
+   "llm_calls": 4,
+   "llm_live": 4,
+   "tokens_in": 14113,
+   "tokens_out": 562,
+   "llm_seconds": 40.0,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 4
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 4
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 4
+   }
+  },
+  {
+   "id": "T11",
+   "type": "multi_hop",
+   "question": "Note 2 (Net Sales) to Target's fiscal 2025 consolidated financial statements breaks merchandise sales into six named categories plus other merchandise sales. Rank the six named categories by 2025 net sales (fiscal year ended January 31, 2026), largest first.",
+   "gold": "Food & beverage ($24,136 million), Household essentials ($18,017 million), Hardlines ($15,800 million), Apparel & accessories ($15,737 million), Home furnishings & d\u00e9cor ($15,608 million), Beauty ($13,214 million).",
+   "answer": "Food & beverage ($24.136 billion), Household essentials ($18.017 billion), Hardlines ($15.800 billion), Apparel & accessories ($15.737 billion), Home furnishings & d\u00e9cor ($15.608 billion), Beauty ($13.214 billion); first minus last $10.922 billion",
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 7,
+    "matched_retrieved": 6,
+    "gold": 7,
+    "matched_gold": 6,
+    "page_exact": 6
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "members",
+      "company": "TGT",
+      "of": "merchandise sales by category",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "rank",
+      "over": "$s1",
+      "by": {
+       "value": true
+      },
+      "period": {
+       "fy": 2025
+      },
+      "order": "desc",
+      "k": 6
+     }
+    ],
+    "answer": "s2"
+   },
+   "notes": [],
+   "learned": [
+    {
+     "kind": "breakdown",
+     "ticker": "TGT",
+     "concept": null,
+     "phrase": "merchandise sales by category",
+     "state": "active",
+     "label": "Merchandise sales",
+     "doc": "TGT_FY2025_10K",
+     "page": 57,
+     "picked": ""
+    }
+   ],
+   "seconds": 15.83,
+   "system": "v_r7_fl",
+   "tags": [
+    "multi_hop",
+    "TGT",
+    "ranking",
+    "product_note",
+    "total_vs_parts"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "TGT: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (TGT_FY2025_10K page 57)"
+   ],
+   "llm_calls": 2,
+   "llm_live": 2,
+   "tokens_in": 5983,
+   "tokens_out": 108,
+   "llm_seconds": 15.8,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1,
+    "breakdown": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 2
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 2
+   }
+  },
+  {
+   "id": "T12",
+   "type": "multi_hop",
+   "question": "Using Optum Rx revenues in the reportable segment table of the MD&A in UnitedHealth Group's 2025 Form 10-K and the number of adjusted scripts Optum Rx fulfilled in 2025 (stated in the Optum Rx discussion), what was Optum Rx revenue per adjusted script in 2025?",
+   "gold": "About $93.26 per adjusted script: $154,726 million of 2025 Optum Rx revenues divided by 1,659 million adjusted scripts.",
+   "answer": "93.2646 USD per count",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "UNH",
+      "item": "Optum Rx revenue",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "UNH",
+      "item": "Optum Rx adjusted scripts fulfilled",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 / s2"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "UNH FY2025 ends 2025-12-31"
+   ],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "UNH",
+     "concept": null,
+     "phrase": "Optum Rx revenue",
+     "state": "active",
+     "label": "Optum Rx",
+     "doc": "UNH_FY2025_10K",
+     "page": 31,
+     "picked": ""
+    },
+    {
+     "kind": "mention",
+     "ticker": "UNH",
+     "concept": null,
+     "phrase": "Optum Rx adjusted scripts fulfilled",
+     "state": "flagged",
+     "label": "Optum Rx fulfilled <n1> million and <n2> million adjusted scripts in <n3> and <n4>, respectively.",
+     "doc": "UNH_FY2025_10K",
+     "page": 33,
+     "picked": ""
+    }
+   ],
+   "seconds": 23.76,
+   "system": "v_r7_fl",
+   "tags": [
+    "multi_hop",
+    "UNH",
+    "ratio",
+    "segment",
+    "sentence_only",
+    "volume"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "UNH: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (UNH_FY2025_10K page 31)",
+    "UNH: the line was chosen by the linker from its words and its number is not inside a passing formula (UNH_FY2025_10K page 33)"
+   ],
+   "llm_calls": 3,
+   "llm_live": 3,
+   "tokens_in": 10082,
+   "tokens_out": 185,
+   "llm_seconds": 23.53,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1,
+    "link": 2
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 3
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 3
+   }
+  },
+  {
+   "id": "T13",
+   "type": "cross_filing",
+   "question": "Rank Procter & Gamble (fiscal 2026, year ended June 30, 2026), Coca-Cola (2025) and PepsiCo (2025) by advertising expense as a share of net revenue, highest first. Use the advertising cost each company discloses in its accounting-policy note (for PepsiCo, the advertising expenses component rather than the broader advertising and other marketing total) and the top line of each income statement (P&G net sales, Coca-Cola net operating revenues, PepsiCo net revenue).",
+   "gold": "Procter & Gamble 11.72% ($10.2 billion / $87,032 million), Coca-Cola 11.26% ($5.4 billion / $47,941 million), PepsiCo 3.62% ($3.4 billion / $93,925 million).",
+   "answer": "PG (11.72%), KO (11.26%), PEP (3.61%); first minus last 8.11%",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 6,
+    "matched_retrieved": 5,
+    "gold": 6,
+    "matched_gold": 5,
+    "page_exact": 5
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "PG",
+      "item": "advertising expense",
+      "period": {
+       "fy": 2026
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "PG",
+      "concept": "Revenue",
+      "period": {
+       "fy": 2026
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 / s2"
+     },
+     {
+      "id": "s4",
+      "op": "get",
+      "company": "KO",
+      "item": "advertising expense",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s5",
+      "op": "get",
+      "company": "KO",
+      "concept": "Revenue",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s6",
+      "op": "calc",
+      "expr": "s4 / s5"
+     },
+     {
+      "id": "s7",
+      "op": "get",
+      "company": "PEP",
+      "item": "advertising expenses component",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s8",
+      "op": "get",
+      "company": "PEP",
+      "concept": "Revenue",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s9",
+      "op": "calc",
+      "expr": "s7 / s8"
+     },
+     {
+      "id": "s10",
+      "op": "rank",
+      "over": [
+       "PG",
+       "KO",
+       "PEP"
+      ],
+      "by": {
+       "ratio": [
+        {
+         "item": "advertising expense"
+        },
+        {
+         "concept": "Revenue"
+        }
+       ]
+      },
+      "period": {
+       "fy": "latest"
+      },
+      "order": "desc",
+      "k": 3
+     }
+    ],
+    "answer": "s10"
+   },
+   "notes": [],
+   "learned": [
+    {
+     "kind": "mention",
+     "ticker": "PG",
+     "concept": null,
+     "phrase": "advertising expense",
+     "state": "active",
+     "label": "Advertising costs, charged to expense as incurred, include television, print, radio, digital and in-store advertising expenses and were $<n1> billion in <n2>, $",
+     "doc": "PG_FY2026_10K",
+     "page": 43,
+     "picked": ""
+    },
+    {
+     "kind": "mention",
+     "ticker": "KO",
+     "concept": null,
+     "phrase": "advertising expense",
+     "state": "active",
+     "label": "Advertising costs included in the line item selling, general and administrative expenses in our consolidated statements of income were $<n1> billion, $<n2> bill",
+     "doc": "KO_FY2025_10K",
+     "page": 69,
+     "picked": ""
+    },
+    {
+     "kind": "item",
+     "ticker": "PEP",
+     "concept": null,
+     "phrase": "advertising expense",
+     "state": "active",
+     "label": "Acquisitions, net of cash acquired, investments in noncontrolled affiliates and purchases of intangible and other assets",
+     "doc": "PEP_FY2025_10K",
+     "page": 62,
+     "picked": ""
+    }
+   ],
+   "seconds": 8.05,
+   "system": "v_r7_fl",
+   "tags": [
+    "cross_filing",
+    "PG",
+    "KO",
+    "PEP",
+    "ranking",
+    "ratio",
+    "sentence_only",
+    "three_companies"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "PG: the line was chosen by the linker from its words and its number is not inside a passing formula (PG_FY2026_10K page 43)",
+    "KO: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (KO_FY2025_10K page 69)",
+    "PEP: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (PEP_FY2025_10K page 62)"
+   ],
+   "llm_calls": 4,
+   "llm_live": 2,
+   "tokens_in": 10625,
+   "tokens_out": 737,
+   "llm_seconds": 26.47,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1,
+    "link": 3
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 4
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 2
+   }
+  },
+  {
+   "id": "T14",
+   "type": "cross_filing",
+   "question": "Rank Salesforce (fiscal 2026, year ended January 31, 2026), Adobe (fiscal 2025, year ended November 28, 2025) and Oracle (fiscal 2026, year ended May 31, 2026) by stock-based compensation expense as a share of total revenue(s), highest first. Use the stock-based compensation add-back in each consolidated statement of cash flows and total revenue(s) from each income statement.",
+   "gold": "Salesforce 8.45% ($3,509 million / $41,525 million), Adobe 8.17% ($1,942 million / $23,769 million), Oracle 7.14% ($4,811 million / $67,357 million); Oracle has the most stock-based compensation in dollars but the lowest share of revenue.",
+   "answer": "CRM (8.45%), ADBE (8.17%), ORCL (7.14%); first minus last 1.31%",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 6,
+    "matched_retrieved": 6,
+    "gold": 6,
+    "matched_gold": 6,
+    "page_exact": 6
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "CRM",
+      "concept": "StockBasedCompensation",
+      "period": {
+       "fy": 2026
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "CRM",
+      "concept": "Revenue",
+      "period": {
+       "fy": 2026
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 / s2"
+     },
+     {
+      "id": "s4",
+      "op": "get",
+      "company": "ADBE",
+      "concept": "StockBasedCompensation",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s5",
+      "op": "get",
+      "company": "ADBE",
+      "concept": "Revenue",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s6",
+      "op": "calc",
+      "expr": "s4 / s5"
+     },
+     {
+      "id": "s7",
+      "op": "get",
+      "company": "ORCL",
+      "concept": "StockBasedCompensation",
+      "period": {
+       "fy": 2026
+      }
+     },
+     {
+      "id": "s8",
+      "op": "get",
+      "company": "ORCL",
+      "concept": "Revenue",
+      "period": {
+       "fy": 2026
+      }
+     },
+     {
+      "id": "s9",
+      "op": "calc",
+      "expr": "s7 / s8"
+     },
+     {
+      "id": "s10",
+      "op": "rank",
+      "over": [
+       "CRM",
+       "ADBE",
+       "ORCL"
+      ],
+      "by": {
+       "ratio": [
+        {
+         "concept": "StockBasedCompensation"
+        },
+        {
+         "concept": "Revenue"
+        }
+       ]
+      },
+      "period": {
+       "fy": "latest"
+      },
+      "order": "desc",
+      "k": 3
+     }
+    ],
+    "answer": "s10"
+   },
+   "notes": [],
+   "learned": [],
+   "seconds": 29.79,
+   "system": "v_r7_fl",
+   "tags": [
+    "cross_filing",
+    "CRM",
+    "ADBE",
+    "ORCL",
+    "ranking",
+    "ratio",
+    "cash_flow_statement",
+    "three_companies"
+   ],
+   "repaired": true,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 3,
+   "llm_live": 3,
+   "tokens_in": 10805,
+   "tokens_out": 673,
+   "llm_seconds": 29.78,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 3
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 3
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 3
+   }
+  },
+  {
+   "id": "T15",
+   "type": "cross_filing",
+   "question": "Using the 'Investment banking' revenue line on Goldman Sachs' consolidated statements of earnings and on Morgan Stanley's consolidated income statement in their 2025 Forms 10-K, which firm grew investment banking revenues faster in 2025 over 2024, and by how many percentage points?",
+   "gold": "Morgan Stanley grew faster: $8,199 million against $6,705 million is +22.28%, versus Goldman Sachs' $9,348 million against $7,738 million, +20.81%; the gap is 1.48 percentage points.",
+   "answer": "MS (22.28%), GS (20.81%); difference 1.48%",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 4,
+    "matched_retrieved": 4,
+    "gold": 4,
+    "matched_gold": 4,
+    "page_exact": 4
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "GS",
+      "item": "Investment banking",
+      "from": {
+       "fy": 2024
+      },
+      "to": {
+       "fy": 2025
+      },
+      "mode": "pct"
+     },
+     {
+      "id": "s2",
+      "op": "change",
+      "company": "MS",
+      "item": "Investment banking",
+      "from": {
+       "fy": 2024
+      },
+      "to": {
+       "fy": 2025
+      },
+      "mode": "pct"
+     },
+     {
+      "id": "s3",
+      "op": "compare",
+      "of": [
+       "s1",
+       "s2"
+      ],
+      "order": "desc"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "GS FY2024 ends 2024-12-31",
+    "GS FY2025 ends 2025-12-31",
+    "MS FY2024 ends 2024-12-31",
+    "MS FY2025 ends 2025-12-31"
+   ],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "GS",
+     "concept": null,
+     "phrase": "Investment banking",
+     "state": "active",
+     "label": "Investment banking",
+     "doc": "GS_FY2024_10K",
+     "page": 134,
+     "picked": ""
+    },
+    {
+     "kind": "item",
+     "ticker": "GS",
+     "concept": null,
+     "phrase": "Investment banking",
+     "state": "active",
+     "label": "Investment banking",
+     "doc": "GS_FY2025_10K",
+     "page": 141,
+     "picked": ""
+    },
+    {
+     "kind": "item",
+     "ticker": "MS",
+     "concept": null,
+     "phrase": "Investment banking",
+     "state": "active",
+     "label": "Investment banking",
+     "doc": "MS_FY2025_10K",
+     "page": 80,
+     "picked": ""
+    },
+    {
+     "kind": "item",
+     "ticker": "MS",
+     "concept": null,
+     "phrase": "Investment banking",
+     "state": "active",
+     "label": "Investment banking",
+     "doc": "MS_FY2025_10K",
+     "page": 80,
+     "picked": ""
+    }
+   ],
+   "seconds": 18.2,
+   "system": "v_r7_fl",
+   "tags": [
+    "cross_filing",
+    "GS",
+    "MS",
+    "growth",
+    "income_statement",
+    "two_companies"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "GS: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (GS_FY2025_10K page 141)",
+    "MS: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (MS_FY2025_10K page 80)"
+   ],
+   "llm_calls": 5,
+   "llm_live": 3,
+   "tokens_in": 13537,
+   "tokens_out": 267,
+   "llm_seconds": 24.29,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1,
+    "link": 4
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 5
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 3
+   }
+  },
+  {
+   "id": "T16",
+   "type": "cross_filing",
+   "question": "Bank of America's 2025 Form 10-K re-presents its 2025 quarters in Table 7 (Selected Quarterly Financial Data). Tie the third-quarter 2025 income tax expense shown there to the consolidated statement of income in BAC's third-quarter 2025 Form 10-Q. By how much does the 10-K figure differ, and what reason does the 10-K give?",
+   "gold": "Table 7 shows $2,076 million against $987 million in the 10-Q, $1,089 million higher, because effective in the fourth quarter of 2025 BAC changed its accounting methods for tax-related affordable housing, eligible wind and solar renewable energy equity investments and applied the change retrospectively (mainly a reclassification that nets income tax credits and benefits against the investment expense).",
+   "answer": "Only one filing reports this period: $987.0 million (BAC_FY2025_Q3_10Q)",
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 3,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "restated",
+      "company": "BAC",
+      "concept": "IncomeTax",
+      "period": {
+       "fy": 2025,
+       "q": 3
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "BAC FY2025Q3 ends 2025-09-30",
+    "BAC IncomeTax: only one filing reports this period, so there is nothing to compare"
+   ],
+   "learned": [],
+   "seconds": 6.49,
+   "system": "v_r7_fl",
+   "tags": [
+    "cross_filing",
+    "BAC",
+    "10-K_with_10-Q",
+    "restatement",
+    "quarterly_data",
+    "comparative_tieout"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "BAC IncomeTax: only one filing reports this period, so there is nothing to compare"
+   ],
+   "llm_calls": 1,
+   "llm_live": 1,
+   "tokens_in": 3417,
+   "tokens_out": 41,
+   "llm_seconds": 6.48,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1
+   }
+  },
+  {
+   "id": "T17",
+   "type": "cross_filing",
+   "question": "Footnote (1) to the segment table in Walmart's annual reports gives total fuel-related expenses for Sam's Club U.S. By how much did those expenses fall from fiscal 2023 (printed only in the fiscal 2025 Form 10-K) to fiscal 2026 (fiscal 2026 Form 10-K, year ended January 31, 2026)?",
+   "gold": "By $3.4 billion: from $12.1 billion in fiscal 2023 to $8.7 billion in fiscal 2026.",
+   "answer": "ABSTAIN: 'Sam's Club U.S. total fuel-related expenses' is linked for WMT but has no value for FY2023",
+   "correct": false,
+   "abstained": true,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 2,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "WMT",
+      "item": "Sam's Club U.S. total fuel-related expenses",
+      "period": {
+       "fy": 2023
+      },
+      "as": "first_reported"
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "WMT",
+      "item": "Sam's Club U.S. total fuel-related expenses",
+      "period": {
+       "fy": 2026
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 - s2"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "'Sam's Club U.S. total fuel-related expenses' is linked for WMT but has no value for FY2023"
+   ],
+   "learned": [
+    {
+     "kind": "mention",
+     "ticker": "WMT",
+     "concept": null,
+     "phrase": "Sam's Club U.S. total fuel-related expenses",
+     "state": "active",
+     "label": "(<n1>) Total fuel-related expenses for Sam's Club U.S. were $<n2> billion, $<n3> billion, and $<n4> billion in fiscal <n5>, fiscal <n6>, and fiscal <n7> respect",
+     "doc": "WMT_FY2025_10K",
+     "page": 78,
+     "picked": ""
+    },
+    {
+     "kind": "mention",
+     "ticker": "WMT",
+     "concept": null,
+     "phrase": "Total fuel-related expenses for Sam's Club U.S.",
+     "state": "active",
+     "label": "(<n1>) Total fuel-related expenses for Sam's Club U.S. were $<n2> billion, $<n3> billion, and $<n4> billion in fiscal <n5>, fiscal <n6>, and fiscal <n7> respect",
+     "doc": "WMT_FY2025_10K",
+     "page": 78,
+     "picked": ""
+    }
+   ],
+   "seconds": 24.58,
+   "system": "v_r7_fl",
+   "tags": [
+    "cross_filing",
+    "WMT",
+    "two_annual_reports",
+    "older_report_only",
+    "footnote",
+    "change"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "ABSTAIN",
+   "tier_reasons": [
+    "'Sam's Club U.S. total fuel-related expenses' is linked for WMT but has no value for FY2023"
+   ],
+   "llm_calls": 4,
+   "llm_live": 2,
+   "tokens_in": 13860,
+   "tokens_out": 334,
+   "llm_seconds": 34.54,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 2,
+    "link": 2
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 4
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 2
+   }
+  },
+  {
+   "id": "T18",
+   "type": "cross_filing",
+   "question": "Johnson & Johnson's 2025 Form 10-K shows sales to customers only back to 2023. Taking 2022 sales to customers from the consolidated statements of earnings in the 2024 Form 10-K and 2025 sales to customers from the 2025 Form 10-K, what was the compound annual growth rate of J&J's sales from 2022 to 2025?",
+   "gold": "About 5.60% a year: $79,990 million in 2022 to $94,193 million in 2025 (17.76% cumulative over three years).",
+   "answer": "$94.193 billion",
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 2,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "JNJ",
+      "concept": "Revenue",
+      "period": {
+       "fy": 2022
+      },
+      "as": "first_reported"
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "JNJ",
+      "concept": "Revenue",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s2"
+   },
+   "notes": [
+    "JNJ FY2025 ends 2025-12-28"
+   ],
+   "learned": [],
+   "seconds": 6.12,
+   "system": "v_r7_fl",
+   "tags": [
+    "cross_filing",
+    "JNJ",
+    "two_annual_reports",
+    "older_report_only",
+    "cagr",
+    "income_statement"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 1,
+   "llm_live": 1,
+   "tokens_in": 3458,
+   "tokens_out": 69,
+   "llm_seconds": 6.11,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1
+   }
+  },
+  {
+   "id": "U01",
+   "type": "single_fact",
+   "question": "Across all of Tesla's debt facilities at December 31, 2025, how much undrawn committed borrowing capacity did it report in total (the 'unused committed amount' column)?",
+   "gold": "Tesla reported $6,429 million of unused committed amounts at December 31, 2025 ($5,000 million RCF plus $1,429 million China Working Capital Facility).",
+   "answer": "$6.430 billion",
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 0,
+    "gold": 1,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "TSLA",
+      "item": "unused committed amount",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [],
+   "learned": [
+    {
+     "kind": "mention",
+     "ticker": "TSLA",
+     "concept": null,
+     "phrase": "unused committed amount",
+     "state": "active",
+     "label": "We had $<n1> billion of unused committed credit amounts as of <n2>.",
+     "doc": "TSLA_FY2025_10K",
+     "page": 45,
+     "picked": ""
+    }
+   ],
+   "seconds": 5.74,
+   "system": "v_r7_fl",
+   "tags": [
+    "debt",
+    "liquidity",
+    "credit facility"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "TSLA: the line was chosen by the linker from its words and its number is not inside a passing formula (TSLA_FY2025_10K page 45)"
+   ],
+   "llm_calls": 2,
+   "llm_live": 1,
+   "tokens_in": 5542,
+   "tokens_out": 87,
+   "llm_seconds": 13.29,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1,
+    "link": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 2
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1
+   }
+  },
+  {
+   "id": "U02",
+   "type": "single_fact",
+   "question": "How much commercial paper was Cisco carrying at the end of fiscal 2026 (July 25, 2026)?",
+   "gold": "Cisco had $6.7 billion of commercial paper notes outstanding as of July 25, 2026.",
+   "answer": "$6.661 billion",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 0,
+    "gold": 1,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "CSCO",
+      "item": "commercial paper",
+      "period": {
+       "fy": 2026
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "CSCO FY2026 ends 2026-07-25"
+   ],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "CSCO",
+     "concept": null,
+     "phrase": "commercial paper",
+     "state": "active",
+     "label": "Commercial paper",
+     "doc": "CSCO_FY2026_10K",
+     "page": 101,
+     "picked": ""
+    }
+   ],
+   "seconds": 6.35,
+   "system": "v_r7_fl",
+   "tags": [
+    "debt",
+    "commercial paper",
+    "sentence"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "CSCO: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (CSCO_FY2026_10K page 101)"
+   ],
+   "llm_calls": 2,
+   "llm_live": 1,
+   "tokens_in": 4620,
+   "tokens_out": 82,
+   "llm_seconds": 26.19,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1,
+    "link": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 2
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1
+   }
+  },
+  {
+   "id": "U03",
+   "type": "single_fact",
+   "question": "Chevron had debt due within one year at December 31, 2025. How much of that was reclassified to long-term debt because the company intended and was able to refinance it?",
+   "gold": "$9.9 billion of the $10.9 billion of debt due within one year was reclassified to long-term debt at the end of 2025.",
+   "answer": "$-9.941 billion",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 0,
+    "gold": 1,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "CVX",
+      "item": "debt due within one year reclassified to long-term debt",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "CVX FY2025 ends 2025-12-31"
+   ],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "CVX",
+     "concept": null,
+     "phrase": "debt due within one year reclassified to long-term debt",
+     "state": "active",
+     "label": "Reclassified to long-term debt",
+     "doc": "CVX_FY2025_10K",
+     "page": 93,
+     "picked": ""
+    }
+   ],
+   "seconds": 6.03,
+   "system": "v_r7_fl",
+   "tags": [
+    "debt",
+    "refinancing",
+    "sentence"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "CVX: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (CVX_FY2025_10K page 93)"
+   ],
+   "llm_calls": 3,
+   "llm_live": 1,
+   "tokens_in": 6039,
+   "tokens_out": 138,
+   "llm_seconds": 23.69,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1,
+    "labels": 1,
+    "link": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 3
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1
+   }
+  },
+  {
+   "id": "U04",
+   "type": "single_fact",
+   "question": "What was General Motors' total Automotive available liquidity (cash, marketable debt securities and undrawn credit facilities) at December 31, 2025?",
+   "gold": "GM's total Automotive available liquidity was $35.7 billion at December 31, 2025.",
+   "answer": "$21.700 billion",
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 0,
+    "gold": 1,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "GM",
+      "item": "Automotive cash, cash equivalents, and marketable debt securities",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "GM FY2025 ends 2025-12-31",
+    "GM item:automotive-cash-cash-equivalents-and-marketable-@general-motors-company-and-subsidiaries-the-foll FY2025: reading is not covered by any check"
+   ],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "GM",
+     "concept": null,
+     "phrase": "Automotive available liquidity (cash, marketable debt securities and undrawn credit facilities)",
+     "state": "rejected",
+     "label": null,
+     "doc": null,
+     "page": null,
+     "picked": null
+    },
+    {
+     "kind": "item",
+     "ticker": "GM",
+     "concept": null,
+     "phrase": "Automotive cash, cash equivalents, and marketable debt securities",
+     "state": "flagged",
+     "label": "Automotive cash, cash equivalents, and marketable debt securities",
+     "doc": "GM_FY2025_10K",
+     "page": 39,
+     "picked": ""
+    }
+   ],
+   "seconds": 22.97,
+   "system": "v_r7_fl",
+   "tags": [
+    "liquidity",
+    "automotive"
+   ],
+   "repaired": true,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "GM: the line was chosen by the linker from its words and its number is not inside a passing formula (GM_FY2025_10K page 39)",
+    "GM item:automotive-cash-cash-equivalents-and-marketable-@general-motors-company-and-subsidiaries-the-foll FY2025: reading is not covered by any check"
+   ],
+   "llm_calls": 5,
+   "llm_live": 3,
+   "tokens_in": 12607,
+   "tokens_out": 216,
+   "llm_seconds": 31.36,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 2,
+    "labels": 1,
+    "link": 2
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 5
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 3
+   }
+  },
+  {
+   "id": "U05",
+   "type": "single_fact",
+   "question": "How much free cash flow did Caterpillar's Machinery, Power & Energy business (everything except Financial Products) generate in 2025, on the company's own MP&E free cash flow measure?",
+   "gold": "Caterpillar's MP&E free cash flow was $9,484 million in 2025.",
+   "answer": "MP&E net cash provided by operating activities 1 ($12.278 billion)",
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 0,
+    "gold": 1,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "members",
+      "company": "CAT",
+      "of": "free cash flow by business segment",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "filter",
+      "over": "$s1",
+      "where": {
+       "by": {
+        "value": true
+       },
+       "period": {
+        "fy": 2025
+       },
+       "gt": -1.0
+      }
+     }
+    ],
+    "answer": "s2"
+   },
+   "notes": [],
+   "learned": [
+    {
+     "kind": "breakdown",
+     "ticker": "CAT",
+     "concept": null,
+     "phrase": "free cash flow by business segment",
+     "state": "active",
+     "label": "MP&E free cash flow",
+     "doc": "CAT_FY2025_10K",
+     "page": 52,
+     "picked": ""
+    }
+   ],
+   "seconds": 38.76,
+   "system": "v_r7_fl",
+   "tags": [
+    "cash generation",
+    "free cash flow"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "CAT: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (CAT_FY2025_10K page 52)"
+   ],
+   "llm_calls": 3,
+   "llm_live": 3,
+   "tokens_in": 9268,
+   "tokens_out": 221,
+   "llm_seconds": 17.03,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 2,
+    "breakdown": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 3
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 3
+   }
+  },
+  {
+   "id": "U06",
+   "type": "single_fact",
+   "question": "What senior unsecured credit rating did Moody's assign to Oracle at May 31, 2026?",
+   "gold": "The filing does not state Oracle's Moody's (or any agency's) credit rating level.",
+   "answer": "ABSTAIN: planner: filings do not provide credit ratings",
+   "correct": true,
+   "abstained": true,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 0,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "plan": {
+    "steps": [],
+    "answer": null,
+    "cannot": "filings do not provide credit ratings"
+   },
+   "notes": [
+    "planner: filings do not provide credit ratings"
+   ],
+   "learned": [],
+   "seconds": 2.93,
+   "system": "v_r7_fl",
+   "tags": [
+    "unanswerable",
+    "credit rating"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "ABSTAIN",
+   "tier_reasons": [],
+   "llm_calls": 1,
+   "llm_live": 1,
+   "tokens_in": 3134,
+   "tokens_out": 18,
+   "llm_seconds": 2.93,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1
+   }
+  },
+  {
+   "id": "U07",
+   "type": "multi_hop",
+   "question": "What share of Oracle's total senior notes and other borrowings principal at May 31, 2026 comes due in the next two fiscal years combined (fiscal 2027 plus fiscal 2028)?",
+   "gold": "(7,210 + 10,145) / 130,105 = 13.34% of Oracle's borrowings principal is due in fiscal 2027 and 2028.",
+   "answer": "3.27%",
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 3,
+    "matched_retrieved": 1,
+    "gold": 3,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "ORCL",
+      "item": "senior notes and other borrowings principal due in fiscal 2027",
+      "period": {
+       "fy": 2026
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "ORCL",
+      "item": "senior notes and other borrowings principal due in fiscal 2028",
+      "period": {
+       "fy": 2026
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 + s2"
+     },
+     {
+      "id": "s4",
+      "op": "get",
+      "company": "ORCL",
+      "item": "total senior notes and other borrowings principal",
+      "period": {
+       "fy": 2026
+      }
+     },
+     {
+      "id": "s5",
+      "op": "calc",
+      "expr": "s3 / s4"
+     }
+    ],
+    "answer": "s5"
+   },
+   "notes": [
+    "ORCL FY2026 ends 2026-05-31"
+   ],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "ORCL",
+     "concept": null,
+     "phrase": "senior notes and other borrowings principal due in fiscal 2027",
+     "state": "active",
+     "label": "$2,250, 2.80%, due April 2027 April 2020",
+     "doc": "ORCL_FY2026_10K",
+     "page": 84,
+     "picked": ""
+    },
+    {
+     "kind": "item",
+     "ticker": "ORCL",
+     "concept": null,
+     "phrase": "senior notes and other borrowings principal due in fiscal 2028",
+     "state": "active",
+     "label": "$2,000, 2.30%, due March 2028 March 2021",
+     "doc": "ORCL_FY2026_10K",
+     "page": 84,
+     "picked": ""
+    },
+    {
+     "kind": "item",
+     "ticker": "ORCL",
+     "concept": null,
+     "phrase": "total senior notes and other borrowings principal",
+     "state": "active",
+     "label": "Total senior notes and other borrowings",
+     "doc": "ORCL_FY2026_10K",
+     "page": 85,
+     "picked": ""
+    }
+   ],
+   "seconds": 36.88,
+   "system": "v_r7_fl",
+   "tags": [
+    "debt maturities",
+    "ratio"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "ORCL: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (ORCL_FY2026_10K page 84)",
+    "ORCL: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (ORCL_FY2026_10K page 85)"
+   ],
+   "llm_calls": 7,
+   "llm_live": 5,
+   "tokens_in": 12138,
+   "tokens_out": 443,
+   "llm_seconds": 45.48,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1,
+    "labels": 3,
+    "link": 3
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 7
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 5
+   }
+  },
+  {
+   "id": "U08",
+   "type": "multi_hop",
+   "question": "What was Home Depot's debt-to-equity ratio at February 1, 2026, counting short-term debt, current installments of long-term debt and long-term debt excluding current installments as debt, divided by total stockholders' equity?",
+   "gold": "Total debt of 4,464 + 4,967 + 46,341 = 55,772 divided by equity of 12,813 gives 4.35x.",
+   "answer": "435.28%",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 4,
+    "matched_retrieved": 4,
+    "gold": 4,
+    "matched_gold": 4,
+    "page_exact": 4
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "HD",
+      "item": "short-term debt",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "HD",
+      "item": "current installments of long-term debt",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s3",
+      "op": "get",
+      "company": "HD",
+      "item": "long-term debt excluding current installments",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s4",
+      "op": "calc",
+      "expr": "s1 + s2 + s3"
+     },
+     {
+      "id": "s5",
+      "op": "get",
+      "company": "HD",
+      "concept": "ShareholdersEquity",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s6",
+      "op": "calc",
+      "expr": "s4 / s5"
+     }
+    ],
+    "answer": "s6"
+   },
+   "notes": [
+    "HD FY2025@end ends 2026-02-01"
+   ],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "HD",
+     "concept": null,
+     "phrase": "short-term debt",
+     "state": "active",
+     "label": "Short-term debt",
+     "doc": "HD_FY2025_10K",
+     "page": 47,
+     "picked": ""
+    },
+    {
+     "kind": "item",
+     "ticker": "HD",
+     "concept": null,
+     "phrase": "current installments of long-term debt",
+     "state": "active",
+     "label": "Current installments of long-term debt",
+     "doc": "HD_FY2025_10K",
+     "page": 47,
+     "picked": ""
+    },
+    {
+     "kind": "item",
+     "ticker": "HD",
+     "concept": null,
+     "phrase": "long-term debt excluding current installments",
+     "state": "active",
+     "label": "Long-term debt, excluding current installments",
+     "doc": "HD_FY2025_10K",
+     "page": 47,
+     "picked": ""
+    }
+   ],
+   "seconds": 5.55,
+   "system": "v_r7_fl",
+   "tags": [
+    "leverage",
+    "ratio",
+    "balance sheet"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "HD: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (HD_FY2025_10K page 47)"
+   ],
+   "llm_calls": 4,
+   "llm_live": 1,
+   "tokens_in": 10163,
+   "tokens_out": 290,
+   "llm_seconds": 32.04,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1,
+    "link": 3
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 4
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1
+   }
+  },
+  {
+   "id": "U09",
+   "type": "multi_hop",
+   "question": "At December 31, 2025, what fraction of Ford Credit's total debt was payable within one year (including short-term debt and the current portion of long-term debt)?",
+   "gold": "Ford Credit's debt payable within one year of 51,752 over total Ford Credit debt of 141,417 is 36.6%.",
+   "answer": "36.60%",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 1
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "F",
+      "item": "Ford Credit short-term debt and current portion of long-term debt",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "F",
+      "item": "Ford Credit total debt",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 / s2"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "F FY2025 ends 2025-12-31"
+   ],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "F",
+     "concept": null,
+     "phrase": "Ford Credit short-term debt and current portion of long-term debt",
+     "state": "active",
+     "label": "Ford Credit debt payable within one year",
+     "doc": "F_FY2025_10K",
+     "page": 86,
+     "picked": ""
+    },
+    {
+     "kind": "item",
+     "ticker": "F",
+     "concept": null,
+     "phrase": "Ford Credit total debt",
+     "state": "active",
+     "label": "Total Ford Credit",
+     "doc": "F_FY2025_10K",
+     "page": 160,
+     "picked": ""
+    }
+   ],
+   "seconds": 38.52,
+   "system": "v_r7_fl",
+   "tags": [
+    "debt maturities",
+    "captive finance",
+    "ratio"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "F: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (F_FY2025_10K page 86)",
+    "F: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (F_FY2025_10K page 160)"
+   ],
+   "llm_calls": 4,
+   "llm_live": 4,
+   "tokens_in": 9195,
+   "tokens_out": 249,
+   "llm_seconds": 36.91,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1,
+    "labels": 1,
+    "link": 2
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 4
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 4
+   }
+  },
+  {
+   "id": "U10",
+   "type": "multi_hop",
+   "question": "How many times did Tesla's cash and cash equivalents plus short-term investments cover its total debt and finance leases (current plus non-current portions) at December 31, 2025?",
+   "gold": "(16,513 + 27,546) / (1,640 + 6,736) = 44,059 / 8,376 = 5.26x.",
+   "answer": "26.87x",
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 1,
+    "gold": 4,
+    "matched_gold": 1,
+    "page_exact": 0
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "TSLA",
+      "item": "cash and cash equivalents plus short-term investments",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "TSLA",
+      "item": "total debt and finance leases (current plus non-current portions)",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 / s2"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "TSLA FY2025 ends 2025-12-31",
+    "TSLA 'total debt and finance leases (current plus non-current portions)': the source prints no period column for this figure"
+   ],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "TSLA",
+     "concept": null,
+     "phrase": "cash and cash equivalents plus short-term investments",
+     "state": "active",
+     "label": "Total cash, cash equivalents and short-term investments",
+     "doc": "TSLA_FY2025_10K",
+     "page": 74,
+     "picked": ""
+    },
+    {
+     "kind": "item",
+     "ticker": "TSLA",
+     "concept": null,
+     "phrase": "total debt and finance leases (current plus non-current portions)",
+     "state": "active",
+     "label": "Total debt and finance leases",
+     "doc": "TSLA_FY2025_10K",
+     "page": 76,
+     "picked": ""
+    }
+   ],
+   "seconds": 6.45,
+   "system": "v_r7_fl",
+   "tags": [
+    "liquidity",
+    "coverage",
+    "balance sheet"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "TSLA: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (TSLA_FY2025_10K page 74)",
+    "TSLA: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (TSLA_FY2025_10K page 76)",
+    "TSLA 'total debt and finance leases (current plus non-current portions)': the source prints no period column for this figure"
+   ],
+   "llm_calls": 5,
+   "llm_live": 1,
+   "tokens_in": 8948,
+   "tokens_out": 300,
+   "llm_seconds": 34.44,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1,
+    "labels": 2,
+    "link": 2
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 5
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1
+   }
+  },
+  {
+   "id": "U11",
+   "type": "multi_hop",
+   "question": "By how many turns did UnitedHealth Group's interest coverage (earnings from operations divided by interest expense) fall between 2024 and 2025?",
+   "gold": "Coverage fell from 32,287 / 3,906 = 8.27x in 2024 to 18,964 / 4,002 = 4.74x in 2025, a drop of about 3.53 turns.",
+   "answer": "-352.74%",
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 4,
+    "matched_retrieved": 4,
+    "gold": 4,
+    "matched_gold": 4,
+    "page_exact": 4
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "UNH",
+      "concept": "OperatingIncome",
+      "period": {
+       "fy": 2024
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "UNH",
+      "concept": "InterestExpense",
+      "period": {
+       "fy": 2024
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 / abs(s2)"
+     },
+     {
+      "id": "s4",
+      "op": "get",
+      "company": "UNH",
+      "concept": "OperatingIncome",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s5",
+      "op": "get",
+      "company": "UNH",
+      "concept": "InterestExpense",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s6",
+      "op": "calc",
+      "expr": "s4 / abs(s5)"
+     },
+     {
+      "id": "s7",
+      "op": "calc",
+      "expr": "s6 - s3"
+     }
+    ],
+    "answer": "s7"
+   },
+   "notes": [
+    "UNH FY2025 ends 2025-12-31",
+    "UNH FY2024 ends 2024-12-31"
+   ],
+   "learned": [],
+   "seconds": 15.6,
+   "system": "v_r7_fl",
+   "tags": [
+    "coverage",
+    "interest",
+    "change"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 1,
+   "llm_live": 1,
+   "tokens_in": 3291,
+   "tokens_out": 182,
+   "llm_seconds": 15.6,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1
+   }
+  },
+  {
+   "id": "U12",
+   "type": "multi_hop",
+   "question": "What was American Express's ratio of total loans and Card Member receivables to customer deposits at December 31, 2025?",
+   "gold": "Total loans and Card Member receivables of 224,791 divided by customer deposits of 152,488 is 1.47x.",
+   "answer": "147.42%",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 1
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "AXP",
+      "item": "total loans and Card Member receivables",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "AXP",
+      "concept": "Deposits",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 / s2"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "AXP FY2025 ends 2025-12-31",
+    "AXP item:total-loans-and-card-member-receivables@selected-balance-sheet-and-common-share-data FY2025: reading is not covered by any check",
+    "AXP FY2025@end ends 2025-12-31"
+   ],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "AXP",
+     "concept": null,
+     "phrase": "total loans and Card Member receivables",
+     "state": "flagged",
+     "label": "Total loans and Card Member receivables",
+     "doc": "AXP_FY2025_10K",
+     "page": 46,
+     "picked": ""
+    }
+   ],
+   "seconds": 5.66,
+   "system": "v_r7_fl",
+   "tags": [
+    "funding",
+    "ratio",
+    "loan to deposit"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "AXP: the line was chosen by the linker from its words and its number is not inside a passing formula (AXP_FY2025_10K page 46)",
+    "AXP item:total-loans-and-card-member-receivables@selected-balance-sheet-and-common-share-data FY2025: reading is not covered by any check"
+   ],
+   "llm_calls": 2,
+   "llm_live": 2,
+   "tokens_in": 6432,
+   "tokens_out": 134,
+   "llm_seconds": 5.44,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1,
+    "link": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 2
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 2
+   }
+  },
+  {
+   "id": "U13",
+   "type": "cross_filing",
+   "question": "Rank Home Depot (fiscal 2025, year ended February 1, 2026), Target (fiscal 2025, year ended January 31, 2026) and Walmart (fiscal 2026, year ended January 31, 2026) by interest coverage, meaning operating income divided by the interest line on the income statement (Home Depot interest expense, Target net interest expense, Walmart interest, net), highest first.",
+   "gold": "Walmart 12.27x (29,825/2,431), Target 11.50x (5,117/445), Home Depot 8.66x (20,890/2,412).",
+   "answer": "WMT (12.27x), TGT (11.50x), HD (866.09%); first minus last 360.78%",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 6,
+    "matched_retrieved": 6,
+    "gold": 6,
+    "matched_gold": 6,
+    "page_exact": 6
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "rank",
+      "over": [
+       "HD",
+       "TGT",
+       "WMT"
+      ],
+      "by": {
+       "ratio": [
+        {
+         "concept": "OperatingIncome"
+        },
+        {
+         "item": "interest expense"
+        }
+       ]
+      },
+      "period": {
+       "fy": "latest"
+      },
+      "order": "desc",
+      "k": 3
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "HD",
+     "concept": null,
+     "phrase": "interest expense",
+     "state": "active",
+     "label": "Interest expense",
+     "doc": "HD_FY2025_10K",
+     "page": 48,
+     "picked": ""
+    },
+    {
+     "kind": "item",
+     "ticker": "TGT",
+     "concept": null,
+     "phrase": "interest expense",
+     "state": "active",
+     "label": "Net interest expense",
+     "doc": "TGT_FY2025_10K",
+     "page": 51,
+     "picked": ""
+    },
+    {
+     "kind": "item",
+     "ticker": "WMT",
+     "concept": null,
+     "phrase": "interest expense",
+     "state": "active",
+     "label": "Interest, net",
+     "doc": "WMT_FY2026_10K",
+     "page": 52,
+     "picked": ""
+    }
+   ],
+   "seconds": 9.71,
+   "system": "v_r7_fl",
+   "tags": [
+    "coverage",
+    "ranking",
+    "retail",
+    "peers"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "HD: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (HD_FY2025_10K page 48)",
+    "TGT: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (TGT_FY2025_10K page 51)",
+    "WMT: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (WMT_FY2026_10K page 52)"
+   ],
+   "llm_calls": 5,
+   "llm_live": 2,
+   "tokens_in": 10348,
+   "tokens_out": 225,
+   "llm_seconds": 28.87,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1,
+    "link": 3,
+    "labels": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 5
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 2
+   }
+  },
+  {
+   "id": "U14",
+   "type": "cross_filing",
+   "question": "Coca-Cola does not print a fourth quarter separately. Using its 2025 10-K and its third-quarter 2025 10-Q (nine months ended September 26, 2025), what was its fourth-quarter 2025 interest coverage, meaning operating income divided by interest expense?",
+   "gold": "Q4 operating income 13,762 - 11,921 = 1,841 over Q4 interest expense 1,654 - 1,223 = 431 gives 4.27x.",
+   "answer": "427.15%",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 4,
+    "matched_retrieved": 4,
+    "gold": 4,
+    "matched_gold": 4,
+    "page_exact": 4
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "KO",
+      "period": {
+       "fy": 2025,
+       "q": 4
+      },
+      "concept": "OperatingIncome"
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "KO",
+      "period": {
+       "fy": 2025,
+       "q": 4
+      },
+      "concept": "InterestExpense"
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 / s2"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "KO FY2025 ends 2025-12-31",
+    "KO FY2025Q3YTD ends 2025-09-26",
+    "KO OperatingIncome for the fourth quarter is not printed; derived as the full year minus the nine months",
+    "KO InterestExpense for the fourth quarter is not printed; derived as the full year minus the nine months"
+   ],
+   "learned": [],
+   "seconds": 5.33,
+   "system": "v_r7_fl",
+   "tags": [
+    "coverage",
+    "quarterly derivation",
+    "10-K and 10-Q"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 1,
+   "llm_live": 1,
+   "tokens_in": 3287,
+   "tokens_out": 92,
+   "llm_seconds": 5.33,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1
+   }
+  },
+  {
+   "id": "U15",
+   "type": "cross_filing",
+   "question": "By how much did ExxonMobil's total debt change between year-end 2022 and year-end 2025? Use the 2024 annual report for 2022 and the 2025 annual report for 2025.",
+   "gold": "Total debt rose from $41,193 million at year-end 2022 to $43,537 million at year-end 2025, an increase of $2,344 million.",
+   "answer": "$2.344 billion",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "XOM",
+      "item": "total debt",
+      "period": {
+       "fy": 2022
+      },
+      "as": "first_reported"
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "XOM",
+      "item": "total debt",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s2 - s1"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "XOM FY2025 ends 2025-12-31",
+    "XOM item:total-debt@financial-information FY2025: reading is not covered by any check",
+    "XOM FY2022 ends 2022-12-31",
+    "XOM item:total-debt@financial-information FY2022: reading is not covered by any check"
+   ],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "XOM",
+     "concept": null,
+     "phrase": "total debt",
+     "state": "flagged",
+     "label": "Total debt",
+     "doc": "XOM_FY2025_10K",
+     "page": 32,
+     "picked": ""
+    }
+   ],
+   "seconds": 2.46,
+   "system": "v_r7_fl",
+   "tags": [
+    "debt",
+    "two annual reports",
+    "older-report figure"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "XOM: the line was chosen by the linker from its words and its number is not inside a passing formula (XOM_FY2025_10K page 32)",
+    "XOM: the line was chosen by the linker from its words and its number is not inside a passing formula (XOM_FY2024_10K page 35)",
+    "XOM item:total-debt@financial-information FY2025: reading is not covered by any check",
+    "XOM item:total-debt@financial-information FY2022: reading is not covered by any check"
+   ],
+   "llm_calls": 2,
+   "llm_live": 1,
+   "tokens_in": 5881,
+   "tokens_out": 133,
+   "llm_seconds": 3.44,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1,
+    "link": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 2
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1
+   }
+  },
+  {
+   "id": "U16",
+   "type": "cross_filing",
+   "question": "Rank Merck, Pfizer and Johnson & Johnson by debt-to-equity at December 31, 2025 (fiscal year-end December 28, 2025 for J&J), highest first. Debt means loans or short-term borrowings including the current portion of long-term debt plus long-term debt; equity is total equity (J&J: total shareholders' equity).",
+   "gold": "Merck 0.94x (49,339/52,662), Pfizer 0.75x (64,795/86,775), Johnson & Johnson 0.59x (47,933/81,544).",
+   "answer": "ABSTAIN: plan rejected: s13: a measure needs one of concept, metric, item, attr, growth, delta, ratio; s13: a measure needs one of concept, metric, item, attr, growth, delta, ratio",
+   "correct": false,
+   "abstained": true,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 9,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "members",
+      "company": "MRK",
+      "of": "debt",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "agg",
+      "over": "$s1",
+      "by": {
+       "value": true
+      },
+      "period": {
+       "fy": 2025
+      },
+      "fn": "sum"
+     },
+     {
+      "id": "s3",
+      "op": "get",
+      "company": "MRK",
+      "concept": "TotalEquity",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s4",
+      "op": "calc",
+      "expr": "s2 / s3"
+     },
+     {
+      "id": "s5",
+      "op": "members",
+      "company": "PFE",
+      "of": "debt",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s6",
+      "op": "agg",
+      "over": "$s5",
+      "by": {
+       "value": true
+      },
+      "period": {
+       "fy": 2025
+      },
+      "fn": "sum"
+     },
+     {
+      "id": "s7",
+      "op": "get",
+      "company": "PFE",
+      "concept": "TotalEquity",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s8",
+      "op": "calc",
+      "expr": "s6 / s7"
+     },
+     {
+      "id": "s9",
+      "op": "members",
+      "company": "JNJ",
+      "of": "debt",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s10",
+      "op": "agg",
+      "over": "$s9",
+      "by": {
+       "value": true
+      },
+      "period": {
+       "fy": 2025
+      },
+      "fn": "sum"
+     },
+     {
+      "id": "s11",
+      "op": "get",
+      "company": "JNJ",
+      "concept": "ShareholdersEquity",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s12",
+      "op": "calc",
+      "expr": "s10 / s11"
+     },
+     {
+      "id": "s13",
+      "op": "rank",
+      "over": [
+       "MRK",
+       "PFE",
+       "JNJ"
+      ],
+      "by": {
+       "ratio": [
+        {
+         "calc": "s2"
+        },
+        {
+         "calc": "s3"
+        }
+       ]
+      },
+      "period": {
+       "fy": 2025
+      },
+      "order": "desc",
+      "k": 3
+     }
+    ],
+    "answer": "s13"
+   },
+   "notes": [
+    "plan rejected: s13: a measure needs one of concept, metric, item, attr, growth, delta, ratio; s13: a measure needs one of concept, metric, item, attr, growth, delta, ratio"
+   ],
+   "learned": [
+    {
+     "kind": "breakdown",
+     "ticker": "MRK",
+     "concept": null,
+     "phrase": "debt",
+     "state": "rejected",
+     "label": null,
+     "doc": null,
+     "page": null,
+     "picked": null
+    }
+   ],
+   "seconds": 25.73,
+   "system": "v_r7_fl",
+   "tags": [
+    "leverage",
+    "ranking",
+    "pharma",
+    "peers"
+   ],
+   "repaired": false,
+   "plan_errors": [
+    "s13: a measure needs one of concept, metric, item, attr, growth, delta, ratio",
+    "s13: a measure needs one of concept, metric, item, attr, growth, delta, ratio"
+   ],
+   "tier": "ABSTAIN",
+   "tier_reasons": [],
+   "llm_calls": 4,
+   "llm_live": 4,
+   "tokens_in": 13110,
+   "tokens_out": 1230,
+   "llm_seconds": 22.54,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 3,
+    "breakdown": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 4
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 4
+   }
+  },
+  {
+   "id": "U17",
+   "type": "cross_filing",
+   "question": "Alphabet does not print a fourth quarter separately. Using its 2025 10-K and its third-quarter 2025 10-Q, what was its fourth-quarter 2025 free cash flow, defined as net cash provided by operating activities less purchases of property and equipment?",
+   "gold": "Q4 free cash flow = (164,713 - 91,447) - (112,311 - 63,596) = 73,266 - 48,715 = $24,551 million.",
+   "answer": "$24.551 billion",
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 4,
+    "matched_retrieved": 4,
+    "gold": 4,
+    "matched_gold": 4,
+    "page_exact": 4
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "metric",
+      "company": "GOOGL",
+      "metric": "free_cash_flow",
+      "period": {
+       "fy": 2025,
+       "q": 4
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "GOOGL FY2025 ends 2025-12-31",
+    "GOOGL FY2025Q3YTD ends 2025-09-30",
+    "GOOGL OperatingCashFlow for the fourth quarter is not printed; derived as the full year minus the nine months",
+    "GOOGL CapitalExpenditures for the fourth quarter is not printed; derived as the full year minus the nine months"
+   ],
+   "learned": [],
+   "seconds": 2.0,
+   "system": "v_r7_fl",
+   "tags": [
+    "free cash flow",
+    "quarterly derivation",
+    "10-K and 10-Q"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "llm_calls": 1,
+   "llm_live": 1,
+   "tokens_in": 3200,
+   "tokens_out": 45,
+   "llm_seconds": 2.0,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1
+   }
+  },
+  {
+   "id": "U18",
+   "type": "cross_filing",
+   "question": "Using Apple's third-quarter fiscal 2026 10-Q (balance at June 27, 2026) and its fiscal 2026 10-K (balance at September 26, 2026), by how much did Apple's total term debt (current plus non-current) decline in the final quarter of fiscal 2026?",
+   "gold": "Term debt fell from 11,007 + 71,340 = 82,347 at June 27, 2026 to 9,906 + 68,208 = 78,114 at September 26, 2026, a decline of $4,233 million.",
+   "answer": "$1.101 billion",
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 4,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "AAPL",
+      "item": "Term debt",
+      "period": {
+       "fy": 2026,
+       "q": 3
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "AAPL",
+      "item": "Term debt",
+      "period": {
+       "fy": 2026
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 - s2"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "AAPL FY2026Q3@end ends 2026-06-27",
+    "AAPL FY2026@end ends 2026-09-26"
+   ],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "AAPL",
+     "concept": null,
+     "phrase": "Term debt",
+     "state": "active",
+     "label": "Term debt",
+     "doc": "AAPL_FY2026_Q3_10Q",
+     "page": 6,
+     "picked": ""
+    }
+   ],
+   "seconds": 4.95,
+   "system": "v_r7_fl",
+   "tags": [
+    "debt",
+    "10-K and 10-Q",
+    "change"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "AAPL: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (AAPL_FY2026_Q3_10Q page 6)",
+    "AAPL: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (AAPL_FY2026_10K page 37)"
+   ],
+   "llm_calls": 2,
+   "llm_live": 2,
+   "tokens_in": 5150,
+   "tokens_out": 132,
+   "llm_seconds": 4.87,
+   "models": [
+    "gemini:gemini-3.5-flash-lite"
+   ],
+   "calls_by_kind": {
+    "plan": 1,
+    "link": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 2
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 2
+   }
+  }
+ ],
+ "llm": {
+  "live": 64,
+  "cached": 44,
+  "seconds": 435.23031735420227,
+  "tokens_in": 195617,
+  "tokens_out": 6709
+ },
+ "graph": {
+  "filings": 55,
+  "companies": 40,
+  "tables": 165,
+  "readings": 13431,
+  "reading_status": {
+   "verified": 12880,
+   "unverified": 534,
+   "failed": 10,
+   "text": 7
+  },
+  "checks": {
+   "SUM:pass": 946,
+   "TIE:pass": 361,
+   "RATIO:pass": 136,
+   "SUM:fail": 3,
+   "SUM:rounded": 46,
+   "CARRY:pass": 1276,
+   "CARRY:restated": 32
+  },
+  "facts": 4335,
+  "bindings": 1868,
+  "bindings_active": 1826,
+  "textfacts": 758
+ }
+}

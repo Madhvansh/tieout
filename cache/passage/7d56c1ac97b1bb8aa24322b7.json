@@ -1,0 +1,106 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Which of Salesforce's service offerings grew subscription and support revenue fastest in fiscal 2026, and how much did that offering bring in?",
+ "abstain": false,
+ "answer": "Agentforce 360 Platform, Slack and Other",
+ "pred": {
+  "kind": "text",
+  "value": "Agentforce 360 Platform, Slack and Other"
+ },
+ "unit": "text",
+ "facts": [
+  {
+   "ticker": "CRM",
+   "doc": "CRM_FY2026_10K",
+   "page": 53,
+   "value": 8882.0,
+   "label": "Agentforce 360 Platform, Slack and Other 2026",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "CRM",
+   "doc": "CRM_FY2026_10K",
+   "page": 53,
+   "value": 7247.0,
+   "label": "Agentforce 360 Platform, Slack and Other 2025",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "CRM",
+   "doc": "CRM_FY2026_10K",
+   "page": 53,
+   "value": 9028.0,
+   "label": "Agentforce Sales 2026",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "CRM",
+   "doc": "CRM_FY2026_10K",
+   "page": 53,
+   "value": 8322.0,
+   "label": "Agentforce Sales 2025",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "CRM",
+   "doc": "CRM_FY2026_10K",
+   "page": 53,
+   "value": 9818.0,
+   "label": "Agentforce Service 2026",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "CRM",
+   "doc": "CRM_FY2026_10K",
+   "page": 53,
+   "value": 9054.0,
+   "label": "Agentforce Service 2025",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "CRM",
+   "doc": "CRM_FY2026_10K",
+   "page": 53,
+   "value": 5428.0,
+   "label": "Agentforce Marketing and Agentforce Commerce 2026",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "CRM",
+   "doc": "CRM_FY2026_10K",
+   "page": 53,
+   "value": 5281.0,
+   "label": "Agentforce Marketing and Agentforce Commerce 2025",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "CRM",
+   "doc": "CRM_FY2026_10K",
+   "page": 53,
+   "value": 6232.0,
+   "label": "Agentforce Integration and Agentforce Analytics 2026",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "CRM",
+   "doc": "CRM_FY2026_10K",
+   "page": 53,
+   "value": 5775.0,
+   "label": "Agentforce Integration and Agentforce Analytics 2025",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

@@ -1,0 +1,60 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Which has the larger average space per unit, Costco's warehouses at August 30, 2026 (total operating floor space divided by its 939 warehouses) or Sam's Club U.S. clubs at January 31, 2026 (total retail square feet divided by unit count in Walmart's Item 2 table)? Give the gap in square feet per unit.",
+ "abstain": false,
+ "answer": "Costco's warehouses have the larger average space per unit with a gap of 14,357.77 square feet per unit.",
+ "pred": {
+  "kind": "companies",
+  "value": [
+   [
+    "Costco",
+    null
+   ]
+  ]
+ },
+ "unit": "company",
+ "facts": [
+  {
+   "ticker": "COST",
+   "doc": "COST_FY2026_10K",
+   "page": 21,
+   "value": 138700000.0,
+   "label": "warehouses contained ... million square feet of operating floor space",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "COST",
+   "doc": "COST_FY2026_10K",
+   "page": 4,
+   "value": 939.0,
+   "label": "Costco operated 939 ... warehouses worldwide at August 30, 2026",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "WMT",
+   "doc": "WMT_FY2026_10K",
+   "page": 39,
+   "value": 81000000.0,
+   "label": "Retail square feet at period end",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "WMT",
+   "doc": "WMT_FY2026_10K",
+   "page": 8,
+   "value": 601.0,
+   "label": "Retail unit counts at period end",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

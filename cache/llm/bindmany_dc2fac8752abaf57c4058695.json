@@ -1,0 +1,19 @@
+{
+ "model": "groq:openai/gpt-oss-20b@low",
+ "system": "You map financial concepts to rows of one company's financial statement.\nYou are shown the printed row labels with their section headings and structural roles. You are never\nshown values. For each concept listed, give the single row that reports it for the whole company\n(consolidated, attributable to the parent where the statement separates it), or null if no row\nreports it. Never a component of the concept, never a per-share row for an amount.\nAnswer as JSON, one key per concept: {\"<Concept>\": <row number or null>, ...}",
+ "user": "Company: Johnson & Johnson (JNJ)\nStatement: IS\nConcepts:\nOperatingIncome: operating income / income from operations / earnings from operations\nEPSDiluted: diluted earnings per share\nEPSBasic: basic earnings per share\nSharesDiluted: diluted weighted-average number of shares used for diluted earnings per share\nSharesBasic: basic weighted-average number of shares outstanding\nSalesAndMarketing: sales and marketing expense, where printed as its own line\nGeneralAndAdministrative: general and administrative expense, where printed as its own line\n\nRows (number: label (section) <role>):\n0: Sales to customers  <operand> [already: Revenue]\n1: Cost of products sold  <operand> [already: CostOfRevenue]\n2: Gross profit  <total> [already: GrossProfit]\n3: Selling, marketing and administrative expenses  <operand> [already: SellingGeneralAdmin]\n4: Research and development expense  <operand> [already: ResearchAndDevelopment]\n5: In-process research and development impairments  <operand>\n6: Interest income  <operand>\n7: Interest expense, net of portion capitalized (Note  <operand> [already: InterestExpense]\n8: Other (income) expense, net  <operand>\n9: Restructuring (Note  <operand>\n10: Earnings before provision for taxes on income  <total> [already: PretaxIncome]\n11: Provision for taxes on income (Note  <operand> [already: IncomeTax]\n12: Net earnings from continuing operations  <total>\n13: Net earnings from discontinued operations, net of tax (Note  <operand>\n14: Net earnings  <total> [already: ConsolidatedNetIncome]\n15: Net earnings per share (Notes 1 and Continuing operations - basic  <loose>\n17: Total net earnings per share - basic  <loose>\n20: Total net earnings per share - diluted  <loose>\n21: Average shares outstanding (Notes 1 and Basic  <loose>",
+ "answer": {
+  "OperatingIncome": 10,
+  "EPSDiluted": 20,
+  "EPSBasic": 15,
+  "SharesDiluted": null,
+  "SharesBasic": 21,
+  "SalesAndMarketing": null,
+  "GeneralAndAdministrative": null
+ },
+ "seconds": 0.87,
+ "usage": {
+  "in": 628,
+  "out": 147
+ }
+}

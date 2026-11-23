@@ -1,0 +1,14 @@
+{
+ "model": "ollama:phi4-mini",
+ "system": "You check one proposed mapping from a financial concept to a row of a company's financial statement.\nYou see the row's printed label, the section heading above it and its role in the statement's arithmetic.\nYou never see values. Answer whether this row reports exactly the concept for the whole company (not a\npart of it, not a broader line that includes other items, not a gross amount when the concept is net).\nAnswer as JSON: {\"reports\": true or false, \"reason\": \"<one short sentence>\"}",
+ "user": "Concept: InterestExpense: interest expense\nStatement: IS\nRow label: Interest expense on Company debt excluding Ford Credit\nSection: Costs and expenses\nRole: operand",
+ "answer": {
+  "reports": false,
+  "reason": "The row specifies a subset of the concept (excluding Ford Credit), not representing all company interests."
+ },
+ "seconds": 4.49,
+ "usage": {
+  "in": 141,
+  "out": 30
+ }
+}

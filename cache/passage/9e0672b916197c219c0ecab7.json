@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Roughly how many people worked at Goldman Sachs at the end of 2025?",
+ "abstain": false,
+ "answer": "47,400",
+ "pred": {
+  "kind": "number",
+  "value": 47400.0
+ },
+ "unit": "count",
+ "facts": [
+  {
+   "ticker": "GS",
+   "doc": "GS_FY2025_10K",
+   "page": 10,
+   "value": 47400.0,
+   "label": "As of December 2025, we had headcount of 47,400",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

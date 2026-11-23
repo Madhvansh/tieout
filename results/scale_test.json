@@ -1,0 +1,5612 @@
+{
+ "meta": {
+  "n": 8667,
+  "families": [
+   "fact",
+   "growth",
+   "metric",
+   "solve",
+   "restated",
+   "rank"
+  ],
+  "seconds": 12.1,
+  "executor_errors": 0,
+  "correct_by_magnitude_only": 48,
+  "restated_questions_whose_key_is_not_zero": 14,
+  "key_defects_blocked": {
+   "JNJ/ResearchAndDevelopment": "the SEC element holds a different amount from the printed income-statement line (1,841 against 17,232 for fiscal 2024)"
+  },
+  "alternatives": {
+   "NetIncome": [
+    "ProfitLoss",
+    "NetIncomeLossAvailableToCommonStockholdersBasic"
+   ],
+   "ConsolidatedNetIncome": [
+    "NetIncomeLoss"
+   ],
+   "ShareholdersEquity": [
+    "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest"
+   ],
+   "TotalEquity": [
+    "StockholdersEquity"
+   ],
+   "Revenue": [
+    "RevenueFromContractWithCustomerExcludingAssessedTax",
+    "RevenueFromContractWithCustomerIncludingAssessedTax"
+   ],
+   "InterestExpense": [
+    "InterestExpenseNonoperating",
+    "InterestExpenseDebt"
+   ],
+   "Cash": [
+    "CashAndCashEquivalentsAtCarryingValue",
+    "CashAndDueFromBanks",
+    "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents"
+   ],
+   "AccountsReceivable": [
+    "ReceivablesNetCurrent",
+    "AccountsNotesAndLoansReceivableNetCurrent"
+   ],
+   "LongTermDebt": [
+    "LongTermDebt",
+    "LongTermDebtAndCapitalLeaseObligations"
+   ],
+   "CapitalExpenditures": [
+    "PaymentsToAcquirePropertyPlantAndEquipment",
+    "PaymentsToAcquireProductiveAssets"
+   ],
+   "OperatingCashFlow": [
+    "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations"
+   ],
+   "InvestingCashFlow": [
+    "NetCashProvidedByUsedInInvestingActivitiesContinuingOperations"
+   ],
+   "FinancingCashFlow": [
+    "NetCashProvidedByUsedInFinancingActivitiesContinuingOperations"
+   ],
+   "EPSDiluted": [
+    "IncomeLossFromContinuingOperationsPerDilutedShare"
+   ],
+   "EPSBasic": [
+    "IncomeLossFromContinuingOperationsPerBasicShare"
+   ],
+   "PretaxIncome": [
+    "IncomeLossFromContinuingOperationsBeforeIncomeTaxesMinorityInterestAndIncomeLossFromEquityMethodInvestments"
+   ]
+  },
+  "key_elements": {
+   "Revenue": [
+    "Revenues",
+    "RevenuesNetOfInterestExpense",
+    "RevenueFromContractWithCustomerExcludingAssessedTax",
+    "RevenueFromContractWithCustomerIncludingAssessedTax",
+    "SalesRevenueNet"
+   ],
+   "CostOfRevenue": [
+    "CostOfRevenue",
+    "CostOfGoodsAndServicesSold",
+    "CostOfGoodsSold"
+   ],
+   "GrossProfit": [
+    "GrossProfit"
+   ],
+   "ResearchAndDevelopment": [
+    "ResearchAndDevelopmentExpense"
+   ],
+   "OperatingIncome": [
+    "OperatingIncomeLoss"
+   ],
+   "IncomeTax": [
+    "IncomeTaxExpenseBenefit"
+   ],
+   "NetIncome": [
+    "NetIncomeLoss"
+   ],
+   "ConsolidatedNetIncome": [
+    "ProfitLoss"
+   ],
+   "InterestExpense": [
+    "InterestExpense",
+    "InterestExpenseNonoperating"
+   ],
+   "AccountsReceivable": [
+    "AccountsReceivableNetCurrent"
+   ],
+   "PropertyPlantEquipment": [
+    "PropertyPlantAndEquipmentNet"
+   ],
+   "AccountsPayable": [
+    "AccountsPayableCurrent"
+   ],
+   "RetainedEarnings": [
+    "RetainedEarningsAccumulatedDeficit"
+   ],
+   "ShareholdersEquity": [
+    "StockholdersEquity"
+   ],
+   "TotalAssets": [
+    "Assets"
+   ],
+   "TotalCurrentAssets": [
+    "AssetsCurrent"
+   ],
+   "TotalLiabilities": [
+    "Liabilities"
+   ],
+   "TotalCurrentLiabilities": [
+    "LiabilitiesCurrent"
+   ],
+   "TotalEquity": [
+    "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+    "StockholdersEquity"
+   ],
+   "TotalLiabilitiesAndEquity": [
+    "LiabilitiesAndStockholdersEquity"
+   ],
+   "Cash": [
+    "CashAndCashEquivalentsAtCarryingValue",
+    "CashAndDueFromBanks"
+   ],
+   "Goodwill": [
+    "Goodwill"
+   ],
+   "OperatingCashFlow": [
+    "NetCashProvidedByUsedInOperatingActivities"
+   ],
+   "InvestingCashFlow": [
+    "NetCashProvidedByUsedInInvestingActivities"
+   ],
+   "FinancingCashFlow": [
+    "NetCashProvidedByUsedInFinancingActivities"
+   ],
+   "CapitalExpenditures": [
+    "PaymentsToAcquirePropertyPlantAndEquipment",
+    "PaymentsToAcquireProductiveAssets"
+   ],
+   "StockBasedCompensation": [
+    "ShareBasedCompensation"
+   ],
+   "DividendsPaid": [
+    "PaymentsOfDividends",
+    "PaymentsOfDividendsCommonStock"
+   ],
+   "ShareRepurchases": [
+    "PaymentsForRepurchaseOfCommonStock"
+   ],
+   "NetInterestIncome": [
+    "InterestIncomeExpenseNet"
+   ],
+   "Deposits": [
+    "Deposits"
+   ],
+   "LongTermDebt": [
+    "LongTermDebtNoncurrent"
+   ],
+   "EPSDiluted": [
+    "EarningsPerShareDiluted"
+   ],
+   "EPSBasic": [
+    "EarningsPerShareBasic"
+   ],
+   "PretaxIncome": [
+    "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+    "IncomeLossFromContinuingOperationsBeforeIncomeTaxesMinorityInterestAndIncomeLossFromEquityMethodInvestments"
+   ],
+   "SellingGeneralAdmin": [
+    "SellingGeneralAndAdministrativeExpense"
+   ],
+   "SalesAndMarketing": [
+    "SellingAndMarketingExpense"
+   ],
+   "GeneralAndAdministrative": [
+    "GeneralAndAdministrativeExpense"
+   ],
+   "SharesDiluted": [
+    "WeightedAverageNumberOfDilutedSharesOutstanding"
+   ],
+   "SharesBasic": [
+    "WeightedAverageNumberOfSharesOutstandingBasic"
+   ],
+   "Inventory": [
+    "InventoryNet"
+   ],
+   "NoninterestIncome": [
+    "NoninterestIncome"
+   ],
+   "NoninterestExpense": [
+    "NoninterestExpense"
+   ]
+  }
+ },
+ "coverage": {
+  "companies": [
+   "AAPL",
+   "ADBE",
+   "AMD",
+   "AMZN",
+   "AXP",
+   "BAC",
+   "BLK",
+   "C",
+   "CAT",
+   "COST",
+   "CRM",
+   "CSCO",
+   "CVX",
+   "F",
+   "GM",
+   "GOOGL",
+   "GS",
+   "HD",
+   "JNJ",
+   "JPM",
+   "KO",
+   "MA",
+   "MCD",
+   "META",
+   "MRK",
+   "MS",
+   "MSFT",
+   "NKE",
+   "NVDA",
+   "ORCL",
+   "PEP",
+   "PFE",
+   "PG",
+   "TGT",
+   "TSLA",
+   "UNH",
+   "V",
+   "WFC",
+   "WMT",
+   "XOM"
+  ],
+  "companies_without_sec_file": [],
+  "concepts": [
+   "AccountsPayable",
+   "AccountsReceivable",
+   "CapitalExpenditures",
+   "Cash",
+   "ConsolidatedNetIncome",
+   "CostOfRevenue",
+   "Deposits",
+   "DividendsPaid",
+   "EPSBasic",
+   "EPSDiluted",
+   "FinancingCashFlow",
+   "GeneralAndAdministrative",
+   "Goodwill",
+   "GrossProfit",
+   "IncomeTax",
+   "InterestExpense",
+   "Inventory",
+   "InvestingCashFlow",
+   "LongTermDebt",
+   "NetIncome",
+   "NetInterestIncome",
+   "NoninterestExpense",
+   "NoninterestIncome",
+   "OperatingCashFlow",
+   "OperatingIncome",
+   "PretaxIncome",
+   "PropertyPlantEquipment",
+   "ResearchAndDevelopment",
+   "RetainedEarnings",
+   "Revenue",
+   "SalesAndMarketing",
+   "SellingGeneralAdmin",
+   "ShareRepurchases",
+   "ShareholdersEquity",
+   "SharesBasic",
+   "SharesDiluted",
+   "StockBasedCompensation",
+   "TotalAssets",
+   "TotalCurrentAssets",
+   "TotalCurrentLiabilities",
+   "TotalEquity",
+   "TotalLiabilities",
+   "TotalLiabilitiesAndEquity"
+  ],
+  "concepts_out": [
+   "DepreciationAmortization",
+   "IntangibleAssets",
+   "Loans",
+   "ProvisionForCreditLosses"
+  ],
+  "metrics": [
+   "asset_turnover",
+   "capex_intensity",
+   "cash_conversion",
+   "current_ratio",
+   "effective_tax_rate",
+   "free_cash_flow",
+   "gross_margin",
+   "gross_profit",
+   "liabilities_to_equity",
+   "net_margin",
+   "operating_margin",
+   "return_on_assets",
+   "return_on_equity",
+   "rnd_intensity",
+   "sbc_share_of_revenue",
+   "shareholder_payout",
+   "total_liabilities"
+  ],
+  "metrics_out": []
+ },
+ "summary": {
+  "overall": {
+   "n": 8667,
+   "correct": 8083,
+   "abstained": 517,
+   "wrong_unverified": 0,
+   "wrong_silent": 67,
+   "silent_wrong_equal_to_second_definition": 46,
+   "accuracy": 0.9326,
+   "accuracy_when_answered": 0.9918,
+   "silent_wrong_rate": 0.0077
+  },
+  "by_family": {
+   "fact": {
+    "n": 4016,
+    "correct": 3721,
+    "abstained": 263,
+    "wrong_unverified": 0,
+    "wrong_silent": 32,
+    "silent_wrong_equal_to_second_definition": 23,
+    "accuracy": 0.9265,
+    "accuracy_when_answered": 0.9915,
+    "silent_wrong_rate": 0.008
+   },
+   "growth": {
+    "n": 2337,
+    "correct": 2161,
+    "abstained": 157,
+    "wrong_unverified": 0,
+    "wrong_silent": 19,
+    "silent_wrong_equal_to_second_definition": 14,
+    "accuracy": 0.9247,
+    "accuracy_when_answered": 0.9913,
+    "silent_wrong_rate": 0.0081
+   },
+   "metric": {
+    "n": 1675,
+    "correct": 1636,
+    "abstained": 28,
+    "wrong_unverified": 0,
+    "wrong_silent": 11,
+    "silent_wrong_equal_to_second_definition": 9,
+    "accuracy": 0.9767,
+    "accuracy_when_answered": 0.9933,
+    "silent_wrong_rate": 0.0066
+   },
+   "rank": {
+    "n": 163,
+    "correct": 118,
+    "abstained": 40,
+    "wrong_unverified": 0,
+    "wrong_silent": 5,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.7239,
+    "accuracy_when_answered": 0.9593,
+    "silent_wrong_rate": 0.0307
+   },
+   "restated": {
+    "n": 320,
+    "correct": 299,
+    "abstained": 21,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9344,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "solve": {
+    "n": 156,
+    "correct": 148,
+    "abstained": 8,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9487,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   }
+  },
+  "by_company": {
+   "AAPL": {
+    "n": 490,
+    "correct": 451,
+    "abstained": 39,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9204,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "ADBE": {
+    "n": 178,
+    "correct": 176,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 2,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9888,
+    "accuracy_when_answered": 0.9888,
+    "silent_wrong_rate": 0.0112
+   },
+   "AMD": {
+    "n": 185,
+    "correct": 165,
+    "abstained": 5,
+    "wrong_unverified": 0,
+    "wrong_silent": 15,
+    "silent_wrong_equal_to_second_definition": 15,
+    "accuracy": 0.8919,
+    "accuracy_when_answered": 0.9167,
+    "silent_wrong_rate": 0.0811
+   },
+   "AMZN": {
+    "n": 158,
+    "correct": 156,
+    "abstained": 2,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9873,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "AXP": {
+    "n": 152,
+    "correct": 149,
+    "abstained": 3,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9803,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "BAC": {
+    "n": 330,
+    "correct": 330,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "BLK": {
+    "n": 148,
+    "correct": 136,
+    "abstained": 10,
+    "wrong_unverified": 0,
+    "wrong_silent": 2,
+    "silent_wrong_equal_to_second_definition": 2,
+    "accuracy": 0.9189,
+    "accuracy_when_answered": 0.9855,
+    "silent_wrong_rate": 0.0135
+   },
+   "C": {
+    "n": 146,
+    "correct": 123,
+    "abstained": 23,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.8425,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "CAT": {
+    "n": 264,
+    "correct": 214,
+    "abstained": 50,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.8106,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "COST": {
+    "n": 176,
+    "correct": 173,
+    "abstained": 3,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.983,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "CRM": {
+    "n": 185,
+    "correct": 185,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "CSCO": {
+    "n": 200,
+    "correct": 190,
+    "abstained": 10,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.95,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "CVX": {
+    "n": 159,
+    "correct": 107,
+    "abstained": 44,
+    "wrong_unverified": 0,
+    "wrong_silent": 8,
+    "silent_wrong_equal_to_second_definition": 3,
+    "accuracy": 0.673,
+    "accuracy_when_answered": 0.9304,
+    "silent_wrong_rate": 0.0503
+   },
+   "F": {
+    "n": 175,
+    "correct": 151,
+    "abstained": 24,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.8629,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "GM": {
+    "n": 152,
+    "correct": 149,
+    "abstained": 3,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9803,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "GOOGL": {
+    "n": 455,
+    "correct": 416,
+    "abstained": 39,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9143,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "GS": {
+    "n": 255,
+    "correct": 243,
+    "abstained": 12,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9529,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "HD": {
+    "n": 182,
+    "correct": 182,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "JNJ": {
+    "n": 420,
+    "correct": 402,
+    "abstained": 18,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9571,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "JPM": {
+    "n": 138,
+    "correct": 127,
+    "abstained": 11,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9203,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "KO": {
+    "n": 446,
+    "correct": 443,
+    "abstained": 3,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9933,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "MA": {
+    "n": 158,
+    "correct": 155,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 3,
+    "silent_wrong_equal_to_second_definition": 3,
+    "accuracy": 0.981,
+    "accuracy_when_answered": 0.981,
+    "silent_wrong_rate": 0.019
+   },
+   "MCD": {
+    "n": 153,
+    "correct": 139,
+    "abstained": 8,
+    "wrong_unverified": 0,
+    "wrong_silent": 6,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9085,
+    "accuracy_when_answered": 0.9586,
+    "silent_wrong_rate": 0.0392
+   },
+   "META": {
+    "n": 180,
+    "correct": 175,
+    "abstained": 5,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9722,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "MRK": {
+    "n": 174,
+    "correct": 151,
+    "abstained": 23,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.8678,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "MS": {
+    "n": 135,
+    "correct": 134,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 1,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9926,
+    "accuracy_when_answered": 0.9926,
+    "silent_wrong_rate": 0.0074
+   },
+   "MSFT": {
+    "n": 328,
+    "correct": 320,
+    "abstained": 8,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9756,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "NKE": {
+    "n": 169,
+    "correct": 164,
+    "abstained": 5,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9704,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "NVDA": {
+    "n": 195,
+    "correct": 195,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "ORCL": {
+    "n": 169,
+    "correct": 153,
+    "abstained": 11,
+    "wrong_unverified": 0,
+    "wrong_silent": 5,
+    "silent_wrong_equal_to_second_definition": 5,
+    "accuracy": 0.9053,
+    "accuracy_when_answered": 0.9684,
+    "silent_wrong_rate": 0.0296
+   },
+   "PEP": {
+    "n": 197,
+    "correct": 178,
+    "abstained": 19,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9036,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "PFE": {
+    "n": 162,
+    "correct": 148,
+    "abstained": 12,
+    "wrong_unverified": 0,
+    "wrong_silent": 2,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9136,
+    "accuracy_when_answered": 0.9867,
+    "silent_wrong_rate": 0.0123
+   },
+   "PG": {
+    "n": 181,
+    "correct": 163,
+    "abstained": 18,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9006,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "TGT": {
+    "n": 156,
+    "correct": 153,
+    "abstained": 3,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9808,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "TSLA": {
+    "n": 182,
+    "correct": 174,
+    "abstained": 3,
+    "wrong_unverified": 0,
+    "wrong_silent": 5,
+    "silent_wrong_equal_to_second_definition": 5,
+    "accuracy": 0.956,
+    "accuracy_when_answered": 0.9721,
+    "silent_wrong_rate": 0.0275
+   },
+   "UNH": {
+    "n": 173,
+    "correct": 165,
+    "abstained": 8,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9538,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "V": {
+    "n": 146,
+    "correct": 138,
+    "abstained": 8,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9452,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "WFC": {
+    "n": 139,
+    "correct": 131,
+    "abstained": 8,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9424,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "WMT": {
+    "n": 265,
+    "correct": 262,
+    "abstained": 3,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9887,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "XOM": {
+    "n": 248,
+    "correct": 199,
+    "abstained": 36,
+    "wrong_unverified": 0,
+    "wrong_silent": 13,
+    "silent_wrong_equal_to_second_definition": 13,
+    "accuracy": 0.8024,
+    "accuracy_when_answered": 0.9387,
+    "silent_wrong_rate": 0.0524
+   },
+   "cluster:banks_finance": {
+    "n": 30,
+    "correct": 19,
+    "abstained": 9,
+    "wrong_unverified": 0,
+    "wrong_silent": 2,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.6333,
+    "accuracy_when_answered": 0.9048,
+    "silent_wrong_rate": 0.0667
+   },
+   "cluster:big_tech": {
+    "n": 37,
+    "correct": 28,
+    "abstained": 8,
+    "wrong_unverified": 0,
+    "wrong_silent": 1,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.7568,
+    "accuracy_when_answered": 0.9655,
+    "silent_wrong_rate": 0.027
+   },
+   "cluster:consumer_retail": {
+    "n": 36,
+    "correct": 28,
+    "abstained": 8,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.7778,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "cluster:health": {
+    "n": 28,
+    "correct": 19,
+    "abstained": 7,
+    "wrong_unverified": 0,
+    "wrong_silent": 2,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.6786,
+    "accuracy_when_answered": 0.9048,
+    "silent_wrong_rate": 0.0714
+   },
+   "cluster:industrial_auto_energy": {
+    "n": 32,
+    "correct": 24,
+    "abstained": 8,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.75,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   }
+  },
+  "by_concept": {
+   "AccountsPayable": {
+    "n": 103,
+    "correct": 99,
+    "abstained": 4,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9612,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "AccountsReceivable": {
+    "n": 110,
+    "correct": 86,
+    "abstained": 16,
+    "wrong_unverified": 0,
+    "wrong_silent": 8,
+    "silent_wrong_equal_to_second_definition": 8,
+    "accuracy": 0.7818,
+    "accuracy_when_answered": 0.9149,
+    "silent_wrong_rate": 0.0727
+   },
+   "CapitalExpenditures": {
+    "n": 228,
+    "correct": 226,
+    "abstained": 2,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9912,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "Cash": {
+    "n": 151,
+    "correct": 147,
+    "abstained": 4,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9735,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "ConsolidatedNetIncome": {
+    "n": 118,
+    "correct": 113,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 5,
+    "silent_wrong_equal_to_second_definition": 5,
+    "accuracy": 0.9576,
+    "accuracy_when_answered": 0.9576,
+    "silent_wrong_rate": 0.0424
+   },
+   "CostOfRevenue": {
+    "n": 179,
+    "correct": 179,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "Deposits": {
+    "n": 29,
+    "correct": 29,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "DividendsPaid": {
+    "n": 199,
+    "correct": 197,
+    "abstained": 2,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9899,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "EPSBasic": {
+    "n": 250,
+    "correct": 215,
+    "abstained": 33,
+    "wrong_unverified": 0,
+    "wrong_silent": 2,
+    "silent_wrong_equal_to_second_definition": 2,
+    "accuracy": 0.86,
+    "accuracy_when_answered": 0.9908,
+    "silent_wrong_rate": 0.008
+   },
+   "EPSDiluted": {
+    "n": 250,
+    "correct": 211,
+    "abstained": 39,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.844,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "FinancingCashFlow": {
+    "n": 255,
+    "correct": 242,
+    "abstained": 13,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.949,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "GeneralAndAdministrative": {
+    "n": 87,
+    "correct": 62,
+    "abstained": 25,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.7126,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "Goodwill": {
+    "n": 147,
+    "correct": 117,
+    "abstained": 30,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.7959,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "GrossProfit": {
+    "n": 97,
+    "correct": 97,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "IncomeTax": {
+    "n": 265,
+    "correct": 261,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 4,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9849,
+    "accuracy_when_answered": 0.9849,
+    "silent_wrong_rate": 0.0151
+   },
+   "InterestExpense": {
+    "n": 184,
+    "correct": 136,
+    "abstained": 46,
+    "wrong_unverified": 0,
+    "wrong_silent": 2,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.7391,
+    "accuracy_when_answered": 0.9855,
+    "silent_wrong_rate": 0.0109
+   },
+   "Inventory": {
+    "n": 96,
+    "correct": 85,
+    "abstained": 11,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.8854,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "InvestingCashFlow": {
+    "n": 255,
+    "correct": 251,
+    "abstained": 2,
+    "wrong_unverified": 0,
+    "wrong_silent": 2,
+    "silent_wrong_equal_to_second_definition": 2,
+    "accuracy": 0.9843,
+    "accuracy_when_answered": 0.9921,
+    "silent_wrong_rate": 0.0078
+   },
+   "LongTermDebt": {
+    "n": 91,
+    "correct": 77,
+    "abstained": 14,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.8462,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "NetIncome": {
+    "n": 250,
+    "correct": 250,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "NetInterestIncome": {
+    "n": 56,
+    "correct": 48,
+    "abstained": 8,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.8571,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "NoninterestExpense": {
+    "n": 48,
+    "correct": 48,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "NoninterestIncome": {
+    "n": 48,
+    "correct": 48,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "OperatingCashFlow": {
+    "n": 255,
+    "correct": 251,
+    "abstained": 2,
+    "wrong_unverified": 0,
+    "wrong_silent": 2,
+    "silent_wrong_equal_to_second_definition": 2,
+    "accuracy": 0.9843,
+    "accuracy_when_answered": 0.9921,
+    "silent_wrong_rate": 0.0078
+   },
+   "OperatingIncome": {
+    "n": 174,
+    "correct": 174,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "PretaxIncome": {
+    "n": 255,
+    "correct": 250,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 5,
+    "silent_wrong_equal_to_second_definition": 5,
+    "accuracy": 0.9804,
+    "accuracy_when_answered": 0.9804,
+    "silent_wrong_rate": 0.0196
+   },
+   "PropertyPlantEquipment": {
+    "n": 123,
+    "correct": 107,
+    "abstained": 15,
+    "wrong_unverified": 0,
+    "wrong_silent": 1,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.8699,
+    "accuracy_when_answered": 0.9907,
+    "silent_wrong_rate": 0.0081
+   },
+   "ResearchAndDevelopment": {
+    "n": 114,
+    "correct": 85,
+    "abstained": 29,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.7456,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "RetainedEarnings": {
+    "n": 157,
+    "correct": 141,
+    "abstained": 16,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.8981,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "Revenue": {
+    "n": 265,
+    "correct": 265,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "SalesAndMarketing": {
+    "n": 62,
+    "correct": 47,
+    "abstained": 15,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.7581,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "SellingGeneralAdmin": {
+    "n": 144,
+    "correct": 132,
+    "abstained": 11,
+    "wrong_unverified": 0,
+    "wrong_silent": 1,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9167,
+    "accuracy_when_answered": 0.9925,
+    "silent_wrong_rate": 0.0069
+   },
+   "ShareRepurchases": {
+    "n": 235,
+    "correct": 223,
+    "abstained": 9,
+    "wrong_unverified": 0,
+    "wrong_silent": 3,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9489,
+    "accuracy_when_answered": 0.9867,
+    "silent_wrong_rate": 0.0128
+   },
+   "ShareholdersEquity": {
+    "n": 144,
+    "correct": 136,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 8,
+    "silent_wrong_equal_to_second_definition": 8,
+    "accuracy": 0.9444,
+    "accuracy_when_answered": 0.9444,
+    "silent_wrong_rate": 0.0556
+   },
+   "SharesBasic": {
+    "n": 250,
+    "correct": 184,
+    "abstained": 63,
+    "wrong_unverified": 0,
+    "wrong_silent": 3,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.736,
+    "accuracy_when_answered": 0.984,
+    "silent_wrong_rate": 0.012
+   },
+   "SharesDiluted": {
+    "n": 242,
+    "correct": 172,
+    "abstained": 65,
+    "wrong_unverified": 0,
+    "wrong_silent": 5,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.7107,
+    "accuracy_when_answered": 0.9718,
+    "silent_wrong_rate": 0.0207
+   },
+   "StockBasedCompensation": {
+    "n": 215,
+    "correct": 204,
+    "abstained": 11,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9488,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "TotalAssets": {
+    "n": 160,
+    "correct": 160,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "TotalCurrentAssets": {
+    "n": 128,
+    "correct": 128,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "TotalCurrentLiabilities": {
+    "n": 128,
+    "correct": 128,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "TotalEquity": {
+    "n": 160,
+    "correct": 151,
+    "abstained": 4,
+    "wrong_unverified": 0,
+    "wrong_silent": 5,
+    "silent_wrong_equal_to_second_definition": 5,
+    "accuracy": 0.9437,
+    "accuracy_when_answered": 0.9679,
+    "silent_wrong_rate": 0.0312
+   },
+   "TotalLiabilities": {
+    "n": 125,
+    "correct": 125,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "TotalLiabilitiesAndEquity": {
+    "n": 160,
+    "correct": 160,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "asset_turnover": {
+    "n": 100,
+    "correct": 100,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "capex_intensity": {
+    "n": 125,
+    "correct": 124,
+    "abstained": 1,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.992,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "cash_conversion": {
+    "n": 132,
+    "correct": 130,
+    "abstained": 1,
+    "wrong_unverified": 0,
+    "wrong_silent": 1,
+    "silent_wrong_equal_to_second_definition": 1,
+    "accuracy": 0.9848,
+    "accuracy_when_answered": 0.9924,
+    "silent_wrong_rate": 0.0076
+   },
+   "current_ratio": {
+    "n": 76,
+    "correct": 76,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "effective_tax_rate": {
+    "n": 144,
+    "correct": 142,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 2,
+    "silent_wrong_equal_to_second_definition": 2,
+    "accuracy": 0.9861,
+    "accuracy_when_answered": 0.9861,
+    "silent_wrong_rate": 0.0139
+   },
+   "free_cash_flow": {
+    "n": 125,
+    "correct": 123,
+    "abstained": 1,
+    "wrong_unverified": 0,
+    "wrong_silent": 1,
+    "silent_wrong_equal_to_second_definition": 1,
+    "accuracy": 0.984,
+    "accuracy_when_answered": 0.9919,
+    "silent_wrong_rate": 0.008
+   },
+   "gross_margin": {
+    "n": 55,
+    "correct": 55,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "gross_profit": {
+    "n": 55,
+    "correct": 55,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "liabilities_to_equity": {
+    "n": 74,
+    "correct": 70,
+    "abstained": 2,
+    "wrong_unverified": 0,
+    "wrong_silent": 2,
+    "silent_wrong_equal_to_second_definition": 2,
+    "accuracy": 0.9459,
+    "accuracy_when_answered": 0.9722,
+    "silent_wrong_rate": 0.027
+   },
+   "net_margin": {
+    "n": 142,
+    "correct": 142,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "operating_margin": {
+    "n": 99,
+    "correct": 99,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "return_on_assets": {
+    "n": 94,
+    "correct": 94,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "return_on_equity": {
+    "n": 88,
+    "correct": 85,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 3,
+    "silent_wrong_equal_to_second_definition": 3,
+    "accuracy": 0.9659,
+    "accuracy_when_answered": 0.9659,
+    "silent_wrong_rate": 0.0341
+   },
+   "rnd_intensity": {
+    "n": 64,
+    "correct": 48,
+    "abstained": 16,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.75,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "sbc_share_of_revenue": {
+    "n": 119,
+    "correct": 113,
+    "abstained": 6,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9496,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   },
+   "shareholder_payout": {
+    "n": 109,
+    "correct": 106,
+    "abstained": 1,
+    "wrong_unverified": 0,
+    "wrong_silent": 2,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 0.9725,
+    "accuracy_when_answered": 0.9815,
+    "silent_wrong_rate": 0.0183
+   },
+   "total_liabilities": {
+    "n": 74,
+    "correct": 74,
+    "abstained": 0,
+    "wrong_unverified": 0,
+    "wrong_silent": 0,
+    "silent_wrong_equal_to_second_definition": 0,
+    "accuracy": 1.0,
+    "accuracy_when_answered": 1.0,
+    "silent_wrong_rate": 0.0
+   }
+  }
+ },
+ "wrong": [
+  {
+   "id": "growth:ADBE:SharesDiluted:FY2025",
+   "family": "growth",
+   "company": "ADBE",
+   "concept": "SharesDiluted",
+   "period": "FY2025",
+   "key": -0.0504781,
+   "got": -0.0511111,
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "ADBE",
+      "concept": "SharesDiluted",
+      "from": {
+       "fy": 2024
+      },
+      "to": {
+       "fy": 2025
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "SharesDiluted",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "WeightedAverageNumberOfDilutedSharesOutstanding",
+     "value": 449700000,
+     "form": "10-K",
+     "filed": "2026-01-15"
+    },
+    {
+     "concept": "SharesDiluted",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "WeightedAverageNumberOfDilutedSharesOutstanding",
+     "value": 427000000,
+     "form": "10-K",
+     "filed": "2026-01-15"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "ADBE_FY2025_10K",
+     "page": 48,
+     "label": "Shares used to compute diluted net income per share",
+     "printed": "450",
+     "period": "FY2024",
+     "value": 450000000,
+     "status": "verified"
+    },
+    {
+     "doc": "ADBE_FY2025_10K",
+     "page": 48,
+     "label": "Shares used to compute diluted net income per share",
+     "printed": "427",
+     "period": "FY2025",
+     "value": 427000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "growth:ADBE:SharesDiluted:FY2024",
+   "family": "growth",
+   "company": "ADBE",
+   "concept": "SharesDiluted",
+   "period": "FY2024",
+   "key": -0.0204748,
+   "got": -0.0196078,
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "ADBE",
+      "concept": "SharesDiluted",
+      "from": {
+       "fy": 2023
+      },
+      "to": {
+       "fy": 2024
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "SharesDiluted",
+     "period": "FY2023",
+     "as": "latest",
+     "tag": "WeightedAverageNumberOfDilutedSharesOutstanding",
+     "value": 459100000,
+     "form": "10-K",
+     "filed": "2026-01-15"
+    },
+    {
+     "concept": "SharesDiluted",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "WeightedAverageNumberOfDilutedSharesOutstanding",
+     "value": 449700000,
+     "form": "10-K",
+     "filed": "2026-01-15"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "ADBE_FY2025_10K",
+     "page": 48,
+     "label": "Shares used to compute diluted net income per share",
+     "printed": "459",
+     "period": "FY2023",
+     "value": 459000000,
+     "status": "verified"
+    },
+    {
+     "doc": "ADBE_FY2025_10K",
+     "page": 48,
+     "label": "Shares used to compute diluted net income per share",
+     "printed": "450",
+     "period": "FY2024",
+     "value": 450000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:AMD:OperatingCashFlow:FY2025",
+   "family": "fact",
+   "company": "AMD",
+   "concept": "OperatingCashFlow",
+   "period": "FY2025",
+   "key": 7709000000,
+   "got": 6493000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "AMD",
+      "concept": "OperatingCashFlow",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "OperatingCashFlow",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "NetCashProvidedByUsedInOperatingActivities",
+     "value": 7709000000,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 65,
+     "label": "Net cash provided by operating activities of continuing oper",
+     "printed": "6,493",
+     "period": "FY2025",
+     "value": 6493000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:AMD:InvestingCashFlow:FY2025",
+   "family": "fact",
+   "company": "AMD",
+   "concept": "InvestingCashFlow",
+   "period": "FY2025",
+   "key": -5533000000,
+   "got": -6851000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "AMD",
+      "concept": "InvestingCashFlow",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "InvestingCashFlow",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "NetCashProvidedByUsedInInvestingActivities",
+     "value": -5533000000,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 65,
+     "label": "Net cash used in investing activities of continuing operatio",
+     "printed": "(6,851)",
+     "period": "FY2025",
+     "value": -6851000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:AMD:EPSBasic:FY2025",
+   "family": "fact",
+   "company": "AMD",
+   "concept": "EPSBasic",
+   "period": "FY2025",
+   "key": 2.67,
+   "got": 2.63,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "AMD",
+      "concept": "EPSBasic",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "EPSBasic",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "EarningsPerShareBasic",
+     "value": 2.67,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 61,
+     "label": "Earnings from continuing operations - basic",
+     "printed": "2.63",
+     "period": "FY2025",
+     "value": 2.63,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:AMD:PretaxIncome:FY2025",
+   "family": "fact",
+   "company": "AMD",
+   "concept": "PretaxIncome",
+   "period": "FY2025",
+   "key": 4166000000,
+   "got": 4140000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "AMD",
+      "concept": "PretaxIncome",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "PretaxIncome",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+     "value": 4166000000,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 61,
+     "label": "Income from continuing operations before income taxes and eq",
+     "printed": "4,140",
+     "period": "FY2025",
+     "value": 4140000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:AMD:PretaxIncome:FY2024",
+   "family": "fact",
+   "company": "AMD",
+   "concept": "PretaxIncome",
+   "period": "FY2024",
+   "key": 2022000000,
+   "got": 1989000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "AMD",
+      "concept": "PretaxIncome",
+      "period": {
+       "fy": 2024
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "PretaxIncome",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+     "value": 2022000000,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 61,
+     "label": "Income from continuing operations before income taxes and eq",
+     "printed": "1,989",
+     "period": "FY2024",
+     "value": 1989000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:AMD:PretaxIncome:FY2023",
+   "family": "fact",
+   "company": "AMD",
+   "concept": "PretaxIncome",
+   "period": "FY2023",
+   "key": 508000000,
+   "got": 492000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "AMD",
+      "concept": "PretaxIncome",
+      "period": {
+       "fy": 2023
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "PretaxIncome",
+     "period": "FY2023",
+     "as": "latest",
+     "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+     "value": 508000000,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 61,
+     "label": "Income from continuing operations before income taxes and eq",
+     "printed": "492",
+     "period": "FY2023",
+     "value": 492000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "growth:AMD:OperatingCashFlow:FY2025",
+   "family": "growth",
+   "company": "AMD",
+   "concept": "OperatingCashFlow",
+   "period": "FY2025",
+   "key": 1.53502,
+   "got": 1.13515,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "AMD",
+      "concept": "OperatingCashFlow",
+      "from": {
+       "fy": 2024
+      },
+      "to": {
+       "fy": 2025
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "OperatingCashFlow",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "NetCashProvidedByUsedInOperatingActivities",
+     "value": 3041000000,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    },
+    {
+     "concept": "OperatingCashFlow",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "NetCashProvidedByUsedInOperatingActivities",
+     "value": 7709000000,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 65,
+     "label": "Net cash provided by operating activities of continuing oper",
+     "printed": "3,041",
+     "period": "FY2024",
+     "value": 3041000000,
+     "status": "verified"
+    },
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 65,
+     "label": "Net cash provided by operating activities of continuing oper",
+     "printed": "6,493",
+     "period": "FY2025",
+     "value": 6493000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "growth:AMD:InvestingCashFlow:FY2025",
+   "family": "growth",
+   "company": "AMD",
+   "concept": "InvestingCashFlow",
+   "period": "FY2025",
+   "key": -4.02543,
+   "got": -5.22252,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "AMD",
+      "concept": "InvestingCashFlow",
+      "from": {
+       "fy": 2024
+      },
+      "to": {
+       "fy": 2025
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "InvestingCashFlow",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "NetCashProvidedByUsedInInvestingActivities",
+     "value": -1101000000,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    },
+    {
+     "concept": "InvestingCashFlow",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "NetCashProvidedByUsedInInvestingActivities",
+     "value": -5533000000,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 65,
+     "label": "Net cash used in investing activities of continuing operatio",
+     "printed": "(1,101)",
+     "period": "FY2024",
+     "value": -1101000000,
+     "status": "verified"
+    },
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 65,
+     "label": "Net cash used in investing activities of continuing operatio",
+     "printed": "(6,851)",
+     "period": "FY2025",
+     "value": -6851000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "growth:AMD:EPSBasic:FY2025",
+   "family": "growth",
+   "company": "AMD",
+   "concept": "EPSBasic",
+   "period": "FY2025",
+   "key": 1.64356,
+   "got": 1.60396,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "AMD",
+      "concept": "EPSBasic",
+      "from": {
+       "fy": 2024
+      },
+      "to": {
+       "fy": 2025
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "EPSBasic",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "EarningsPerShareBasic",
+     "value": 1.01,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    },
+    {
+     "concept": "EPSBasic",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "EarningsPerShareBasic",
+     "value": 2.67,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 61,
+     "label": "Earnings from continuing operations - basic",
+     "printed": "1.01",
+     "period": "FY2024",
+     "value": 1.01,
+     "status": "verified"
+    },
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 61,
+     "label": "Earnings from continuing operations - basic",
+     "printed": "2.63",
+     "period": "FY2025",
+     "value": 2.63,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "growth:AMD:PretaxIncome:FY2025",
+   "family": "growth",
+   "company": "AMD",
+   "concept": "PretaxIncome",
+   "period": "FY2025",
+   "key": 1.06034,
+   "got": 1.08145,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "AMD",
+      "concept": "PretaxIncome",
+      "from": {
+       "fy": 2024
+      },
+      "to": {
+       "fy": 2025
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "PretaxIncome",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+     "value": 2022000000,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    },
+    {
+     "concept": "PretaxIncome",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+     "value": 4166000000,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 61,
+     "label": "Income from continuing operations before income taxes and eq",
+     "printed": "1,989",
+     "period": "FY2024",
+     "value": 1989000000,
+     "status": "verified"
+    },
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 61,
+     "label": "Income from continuing operations before income taxes and eq",
+     "printed": "4,140",
+     "period": "FY2025",
+     "value": 4140000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "growth:AMD:PretaxIncome:FY2024",
+   "family": "growth",
+   "company": "AMD",
+   "concept": "PretaxIncome",
+   "period": "FY2024",
+   "key": 2.98031,
+   "got": 3.04268,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "AMD",
+      "concept": "PretaxIncome",
+      "from": {
+       "fy": 2023
+      },
+      "to": {
+       "fy": 2024
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "PretaxIncome",
+     "period": "FY2023",
+     "as": "latest",
+     "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+     "value": 508000000,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    },
+    {
+     "concept": "PretaxIncome",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+     "value": 2022000000,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 61,
+     "label": "Income from continuing operations before income taxes and eq",
+     "printed": "492",
+     "period": "FY2023",
+     "value": 492000000,
+     "status": "verified"
+    },
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 61,
+     "label": "Income from continuing operations before income taxes and eq",
+     "printed": "1,989",
+     "period": "FY2024",
+     "value": 1989000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "metric:AMD:effective_tax_rate:FY2023",
+   "family": "metric",
+   "company": "AMD",
+   "concept": "effective_tax_rate",
+   "period": "FY2023",
+   "key": 0.681102,
+   "got": 0.703252,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "metric",
+      "company": "AMD",
+      "metric": "effective_tax_rate",
+      "period": {
+       "fy": 2023
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "IncomeTax",
+     "period": "FY2023",
+     "as": "latest",
+     "tag": "IncomeTaxExpenseBenefit",
+     "value": -346000000,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    },
+    {
+     "concept": "PretaxIncome",
+     "period": "FY2023",
+     "as": "latest",
+     "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+     "value": 508000000,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 61,
+     "label": "Income tax provision (benefit)",
+     "printed": "(346)",
+     "period": "FY2023",
+     "value": -346000000,
+     "status": "verified"
+    },
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 61,
+     "label": "Income from continuing operations before income taxes and eq",
+     "printed": "492",
+     "period": "FY2023",
+     "value": 492000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "metric:AMD:effective_tax_rate:FY2024",
+   "family": "metric",
+   "company": "AMD",
+   "concept": "effective_tax_rate",
+   "period": "FY2024",
+   "key": 0.188427,
+   "got": 0.191554,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "metric",
+      "company": "AMD",
+      "metric": "effective_tax_rate",
+      "period": {
+       "fy": 2024
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "IncomeTax",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "IncomeTaxExpenseBenefit",
+     "value": 381000000,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    },
+    {
+     "concept": "PretaxIncome",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+     "value": 2022000000,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 61,
+     "label": "Income tax provision (benefit)",
+     "printed": "381",
+     "period": "FY2024",
+     "value": 381000000,
+     "status": "verified"
+    },
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 61,
+     "label": "Income from continuing operations before income taxes and eq",
+     "printed": "1,989",
+     "period": "FY2024",
+     "value": 1989000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "metric:AMD:free_cash_flow:FY2025",
+   "family": "metric",
+   "company": "AMD",
+   "concept": "free_cash_flow",
+   "period": "FY2025",
+   "key": 6735000000,
+   "got": 5519000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "metric",
+      "company": "AMD",
+      "metric": "free_cash_flow",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "OperatingCashFlow",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "NetCashProvidedByUsedInOperatingActivities",
+     "value": 7709000000,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    },
+    {
+     "concept": "CapitalExpenditures",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "PaymentsToAcquirePropertyPlantAndEquipment",
+     "value": 974000000,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 65,
+     "label": "Net cash provided by operating activities of continuing oper",
+     "printed": "6,493",
+     "period": "FY2025",
+     "value": 6493000000,
+     "status": "verified"
+    },
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 65,
+     "label": "Purchases of property and equipment",
+     "printed": "(974)",
+     "period": "FY2025",
+     "value": -974000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "metric:AMD:cash_conversion:FY2025",
+   "family": "metric",
+   "company": "AMD",
+   "concept": "cash_conversion",
+   "period": "FY2025",
+   "key": 1.77832,
+   "got": 1.49781,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "metric",
+      "company": "AMD",
+      "metric": "cash_conversion",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "OperatingCashFlow",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "NetCashProvidedByUsedInOperatingActivities",
+     "value": 7709000000,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    },
+    {
+     "concept": "NetIncome",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "NetIncomeLoss",
+     "value": 4335000000,
+     "form": "10-K",
+     "filed": "2026-02-04"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 65,
+     "label": "Net cash provided by operating activities of continuing oper",
+     "printed": "6,493",
+     "period": "FY2025",
+     "value": 6493000000,
+     "status": "verified"
+    },
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 61,
+     "label": "Net income",
+     "printed": "4,335",
+     "period": "FY2025",
+     "value": 4335000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:BLK:TotalEquity:FY2025@end",
+   "family": "fact",
+   "company": "BLK",
+   "concept": "TotalEquity",
+   "period": "FY2025@end",
+   "key": 56115000000,
+   "got": 55888000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "BLK",
+      "concept": "TotalEquity",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "TotalEquity",
+     "period": "FY2025@end",
+     "as": "latest",
+     "tag": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+     "value": 56115000000,
+     "form": "10-K",
+     "filed": "2026-02-25"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "BLK_FY2025_10K",
+     "page": 79,
+     "label": "Total BlackRock, Inc. stockholders\u2019 equity",
+     "printed": "55,888",
+     "period": "FY2025@end",
+     "value": 55888000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:BLK:TotalEquity:FY2024@end",
+   "family": "fact",
+   "company": "BLK",
+   "concept": "TotalEquity",
+   "period": "FY2024@end",
+   "key": 47664000000,
+   "got": 47495000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "BLK",
+      "concept": "TotalEquity",
+      "period": {
+       "fy": 2024
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "TotalEquity",
+     "period": "FY2024@end",
+     "as": "latest",
+     "tag": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+     "value": 47664000000,
+     "form": "10-K",
+     "filed": "2026-02-25"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "BLK_FY2025_10K",
+     "page": 79,
+     "label": "Total BlackRock, Inc. stockholders\u2019 equity",
+     "printed": "47,495",
+     "period": "FY2024@end",
+     "value": 47495000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:CVX:AccountsReceivable:FY2025@end",
+   "family": "fact",
+   "company": "CVX",
+   "concept": "AccountsReceivable",
+   "period": "FY2025@end",
+   "key": 15986000000,
+   "got": 18075000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "CVX",
+      "concept": "AccountsReceivable",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "AccountsReceivable",
+     "period": "FY2025@end",
+     "as": "latest",
+     "tag": "AccountsReceivableNetCurrent",
+     "value": 15986000000,
+     "form": "10-K",
+     "filed": "2026-02-24"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 68,
+     "label": "Accounts and notes receivable (less allowance: 2025 - $176; ",
+     "printed": "18,075",
+     "period": "FY2025@end",
+     "value": 18075000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:CVX:AccountsReceivable:FY2024@end",
+   "family": "fact",
+   "company": "CVX",
+   "concept": "AccountsReceivable",
+   "period": "FY2024@end",
+   "key": 18338000000,
+   "got": 20684000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "CVX",
+      "concept": "AccountsReceivable",
+      "period": {
+       "fy": 2024
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "AccountsReceivable",
+     "period": "FY2024@end",
+     "as": "latest",
+     "tag": "AccountsReceivableNetCurrent",
+     "value": 18338000000,
+     "form": "10-K",
+     "filed": "2025-02-21"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 68,
+     "label": "Accounts and notes receivable (less allowance: 2025 - $176; ",
+     "printed": "20,684",
+     "period": "FY2024@end",
+     "value": 20684000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:CVX:ShareRepurchases:FY2025",
+   "family": "fact",
+   "company": "CVX",
+   "concept": "ShareRepurchases",
+   "period": "FY2025",
+   "key": 12079000000,
+   "got": 11855000000,
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "CVX",
+      "concept": "ShareRepurchases",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "ShareRepurchases",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "PaymentsForRepurchaseOfCommonStock",
+     "value": 12079000000,
+     "form": "10-K",
+     "filed": "2026-02-24"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 69,
+     "label": "Net sales (purchases) of treasury shares",
+     "printed": "(11,855)",
+     "period": "FY2025",
+     "value": -11855000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:CVX:ShareRepurchases:FY2024",
+   "family": "fact",
+   "company": "CVX",
+   "concept": "ShareRepurchases",
+   "period": "FY2024",
+   "key": 15229000000,
+   "got": 15044000000,
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "CVX",
+      "concept": "ShareRepurchases",
+      "period": {
+       "fy": 2024
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "ShareRepurchases",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "PaymentsForRepurchaseOfCommonStock",
+     "value": 15229000000,
+     "form": "10-K",
+     "filed": "2026-02-24"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 69,
+     "label": "Net sales (purchases) of treasury shares",
+     "printed": "(15,044)",
+     "period": "FY2024",
+     "value": -15044000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "growth:CVX:AccountsReceivable:FY2025@end",
+   "family": "growth",
+   "company": "CVX",
+   "concept": "AccountsReceivable",
+   "period": "FY2025@end",
+   "key": -0.128258,
+   "got": -0.126136,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "CVX",
+      "concept": "AccountsReceivable",
+      "from": {
+       "fy": 2024
+      },
+      "to": {
+       "fy": 2025
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "AccountsReceivable",
+     "period": "FY2024@end",
+     "as": "latest",
+     "tag": "AccountsReceivableNetCurrent",
+     "value": 18338000000,
+     "form": "10-K",
+     "filed": "2025-02-21"
+    },
+    {
+     "concept": "AccountsReceivable",
+     "period": "FY2025@end",
+     "as": "latest",
+     "tag": "AccountsReceivableNetCurrent",
+     "value": 15986000000,
+     "form": "10-K",
+     "filed": "2026-02-24"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 68,
+     "label": "Accounts and notes receivable (less allowance: 2025 - $176; ",
+     "printed": "20,684",
+     "period": "FY2024@end",
+     "value": 20684000000,
+     "status": "verified"
+    },
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 68,
+     "label": "Accounts and notes receivable (less allowance: 2025 - $176; ",
+     "printed": "18,075",
+     "period": "FY2025@end",
+     "value": 18075000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "growth:CVX:ShareRepurchases:FY2025",
+   "family": "growth",
+   "company": "CVX",
+   "concept": "ShareRepurchases",
+   "period": "FY2025",
+   "key": -0.206842,
+   "got": -0.211978,
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "CVX",
+      "concept": "ShareRepurchases",
+      "from": {
+       "fy": 2024
+      },
+      "to": {
+       "fy": 2025
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "ShareRepurchases",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "PaymentsForRepurchaseOfCommonStock",
+     "value": 15229000000,
+     "form": "10-K",
+     "filed": "2026-02-24"
+    },
+    {
+     "concept": "ShareRepurchases",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "PaymentsForRepurchaseOfCommonStock",
+     "value": 12079000000,
+     "form": "10-K",
+     "filed": "2026-02-24"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 69,
+     "label": "Net sales (purchases) of treasury shares",
+     "printed": "(15,044)",
+     "period": "FY2024",
+     "value": -15044000000,
+     "status": "verified"
+    },
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 69,
+     "label": "Net sales (purchases) of treasury shares",
+     "printed": "(11,855)",
+     "period": "FY2025",
+     "value": -11855000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "metric:CVX:shareholder_payout:FY2024",
+   "family": "metric",
+   "company": "CVX",
+   "concept": "shareholder_payout",
+   "period": "FY2024",
+   "key": 27030000000,
+   "got": 26845000000,
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "metric",
+      "company": "CVX",
+      "metric": "shareholder_payout",
+      "period": {
+       "fy": 2024
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "DividendsPaid",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "PaymentsOfDividendsCommonStock",
+     "value": 11801000000,
+     "form": "10-K",
+     "filed": "2026-02-24"
+    },
+    {
+     "concept": "ShareRepurchases",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "PaymentsForRepurchaseOfCommonStock",
+     "value": 15229000000,
+     "form": "10-K",
+     "filed": "2026-02-24"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 69,
+     "label": "Cash dividends - common stock",
+     "printed": "(11,801)",
+     "period": "FY2024",
+     "value": -11801000000,
+     "status": "verified"
+    },
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 69,
+     "label": "Net sales (purchases) of treasury shares",
+     "printed": "(15,044)",
+     "period": "FY2024",
+     "value": -15044000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "metric:CVX:shareholder_payout:FY2025",
+   "family": "metric",
+   "company": "CVX",
+   "concept": "shareholder_payout",
+   "period": "FY2025",
+   "key": 24830000000,
+   "got": 24606000000,
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "metric",
+      "company": "CVX",
+      "metric": "shareholder_payout",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "DividendsPaid",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "PaymentsOfDividendsCommonStock",
+     "value": 12751000000,
+     "form": "10-K",
+     "filed": "2026-02-24"
+    },
+    {
+     "concept": "ShareRepurchases",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "PaymentsForRepurchaseOfCommonStock",
+     "value": 12079000000,
+     "form": "10-K",
+     "filed": "2026-02-24"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 69,
+     "label": "Cash dividends - common stock",
+     "printed": "(12,751)",
+     "period": "FY2025",
+     "value": -12751000000,
+     "status": "verified"
+    },
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 69,
+     "label": "Net sales (purchases) of treasury shares",
+     "printed": "(11,855)",
+     "period": "FY2025",
+     "value": -11855000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:MA:ShareholdersEquity:FY2025@end",
+   "family": "fact",
+   "company": "MA",
+   "concept": "ShareholdersEquity",
+   "period": "FY2025@end",
+   "key": 7737000000,
+   "got": 7746000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "MA",
+      "concept": "ShareholdersEquity",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "ShareholdersEquity",
+     "period": "FY2025@end",
+     "as": "latest",
+     "tag": "StockholdersEquity",
+     "value": 7737000000,
+     "form": "10-K",
+     "filed": "2026-02-11"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "MA_FY2025_10K",
+     "page": 71,
+     "label": "Total Equity",
+     "printed": "7,746",
+     "period": "FY2025@end",
+     "value": 7746000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:MA:ShareholdersEquity:FY2024@end",
+   "family": "fact",
+   "company": "MA",
+   "concept": "ShareholdersEquity",
+   "period": "FY2024@end",
+   "key": 6485000000,
+   "got": 6515000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "MA",
+      "concept": "ShareholdersEquity",
+      "period": {
+       "fy": 2024
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "ShareholdersEquity",
+     "period": "FY2024@end",
+     "as": "latest",
+     "tag": "StockholdersEquity",
+     "value": 6485000000,
+     "form": "10-K",
+     "filed": "2026-02-11"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "MA_FY2025_10K",
+     "page": 71,
+     "label": "Total Equity",
+     "printed": "6,515",
+     "period": "FY2024@end",
+     "value": 6515000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "growth:MA:ShareholdersEquity:FY2025@end",
+   "family": "growth",
+   "company": "MA",
+   "concept": "ShareholdersEquity",
+   "period": "FY2025@end",
+   "key": 0.193061,
+   "got": 0.188949,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "MA",
+      "concept": "ShareholdersEquity",
+      "from": {
+       "fy": 2024
+      },
+      "to": {
+       "fy": 2025
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "ShareholdersEquity",
+     "period": "FY2024@end",
+     "as": "latest",
+     "tag": "StockholdersEquity",
+     "value": 6485000000,
+     "form": "10-K",
+     "filed": "2026-02-11"
+    },
+    {
+     "concept": "ShareholdersEquity",
+     "period": "FY2025@end",
+     "as": "latest",
+     "tag": "StockholdersEquity",
+     "value": 7737000000,
+     "form": "10-K",
+     "filed": "2026-02-11"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "MA_FY2025_10K",
+     "page": 71,
+     "label": "Total Equity",
+     "printed": "6,515",
+     "period": "FY2024@end",
+     "value": 6515000000,
+     "status": "verified"
+    },
+    {
+     "doc": "MA_FY2025_10K",
+     "page": 71,
+     "label": "Total Equity",
+     "printed": "7,746",
+     "period": "FY2025@end",
+     "value": 7746000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:MCD:SharesDiluted:FY2025",
+   "family": "fact",
+   "company": "MCD",
+   "concept": "SharesDiluted",
+   "period": "FY2025",
+   "key": 716.4,
+   "got": 716400000,
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "MCD",
+      "concept": "SharesDiluted",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "SharesDiluted",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "WeightedAverageNumberOfDilutedSharesOutstanding",
+     "value": 716.4,
+     "form": "10-K",
+     "filed": "2026-02-24"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "MCD_FY2025_10K",
+     "page": 47,
+     "label": "Weighted-average shares outstanding\ufffddiluted",
+     "printed": "716.4",
+     "period": "FY2025",
+     "value": 716400000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:MCD:SharesDiluted:FY2024",
+   "family": "fact",
+   "company": "MCD",
+   "concept": "SharesDiluted",
+   "period": "FY2024",
+   "key": 721.9,
+   "got": 721900000,
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "MCD",
+      "concept": "SharesDiluted",
+      "period": {
+       "fy": 2024
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "SharesDiluted",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "WeightedAverageNumberOfDilutedSharesOutstanding",
+     "value": 721.9,
+     "form": "10-K",
+     "filed": "2026-02-24"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "MCD_FY2025_10K",
+     "page": 47,
+     "label": "Weighted-average shares outstanding\ufffddiluted",
+     "printed": "721.9",
+     "period": "FY2024",
+     "value": 721900000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:MCD:SharesDiluted:FY2023",
+   "family": "fact",
+   "company": "MCD",
+   "concept": "SharesDiluted",
+   "period": "FY2023",
+   "key": 732.3,
+   "got": 732300000,
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "MCD",
+      "concept": "SharesDiluted",
+      "period": {
+       "fy": 2023
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "SharesDiluted",
+     "period": "FY2023",
+     "as": "latest",
+     "tag": "WeightedAverageNumberOfDilutedSharesOutstanding",
+     "value": 732.3,
+     "form": "10-K",
+     "filed": "2026-02-24"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "MCD_FY2025_10K",
+     "page": 47,
+     "label": "Weighted-average shares outstanding\ufffddiluted",
+     "printed": "732.3",
+     "period": "FY2023",
+     "value": 732300000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:MCD:SharesBasic:FY2025",
+   "family": "fact",
+   "company": "MCD",
+   "concept": "SharesBasic",
+   "period": "FY2025",
+   "key": 713.4,
+   "got": 713400000,
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "MCD",
+      "concept": "SharesBasic",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "SharesBasic",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "WeightedAverageNumberOfSharesOutstandingBasic",
+     "value": 713.4,
+     "form": "10-K",
+     "filed": "2026-02-24"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "MCD_FY2025_10K",
+     "page": 47,
+     "label": "Weighted-average shares outstanding\ufffdbasic",
+     "printed": "713.4",
+     "period": "FY2025",
+     "value": 713400000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:MCD:SharesBasic:FY2024",
+   "family": "fact",
+   "company": "MCD",
+   "concept": "SharesBasic",
+   "period": "FY2024",
+   "key": 718.3,
+   "got": 718300000,
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "MCD",
+      "concept": "SharesBasic",
+      "period": {
+       "fy": 2024
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "SharesBasic",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "WeightedAverageNumberOfSharesOutstandingBasic",
+     "value": 718.3,
+     "form": "10-K",
+     "filed": "2026-02-24"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "MCD_FY2025_10K",
+     "page": 47,
+     "label": "Weighted-average shares outstanding\ufffdbasic",
+     "printed": "718.3",
+     "period": "FY2024",
+     "value": 718300000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:MCD:SharesBasic:FY2023",
+   "family": "fact",
+   "company": "MCD",
+   "concept": "SharesBasic",
+   "period": "FY2023",
+   "key": 727.9,
+   "got": 727900000,
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "MCD",
+      "concept": "SharesBasic",
+      "period": {
+       "fy": 2023
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "SharesBasic",
+     "period": "FY2023",
+     "as": "latest",
+     "tag": "WeightedAverageNumberOfSharesOutstandingBasic",
+     "value": 727.9,
+     "form": "10-K",
+     "filed": "2026-02-24"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "MCD_FY2025_10K",
+     "page": 47,
+     "label": "Weighted-average shares outstanding\ufffdbasic",
+     "printed": "727.9",
+     "period": "FY2023",
+     "value": 727900000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:MS:InterestExpense:FY2023",
+   "family": "fact",
+   "company": "MS",
+   "concept": "InterestExpense",
+   "period": "FY2023",
+   "key": 42051000000,
+   "got": 37619000000,
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "MS",
+      "concept": "InterestExpense",
+      "period": {
+       "fy": 2023
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "InterestExpense",
+     "period": "FY2023",
+     "as": "latest",
+     "tag": "InterestExpense",
+     "value": 42051000000,
+     "form": "10-K",
+     "filed": "2024-02-22"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "MS_FY2025_10K",
+     "page": 80,
+     "label": "Interest expense1",
+     "printed": "37,619",
+     "period": "FY2023",
+     "value": 37619000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:ORCL:ConsolidatedNetIncome:FY2026",
+   "family": "fact",
+   "company": "ORCL",
+   "concept": "ConsolidatedNetIncome",
+   "period": "FY2026",
+   "key": 17309000000,
+   "got": 17087000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "ORCL",
+      "concept": "ConsolidatedNetIncome",
+      "period": {
+       "fy": 2026
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "ConsolidatedNetIncome",
+     "period": "FY2026",
+     "as": "latest",
+     "tag": "ProfitLoss",
+     "value": 17309000000,
+     "form": "10-K",
+     "filed": "2026-06-22"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "ORCL_FY2026_10K",
+     "page": 67,
+     "label": "Net income..................................................",
+     "printed": "17,087",
+     "period": "FY2026",
+     "value": 17087000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:ORCL:ConsolidatedNetIncome:FY2025",
+   "family": "fact",
+   "company": "ORCL",
+   "concept": "ConsolidatedNetIncome",
+   "period": "FY2025",
+   "key": 12627000000,
+   "got": 12443000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "ORCL",
+      "concept": "ConsolidatedNetIncome",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "ConsolidatedNetIncome",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "ProfitLoss",
+     "value": 12627000000,
+     "form": "10-K",
+     "filed": "2026-06-22"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "ORCL_FY2026_10K",
+     "page": 67,
+     "label": "Net income..................................................",
+     "printed": "12,443",
+     "period": "FY2025",
+     "value": 12443000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:ORCL:ConsolidatedNetIncome:FY2024",
+   "family": "fact",
+   "company": "ORCL",
+   "concept": "ConsolidatedNetIncome",
+   "period": "FY2024",
+   "key": 10653000000,
+   "got": 10467000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "ORCL",
+      "concept": "ConsolidatedNetIncome",
+      "period": {
+       "fy": 2024
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "ConsolidatedNetIncome",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "ProfitLoss",
+     "value": 10653000000,
+     "form": "10-K",
+     "filed": "2026-06-22"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "ORCL_FY2026_10K",
+     "page": 67,
+     "label": "Net income..................................................",
+     "printed": "10,467",
+     "period": "FY2024",
+     "value": 10467000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "growth:ORCL:ConsolidatedNetIncome:FY2026",
+   "family": "growth",
+   "company": "ORCL",
+   "concept": "ConsolidatedNetIncome",
+   "period": "FY2026",
+   "key": 0.370793,
+   "got": 0.373222,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "ORCL",
+      "concept": "ConsolidatedNetIncome",
+      "from": {
+       "fy": 2025
+      },
+      "to": {
+       "fy": 2026
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "ConsolidatedNetIncome",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "ProfitLoss",
+     "value": 12627000000,
+     "form": "10-K",
+     "filed": "2026-06-22"
+    },
+    {
+     "concept": "ConsolidatedNetIncome",
+     "period": "FY2026",
+     "as": "latest",
+     "tag": "ProfitLoss",
+     "value": 17309000000,
+     "form": "10-K",
+     "filed": "2026-06-22"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "ORCL_FY2026_10K",
+     "page": 67,
+     "label": "Net income..................................................",
+     "printed": "12,443",
+     "period": "FY2025",
+     "value": 12443000000,
+     "status": "verified"
+    },
+    {
+     "doc": "ORCL_FY2026_10K",
+     "page": 67,
+     "label": "Net income..................................................",
+     "printed": "17,087",
+     "period": "FY2026",
+     "value": 17087000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "growth:ORCL:ConsolidatedNetIncome:FY2025",
+   "family": "growth",
+   "company": "ORCL",
+   "concept": "ConsolidatedNetIncome",
+   "period": "FY2025",
+   "key": 0.1853,
+   "got": 0.188784,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "ORCL",
+      "concept": "ConsolidatedNetIncome",
+      "from": {
+       "fy": 2024
+      },
+      "to": {
+       "fy": 2025
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "ConsolidatedNetIncome",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "ProfitLoss",
+     "value": 10653000000,
+     "form": "10-K",
+     "filed": "2026-06-22"
+    },
+    {
+     "concept": "ConsolidatedNetIncome",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "ProfitLoss",
+     "value": 12627000000,
+     "form": "10-K",
+     "filed": "2026-06-22"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "ORCL_FY2026_10K",
+     "page": 67,
+     "label": "Net income..................................................",
+     "printed": "10,467",
+     "period": "FY2024",
+     "value": 10467000000,
+     "status": "verified"
+    },
+    {
+     "doc": "ORCL_FY2026_10K",
+     "page": 67,
+     "label": "Net income..................................................",
+     "printed": "12,443",
+     "period": "FY2025",
+     "value": 12443000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "growth:PFE:IncomeTax:FY2025",
+   "family": "growth",
+   "company": "PFE",
+   "concept": "IncomeTax",
+   "period": "FY2025",
+   "key": -8.5,
+   "got": 8.5,
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "PFE",
+      "concept": "IncomeTax",
+      "from": {
+       "fy": 2024
+      },
+      "to": {
+       "fy": 2025
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "IncomeTax",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "IncomeTaxExpenseBenefit",
+     "value": -28000000,
+     "form": "10-K",
+     "filed": "2026-02-26"
+    },
+    {
+     "concept": "IncomeTax",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "IncomeTaxExpenseBenefit",
+     "value": -266000000,
+     "form": "10-K",
+     "filed": "2026-02-26"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 58,
+     "label": "Provision/(benefit) for taxes on income",
+     "printed": "(28)",
+     "period": "FY2024",
+     "value": -28000000,
+     "status": "verified"
+    },
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 58,
+     "label": "Provision/(benefit) for taxes on income",
+     "printed": "(266)",
+     "period": "FY2025",
+     "value": -266000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "growth:PFE:IncomeTax:FY2024",
+   "family": "growth",
+   "company": "PFE",
+   "concept": "IncomeTax",
+   "period": "FY2024",
+   "key": 0.974888,
+   "got": -0.974888,
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "PFE",
+      "concept": "IncomeTax",
+      "from": {
+       "fy": 2023
+      },
+      "to": {
+       "fy": 2024
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "IncomeTax",
+     "period": "FY2023",
+     "as": "latest",
+     "tag": "IncomeTaxExpenseBenefit",
+     "value": -1115000000,
+     "form": "10-K",
+     "filed": "2026-02-26"
+    },
+    {
+     "concept": "IncomeTax",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "IncomeTaxExpenseBenefit",
+     "value": -28000000,
+     "form": "10-K",
+     "filed": "2026-02-26"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 58,
+     "label": "Provision/(benefit) for taxes on income",
+     "printed": "(1,115)",
+     "period": "FY2023",
+     "value": -1115000000,
+     "status": "verified"
+    },
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 58,
+     "label": "Provision/(benefit) for taxes on income",
+     "printed": "(28)",
+     "period": "FY2024",
+     "value": -28000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:TSLA:TotalEquity:FY2025@end",
+   "family": "fact",
+   "company": "TSLA",
+   "concept": "TotalEquity",
+   "period": "FY2025@end",
+   "key": 82807000000,
+   "got": 82137000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "TSLA",
+      "concept": "TotalEquity",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "TotalEquity",
+     "period": "FY2025@end",
+     "as": "latest",
+     "tag": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+     "value": 82807000000,
+     "form": "10-K",
+     "filed": "2026-01-29"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "TSLA_FY2025_10K",
+     "page": 52,
+     "label": "Total stockholders\u2019 equity",
+     "printed": "82,137",
+     "period": "FY2025@end",
+     "value": 82137000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:TSLA:TotalEquity:FY2024@end",
+   "family": "fact",
+   "company": "TSLA",
+   "concept": "TotalEquity",
+   "period": "FY2024@end",
+   "key": 73617000000,
+   "got": 72913000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "TSLA",
+      "concept": "TotalEquity",
+      "period": {
+       "fy": 2024
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "TotalEquity",
+     "period": "FY2024@end",
+     "as": "latest",
+     "tag": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+     "value": 73617000000,
+     "form": "10-K",
+     "filed": "2026-01-29"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "TSLA_FY2025_10K",
+     "page": 52,
+     "label": "Total stockholders\u2019 equity",
+     "printed": "72,913",
+     "period": "FY2024@end",
+     "value": 72913000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "growth:TSLA:TotalEquity:FY2025@end",
+   "family": "growth",
+   "company": "TSLA",
+   "concept": "TotalEquity",
+   "period": "FY2025@end",
+   "key": 0.124835,
+   "got": 0.126507,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "TSLA",
+      "concept": "TotalEquity",
+      "from": {
+       "fy": 2024
+      },
+      "to": {
+       "fy": 2025
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "TotalEquity",
+     "period": "FY2024@end",
+     "as": "latest",
+     "tag": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+     "value": 73617000000,
+     "form": "10-K",
+     "filed": "2026-01-29"
+    },
+    {
+     "concept": "TotalEquity",
+     "period": "FY2025@end",
+     "as": "latest",
+     "tag": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+     "value": 82807000000,
+     "form": "10-K",
+     "filed": "2026-01-29"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "TSLA_FY2025_10K",
+     "page": 52,
+     "label": "Total stockholders\u2019 equity",
+     "printed": "72,913",
+     "period": "FY2024@end",
+     "value": 72913000000,
+     "status": "verified"
+    },
+    {
+     "doc": "TSLA_FY2025_10K",
+     "page": 52,
+     "label": "Total stockholders\u2019 equity",
+     "printed": "82,137",
+     "period": "FY2025@end",
+     "value": 82137000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "metric:TSLA:liabilities_to_equity:FY2024",
+   "family": "metric",
+   "company": "TSLA",
+   "concept": "liabilities_to_equity",
+   "period": "FY2024",
+   "key": 0.657321,
+   "got": 0.663668,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "metric",
+      "company": "TSLA",
+      "metric": "liabilities_to_equity",
+      "period": {
+       "fy": 2024
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "TotalLiabilities",
+     "period": "FY2024@end",
+     "as": "latest",
+     "tag": "Liabilities",
+     "value": 48390000000,
+     "form": "10-K",
+     "filed": "2026-01-29"
+    },
+    {
+     "concept": "TotalEquity",
+     "period": "FY2024@end",
+     "as": "latest",
+     "tag": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+     "value": 73617000000,
+     "form": "10-K",
+     "filed": "2026-01-29"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "TSLA_FY2025_10K",
+     "page": 52,
+     "label": "Total liabilities",
+     "printed": "48,390",
+     "period": "FY2024@end",
+     "value": 48390000000,
+     "status": "verified"
+    },
+    {
+     "doc": "TSLA_FY2025_10K",
+     "page": 52,
+     "label": "Total stockholders\u2019 equity",
+     "printed": "72,913",
+     "period": "FY2024@end",
+     "value": 72913000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "metric:TSLA:liabilities_to_equity:FY2025",
+   "family": "metric",
+   "company": "TSLA",
+   "concept": "liabilities_to_equity",
+   "period": "FY2025",
+   "key": 0.663483,
+   "got": 0.668895,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "metric",
+      "company": "TSLA",
+      "metric": "liabilities_to_equity",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "TotalLiabilities",
+     "period": "FY2025@end",
+     "as": "latest",
+     "tag": "Liabilities",
+     "value": 54941000000,
+     "form": "10-K",
+     "filed": "2026-01-29"
+    },
+    {
+     "concept": "TotalEquity",
+     "period": "FY2025@end",
+     "as": "latest",
+     "tag": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+     "value": 82807000000,
+     "form": "10-K",
+     "filed": "2026-01-29"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "TSLA_FY2025_10K",
+     "page": 52,
+     "label": "Total liabilities",
+     "printed": "54,941",
+     "period": "FY2025@end",
+     "value": 54941000000,
+     "status": "verified"
+    },
+    {
+     "doc": "TSLA_FY2025_10K",
+     "page": 52,
+     "label": "Total stockholders\u2019 equity",
+     "printed": "82,137",
+     "period": "FY2025@end",
+     "value": 82137000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:XOM:AccountsReceivable:FY2025@end",
+   "family": "fact",
+   "company": "XOM",
+   "concept": "AccountsReceivable",
+   "period": "FY2025@end",
+   "key": 35744000000,
+   "got": 44562000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "XOM",
+      "concept": "AccountsReceivable",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "AccountsReceivable",
+     "period": "FY2025@end",
+     "as": "latest",
+     "tag": "AccountsReceivableNetCurrent",
+     "value": 35744000000,
+     "form": "10-K",
+     "filed": "2026-02-18"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 75,
+     "label": "Notes and accounts receivable \u2013 net",
+     "printed": "44,562",
+     "period": "FY2025@end",
+     "value": 44562000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:XOM:AccountsReceivable:FY2024@end",
+   "family": "fact",
+   "company": "XOM",
+   "concept": "AccountsReceivable",
+   "period": "FY2024@end",
+   "key": 35282000000,
+   "got": 43681000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "XOM",
+      "concept": "AccountsReceivable",
+      "period": {
+       "fy": 2024
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "AccountsReceivable",
+     "period": "FY2024@end",
+     "as": "latest",
+     "tag": "AccountsReceivableNetCurrent",
+     "value": 35282000000,
+     "form": "10-K",
+     "filed": "2026-02-18"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 75,
+     "label": "Notes and accounts receivable \u2013 net",
+     "printed": "43,681",
+     "period": "FY2024@end",
+     "value": 43681000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:XOM:AccountsReceivable:FY2023@end",
+   "family": "fact",
+   "company": "XOM",
+   "concept": "AccountsReceivable",
+   "period": "FY2023@end",
+   "key": 30296000000,
+   "got": 38015000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "XOM",
+      "concept": "AccountsReceivable",
+      "period": {
+       "fy": 2023
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "AccountsReceivable",
+     "period": "FY2023@end",
+     "as": "latest",
+     "tag": "AccountsReceivableNetCurrent",
+     "value": 30296000000,
+     "form": "10-K",
+     "filed": "2025-02-19"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "XOM_FY2024_10K",
+     "page": 81,
+     "label": "Notes and accounts receivable \u2013 net",
+     "printed": "38,015",
+     "period": "FY2023@end",
+     "value": 38015000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:XOM:ShareholdersEquity:FY2025@end",
+   "family": "fact",
+   "company": "XOM",
+   "concept": "ShareholdersEquity",
+   "period": "FY2025@end",
+   "key": 259386000000,
+   "got": 266626000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "XOM",
+      "concept": "ShareholdersEquity",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "ShareholdersEquity",
+     "period": "FY2025@end",
+     "as": "latest",
+     "tag": "StockholdersEquity",
+     "value": 259386000000,
+     "form": "10-K",
+     "filed": "2026-02-18"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 75,
+     "label": "Total Equity",
+     "printed": "266,626",
+     "period": "FY2025@end",
+     "value": 266626000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:XOM:ShareholdersEquity:FY2024@end",
+   "family": "fact",
+   "company": "XOM",
+   "concept": "ShareholdersEquity",
+   "period": "FY2024@end",
+   "key": 263705000000,
+   "got": 270606000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "XOM",
+      "concept": "ShareholdersEquity",
+      "period": {
+       "fy": 2024
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "ShareholdersEquity",
+     "period": "FY2024@end",
+     "as": "latest",
+     "tag": "StockholdersEquity",
+     "value": 263705000000,
+     "form": "10-K",
+     "filed": "2026-02-18"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 75,
+     "label": "Total Equity",
+     "printed": "270,606",
+     "period": "FY2024@end",
+     "value": 270606000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "fact:XOM:ShareholdersEquity:FY2023@end",
+   "family": "fact",
+   "company": "XOM",
+   "concept": "ShareholdersEquity",
+   "period": "FY2023@end",
+   "key": 204802000000,
+   "got": 212538000000,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "XOM",
+      "concept": "ShareholdersEquity",
+      "period": {
+       "fy": 2023
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "ShareholdersEquity",
+     "period": "FY2023@end",
+     "as": "latest",
+     "tag": "StockholdersEquity",
+     "value": 204802000000,
+     "form": "10-K",
+     "filed": "2025-02-19"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "XOM_FY2024_10K",
+     "page": 81,
+     "label": "Total Equity",
+     "printed": "212,538",
+     "period": "FY2023@end",
+     "value": 212538000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "growth:XOM:AccountsReceivable:FY2025@end",
+   "family": "growth",
+   "company": "XOM",
+   "concept": "AccountsReceivable",
+   "period": "FY2025@end",
+   "key": 0.0130945,
+   "got": 0.020169,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "XOM",
+      "concept": "AccountsReceivable",
+      "from": {
+       "fy": 2024
+      },
+      "to": {
+       "fy": 2025
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "AccountsReceivable",
+     "period": "FY2024@end",
+     "as": "latest",
+     "tag": "AccountsReceivableNetCurrent",
+     "value": 35282000000,
+     "form": "10-K",
+     "filed": "2026-02-18"
+    },
+    {
+     "concept": "AccountsReceivable",
+     "period": "FY2025@end",
+     "as": "latest",
+     "tag": "AccountsReceivableNetCurrent",
+     "value": 35744000000,
+     "form": "10-K",
+     "filed": "2026-02-18"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 75,
+     "label": "Notes and accounts receivable \u2013 net",
+     "printed": "43,681",
+     "period": "FY2024@end",
+     "value": 43681000000,
+     "status": "verified"
+    },
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 75,
+     "label": "Notes and accounts receivable \u2013 net",
+     "printed": "44,562",
+     "period": "FY2025@end",
+     "value": 44562000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "growth:XOM:AccountsReceivable:FY2024@end",
+   "family": "growth",
+   "company": "XOM",
+   "concept": "AccountsReceivable",
+   "period": "FY2024@end",
+   "key": 0.164576,
+   "got": 0.149046,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "XOM",
+      "concept": "AccountsReceivable",
+      "from": {
+       "fy": 2023
+      },
+      "to": {
+       "fy": 2024
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "AccountsReceivable",
+     "period": "FY2023@end",
+     "as": "latest",
+     "tag": "AccountsReceivableNetCurrent",
+     "value": 30296000000,
+     "form": "10-K",
+     "filed": "2025-02-19"
+    },
+    {
+     "concept": "AccountsReceivable",
+     "period": "FY2024@end",
+     "as": "latest",
+     "tag": "AccountsReceivableNetCurrent",
+     "value": 35282000000,
+     "form": "10-K",
+     "filed": "2026-02-18"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "XOM_FY2024_10K",
+     "page": 81,
+     "label": "Notes and accounts receivable \u2013 net",
+     "printed": "38,015",
+     "period": "FY2023@end",
+     "value": 38015000000,
+     "status": "verified"
+    },
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 75,
+     "label": "Notes and accounts receivable \u2013 net",
+     "printed": "43,681",
+     "period": "FY2024@end",
+     "value": 43681000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "growth:XOM:ShareholdersEquity:FY2025@end",
+   "family": "growth",
+   "company": "XOM",
+   "concept": "ShareholdersEquity",
+   "period": "FY2025@end",
+   "key": -0.0163781,
+   "got": -0.0147077,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "XOM",
+      "concept": "ShareholdersEquity",
+      "from": {
+       "fy": 2024
+      },
+      "to": {
+       "fy": 2025
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "ShareholdersEquity",
+     "period": "FY2024@end",
+     "as": "latest",
+     "tag": "StockholdersEquity",
+     "value": 263705000000,
+     "form": "10-K",
+     "filed": "2026-02-18"
+    },
+    {
+     "concept": "ShareholdersEquity",
+     "period": "FY2025@end",
+     "as": "latest",
+     "tag": "StockholdersEquity",
+     "value": 259386000000,
+     "form": "10-K",
+     "filed": "2026-02-18"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 75,
+     "label": "Total Equity",
+     "printed": "270,606",
+     "period": "FY2024@end",
+     "value": 270606000000,
+     "status": "verified"
+    },
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 75,
+     "label": "Total Equity",
+     "printed": "266,626",
+     "period": "FY2025@end",
+     "value": 266626000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "growth:XOM:ShareholdersEquity:FY2024@end",
+   "family": "growth",
+   "company": "XOM",
+   "concept": "ShareholdersEquity",
+   "period": "FY2024@end",
+   "key": 0.287609,
+   "got": 0.273212,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "XOM",
+      "concept": "ShareholdersEquity",
+      "from": {
+       "fy": 2023
+      },
+      "to": {
+       "fy": 2024
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "ShareholdersEquity",
+     "period": "FY2023@end",
+     "as": "latest",
+     "tag": "StockholdersEquity",
+     "value": 204802000000,
+     "form": "10-K",
+     "filed": "2025-02-19"
+    },
+    {
+     "concept": "ShareholdersEquity",
+     "period": "FY2024@end",
+     "as": "latest",
+     "tag": "StockholdersEquity",
+     "value": 263705000000,
+     "form": "10-K",
+     "filed": "2026-02-18"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "XOM_FY2024_10K",
+     "page": 81,
+     "label": "Total Equity",
+     "printed": "212,538",
+     "period": "FY2023@end",
+     "value": 212538000000,
+     "status": "verified"
+    },
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 75,
+     "label": "Total Equity",
+     "printed": "270,606",
+     "period": "FY2024@end",
+     "value": 270606000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "metric:XOM:return_on_equity:FY2023",
+   "family": "metric",
+   "company": "XOM",
+   "concept": "return_on_equity",
+   "period": "FY2023",
+   "key": 0.175828,
+   "got": 0.169429,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "metric",
+      "company": "XOM",
+      "metric": "return_on_equity",
+      "period": {
+       "fy": 2023
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "NetIncome",
+     "period": "FY2023",
+     "as": "latest",
+     "tag": "NetIncomeLoss",
+     "value": 36010000000,
+     "form": "10-K",
+     "filed": "2026-02-18"
+    },
+    {
+     "concept": "ShareholdersEquity",
+     "period": "FY2023@end",
+     "as": "latest",
+     "tag": "StockholdersEquity",
+     "value": 204802000000,
+     "form": "10-K",
+     "filed": "2025-02-19"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 73,
+     "label": "Net income (loss) attributable to ExxonMobil",
+     "printed": "36,010",
+     "period": "FY2023",
+     "value": 36010000000,
+     "status": "verified"
+    },
+    {
+     "doc": "XOM_FY2024_10K",
+     "page": 81,
+     "label": "Total Equity",
+     "printed": "212,538",
+     "period": "FY2023@end",
+     "value": 212538000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "metric:XOM:return_on_equity:FY2024",
+   "family": "metric",
+   "company": "XOM",
+   "concept": "return_on_equity",
+   "period": "FY2024",
+   "key": 0.127718,
+   "got": 0.124461,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "metric",
+      "company": "XOM",
+      "metric": "return_on_equity",
+      "period": {
+       "fy": 2024
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "NetIncome",
+     "period": "FY2024",
+     "as": "latest",
+     "tag": "NetIncomeLoss",
+     "value": 33680000000,
+     "form": "10-K",
+     "filed": "2026-02-18"
+    },
+    {
+     "concept": "ShareholdersEquity",
+     "period": "FY2024@end",
+     "as": "latest",
+     "tag": "StockholdersEquity",
+     "value": 263705000000,
+     "form": "10-K",
+     "filed": "2026-02-18"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 73,
+     "label": "Net income (loss) attributable to ExxonMobil",
+     "printed": "33,680",
+     "period": "FY2024",
+     "value": 33680000000,
+     "status": "verified"
+    },
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 75,
+     "label": "Total Equity",
+     "printed": "270,606",
+     "period": "FY2024@end",
+     "value": 270606000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "metric:XOM:return_on_equity:FY2025",
+   "family": "metric",
+   "company": "XOM",
+   "concept": "return_on_equity",
+   "period": "FY2025",
+   "key": 0.111201,
+   "got": 0.108181,
+   "class": "wrong_silent",
+   "alt_definition": true,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "metric",
+      "company": "XOM",
+      "metric": "return_on_equity",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [
+    {
+     "concept": "NetIncome",
+     "period": "FY2025",
+     "as": "latest",
+     "tag": "NetIncomeLoss",
+     "value": 28844000000,
+     "form": "10-K",
+     "filed": "2026-02-18"
+    },
+    {
+     "concept": "ShareholdersEquity",
+     "period": "FY2025@end",
+     "as": "latest",
+     "tag": "StockholdersEquity",
+     "value": 259386000000,
+     "form": "10-K",
+     "filed": "2026-02-18"
+    }
+   ],
+   "leaves": [
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 73,
+     "label": "Net income (loss) attributable to ExxonMobil",
+     "printed": "28,844",
+     "period": "FY2025",
+     "value": 28844000000,
+     "status": "verified"
+    },
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 75,
+     "label": "Total Equity",
+     "printed": "266,626",
+     "period": "FY2025@end",
+     "value": 266626000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "rank:banks_finance:InterestExpense:latest",
+   "family": "rank",
+   "company": "cluster:banks_finance",
+   "concept": "InterestExpense",
+   "period": "latest",
+   "key": [
+    "GS",
+    "V",
+    "MA",
+    "BLK"
+   ],
+   "got": [
+    "GS",
+    "BLK",
+    "MA",
+    "V"
+   ],
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "rank",
+      "over": [
+       "BLK",
+       "GS",
+       "MA",
+       "V"
+      ],
+      "by": {
+       "concept": "InterestExpense"
+      },
+      "period": {
+       "fy": "latest"
+      },
+      "order": "desc",
+      "k": 4
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [],
+   "leaves": [
+    {
+     "doc": "BLK_FY2025_10K",
+     "page": 80,
+     "label": "Interest expense",
+     "printed": "(614)",
+     "period": "FY2025",
+     "value": -614000000,
+     "status": "verified"
+    },
+    {
+     "doc": "GS_FY2025_10K",
+     "page": 141,
+     "label": "Interest expense",
+     "printed": "66,814",
+     "period": "FY2025",
+     "value": 66814000000,
+     "status": "verified"
+    },
+    {
+     "doc": "MA_FY2025_10K",
+     "page": 69,
+     "label": "Interest expense",
+     "printed": "(722)",
+     "period": "FY2025",
+     "value": -722000000,
+     "status": "verified"
+    },
+    {
+     "doc": "V_FY2026_10K",
+     "page": 60,
+     "label": "Interest expense",
+     "printed": "(758)",
+     "period": "FY2026",
+     "value": -758000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "rank:banks_finance:PropertyPlantEquipment:latest",
+   "family": "rank",
+   "company": "cluster:banks_finance",
+   "concept": "PropertyPlantEquipment",
+   "period": "latest",
+   "key": [
+    "BAC",
+    "GS",
+    "AXP",
+    "V",
+    "MA",
+    "BLK"
+   ],
+   "got": [
+    "BAC",
+    "AXP",
+    "V",
+    "MA",
+    "BLK"
+   ],
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "rank",
+      "over": [
+       "AXP",
+       "BAC",
+       "BLK",
+       "GS",
+       "MA",
+       "V"
+      ],
+      "by": {
+       "concept": "PropertyPlantEquipment"
+      },
+      "period": {
+       "fy": "latest"
+      },
+      "order": "desc",
+      "k": 6
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [],
+   "leaves": [
+    {
+     "doc": "AXP_FY2025_10K",
+     "page": 97,
+     "label": "Premises and equipment, less accumulated depreciation and am",
+     "printed": "6,118",
+     "period": "FY2025@end",
+     "value": 6118000000,
+     "status": "verified"
+    },
+    {
+     "doc": "BAC_FY2025_10K",
+     "page": 94,
+     "label": "Premises and equipment, net",
+     "printed": "12,516",
+     "period": "FY2025@end",
+     "value": 12516000000,
+     "status": "verified"
+    },
+    {
+     "doc": "BLK_FY2025_10K",
+     "page": 79,
+     "label": "Property and equipment (net of accumulated depreciation and ",
+     "printed": "1,256",
+     "period": "FY2025@end",
+     "value": 1256000000,
+     "status": "verified"
+    },
+    {
+     "doc": "MA_FY2025_10K",
+     "page": 71,
+     "label": "Property, equipment and right-of-use assets, net",
+     "printed": "2,303",
+     "period": "FY2025@end",
+     "value": 2303000000,
+     "status": "verified"
+    },
+    {
+     "doc": "V_FY2026_10K",
+     "page": 59,
+     "label": "Property, equipment and technology, net",
+     "printed": "5,066",
+     "period": "FY2026@end",
+     "value": 5066000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "rank:big_tech:IncomeTax:latest",
+   "family": "rank",
+   "company": "cluster:big_tech",
+   "concept": "IncomeTax",
+   "period": "latest",
+   "key": [
+    "MSFT",
+    "AAPL",
+    "GOOGL",
+    "META",
+    "NVDA",
+    "AMZN",
+    "CSCO",
+    "ORCL",
+    "CRM",
+    "ADBE",
+    "AMD"
+   ],
+   "got": [
+    "MSFT",
+    "AAPL",
+    "GOOGL",
+    "META",
+    "NVDA",
+    "CSCO",
+    "ORCL",
+    "ADBE",
+    "AMD",
+    "CRM",
+    "AMZN"
+   ],
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "rank",
+      "over": [
+       "AAPL",
+       "ADBE",
+       "AMD",
+       "AMZN",
+       "CRM",
+       "CSCO",
+       "GOOGL",
+       "META",
+       "MSFT",
+       "NVDA",
+       "ORCL"
+      ],
+      "by": {
+       "concept": "IncomeTax"
+      },
+      "period": {
+       "fy": "latest"
+      },
+      "order": "desc",
+      "k": 11
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [],
+   "leaves": [
+    {
+     "doc": "AAPL_FY2026_10K",
+     "page": 35,
+     "label": "Provision for income taxes",
+     "printed": "27,062",
+     "period": "FY2026",
+     "value": 27062000000,
+     "status": "verified"
+    },
+    {
+     "doc": "ADBE_FY2025_10K",
+     "page": 48,
+     "label": "Provision for income taxes",
+     "printed": "1,604",
+     "period": "FY2025",
+     "value": 1604000000,
+     "status": "verified"
+    },
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 61,
+     "label": "Income tax provision (benefit)",
+     "printed": "(103)",
+     "period": "FY2025",
+     "value": -103000000,
+     "status": "verified"
+    },
+    {
+     "doc": "AMZN_FY2025_10K",
+     "page": 37,
+     "label": "Provision for income taxes",
+     "printed": "(19,087)",
+     "period": "FY2025",
+     "value": -19087000000,
+     "status": "verified"
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 67,
+     "label": "Provision for income taxes",
+     "printed": "(2,063)",
+     "period": "FY2026",
+     "value": -2063000000,
+     "status": "verified"
+    },
+    {
+     "doc": "CSCO_FY2026_10K",
+     "page": 76,
+     "label": "Provision for income taxes..................................",
+     "printed": "2,742",
+     "period": "FY2026",
+     "value": 2742000000,
+     "status": "verified"
+    },
+    {
+     "doc": "GOOGL_FY2025_10K",
+     "page": 50,
+     "label": "Provision for income taxes",
+     "printed": "26,656",
+     "period": "FY2025",
+     "value": 26656000000,
+     "status": "verified"
+    },
+    {
+     "doc": "META_FY2025_10K",
+     "page": 90,
+     "label": "Provision for income taxes",
+     "printed": "25,474",
+     "period": "FY2025",
+     "value": 25474000000,
+     "status": "verified"
+    },
+    {
+     "doc": "MSFT_FY2026_10K",
+     "page": 50,
+     "label": "Provision for income taxes",
+     "printed": "32,185",
+     "period": "FY2026",
+     "value": 32185000000,
+     "status": "verified"
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 139,
+     "label": "Income tax expense",
+     "printed": "21,383",
+     "period": "FY2026",
+     "value": 21383000000,
+     "status": "verified"
+    },
+    {
+     "doc": "ORCL_FY2026_10K",
+     "page": 67,
+     "label": "Provision for income taxes .................................",
+     "printed": "2,467",
+     "period": "FY2026",
+     "value": 2467000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "rank:health:IncomeTax:latest",
+   "family": "rank",
+   "company": "cluster:health",
+   "concept": "IncomeTax",
+   "period": "latest",
+   "key": [
+    "JNJ",
+    "MRK",
+    "UNH",
+    "PFE"
+   ],
+   "got": [
+    "JNJ",
+    "MRK",
+    "PFE",
+    "UNH"
+   ],
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "rank",
+      "over": [
+       "JNJ",
+       "MRK",
+       "PFE",
+       "UNH"
+      ],
+      "by": {
+       "concept": "IncomeTax"
+      },
+      "period": {
+       "fy": "latest"
+      },
+      "order": "desc",
+      "k": 4
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [],
+   "leaves": [
+    {
+     "doc": "JNJ_FY2025_10K",
+     "page": 50,
+     "label": "Provision for taxes on income (Note",
+     "printed": "5,777",
+     "period": "FY2025",
+     "value": 5777000000,
+     "status": "verified"
+    },
+    {
+     "doc": "MRK_FY2025_10K",
+     "page": 79,
+     "label": "Taxes on Income",
+     "printed": "2,804",
+     "period": "FY2025",
+     "value": 2804000000,
+     "status": "verified"
+    },
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 58,
+     "label": "Provision/(benefit) for taxes on income",
+     "printed": "(266)",
+     "period": "FY2025",
+     "value": -266000000,
+     "status": "verified"
+    },
+    {
+     "doc": "UNH_FY2025_10K",
+     "page": 44,
+     "label": "Provision for income taxes .................................",
+     "printed": "(1,890)",
+     "period": "FY2025",
+     "value": -1890000000,
+     "status": "verified"
+    }
+   ]
+  },
+  {
+   "id": "rank:health:SellingGeneralAdmin:latest",
+   "family": "rank",
+   "company": "cluster:health",
+   "concept": "SellingGeneralAdmin",
+   "period": "latest",
+   "key": [
+    "UNH",
+    "JNJ",
+    "PFE",
+    "MRK"
+   ],
+   "got": [
+    "JNJ",
+    "PFE",
+    "MRK"
+   ],
+   "class": "wrong_silent",
+   "alt_definition": false,
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "rank",
+      "over": [
+       "JNJ",
+       "MRK",
+       "PFE",
+       "UNH"
+      ],
+      "by": {
+       "concept": "SellingGeneralAdmin"
+      },
+      "period": {
+       "fy": "latest"
+      },
+      "order": "desc",
+      "k": 4
+     }
+    ],
+    "answer": "s1"
+   },
+   "key_terms": [],
+   "leaves": [
+    {
+     "doc": "JNJ_FY2025_10K",
+     "page": 50,
+     "label": "Selling, marketing and administrative expenses",
+     "printed": "23,676",
+     "period": "FY2025",
+     "value": 23676000000,
+     "status": "verified"
+    },
+    {
+     "doc": "MRK_FY2025_10K",
+     "page": 79,
+     "label": "Selling, general and administrative",
+     "printed": "10,733",
+     "period": "FY2025",
+     "value": 10733000000,
+     "status": "verified"
+    },
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 58,
+     "label": "Selling, informational and administrative expenses(a)",
+     "printed": "13,794",
+     "period": "FY2025",
+     "value": 13794000000,
+     "status": "verified"
+    }
+   ]
+  }
+ ]
+}

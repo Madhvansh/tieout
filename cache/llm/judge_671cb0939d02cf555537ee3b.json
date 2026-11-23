@@ -1,0 +1,14 @@
+{
+ "model": "gemini:gemini-3.6-flash",
+ "system": "You audit answers to questions about SEC filings. Two derivations, A and B, answer the same question from figures printed in the filings; each lists the printed figures it read (label, filing, page, period), its arithmetic and its result. Decide which derivation answers the question AS ASKED: the lines the question names (not a look-alike line, a segment instead of a total, or a total instead of a part), the company and the period the question asks for, the arithmetic the question implies (a ratio, a change, a sum, a margin), and a plausible scale for the result. Do not compute an answer of your own. If neither answers the question as asked, say neither. Reply JSON {\"pick\": \"A\" | \"B\" | \"neither\", \"reason\": \"one or two sentences\"}.",
+ "user": "Question: How many times as large was ExxonMobil's U.S. refining capacity at year-end 2025 (Total United States, thousands of barrels daily) as Chevron's U.S. operable refining capacity at December 31, 2025 (Total Consolidated Companies, United States)?\n\nDerivation A\nfigures read:\n  - 'Total United States' | XOM_FY2025_10K page 23 | period * | printed 1,967\n  - 'Total Consolidated Companies \u2014 United States' | CVX_FY2025_10K page 19 | period FY2025 | printed 1,038\narithmetic: calc s1 / s2 of (read XOM item:total-united-states@information-with-regard-to-refining-and-chemical#exxonmobil-s-share-of-refining-c *; read CVX item:total-consolidated-companies-united-states@petroleum-refineries-locations-capacities-and-cr FY2025)\nplan: [{\"id\": \"s1\", \"op\": \"get\", \"company\": \"XOM\", \"item\": \"Total United States refining capacity\", \"period\": {\"fy\": 2025}}, {\"id\": \"s2\", \"op\": \"get\", \"company\": \"CVX\", \"item\": \"Total Consolidated Companies United States operable refining capacity\", \"period\": {\"fy\": 2025}}, {\"id\": \"s3\", \"op\": \"calc\", \"expr\": \"s1 / s2\"}]\nresult: 1894.99x\n\nDerivation B\nfigures read:\n  - f1 = 'Total United States' | XOM_FY2025_10K page 23 | period not stated | printed 1,967\n  - f2 = 'Total Consolidated Companies \u2014 United States' | CVX_FY2025_10K page 19 | period not stated | printed 1,099\narithmetic: the expression f1 / f2\nresult: 1789.81x",
+ "answer": {
+  "pick": "neither",
+  "reason": "Both derivations produce an implausible ratio of around 1,800x to 1,900x instead of approximately 1.89x, failing to properly handle the units/scale in the calculation (1,967 thousand bpd divided by 1,038 thousand bpd yields 1.895x)."
+ },
+ "seconds": 7.21,
+ "usage": {
+  "in": 655,
+  "out": 1483
+ }
+}

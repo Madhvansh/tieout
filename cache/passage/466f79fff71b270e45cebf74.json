@@ -1,0 +1,26 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What share of U.S. vehicle sales did General Motors capture in 2025?",
+ "abstain": false,
+ "answer": "0.172",
+ "pred": {
+  "kind": "number",
+  "value": 0.172
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "GM",
+   "doc": "GM_FY2025_10K",
+   "page": 6,
+   "value": 0.172,
+   "label": "United States Market Share",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

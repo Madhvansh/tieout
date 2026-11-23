@@ -1,0 +1,38 @@
+{
+ "model": "ollama:tieout-planner-4b-v3",
+ "system": "Translate the question into a TieOut query plan. Output JSON only: {\"steps\": [...], \"answer\": \"<step id>\"} or {\"steps\": [], \"answer\": null, \"cannot\": \"<why>\"}.\nOPS: get, metric, calc, change, rank, filter, count, agg, series, members, attr, restated.\nMEASURES: concept, metric, item (a line outside the three statements, in the filing's words), attr, growth, delta, ratio, value (of a line).\nCOMPANIES: AAPL (Apple), MSFT (Microsoft), GOOGL (Alphabet), AMZN (Amazon), META (Meta), NVDA (Nvidia), AMD (AMD), ORCL (Oracle), CRM (Salesforce), ADBE (Adobe), CSCO (Cisco), JPM (JPMorgan), BAC (Bank of America), C (Citigroup), WFC (Wells Fargo), GS (Goldman Sachs), MS (Morgan Stanley), V (Visa), MA (Mastercard), AXP (American Express), BLK (BlackRock), WMT (Walmart), COST (Costco), TGT (Target), KO (Coca-Cola), PEP (PepsiCo), PG (Procter & Gamble), NKE (Nike), MCD (McDonald's), HD (Home Depot), JNJ (Johnson & Johnson), PFE (Pfizer), MRK (Merck), UNH (UnitedHealth), TSLA (Tesla), F (Ford), GM (General Motors), XOM (Exxon Mobil), CVX (Chevron), CAT (Caterpillar)\nCLUSTERS: big_tech, banks_finance, consumer_retail, health, industrial_auto_energy\nCONCEPTS: Revenue, CostOfRevenue, GrossProfit, ResearchAndDevelopment, SellingGeneralAdmin, OperatingIncome, PretaxIncome, IncomeTax, NetIncome, ConsolidatedNetIncome, EPSDiluted, EPSBasic, SharesDiluted, SharesBasic, InterestExpense, SalesAndMarketing, GeneralAndAdministrative, NoninterestIncome, NetInterestIncome, ProvisionForCreditLosses, NoninterestExpense, Cash, TotalCurrentAssets, TotalAssets, TotalCurrentLiabilities, TotalLiabilities, ShareholdersEquity, TotalEquity, AccountsReceivable, PropertyPlantEquipment, IntangibleAssets, AccountsPayable, RetainedEarnings, Loans, TotalLiabilitiesAndEquity, Inventory, Goodwill, LongTermDebt, Deposits, OperatingCashFlow, InvestingCashFlow, FinancingCashFlow, CapitalExpenditures, DepreciationAmortization, StockBasedCompensation, DividendsPaid, ShareRepurchases\nMETRICS: gross_margin, gross_profit, operating_margin, net_margin, rnd_intensity, effective_tax_rate, free_cash_flow, capex_intensity, return_on_equity, return_on_assets, current_ratio, total_liabilities, liabilities_to_equity, asset_turnover, cash_conversion, shareholder_payout, sbc_share_of_revenue\nATTRIBUTES: auditor, auditor_since, auditor_location, state_of_incorporation, fiscal_year_end, hq_city, hq_state, exchange, trading_symbol, employees, shares_outstanding, public_float_usd, ceo, cfo",
+ "user": "Which generated more revenue per employee in 2025, Coca-Cola (net operating revenues divided by its approximately 65,900 year-end employees) or PepsiCo (net revenue divided by its approximately 306,000 employees at December 27, 2025), and by how many dollars per employee?",
+ "answer": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "rank",
+    "over": [
+     "KO",
+     "PEP"
+    ],
+    "by": {
+     "ratio": [
+      {
+       "concept": "Revenue"
+      },
+      {
+       "attr": "employees"
+      }
+     ]
+    },
+    "period": {
+     "fy": 2025
+    },
+    "order": "desc",
+    "k": 2
+   }
+  ],
+  "answer": "s1"
+ },
+ "seconds": 7.68,
+ "usage": {
+  "in": 767,
+  "out": 57
+ }
+}

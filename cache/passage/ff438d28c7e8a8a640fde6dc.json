@@ -1,0 +1,15 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Both big US oil majors earned less in 2025. Whose profit fell harder from 2024, ExxonMobil's or Chevron's, and by how many percentage points?",
+ "abstain": true,
+ "answer": "None",
+ "pred": {
+  "kind": "abstain",
+  "value": null
+ },
+ "unit": "none",
+ "facts": [],
+ "facts_ok": false
+}

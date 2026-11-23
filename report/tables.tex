@@ -1,0 +1,31 @@
+\newcommand{\HeldTypeRows}{Single fact & 10 & 8/10 (80\%) & 80\% & 67\% & 7/10 \\
+Multi-hop & 10 & 9/10 (90\%) & 91\% & 98\% & 5/10 \\
+Cross-filing comparison & 10 & 8/10 (80\%) & 75\% & 48\% & 3/10 \\
+Overall & 30 & 25/30 (83\%) & 82\% & 72\% & 15/30 \\}
+\newcommand{\HeldNotes}{On the same 30 questions: the retrieval baseline (passages, the same free model reads) 15/30; TieOut's plans alone, without the text reader, 19/30 (results/heldout\_v2.json, results/heldout\_baseline\_hybrid.json). The baseline reads 16,000 characters of passages; with the 48,000 the text reader gets inside TieOut it scores 22/30 (results/heldout\_baseline\_hybrid\_b48.json). One free key was the limit of this run: the stronger arbiter models answered on 2 of 30 questions before their free daily quota was spent, and 5 answers were then served on one planner's reading, FLAGGED. The same frozen system on a key without that daily limit, a side number and not the headline: 27/30 (results/heldout\_abl\_none.json). Right by tier: VERIFIED 4/4, WITNESSED 3/4, CORROBORATED 9/9, FLAGGED 8/11, ABSTAIN 1/2. Wrong while VERIFIED: 0. Under the strict scorer (the rules of 21 November, before six were relaxed after misses were read): 24/30. 95\% interval of the accuracy: 66\% to 93\%. python scripts/check\_brief.py results/heldout\_v2.json: 28 answers served, 80 proof leaves, 80 of them graph nodes. Paid side experiment, is the model the bottleneck? (Claude Sonnet 5.5 plans and picks, gemini-3.1-pro arbitrates, labelled and never mixed into the headline): 26/30 (results/heldout\_v2\_scaled.json).}
+\newcommand{\DevLine}{On the four latest development rounds (142 questions, results/ff\_r7.json to ff\_r10.json), the plans alone were right on 114 and the whole system on 128. check\_brief passes on 4 of the 4 files (round 10: 31 answers served, 77 proof leaves, 77 of them graph nodes).}
+\newcommand{\RoundsRows}{3 & 25/36 & 25/36 & 36/36 \\
+4 & 23/34 & 22/34 & 35/35 \\
+5 & 20/36 & 20/36 & 35/36 \\
+6 & 17/27 & 17/27 & 30/35 \\
+7 & 23/36 & 20/36 & 35/36 \\
+8 & 29/35 & 27/35 & 34/35 \\
+9 & 26/36 & 21/36 & 31/36 \\
+10 & 26/35 & 21/35 & 28/35 \\
+11 & 29/36 & 26/36 & 31/36 \\
+All & 218/311 & 199/311 & 295/320 \\}
+\newcommand{\OtherRows}{TieOut, the declared configuration on one free key (the headline) & 8/10 & 9/10 & 8/10 & \textbf{25/30} & 82\% & 72\% \\
+TieOut, its plans alone (no text reader) & 6/10 & 6/10 & 7/10 & \textbf{19/30} & -- & -- \\
+Baseline: hybrid retrieval, the same model reads 16,000 characters & 7/10 & 5/10 & 3/10 & \textbf{15/30} & 53\% & 19\% \\
+Baseline: the same with 48,000 characters, as the text reader inside TieOut gets & 9/10 & 8/10 & 5/10 & \textbf{22/30} & 53\% & 39\% \\
+Baseline: dense retrieval, the same model reads & 8/10 & 4/10 & 3/10 & \textbf{15/30} & 41\% & 17\% \\
+Paid side run: Claude Sonnet 5.5 plans and picks, gemini-3.1-pro arbitrates & 9/10 & 9/10 & 8/10 & \textbf{26/30} & 82\% & 72\% \\
+Reference for the rows below: TieOut on a key without the free tier's daily limit & 9/10 & 9/10 & 9/10 & \textbf{27/30} & 82\% & 73\% \\
+... one planner (no second planner, no arbiter) & 7/10 & 8/10 & 8/10 & \textbf{23/30} & 72\% & 61\% \\
+... no arbiter & 7/10 & 9/10 & 8/10 & \textbf{24/30} & 75\% & 68\% \\
+... no linking (statement concepts only) & 8/10 & 4/10 & 9/10 & \textbf{21/30} & 83\% & 47\% \\
+... one picker (no second picker) & 9/10 & 9/10 & 9/10 & \textbf{27/30} & 82\% & 73\% \\
+... empty link store & 9/10 & 9/10 & 9/10 & \textbf{27/30} & 82\% & 73\% \\
+... no equation solving & 9/10 & 9/10 & 9/10 & \textbf{27/30} & 82\% & 73\% \\
+... checks off & 9/10 & 9/10 & 9/10 & \textbf{27/30} & 82\% & 73\% \\
+... no checks read from the question's words & 9/10 & 9/10 & 9/10 & \textbf{27/30} & 82\% & 73\% \\}

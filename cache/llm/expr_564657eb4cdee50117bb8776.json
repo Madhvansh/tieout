@@ -1,0 +1,13 @@
+{
+ "model": "gemini:gemini-3.5-flash-lite",
+ "system": "You answered a question about SEC filings from passages. Below are the figures you cited, numbered f1, f2, ..., each with its label, filing, page, the figure as printed and its value in full units (a percentage as a fraction: 12.5% is 0.125). Write the arithmetic that gives YOUR answer as ONE expression over these names: + - * / ** abs( ) parentheses, the names f1..fn and plain numbers only. If your answer is one of the figures, the expression is that name alone. If no expression over these figures gives your answer, write null. Reply JSON {\"expr\": \"<expression>\" or null}.",
+ "user": "Question: In the facilities table by segment in Item 2 of Amazon's 2025 Form 10-K (segment amounts exclude corporate facilities), what share of the total square footage, leased plus owned, belonged to the AWS segment at December 31, 2025?\n\nYour answer: 0.07365636353982888 (as a number: 0.07365636353982888)\n\nThe figures you cited:\nf1: 'AWS' (you called it 'AWS Leased Square Footage') | AMZN_FY2025_10K page 18 | period not stated | printed 28,370 | value 28370.0 count\nf2: 'Total' (you called it 'Total Leased Square Footage') | AMZN_FY2025_10K page 18 | period not stated | printed 684,022 | value 684022.0 count",
+ "answer": {
+  "expr": "f1 / f2"
+ },
+ "seconds": 1.27,
+ "usage": {
+  "in": 380,
+  "out": 10
+ }
+}

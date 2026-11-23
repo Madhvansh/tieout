@@ -1,0 +1,30 @@
+{"id": "H01", "type": "single_fact", "question": "After stripping out the share belonging to minority holders, how much did Ford Motor Company make or lose in 2025?"}
+{"id": "H02", "type": "single_fact", "question": "What share of U.S. vehicle sales did General Motors capture in 2025?"}
+{"id": "H03", "type": "single_fact", "question": "How many transactions did Visa process across its network in fiscal 2026?"}
+{"id": "H04", "type": "single_fact", "question": "What share of American Express's worldwide Card Member loans was tied to its Delta co-brand cards at the end of 2025?"}
+{"id": "H05", "type": "single_fact", "question": "How much net revenue did PepsiCo generate in Russia in 2025?"}
+{"id": "H06", "type": "single_fact", "question": "How much did JPMorgan Chase set aside for credit losses in 2025?"}
+{"id": "H07", "type": "single_fact", "question": "What was the value of the inventories on Caterpillar's balance sheet at the end of 2025?"}
+{"id": "H08", "type": "single_fact", "question": "What proportion of its premium revenue did UnitedHealth Group pay out in medical costs in 2025 (its medical cost ratio)?"}
+{"id": "H09", "type": "single_fact", "question": "How much cash did Walmart actually pay in income taxes during fiscal 2026?"}
+{"id": "H10", "type": "single_fact", "question": "What was Delta Air Lines' total fuel expense for 2025?"}
+{"id": "B04", "type": "cross_filing", "question": "Across 2022 through 2025, in which year did Exxon Mobil earn the most net income attributable to ExxonMobil, and how far below that peak was 2025?"}
+{"id": "B06", "type": "cross_filing", "question": "Sam's Club U.S. grocery net sales for fiscal 2025 appear in both of Walmart's last two annual reports. Was the figure changed in the fiscal 2026 report, by how much, and why?"}
+{"id": "B09", "type": "cross_filing", "question": "Rank the four health-care companies in the set (Johnson & Johnson, Pfizer, Merck and UnitedHealth Group) by their reported 2025 effective income tax rate, highest first."}
+{"id": "B15", "type": "cross_filing", "question": "Comparing the carmakers' in-house lenders, did Ford Credit or GM Financial earn more before taxes in 2025, by how much, and which of the two grew its pre-tax earnings over 2024?"}
+{"id": "B16", "type": "cross_filing", "question": "Did Caterpillar's 2025 annual report change the 2024 total sales and revenues it shows for the Resource Industries segment compared with the 2024 annual report? If so, by how much and why?"}
+{"id": "B17", "type": "cross_filing", "question": "What was Caterpillar's compound annual growth rate in total sales and revenues from 2022 to 2025, and which of those four years was the high point?"}
+{"id": "B18", "type": "cross_filing", "question": "In Alphabet's breakdown of other income (expense), net, the catch-all 'Other' component for 2024 appears in both its 2024 and 2025 annual reports. Did that 2024 figure change, by how much, and what explains the difference?"}
+{"id": "B19", "type": "cross_filing", "question": "How many dollars of revenue did Microsoft's Azure bring in during fiscal 2026, and was that more or less than Google Cloud's 2025 revenue?"}
+{"id": "B21", "type": "cross_filing", "question": "Rank Apple, Microsoft and Nvidia by net profit margin (net income as a share of revenue) for each company's fiscal 2026, highest first."}
+{"id": "B23", "type": "cross_filing", "question": "Measured as research and development expense over revenue in each company's latest fiscal year in the set, rank AMD, Adobe and Cisco by R&D intensity, highest first."}
+{"id": "B03", "type": "multi_hop", "question": "Nvidia's total revenue soared in fiscal 2026, but how did revenue from customers headquartered in China (including Hong Kong) move? Give the percentage change from fiscal 2025."}
+{"id": "B11", "type": "multi_hop", "question": "Johnson & Johnson does not print a separate fourth-quarter income statement. What were its net earnings for the fiscal fourth quarter of 2025?"}
+{"id": "B25", "type": "multi_hop", "question": "How much operating income did the Google Cloud segment earn in the fourth quarter of 2025?"}
+{"id": "B26", "type": "multi_hop", "question": "Dividing fiscal 2026 net sales by the number of warehouses open at year-end, how much did Costco sell per warehouse?"}
+{"id": "B27", "type": "multi_hop", "question": "Chevron's total earnings fell in 2025. Which of its two operating segments, upstream or downstream, still grew earnings, and by what percentage?"}
+{"id": "H11", "type": "multi_hop", "question": "By how much did Pfizer's combined revenue from its two COVID-19 products, Comirnaty and Paxlovid, fall in 2025 compared with 2024?"}
+{"id": "H12", "type": "multi_hop", "question": "Adding up 2023, 2024 and 2025, how much did Meta's Reality Labs segment lose from operations in total?"}
+{"id": "H13", "type": "multi_hop", "question": "What was Google Cloud's operating margin in the third quarter of 2025?"}
+{"id": "H14", "type": "multi_hop", "question": "According to its 2024 annual report, how much cash did Exxon Mobil return to its shareholders in 2024 through dividends and share buybacks combined?"}
+{"id": "H15", "type": "multi_hop", "question": "Of NVIDIA's five end markets (Data Center, Gaming, Professional Visualization, Automotive, and OEM and Other), which grew revenue fastest in fiscal 2026, and how much revenue did it bring in?"}

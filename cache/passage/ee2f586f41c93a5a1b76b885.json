@@ -1,0 +1,15 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was Google Cloud operating margin of Alphabet Inc. for the third quarter of fiscal year 2025? Give the one figure the filing prints for it.",
+ "abstain": true,
+ "answer": "The provided passages do not contain the Google Cloud operating margin for the third quarter of fiscal year 2025.",
+ "pred": {
+  "kind": "abstain",
+  "value": null
+ },
+ "unit": "none",
+ "facts": [],
+ "facts_ok": false
+}

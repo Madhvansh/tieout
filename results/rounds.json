@@ -1,0 +1,405 @@
+[
+ {
+  "round": "round 3",
+  "note": "",
+  "first_run": {
+   "n": 36,
+   "right": 25,
+   "right_by_tier": {
+    "VERIFIED": 5,
+    "WITNESSED": 0,
+    "CORROBORATED": 0,
+    "FLAGGED": 18,
+    "ABSTAIN": 2
+   },
+   "wrong_by_tier": {
+    "VERIFIED": 1,
+    "WITNESSED": 0,
+    "CORROBORATED": 0,
+    "FLAGGED": 8,
+    "ABSTAIN": 2
+   }
+  },
+  "final_code": {
+   "n": 36,
+   "right": 36,
+   "right_by_tier": {
+    "VERIFIED": 4,
+    "WITNESSED": 8,
+    "CORROBORATED": 14,
+    "FLAGGED": 8,
+    "ABSTAIN": 2
+   },
+   "wrong_by_tier": {
+    "VERIFIED": 0,
+    "WITNESSED": 0,
+    "CORROBORATED": 0,
+    "FLAGGED": 0,
+    "ABSTAIN": 0
+   }
+  },
+  "first_file": "first_runs/round3.json",
+  "final_file": "ff_r3.json"
+ },
+ {
+  "round": "round 4",
+  "note": "",
+  "first_run": {
+   "n": 34,
+   "right": 22,
+   "right_by_tier": {
+    "VERIFIED": 6,
+    "WITNESSED": 0,
+    "CORROBORATED": 0,
+    "FLAGGED": 14,
+    "ABSTAIN": 2
+   },
+   "wrong_by_tier": {
+    "VERIFIED": 0,
+    "WITNESSED": 0,
+    "CORROBORATED": 0,
+    "FLAGGED": 9,
+    "ABSTAIN": 3
+   }
+  },
+  "final_code": {
+   "n": 35,
+   "right": 35,
+   "right_by_tier": {
+    "VERIFIED": 3,
+    "WITNESSED": 8,
+    "CORROBORATED": 10,
+    "FLAGGED": 12,
+    "ABSTAIN": 2
+   },
+   "wrong_by_tier": {
+    "VERIFIED": 0,
+    "WITNESSED": 0,
+    "CORROBORATED": 0,
+    "FLAGGED": 0,
+    "ABSTAIN": 0
+   }
+  },
+  "first_file": "first_runs/round4.json",
+  "final_file": "ff_r4.json"
+ },
+ {
+  "round": "round 5",
+  "note": "arbiter quota spent",
+  "first_run": {
+   "n": 36,
+   "right": 20,
+   "right_by_tier": {
+    "VERIFIED": 2,
+    "WITNESSED": 0,
+    "CORROBORATED": 0,
+    "FLAGGED": 16,
+    "ABSTAIN": 2
+   },
+   "wrong_by_tier": {
+    "VERIFIED": 0,
+    "WITNESSED": 0,
+    "CORROBORATED": 0,
+    "FLAGGED": 10,
+    "ABSTAIN": 6
+   }
+  },
+  "final_code": {
+   "n": 36,
+   "right": 35,
+   "right_by_tier": {
+    "VERIFIED": 3,
+    "WITNESSED": 8,
+    "CORROBORATED": 19,
+    "FLAGGED": 3,
+    "ABSTAIN": 2
+   },
+   "wrong_by_tier": {
+    "VERIFIED": 0,
+    "WITNESSED": 0,
+    "CORROBORATED": 0,
+    "FLAGGED": 0,
+    "ABSTAIN": 1
+   }
+  },
+  "first_file": "first_runs/round5.json",
+  "final_file": "ff_r5.json"
+ },
+ {
+  "round": "round 6",
+  "note": "27 of 35 run",
+  "first_run": {
+   "n": 27,
+   "right": 17,
+   "right_by_tier": {
+    "VERIFIED": 4,
+    "WITNESSED": 0,
+    "CORROBORATED": 0,
+    "FLAGGED": 11,
+    "ABSTAIN": 2
+   },
+   "wrong_by_tier": {
+    "VERIFIED": 0,
+    "WITNESSED": 0,
+    "CORROBORATED": 0,
+    "FLAGGED": 3,
+    "ABSTAIN": 7
+   }
+  },
+  "final_code": {
+   "n": 35,
+   "right": 30,
+   "right_by_tier": {
+    "VERIFIED": 5,
+    "WITNESSED": 9,
+    "CORROBORATED": 9,
+    "FLAGGED": 5,
+    "ABSTAIN": 2
+   },
+   "wrong_by_tier": {
+    "VERIFIED": 1,
+    "WITNESSED": 0,
+    "CORROBORATED": 0,
+    "FLAGGED": 3,
+    "ABSTAIN": 1
+   }
+  },
+  "first_file": "first_runs/round6.json",
+  "final_file": "ff_r6.json"
+ },
+ {
+  "round": "round 7",
+  "note": "",
+  "first_run": {
+   "n": 36,
+   "right": 23,
+   "right_by_tier": {
+    "VERIFIED": 4,
+    "WITNESSED": 11,
+    "CORROBORATED": 0,
+    "FLAGGED": 6,
+    "ABSTAIN": 2
+   },
+   "wrong_by_tier": {
+    "VERIFIED": 0,
+    "WITNESSED": 4,
+    "CORROBORATED": 0,
+    "FLAGGED": 5,
+    "ABSTAIN": 4
+   }
+  },
+  "final_code": {
+   "n": 36,
+   "right": 35,
+   "right_by_tier": {
+    "VERIFIED": 4,
+    "WITNESSED": 9,
+    "CORROBORATED": 11,
+    "FLAGGED": 9,
+    "ABSTAIN": 2
+   },
+   "wrong_by_tier": {
+    "VERIFIED": 0,
+    "WITNESSED": 0,
+    "CORROBORATED": 1,
+    "FLAGGED": 0,
+    "ABSTAIN": 0
+   }
+  },
+  "first_file": "first_runs/round7.json",
+  "final_file": "ff_r7.json"
+ },
+ {
+  "round": "round 8",
+  "note": "",
+  "first_run": {
+   "n": 35,
+   "right": 28,
+   "right_by_tier": {
+    "VERIFIED": 7,
+    "WITNESSED": 9,
+    "CORROBORATED": 0,
+    "FLAGGED": 10,
+    "ABSTAIN": 2
+   },
+   "wrong_by_tier": {
+    "VERIFIED": 0,
+    "WITNESSED": 1,
+    "CORROBORATED": 0,
+    "FLAGGED": 6,
+    "ABSTAIN": 0
+   }
+  },
+  "final_code": {
+   "n": 35,
+   "right": 34,
+   "right_by_tier": {
+    "VERIFIED": 5,
+    "WITNESSED": 9,
+    "CORROBORATED": 11,
+    "FLAGGED": 7,
+    "ABSTAIN": 2
+   },
+   "wrong_by_tier": {
+    "VERIFIED": 0,
+    "WITNESSED": 0,
+    "CORROBORATED": 0,
+    "FLAGGED": 1,
+    "ABSTAIN": 0
+   }
+  },
+  "first_file": "first_runs/round8.json",
+  "final_file": "ff_r8.json"
+ },
+ {
+  "round": "round 9",
+  "note": "no fix aimed at it",
+  "first_run": {
+   "n": 36,
+   "right": 27,
+   "right_by_tier": {
+    "VERIFIED": 6,
+    "WITNESSED": 4,
+    "CORROBORATED": 0,
+    "FLAGGED": 15,
+    "ABSTAIN": 2
+   },
+   "wrong_by_tier": {
+    "VERIFIED": 0,
+    "WITNESSED": 1,
+    "CORROBORATED": 0,
+    "FLAGGED": 5,
+    "ABSTAIN": 3
+   }
+  },
+  "final_code": {
+   "n": 36,
+   "right": 31,
+   "right_by_tier": {
+    "VERIFIED": 5,
+    "WITNESSED": 5,
+    "CORROBORATED": 11,
+    "FLAGGED": 8,
+    "ABSTAIN": 2
+   },
+   "wrong_by_tier": {
+    "VERIFIED": 0,
+    "WITNESSED": 1,
+    "CORROBORATED": 0,
+    "FLAGGED": 3,
+    "ABSTAIN": 1
+   }
+  },
+  "first_file": "first_runs/round9.json",
+  "final_file": "ff_r9.json"
+ },
+ {
+  "round": "round 10",
+  "note": "text reader as pointer",
+  "first_run": {
+   "n": 35,
+   "right": 26,
+   "right_by_tier": {
+    "VERIFIED": 1,
+    "WITNESSED": 7,
+    "CORROBORATED": 10,
+    "FLAGGED": 7,
+    "ABSTAIN": 1
+   },
+   "wrong_by_tier": {
+    "VERIFIED": 0,
+    "WITNESSED": 0,
+    "CORROBORATED": 0,
+    "FLAGGED": 5,
+    "ABSTAIN": 4
+   }
+  },
+  "final_code": {
+   "n": 35,
+   "right": 28,
+   "right_by_tier": {
+    "VERIFIED": 1,
+    "WITNESSED": 7,
+    "CORROBORATED": 10,
+    "FLAGGED": 9,
+    "ABSTAIN": 1
+   },
+   "wrong_by_tier": {
+    "VERIFIED": 0,
+    "WITNESSED": 0,
+    "CORROBORATED": 0,
+    "FLAGGED": 4,
+    "ABSTAIN": 3
+   }
+  },
+  "first_file": "first_runs/round10_pointer.json",
+  "final_file": "ff_r10.json"
+ },
+ {
+  "round": "round 11",
+  "note": "",
+  "first_run": {
+   "n": 36,
+   "right": 29,
+   "right_by_tier": {
+    "VERIFIED": 6,
+    "WITNESSED": 5,
+    "CORROBORATED": 9,
+    "FLAGGED": 7,
+    "ABSTAIN": 2
+   },
+   "wrong_by_tier": {
+    "VERIFIED": 0,
+    "WITNESSED": 1,
+    "CORROBORATED": 0,
+    "FLAGGED": 4,
+    "ABSTAIN": 2
+   }
+  },
+  "final_code": {
+   "n": 36,
+   "right": 31,
+   "right_by_tier": {
+    "VERIFIED": 6,
+    "WITNESSED": 5,
+    "CORROBORATED": 9,
+    "FLAGGED": 9,
+    "ABSTAIN": 2
+   },
+   "wrong_by_tier": {
+    "VERIFIED": 0,
+    "WITNESSED": 1,
+    "CORROBORATED": 0,
+    "FLAGGED": 2,
+    "ABSTAIN": 2
+   }
+  },
+  "first_file": "first_runs/round11.json",
+  "final_file": "ff_r11.json"
+ },
+ {
+  "round": "held-out",
+  "note": "run once",
+  "first_run": {
+   "n": 30,
+   "right": 25,
+   "right_by_tier": {
+    "VERIFIED": 4,
+    "WITNESSED": 3,
+    "CORROBORATED": 9,
+    "FLAGGED": 8,
+    "ABSTAIN": 1
+   },
+   "wrong_by_tier": {
+    "VERIFIED": 0,
+    "WITNESSED": 1,
+    "CORROBORATED": 0,
+    "FLAGGED": 3,
+    "ABSTAIN": 1
+   }
+  },
+  "final_code": null,
+  "first_file": "heldout_v2.json",
+  "final_file": null
+ }
+]

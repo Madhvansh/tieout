@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What free cash flow did Oracle report for fiscal 2026?",
+ "abstain": false,
+ "answer": "-23686000000",
+ "pred": {
+  "kind": "number",
+  "value": -23686000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "ORCL",
+   "doc": "ORCL_FY2026_10K",
+   "page": 55,
+   "value": -23686.0,
+   "label": "Free cash flow",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

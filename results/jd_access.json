@@ -1,0 +1,58 @@
+{
+ "what": "the gate replayed over saved runs: an answer is served only if the asker may read every proof leaf",
+ "command": "python scripts/jd_access.py measure results/h3_r7.json results/h3_r8.json results/h3_r9.json results/h3_r10.json",
+ "withheld_company": "CVX",
+ "companies": 40,
+ "policies": {
+  "everything": {
+   "questions": 142,
+   "served before the gate": 131,
+   "right before the gate": 115,
+   "served after the gate": 131,
+   "right after the gate": 115
+  },
+  "one company": {
+   "questions": 142,
+   "served before the gate": 131,
+   "right before the gate": 115,
+   "served after the gate": 107,
+   "right after the gate": 95,
+   "withheld": 24,
+   "withheld and was right": 20,
+   "withheld and was wrong": 4,
+   "withheld: a figure derived from leaves of two or more filings": 24
+  },
+  "the companies the question names": {
+   "questions": 142,
+   "served before the gate": 131,
+   "right before the gate": 115,
+   "served after the gate": 131,
+   "right after the gate": 115
+  },
+  "every company but CVX": {
+   "questions": 142,
+   "served before the gate": 131,
+   "right before the gate": 115,
+   "served after the gate": 123,
+   "right after the gate": 109,
+   "withheld": 8,
+   "withheld and was right": 6,
+   "withheld and was wrong": 2,
+   "withheld: a figure derived from leaves of two or more filings": 4
+  }
+ },
+ "examples": {
+  "everything": [],
+  "one company": [
+   "T13: withheld: the answer rests on KO_FY2025_10K page 69, which this asker may not read",
+   "T14: withheld: the answer rests on ADBE_FY2025_10K page 51, which this asker may not read",
+   "T15: withheld: the answer rests on MS_FY2025_10K page 80, which this asker may not read"
+  ],
+  "the companies the question names": [],
+  "every company but CVX": [
+   "T10: withheld: the answer rests on CVX_FY2025_10K page 5, which this asker may not read",
+   "U03: withheld: the answer rests on CVX_FY2025_10K page 93, which this asker may not read",
+   "V01: withheld: the answer rests on CVX_FY2025_10K page 69, which this asker may not read"
+  ]
+ }
+}

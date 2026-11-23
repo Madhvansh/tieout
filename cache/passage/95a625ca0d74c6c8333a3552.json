@@ -1,0 +1,44 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How much cash did Cisco generate from operations in fiscal 2026?",
+ "abstain": false,
+ "answer": "$14,177 million",
+ "pred": {
+  "kind": "number",
+  "value": 14177000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "CSCO",
+   "doc": "CSCO_FY2026_10K",
+   "page": 17,
+   "value": 14177.0,
+   "label": "Cash Flow from Operating Activities",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "CSCO",
+   "doc": "CSCO_FY2026_10K",
+   "page": 17,
+   "value": 14177.0,
+   "label": "Net cash provided by operating activities",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "CSCO",
+   "doc": "CSCO_FY2026_10K",
+   "page": 51,
+   "value": 14177.0,
+   "label": "Cash provided by operating activities",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

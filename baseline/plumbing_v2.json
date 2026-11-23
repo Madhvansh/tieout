@@ -1,0 +1,1029 @@
+{
+ "system": "baseline v2 (passage BM25 + dense bge-small, RRF, company scope, LLM reads and computes)",
+ "model": "groq:openai/gpt-oss-20b",
+ "benchmark": "benchmark/round2/dev.jsonl",
+ "params": {
+  "retriever": "v2",
+  "budget_chars": 16000,
+  "passage_chars": "1000-1500",
+  "mode": "hybrid",
+  "dense_model": "BAAI/bge-small-en-v1.5",
+  "bm25_k1": 1.5,
+  "bm25_b": 0.75,
+  "rrf_k": 60,
+  "rrf_depth": 200
+ },
+ "stopped": null,
+ "tokens": {
+  "questions": 6,
+  "live_questions": 6,
+  "prompt_chars_mean": 17482.0,
+  "est_tokens_in_mean": 4370.0,
+  "tokens_in_mean_live": 4362.666666666667,
+  "tokens_out_mean_live": 651.0
+ },
+ "llm_calls": {
+  "live": 6,
+  "cached": 0,
+  "seconds": 9.931427001953125,
+  "tokens_in": 26176,
+  "tokens_out": 3906
+ },
+ "score_fact_level": {
+  "overall": {
+   "n": 6,
+   "correct": 4,
+   "accuracy": 0.6666666666666666,
+   "accuracy_ci95": [
+    0.3,
+    0.9032
+   ],
+   "precision_macro": 0.8333333333333334,
+   "recall_macro": 0.45,
+   "precision_micro": 0.75,
+   "recall_micro": 0.2777777777777778,
+   "page_exact_share": 0.8333333333333334,
+   "abstained": 2,
+   "by_tier": {
+    "VERIFIED": {
+     "n": 0,
+     "correct": 0
+    },
+    "FLAGGED": {
+     "n": 0,
+     "correct": 0
+    },
+    "ABSTAIN": {
+     "n": 0,
+     "correct": 0
+    }
+   },
+   "silent_wrong": 0,
+   "answered_accuracy": 1.0
+  },
+  "single_fact": {
+   "n": 2,
+   "correct": 2,
+   "accuracy": 1.0,
+   "accuracy_ci95": [
+    0.3424,
+    1.0
+   ],
+   "precision_macro": 1.0,
+   "recall_macro": 1.0,
+   "precision_micro": 1.0,
+   "recall_micro": 1.0,
+   "page_exact_share": 0.75,
+   "abstained": 0,
+   "by_tier": {
+    "VERIFIED": {
+     "n": 0,
+     "correct": 0
+    },
+    "FLAGGED": {
+     "n": 0,
+     "correct": 0
+    },
+    "ABSTAIN": {
+     "n": 0,
+     "correct": 0
+    }
+   },
+   "silent_wrong": 0,
+   "answered_accuracy": 1.0
+  },
+  "multi_hop": {
+   "n": 2,
+   "correct": 2,
+   "accuracy": 1.0,
+   "accuracy_ci95": [
+    0.3424,
+    1.0
+   ],
+   "precision_macro": 0.5,
+   "recall_macro": 0.35,
+   "precision_micro": 0.5,
+   "recall_micro": 0.2857142857142857,
+   "page_exact_share": 1.0,
+   "abstained": 0,
+   "by_tier": {
+    "VERIFIED": {
+     "n": 0,
+     "correct": 0
+    },
+    "FLAGGED": {
+     "n": 0,
+     "correct": 0
+    },
+    "ABSTAIN": {
+     "n": 0,
+     "correct": 0
+    }
+   },
+   "silent_wrong": 0,
+   "answered_accuracy": 1.0
+  },
+  "cross_filing": {
+   "n": 2,
+   "correct": 0,
+   "accuracy": 0.0,
+   "accuracy_ci95": [
+    0.0,
+    0.6576
+   ],
+   "precision_macro": 1.0,
+   "recall_macro": 0.0,
+   "precision_micro": null,
+   "recall_micro": 0.0,
+   "page_exact_share": 0.0,
+   "abstained": 2,
+   "by_tier": {
+    "VERIFIED": {
+     "n": 0,
+     "correct": 0
+    },
+    "FLAGGED": {
+     "n": 0,
+     "correct": 0
+    },
+    "ABSTAIN": {
+     "n": 0,
+     "correct": 0
+    }
+   },
+   "silent_wrong": 0,
+   "answered_accuracy": 0.0
+  }
+ },
+ "score_page_level": {
+  "overall": {
+   "n": 6,
+   "precision_macro": 0.14781746031746032,
+   "recall_macro": 0.6666666666666666,
+   "precision_micro": 0.14,
+   "recall_micro": 0.6111111111111112,
+   "all_gold_pages_retrieved": 0.5,
+   "recall_relaxed_macro": 0.7916666666666666
+  },
+  "single_fact": {
+   "n": 2,
+   "precision_macro": 0.21428571428571427,
+   "recall_macro": 1.0,
+   "precision_micro": 0.21428571428571427,
+   "recall_micro": 1.0,
+   "all_gold_pages_retrieved": 1.0,
+   "recall_relaxed_macro": 1.0
+  },
+  "multi_hop": {
+   "n": 2,
+   "precision_macro": 0.11805555555555555,
+   "recall_macro": 0.75,
+   "precision_micro": 0.11764705882352941,
+   "recall_micro": 0.8571428571428571,
+   "all_gold_pages_retrieved": 0.5,
+   "recall_relaxed_macro": 0.75
+  },
+  "cross_filing": {
+   "n": 2,
+   "precision_macro": 0.1111111111111111,
+   "recall_macro": 0.25,
+   "precision_micro": 0.10526315789473684,
+   "recall_micro": 0.25,
+   "all_gold_pages_retrieved": 0.0,
+   "recall_relaxed_macro": 0.625
+  }
+ },
+ "rows": [
+  {
+   "id": "A01",
+   "type": "single_fact",
+   "question": "How much Digital Media annualized recurring revenue did Adobe have going out of fiscal 2025?",
+   "tags": [
+    "outside_statements",
+    "segment_vs_consolidated",
+    "fiscal_year_trap"
+   ],
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 1,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "page_match": {
+    "pages": 7,
+    "gold": 1,
+    "recalled": 1,
+    "relevant_pages": 1,
+    "recalled_relaxed": 1
+   },
+   "answer": "19.20 billion",
+   "pred": {
+    "kind": "number",
+    "value": 19200000000.0
+   },
+   "gold": "Adobe's Digital Media ARR was $19.20 billion at the end of fiscal 2025 (fiscal year ended November 28, 2025).",
+   "gold_value": 19200000000,
+   "retrieved_pages": [
+    {
+     "doc": "ADBE_FY2025_10K",
+     "page": 33,
+     "part": 0,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "ADBE_FY2025_10K",
+     "page": 33,
+     "part": 1,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "ADBE_FY2025_10K",
+     "page": 33,
+     "part": 2,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "ADBE_FY2025_10K",
+     "page": 33,
+     "part": 3,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "ADBE_FY2025_10K",
+     "page": 35,
+     "part": 0,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "ADBE_FY2025_10K",
+     "page": 36,
+     "part": 1,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "ADBE_FY2025_10K",
+     "page": 36,
+     "part": 2,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "ADBE_FY2025_10K",
+     "page": 37,
+     "part": 0,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "ADBE_FY2025_10K",
+     "page": 58,
+     "part": 2,
+     "scope": 0,
+     "rank": 12
+    },
+    {
+     "doc": "ADBE_FY2025_10K",
+     "page": 59,
+     "part": 0,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "ADBE_FY2025_10K",
+     "page": 59,
+     "part": 1,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "ADBE_FY2025_10K",
+     "page": 60,
+     "part": 0,
+     "scope": 0,
+     "rank": 8
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "ADBE",
+     "doc": "ADBE_FY2025_10K",
+     "page": 33,
+     "value": 19200000000.0,
+     "label": "Digital Media ARR",
+     "in_context": true
+    },
+    {
+     "ticker": "ADBE",
+     "doc": "ADBE_FY2025_10K",
+     "page": 35,
+     "value": 19200000000.0,
+     "label": "Digital Media ARR",
+     "in_context": true
+    }
+   ],
+   "seconds": 1.97,
+   "retrieval_seconds": 0.6,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17409,
+   "filing_chars": 15434,
+   "est_tokens_in": 4352,
+   "live_calls": 1,
+   "tokens_in": 4630,
+   "tokens_out": 322
+  },
+  {
+   "id": "A02",
+   "type": "single_fact",
+   "question": "How much contracted but not yet recognized revenue (total remaining performance obligation) did Salesforce have at the end of fiscal 2026?",
+   "tags": [
+    "outside_statements",
+    "fiscal_year_trap",
+    "scale_trap"
+   ],
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "page_match": {
+    "pages": 7,
+    "gold": 2,
+    "recalled": 2,
+    "relevant_pages": 2,
+    "recalled_relaxed": 2
+   },
+   "answer": "$72.4 billion",
+   "pred": {
+    "kind": "number",
+    "value": 72400000000.0
+   },
+   "gold": "About $72.4 billion of total remaining performance obligation as of January 31, 2026.",
+   "gold_value": 72400000000,
+   "retrieved_pages": [
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 3,
+     "part": 0,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 47,
+     "part": 0,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 47,
+     "part": 3,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 48,
+     "part": 2,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 48,
+     "part": 3,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 52,
+     "part": 0,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 52,
+     "part": 1,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 53,
+     "part": 1,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 80,
+     "part": 0,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 80,
+     "part": 1,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 80,
+     "part": 2,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 98,
+     "part": 0,
+     "scope": 0,
+     "rank": 12
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "CRM",
+     "doc": "CRM_FY2026_10K",
+     "page": 47,
+     "value": 72400000000.0,
+     "label": "Total remaining performance obligation",
+     "in_context": true
+    },
+    {
+     "ticker": "CRM",
+     "doc": "CRM_FY2026_10K",
+     "page": 52,
+     "value": 72400000000.0,
+     "label": "Remaining performance obligation",
+     "in_context": true
+    }
+   ],
+   "seconds": 1.86,
+   "retrieval_seconds": 0.19,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17627,
+   "filing_chars": 15606,
+   "est_tokens_in": 4406,
+   "live_calls": 1,
+   "tokens_in": 4279,
+   "tokens_out": 681
+  },
+  {
+   "id": "A19",
+   "type": "multi_hop",
+   "question": "Dividing Costco's fiscal 2026 net sales by the number of warehouses it operated at fiscal year-end, how much did it sell per warehouse?",
+   "tags": [
+    "derived_metric",
+    "outside_statements",
+    "fiscal_year_trap"
+   ],
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 1,
+    "gold": 2,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "page_match": {
+    "pages": 9,
+    "gold": 2,
+    "recalled": 1,
+    "relevant_pages": 1,
+    "recalled_relaxed": 1
+   },
+   "answer": "$316,557,000 per warehouse",
+   "pred": {
+    "kind": "number",
+    "value": 316557000.0
+   },
+   "gold": "About $316.6 million per warehouse ($297,247 million of net sales across 939 warehouses at August 30, 2026).",
+   "gold_value": 316556976,
+   "retrieved_pages": [
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 4,
+     "part": 1,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 4,
+     "part": 2,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 5,
+     "part": 0,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 5,
+     "part": 2,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 18,
+     "part": 0,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 21,
+     "part": 1,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 24,
+     "part": 1,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 26,
+     "part": 1,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 27,
+     "part": 0,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 43,
+     "part": 0,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 65,
+     "part": 1,
+     "scope": 0,
+     "rank": 9
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "COST",
+     "doc": "COST_FY2026_10K",
+     "page": 27,
+     "value": 297247.0,
+     "label": "Net Sales 2026 (in millions)",
+     "in_context": true
+    },
+    {
+     "ticker": "COST",
+     "doc": "COST_FY2026_10K",
+     "page": 4,
+     "value": 939.0,
+     "label": "Number of warehouses at year\u2011end",
+     "in_context": true
+    }
+   ],
+   "seconds": 1.78,
+   "retrieval_seconds": 0.24,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17034,
+   "filing_chars": 15037,
+   "est_tokens_in": 4258,
+   "live_calls": 1,
+   "tokens_in": 4150,
+   "tokens_out": 706
+  },
+  {
+   "id": "A20",
+   "type": "multi_hop",
+   "question": "Which of Salesforce's service offerings grew subscription and support revenue fastest in fiscal 2026, and how much did that offering bring in?",
+   "tags": [
+    "ranking",
+    "outside_statements",
+    "fiscal_year_trap"
+   ],
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 1,
+    "gold": 5,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "page_match": {
+    "pages": 8,
+    "gold": 5,
+    "recalled": 5,
+    "relevant_pages": 1,
+    "recalled_relaxed": 5
+   },
+   "answer": "Agentforce 360 Platform, Slack and Other grew subscription and support revenue fastest in fiscal 2026, bringing in $8,882 million.",
+   "pred": {
+    "kind": "number",
+    "value": 8882000000.0
+   },
+   "gold": "Agentforce 360 Platform, Slack and Other grew fastest (about 23%), with $8,882 million of subscription and support revenue in fiscal 2026.",
+   "gold_value": 8882000000,
+   "retrieved_pages": [
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 18,
+     "part": 1,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 18,
+     "part": 2,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 47,
+     "part": 2,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 47,
+     "part": 3,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 48,
+     "part": 0,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 52,
+     "part": 1,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 53,
+     "part": 0,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 53,
+     "part": 1,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 53,
+     "part": 2,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 54,
+     "part": 0,
+     "scope": 0,
+     "rank": 12
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 73,
+     "part": 3,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "CRM_FY2026_10K",
+     "page": 79,
+     "part": 2,
+     "scope": 0,
+     "rank": 2
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "CRM",
+     "doc": "CRM_FY2026_10K",
+     "page": 53,
+     "value": 0.23,
+     "label": "Growth Rate",
+     "in_context": true
+    },
+    {
+     "ticker": "CRM",
+     "doc": "CRM_FY2026_10K",
+     "page": 53,
+     "value": 8882000000.0,
+     "label": "Subscription and Support Revenue",
+     "in_context": true
+    }
+   ],
+   "seconds": 2.6,
+   "retrieval_seconds": 0.22,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17701,
+   "filing_chars": 15676,
+   "est_tokens_in": 4425,
+   "live_calls": 1,
+   "tokens_in": 4182,
+   "tokens_out": 955
+  },
+  {
+   "id": "B05",
+   "type": "cross_filing",
+   "question": "On the Basel III Standardized approach, rank JPMorgan Chase, Bank of America, Citigroup and Wells Fargo by their CET1 capital ratio at December 31, 2025, strongest first.",
+   "tags": [
+    "ranking",
+    "bank",
+    "outside_statements"
+   ],
+   "correct": false,
+   "abstained": true,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 4,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 9,
+    "gold": 4,
+    "recalled": 2,
+    "relevant_pages": 2,
+    "recalled_relaxed": 3
+   },
+   "answer": "",
+   "pred": {
+    "kind": "abstain",
+    "value": null
+   },
+   "gold": "JPMorgan Chase 14.6%, Citigroup 13.18%, Bank of America 11.4%, Wells Fargo 10.61%.",
+   "gold_value": [
+    "JPMorgan Chase",
+    "Citigroup",
+    "Bank of America",
+    "Wells Fargo"
+   ],
+   "retrieved_pages": [
+    {
+     "doc": "JPM_FY2025_10K",
+     "page": 92,
+     "part": 0,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "JPM_FY2025_10K",
+     "page": 295,
+     "part": 0,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "JPM_FY2025_10K",
+     "page": 295,
+     "part": 1,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "JPM_FY2025_10K",
+     "page": 296,
+     "part": 1,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "BAC_FY2024_10K",
+     "page": 51,
+     "part": 3,
+     "scope": 1,
+     "rank": 2
+    },
+    {
+     "doc": "BAC_FY2024_10K",
+     "page": 52,
+     "part": 1,
+     "scope": 1,
+     "rank": 1
+    },
+    {
+     "doc": "BAC_FY2025_Q3_10Q",
+     "page": 23,
+     "part": 0,
+     "scope": 1,
+     "rank": 3
+    },
+    {
+     "doc": "C_FY2025_10K",
+     "page": 53,
+     "part": 1,
+     "scope": 2,
+     "rank": 1
+    },
+    {
+     "doc": "C_FY2025_10K",
+     "page": 53,
+     "part": 2,
+     "scope": 2,
+     "rank": 2
+    },
+    {
+     "doc": "WFC_FY2025_10K",
+     "page": 63,
+     "part": 2,
+     "scope": 3,
+     "rank": 2
+    },
+    {
+     "doc": "WFC_FY2025_10K",
+     "page": 186,
+     "part": 3,
+     "scope": 3,
+     "rank": 1
+    }
+   ],
+   "facts_used": [],
+   "seconds": 1.57,
+   "retrieval_seconds": 0.26,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17863,
+   "filing_chars": 15831,
+   "est_tokens_in": 4465,
+   "live_calls": 1,
+   "tokens_in": 4703,
+   "tokens_out": 496
+  },
+  {
+   "id": "B07",
+   "type": "cross_filing",
+   "question": "Which investment bank paid out a bigger slice of its 2025 net revenues as compensation and benefits, Goldman Sachs or Morgan Stanley, and what were the two ratios?",
+   "tags": [
+    "derived_metric",
+    "bank",
+    "ranking"
+   ],
+   "correct": false,
+   "abstained": true,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 4,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 10,
+    "gold": 4,
+    "recalled": 0,
+    "relevant_pages": 0,
+    "recalled_relaxed": 2
+   },
+   "answer": "",
+   "pred": {
+    "kind": "abstain",
+    "value": null
+   },
+   "gold": "Morgan Stanley: compensation and benefits were 41.4% of net revenues ($29,216M of $70,645M) versus 32.4% at Goldman Sachs ($18,906M of $58,283M), a gap of about 8.9 percentage points.",
+   "gold_value": "Morgan Stanley",
+   "retrieved_pages": [
+    {
+     "doc": "GS_FY2025_10K",
+     "page": 67,
+     "part": 2,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "GS_FY2025_10K",
+     "page": 73,
+     "part": 0,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "GS_FY2025_10K",
+     "page": 81,
+     "part": 1,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "GS_FY2025_10K",
+     "page": 82,
+     "part": 0,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "GS_FY2025_10K",
+     "page": 84,
+     "part": 3,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "MS_FY2025_10K",
+     "page": 12,
+     "part": 1,
+     "scope": 1,
+     "rank": 5
+    },
+    {
+     "doc": "MS_FY2025_10K",
+     "page": 27,
+     "part": 0,
+     "scope": 1,
+     "rank": 4
+    },
+    {
+     "doc": "MS_FY2025_10K",
+     "page": 28,
+     "part": 0,
+     "scope": 1,
+     "rank": 3
+    },
+    {
+     "doc": "MS_FY2025_10K",
+     "page": 29,
+     "part": 1,
+     "scope": 1,
+     "rank": 1
+    },
+    {
+     "doc": "MS_FY2025_10K",
+     "page": 34,
+     "part": 2,
+     "scope": 1,
+     "rank": 2
+    }
+   ],
+   "facts_used": [],
+   "seconds": 1.95,
+   "retrieval_seconds": 0.28,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17258,
+   "filing_chars": 15254,
+   "est_tokens_in": 4314,
+   "live_calls": 1,
+   "tokens_in": 4232,
+   "tokens_out": 746
+  }
+ ]
+}

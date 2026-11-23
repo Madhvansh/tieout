@@ -1,0 +1,34 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was GM Financial earnings before income taxes of General Motors Co. for fiscal year 2025 (for a balance: at the end of fiscal year 2025)? Give the one figure the filing prints for it.",
+ "abstain": false,
+ "answer": "2,802 million",
+ "pred": {
+  "kind": "number",
+  "value": 2802000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "GM",
+   "doc": "GM_FY2025_10K",
+   "page": 36,
+   "value": 2802.0,
+   "label": "EBT-adjusted",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "GM",
+   "doc": "GM_FY2025_10K",
+   "page": 105,
+   "value": 2802.0,
+   "label": "Earnings (loss) before interest and taxes-adjusted",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

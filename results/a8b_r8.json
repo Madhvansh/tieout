@@ -1,0 +1,7442 @@
+{
+ "name": "a8b_r8",
+ "args": {
+  "bench": "benchmark/round8/dev.jsonl",
+  "oracle": null,
+  "ablate": null,
+  "strict": false,
+  "noise": 0.0,
+  "seed": 1,
+  "offline": false,
+  "no_learning": false,
+  "model": "gemini:gemini-3.5-flash-lite",
+  "name": "a8b_r8",
+  "ids": null,
+  "no_repair": false,
+  "persist": false,
+  "checker": "ollama:tieout-planner-8b-v32",
+  "arbiter": "gemini:gemini-3.6-flash,gemini:gemini-3.5-flash,gemini:gemini-3-flash-preview",
+  "third": "",
+  "passage": "gemini:gemini-3.5-flash-lite",
+  "pick_checker": "gemini:gemini-3.1-flash-lite"
+ },
+ "complete": true,
+ "score": {
+  "overall": {
+   "n": 35,
+   "correct": 32,
+   "accuracy": 0.9142857142857143,
+   "accuracy_ci95": [
+    0.7762,
+    0.9704
+   ],
+   "correct_final": 32,
+   "correct_strict": 29,
+   "accuracy_strict_ci95": [
+    0.6732,
+    0.919
+   ],
+   "precision_macro": 0.8170068027210884,
+   "recall_macro": 0.8151515151515151,
+   "precision_micro": 0.782051282051282,
+   "recall_micro": 0.8356164383561644,
+   "page_exact_share": 0.6721311475409836,
+   "abstained": 2,
+   "by_tier": {
+    "VERIFIED": {
+     "n": 4,
+     "correct": 4
+    },
+    "WITNESSED": {
+     "n": 9,
+     "correct": 9
+    },
+    "CORROBORATED": {
+     "n": 12,
+     "correct": 12
+    },
+    "FLAGGED": {
+     "n": 8,
+     "correct": 5
+    },
+    "ABSTAIN": {
+     "n": 2,
+     "correct": 2
+    }
+   },
+   "silent_wrong": 0,
+   "witnessed_wrong": 0,
+   "plan_road_correct": 31,
+   "answered_accuracy": 0.9090909090909091
+  },
+  "single_fact": {
+   "n": 12,
+   "correct": 11,
+   "accuracy": 0.9166666666666666,
+   "accuracy_ci95": [
+    0.6461,
+    0.9851
+   ],
+   "correct_final": 11,
+   "correct_strict": 10,
+   "accuracy_strict_ci95": [
+    0.552,
+    0.953
+   ],
+   "precision_macro": 0.75,
+   "recall_macro": 0.7,
+   "precision_micro": 0.7,
+   "recall_micro": 0.6363636363636364,
+   "page_exact_share": 0.8571428571428571,
+   "abstained": 2,
+   "by_tier": {
+    "VERIFIED": {
+     "n": 0,
+     "correct": 0
+    },
+    "WITNESSED": {
+     "n": 2,
+     "correct": 2
+    },
+    "CORROBORATED": {
+     "n": 6,
+     "correct": 6
+    },
+    "FLAGGED": {
+     "n": 2,
+     "correct": 1
+    },
+    "ABSTAIN": {
+     "n": 2,
+     "correct": 2
+    }
+   },
+   "silent_wrong": 0,
+   "witnessed_wrong": 0,
+   "plan_road_correct": 10,
+   "answered_accuracy": 0.9
+  },
+  "multi_hop": {
+   "n": 11,
+   "correct": 10,
+   "accuracy": 0.9090909090909091,
+   "accuracy_ci95": [
+    0.6226,
+    0.9838
+   ],
+   "correct_final": 10,
+   "correct_strict": 10,
+   "accuracy_strict_ci95": [
+    0.6226,
+    0.9838
+   ],
+   "precision_macro": 0.9025974025974026,
+   "recall_macro": 0.9545454545454546,
+   "precision_micro": 0.7428571428571429,
+   "recall_micro": 0.9629629629629629,
+   "page_exact_share": 0.6153846153846154,
+   "abstained": 0,
+   "by_tier": {
+    "VERIFIED": {
+     "n": 1,
+     "correct": 1
+    },
+    "WITNESSED": {
+     "n": 6,
+     "correct": 6
+    },
+    "CORROBORATED": {
+     "n": 3,
+     "correct": 3
+    },
+    "FLAGGED": {
+     "n": 1,
+     "correct": 0
+    },
+    "ABSTAIN": {
+     "n": 0,
+     "correct": 0
+    }
+   },
+   "silent_wrong": 0,
+   "witnessed_wrong": 0,
+   "plan_road_correct": 10,
+   "answered_accuracy": 0.9090909090909091
+  },
+  "cross_filing": {
+   "n": 12,
+   "correct": 11,
+   "accuracy": 0.9166666666666666,
+   "accuracy_ci95": [
+    0.6461,
+    0.9851
+   ],
+   "correct_final": 11,
+   "correct_strict": 9,
+   "accuracy_strict_ci95": [
+    0.4677,
+    0.9111
+   ],
+   "precision_macro": 0.8055555555555555,
+   "recall_macro": 0.7833333333333333,
+   "precision_micro": 0.8484848484848485,
+   "recall_micro": 0.8,
+   "page_exact_share": 0.6785714285714286,
+   "abstained": 0,
+   "by_tier": {
+    "VERIFIED": {
+     "n": 3,
+     "correct": 3
+    },
+    "WITNESSED": {
+     "n": 1,
+     "correct": 1
+    },
+    "CORROBORATED": {
+     "n": 3,
+     "correct": 3
+    },
+    "FLAGGED": {
+     "n": 5,
+     "correct": 4
+    },
+    "ABSTAIN": {
+     "n": 0,
+     "correct": 0
+    }
+   },
+   "silent_wrong": 0,
+   "witnessed_wrong": 0,
+   "plan_road_correct": 11,
+   "answered_accuracy": 0.9166666666666666
+  }
+ },
+ "rows": [
+  {
+   "id": "V01",
+   "type": "single_fact",
+   "question": "How much cash did Chevron pay out in dividends on its common stock in 2025?",
+   "gold": "Chevron paid $12,751 million in common stock dividends in 2025.",
+   "answer": "$12.751 billion",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 12751000000,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 1,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "leaves": [
+    {
+     "id": "CVX_FY2025_10K:p69:CF:r24:c0",
+     "doc": "CVX_FY2025_10K",
+     "page": 69,
+     "printed": "(12,751)"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "CVX",
+      "concept": "DividendsPaid",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "CVX FY2025 ends 2025-12-31"
+   ],
+   "learned": [],
+   "seconds": 0.01,
+   "system": "a8b_r8",
+   "tags": [
+    "single_fact",
+    "cash_flow",
+    "dividends",
+    "primary_statement"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "CORROBORATED",
+   "tier_reasons": [
+    "a second method repeats this figure: a reader of the text read it in CVX_FY2025_10K page 69",
+    "CVX DividendsPaid: the row 'Cash dividends - common stock' was bound to the concept by one model's proposal (learned:T068), admitted by the structural gate; no second model made the same binding (CVX_FY2025_10K page 69)"
+   ],
+   "reading": "two readers agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "$12.751 billion",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "CVX",
+        "concept": "DividendsPaid",
+        "period": {
+         "fy": 2025
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "$12.751 billion",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "CVX",
+        "concept": "DividendsPaid",
+        "period": {
+         "fy": 2025
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "$12.751 billion",
+    "tier": "FLAGGED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "In 2025, Chevron paid $12,751 million (or $12.8 billion) in cash dividends on its common stock.",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 12751000000.0
+    },
+    "facts_ok": true,
+    "cited": "CVX_FY2025_10K page 69",
+    "used": "repeats the served answer"
+   },
+   "llm_calls": 2,
+   "llm_live": 0,
+   "tokens_in": 3121,
+   "tokens_out": 78,
+   "llm_seconds": 1.42,
+   "models": [
+    "gemini:gemini-3.5-flash-lite",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 2
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "V02",
+   "type": "single_fact",
+   "question": "How many paying Walmart+ members did Walmart have at the end of fiscal 2026?",
+   "gold": "Not stated: Walmart's fiscal 2026 10-K names Walmart+ and says membership fee revenue was $4.4 billion but never prints a Walmart+ member count.",
+   "answer": "ABSTAIN: planner: Walmart does not disclose the number of paying Walmart+ members in its SEC filings.",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "abstain",
+    "value": null,
+    "extra": {}
+   },
+   "abstained": true,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 0,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "leaves": [],
+   "plan": {
+    "steps": [],
+    "answer": null,
+    "cannot": "Walmart does not disclose the number of paying Walmart+ members in its SEC filings."
+   },
+   "notes": [
+    "planner: Walmart does not disclose the number of paying Walmart+ members in its SEC filings."
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "a8b_r8",
+   "tags": [
+    "single_fact",
+    "unanswerable"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "ABSTAIN",
+   "tier_reasons": [],
+   "reading": "arbiter alone",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "ABSTAIN: no link yet for 'paying Walmart+ members' at WMT",
+     "tier": "ABSTAIN",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "WMT",
+        "item": "paying Walmart+ members",
+        "period": {
+         "fy": 2026
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "ABSTAIN: no link yet for 'paying Walmart+ members' at WMT",
+     "tier": "ABSTAIN",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "WMT",
+        "item": "paying Walmart+ members",
+        "period": {
+         "fy": 2026
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    },
+    {
+     "role": "arbiter",
+     "model": "gemini:gemini-3.6-flash",
+     "answer": "ABSTAIN: planner: Walmart does not disclose the number of paying Walmart+ members in its SEC filings.",
+     "tier": "ABSTAIN",
+     "plan": {
+      "steps": [],
+      "answer": null,
+      "cannot": "Walmart does not disclose the number of paying Walmart+ members in its SEC filings."
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "ABSTAIN: planner: Walmart does not disclose the number of paying Walmart+ members in its SEC filings.",
+    "tier": "ABSTAIN",
+    "correct": true
+   },
+   "passage": {
+    "answer": "The provided passages do not contain the number of paying Walmart+ members at the end of fiscal 2026.",
+    "abstain": true,
+    "pred": {
+     "kind": "abstain",
+     "value": null
+    },
+    "facts_ok": false,
+    "cited": "its passages"
+   },
+   "llm_calls": 12,
+   "llm_live": 0,
+   "tokens_in": 27645,
+   "tokens_out": 1172,
+   "llm_seconds": 92.8,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "gemini:gemini-3.6-flash",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 4,
+    "labels": 2,
+    "link": 6
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 6,
+    "gemini:gemini-3.1-flash-lite": 2,
+    "gemini:gemini-3.6-flash": 3,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "V03",
+   "type": "single_fact",
+   "question": "At the end of 2025, about how many of Ford's hourly workers in the US were represented by the UAW?",
+   "gold": "Approximately 56,300 U.S. hourly employees were represented by the UAW at December 31, 2025.",
+   "answer": "56,300 count",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 56300,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 1,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "leaves": [
+    {
+     "id": "F_FY2025_10K:p21:s1:n2",
+     "doc": "F_FY2025_10K",
+     "page": 21,
+     "printed": "56,300"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "F",
+      "item": "hourly workers in the US represented by the UAW",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "a8b_r8",
+   "tags": [
+    "single_fact",
+    "employees",
+    "sentence_only"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "CORROBORATED",
+   "tier_reasons": [
+    "a second method repeats this figure: a reader of the text read it in F_FY2025_10K page 21",
+    "F: the line was chosen by the linker from its words and its number is not inside a passing formula (F_FY2025_10K page 21)"
+   ],
+   "reading": "arbiter and one reader agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "56,300 count",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "F",
+        "item": "hourly workers in the US represented by the UAW",
+        "period": {
+         "fy": 2025
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "ABSTAIN: the steps of 's1 / s2' all read the same printed figure ('At December 31, 2025, approximately 56,300 hourly employees ', F_FY2025_10K page 21): one line holds what the plan asked for under different names or periods. Read it once; it cannot be added to or compared with itself",
+     "tier": "ABSTAIN",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "F",
+        "item": "number of employees on hourly wages in the United States",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "F",
+        "item": "number of employees represented by the United Auto Workers (UAW) union",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": false
+    },
+    {
+     "role": "arbiter",
+     "model": "gemini:gemini-3.6-flash",
+     "answer": "56,300 count",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "F",
+        "item": "hourly workers in the US represented by the UAW",
+        "period": {
+         "fy": 2025
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "56,300 count",
+    "tier": "FLAGGED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "56,300",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 56300.0
+    },
+    "facts_ok": true,
+    "cited": "F_FY2025_10K page 21",
+    "used": "repeats the served answer"
+   },
+   "llm_calls": 9,
+   "llm_live": 3,
+   "tokens_in": 19999,
+   "tokens_out": 1620,
+   "llm_seconds": 56.64,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "gemini:gemini-3.6-flash",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 3,
+    "labels": 1,
+    "link": 5
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 4,
+    "ollama:tieout-planner-8b-v32": 1,
+    "gemini:gemini-3.1-flash-lite": 2,
+    "gemini:gemini-3.6-flash": 2
+   },
+   "live_by_model": {
+    "gemini:gemini-3.1-flash-lite": 2,
+    "gemini:gemini-3.6-flash": 1
+   }
+  },
+  {
+   "id": "V04",
+   "type": "single_fact",
+   "question": "What did Salesforce pay to buy Informatica, which it closed in fiscal 2026?",
+   "gold": "Salesforce completed the Informatica acquisition in November 2025 for approximately $9.6 billion.",
+   "answer": "$9.600 billion",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 9600000000,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 1,
+    "matched_gold": 1,
+    "page_exact": 0
+   },
+   "leaves": [
+    {
+     "id": "CRM_FY2026_10K:p86:s5:n1",
+     "doc": "CRM_FY2026_10K",
+     "page": 86,
+     "printed": "$9.6 billion"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "CRM",
+      "item": "acquisition of Informatica",
+      "period": {
+       "fy": 2026
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "CRM 'acquisition of Informatica': the source prints no period column for this figure"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "a8b_r8",
+   "tags": [
+    "single_fact",
+    "acquisition",
+    "sentence_only"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "CORROBORATED",
+   "tier_reasons": [
+    "a second method repeats this figure: a reader of the text read it in CRM_FY2026_10K page 86",
+    "CRM 'acquisition of Informatica': the source prints no period column for this figure"
+   ],
+   "reading": "arbiter and one reader agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "ABSTAIN: planner: acquisition purchase price details are not available in standard financial statements",
+     "tier": "ABSTAIN",
+     "plan": {
+      "steps": [],
+      "answer": null,
+      "cannot": "acquisition purchase price details are not available in standard financial statements"
+     },
+     "correct": false
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "$9.600 billion",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "CRM",
+        "item": "value of the acquisition of Informatica",
+        "period": {
+         "fy": 2026
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    },
+    {
+     "role": "arbiter",
+     "model": "gemini:gemini-3.6-flash",
+     "answer": "$9.600 billion",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "CRM",
+        "item": "acquisition of Informatica",
+        "period": {
+         "fy": 2026
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "$9.600 billion",
+    "tier": "FLAGGED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "$9.6 billion",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 9600000000.0
+    },
+    "facts_ok": true,
+    "cited": "CRM_FY2026_10K page 86",
+    "used": "repeats the served answer"
+   },
+   "llm_calls": 5,
+   "llm_live": 1,
+   "tokens_in": 10752,
+   "tokens_out": 1165,
+   "llm_seconds": 13.91,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "gemini:gemini-3.6-flash",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 3,
+    "link": 2
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 2,
+    "ollama:tieout-planner-8b-v32": 1,
+    "gemini:gemini-3.1-flash-lite": 1,
+    "gemini:gemini-3.6-flash": 1
+   },
+   "live_by_model": {
+    "gemini:gemini-3.1-flash-lite": 1
+   }
+  },
+  {
+   "id": "V05",
+   "type": "single_fact",
+   "question": "How many people did Tesla have on its payroll worldwide at the end of 2025?",
+   "gold": "Tesla's worldwide employee headcount at December 31, 2025 was 134,785.",
+   "answer": "134,785 employees",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 134785,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 1,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "leaves": [
+    {
+     "id": "TSLA_FY2025_10K:text:employees",
+     "doc": "TSLA_FY2025_10K",
+     "page": 14,
+     "printed": "As of December 31, 2025, our employee headcount worldwide was 134,785."
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "attr",
+      "company": "TSLA",
+      "attr": "employees"
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "TSLA",
+     "concept": null,
+     "phrase": "number of employees",
+     "state": "rejected",
+     "label": null,
+     "doc": null,
+     "page": null,
+     "picked": null
+    }
+   ],
+   "seconds": 0.64,
+   "system": "a8b_r8",
+   "tags": [
+    "single_fact",
+    "employees",
+    "sentence_only"
+   ],
+   "repaired": true,
+   "plan_errors": [],
+   "tier": "CORROBORATED",
+   "tier_reasons": [
+    "a second method repeats this figure: a reader of the text read it in TSLA_FY2025_10K page 14",
+    "the planners read the question differently; this reading has no second witness",
+    "TSLA employees: stated in a sentence only (TSLA_FY2025_10K page 14)"
+   ],
+   "reading": "arbiter alone",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "ABSTAIN: no link yet for 'number of employees' at TSLA",
+     "tier": "ABSTAIN",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "TSLA",
+        "item": "number of employees",
+        "period": {
+         "fy": 2025
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": false
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "ABSTAIN: no link yet for 'number of employees' at TSLA",
+     "tier": "ABSTAIN",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "TSLA",
+        "item": "number of employees",
+        "period": {
+         "fy": 2025
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": false
+    },
+    {
+     "role": "arbiter",
+     "model": "gemini:gemini-3.6-flash",
+     "answer": "134,785 employees",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "attr",
+        "company": "TSLA",
+        "attr": "employees"
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "134,785 employees",
+    "tier": "FLAGGED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "134,785",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 134785.0
+    },
+    "facts_ok": true,
+    "cited": "TSLA_FY2025_10K page 14",
+    "used": "repeats the served answer"
+   },
+   "llm_calls": 14,
+   "llm_live": 0,
+   "tokens_in": 22877,
+   "tokens_out": 3871,
+   "llm_seconds": 299.58,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "gemini:gemini-3.6-flash",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 5,
+    "link": 9
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 5,
+    "gemini:gemini-3.1-flash-lite": 3,
+    "gemini:gemini-3.6-flash": 5,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "V06",
+   "type": "single_fact",
+   "question": "How much did Merck sell of Winrevair, its pulmonary arterial hypertension drug, in 2025?",
+   "gold": "Winrevair sales were $1,443 million in 2025 (up from $419 million in 2024).",
+   "answer": "$1.443 billion",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 1443000000,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 1,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "leaves": [
+    {
+     "id": "MRK_FY2025_10K:p3:x0:r8:c0",
+     "doc": "MRK_FY2025_10K",
+     "page": 3,
+     "printed": "1,443"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "MRK",
+      "item": "Winrevair sales",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "MRK FY2025 ends 2025-12-31",
+    "MRK item:winrevair@product-sales FY2025: reading is not covered by any check"
+   ],
+   "learned": [],
+   "seconds": 0.01,
+   "system": "a8b_r8",
+   "tags": [
+    "single_fact",
+    "product_sales",
+    "mdna_table"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "CORROBORATED",
+   "tier_reasons": [
+    "a second method repeats this figure: a reader of the text read it in MRK_FY2025_10K page 3",
+    "MRK: the line was chosen by the linker from its words and its number is not inside a passing formula (MRK_FY2025_10K page 3)",
+    "MRK item:winrevair@product-sales FY2025: reading is not covered by any check"
+   ],
+   "reading": "two readers agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "$1.443 billion",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "MRK",
+        "item": "Winrevair sales",
+        "period": {
+         "fy": 2025
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "$1.443 billion",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "MRK",
+        "item": "Winrevair sales",
+        "period": {
+         "fy": 2025
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "$1.443 billion",
+    "tier": "FLAGGED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "$1,443 million",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 1443.0
+    },
+    "facts_ok": true,
+    "cited": "MRK_FY2025_10K page 3",
+    "used": "repeats the served answer"
+   },
+   "llm_calls": 2,
+   "llm_live": 0,
+   "tokens_in": 3179,
+   "tokens_out": 79,
+   "llm_seconds": 5.61,
+   "models": [
+    "gemini:gemini-3.5-flash-lite",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 2
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "V07",
+   "type": "multi_hop",
+   "question": "Roughly what did Mastercard's workforce cost per employee in 2025?",
+   "gold": "About $183,417 per employee: total workforce cost of $7.3 billion divided by approximately 39,800 employees.",
+   "answer": "182,185.9296 USD per employee",
+   "correct": false,
+   "correct_final": false,
+   "correct_strict": false,
+   "pred": {
+    "kind": "number",
+    "value": 182185.9296482412,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 1,
+    "gold": 2,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "leaves": [
+    {
+     "id": "MA_FY2025_10K:p59:x12:r0:c0",
+     "doc": "MA_FY2025_10K",
+     "page": 59,
+     "printed": "7,251"
+    },
+    {
+     "id": "MA_FY2025_10K:text:employees",
+     "doc": "MA_FY2025_10K",
+     "page": 17,
+     "printed": "Our People As of December 31, 2025, we employed approximately 39,800 persons globally, of which approximately 70% were employed outside of the U.S. in more than"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "MA",
+      "item": "personnel costs",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "attr",
+      "company": "MA",
+      "attr": "employees"
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 / s2"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "MA FY2025 ends 2025-12-31"
+   ],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "MA",
+     "concept": null,
+     "phrase": "personnel costs",
+     "state": "active",
+     "label": "Personnel",
+     "doc": "MA_FY2025_10K",
+     "page": 59,
+     "picked": "arbiter and one reader agree"
+    }
+   ],
+   "seconds": 0.2,
+   "system": "a8b_r8",
+   "tags": [
+    "multi_hop",
+    "ratio",
+    "sentence_only",
+    "employees"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "MA employees: stated in a sentence only (MA_FY2025_10K page 17)",
+    "second reading: a reader of the text answers '$183,417 per employee' (MA_FY2025_10K page 17)"
+   ],
+   "reading": "arbiter and one reader agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "182,185.9296 USD per employee",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "MA",
+        "item": "personnel and related expenses",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "attr",
+        "company": "MA",
+        "attr": "employees"
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": false
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "183,417.0854 USD per employee",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "MA",
+        "item": "workforce costs",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "MA",
+        "attr": "employees",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": true
+    },
+    {
+     "role": "arbiter",
+     "model": "gemini:gemini-3.6-flash",
+     "answer": "182,185.9296 USD per employee",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "MA",
+        "item": "personnel costs",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "attr",
+        "company": "MA",
+        "attr": "employees"
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": false
+    }
+   ],
+   "plan_road": {
+    "answer": "182,185.9296 USD per employee",
+    "tier": "FLAGGED",
+    "correct": false
+   },
+   "passage": {
+    "answer": "$183,417 per employee",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 183417.08542713567
+    },
+    "facts_ok": true,
+    "cited": "MA_FY2025_10K page 17",
+    "pointed": [
+     {
+      "phrase": "personnel costs",
+      "id": "MA_FY2025_10K:p91:x41:r1:c0",
+      "kind": "row",
+      "doc": "MA_FY2025_10K",
+      "page": 91,
+      "label": "Personnel costs",
+      "printed": "1,716",
+      "cited": "MA_FY2025_10K page 91"
+     }
+    ],
+    "used": "differs: not served"
+   },
+   "llm_calls": 12,
+   "llm_live": 1,
+   "tokens_in": 19605,
+   "tokens_out": 3048,
+   "llm_seconds": 116.45,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "gemini:gemini-3.6-flash",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 3,
+    "labels": 1,
+    "link": 8
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 5,
+    "gemini:gemini-3.1-flash-lite": 3,
+    "gemini:gemini-3.6-flash": 3,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {
+    "gemini:gemini-3.1-flash-lite": 1
+   }
+  },
+  {
+   "id": "V08",
+   "type": "multi_hop",
+   "question": "How much did Salesforce hand back to shareholders in fiscal 2026 through buybacks and dividends together?",
+   "gold": "$14,183 million: repurchases of common stock $12,596 million plus dividends and dividend equivalents $1,587 million.",
+   "answer": "$14.183 billion",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 14183000000,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "leaves": [
+    {
+     "id": "CRM_FY2026_10K:p70:CF:r26:c0",
+     "doc": "CRM_FY2026_10K",
+     "page": 70,
+     "printed": "(1,587)"
+    },
+    {
+     "id": "CRM_FY2026_10K:p70:CF:r21:c0",
+     "doc": "CRM_FY2026_10K",
+     "page": 70,
+     "printed": "(12,596)"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "metric",
+      "company": "CRM",
+      "metric": "shareholder_payout",
+      "period": {
+       "fy": 2026
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "CRM FY2026 ends 2026-01-31"
+   ],
+   "learned": [],
+   "seconds": 0.01,
+   "system": "a8b_r8",
+   "tags": [
+    "multi_hop",
+    "sum",
+    "cash_flow",
+    "shareholder_returns"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "reading": "two readers agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "$14.183 billion",
+     "tier": "VERIFIED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "metric",
+        "company": "CRM",
+        "metric": "shareholder_payout",
+        "period": {
+         "fy": 2026
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "$14.183 billion",
+     "tier": "VERIFIED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "metric",
+        "company": "CRM",
+        "metric": "shareholder_payout",
+        "period": {
+         "fy": 2026
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "$14.183 billion",
+    "tier": "VERIFIED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "$14.3 billion",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 14300000000.0
+    },
+    "facts_ok": true,
+    "cited": "CRM_FY2026_10K page 5",
+    "used": "repeats the served answer"
+   },
+   "llm_calls": 2,
+   "llm_live": 0,
+   "tokens_in": 3132,
+   "tokens_out": 78,
+   "llm_seconds": 5.08,
+   "models": [
+    "gemini:gemini-3.5-flash-lite",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 2
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "V09",
+   "type": "multi_hop",
+   "question": "What gross margin did Tesla's energy generation and storage business earn in 2025?",
+   "gold": "About 29.8%: energy segment revenue $12,771 million less cost of revenues $8,969 million leaves $3,802 million, which is 29.77% of revenue.",
+   "answer": "29.77%",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 0.29770573956620466,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "leaves": [
+    {
+     "id": "TSLA_FY2025_10K:p53:IS:r4:c0",
+     "doc": "TSLA_FY2025_10K",
+     "page": 53,
+     "printed": "12,771"
+    },
+    {
+     "id": "TSLA_FY2025_10K:p53:IS:r10:c0",
+     "doc": "TSLA_FY2025_10K",
+     "page": 53,
+     "printed": "8,969"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "TSLA",
+      "item": "energy generation and storage revenue",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "TSLA",
+      "item": "energy generation and storage cost of revenues",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 - abs(s2)"
+     },
+     {
+      "id": "s4",
+      "op": "calc",
+      "expr": "s3 / s1"
+     }
+    ],
+    "answer": "s4"
+   },
+   "notes": [
+    "TSLA FY2025 ends 2025-12-31"
+   ],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "TSLA",
+     "concept": null,
+     "phrase": "energy generation and storage revenue",
+     "state": "active",
+     "label": "Energy generation and storage",
+     "doc": "TSLA_FY2025_10K",
+     "page": 53,
+     "picked": "two readers agree"
+    },
+    {
+     "kind": "item",
+     "ticker": "TSLA",
+     "concept": null,
+     "phrase": "energy generation and storage cost of revenues",
+     "state": "active",
+     "label": "Energy generation and storage",
+     "doc": "TSLA_FY2025_10K",
+     "page": 53,
+     "picked": "two readers agree"
+    }
+   ],
+   "seconds": 0.7,
+   "system": "a8b_r8",
+   "tags": [
+    "multi_hop",
+    "margin",
+    "primary_statement"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "WITNESSED",
+   "tier_reasons": [],
+   "reading": "two readers agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "29.77%",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "TSLA",
+        "item": "energy generation and storage revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "TSLA",
+        "item": "energy generation and storage cost of revenues",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 - abs(s2)"
+       },
+       {
+        "id": "s4",
+        "op": "calc",
+        "expr": "s3 / s1"
+       }
+      ],
+      "answer": "s4"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "29.77%",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "TSLA",
+        "item": "energy generation and storage gross profit",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "TSLA",
+        "item": "energy generation and storage revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "29.77%",
+    "tier": "WITNESSED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "29.8%",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 0.298
+    },
+    "facts_ok": true,
+    "cited": "TSLA_FY2025_10K page 41",
+    "used": "repeats the served answer"
+   },
+   "llm_calls": 8,
+   "llm_live": 1,
+   "tokens_in": 18550,
+   "tokens_out": 489,
+   "llm_seconds": 125.79,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 2,
+    "link": 6
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 4,
+    "gemini:gemini-3.1-flash-lite": 3,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {
+    "gemini:gemini-3.1-flash-lite": 1
+   }
+  },
+  {
+   "id": "V10",
+   "type": "multi_hop",
+   "question": "Strip out Reality Labs: what share of the Family of Apps revenue did Meta keep as operating profit in 2025?",
+   "gold": "About 51.6%: Family of Apps income from operations $102,469 million divided by Family of Apps revenue $198,759 million.",
+   "answer": "51.55%",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 0.5155439502110596,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 0
+   },
+   "leaves": [
+    {
+     "id": "META_FY2025_10K:p127:x43:r3:c0",
+     "doc": "META_FY2025_10K",
+     "page": 127,
+     "printed": "102,469"
+    },
+    {
+     "id": "META_FY2025_10K:p127:x43:r0:c0",
+     "doc": "META_FY2025_10K",
+     "page": 127,
+     "printed": "198,759"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "META",
+      "item": "Family of Apps income from operations",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "META",
+      "item": "Family of Apps revenue",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 / s2"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "META FY2025 ends 2025-12-31"
+   ],
+   "learned": [],
+   "seconds": 0.01,
+   "system": "a8b_r8",
+   "tags": [
+    "multi_hop",
+    "margin",
+    "segment"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "WITNESSED",
+   "tier_reasons": [],
+   "reading": "arbiter and one reader agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "51.55%",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "META",
+        "item": "Family of Apps operating income",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "META",
+        "item": "Family of Apps revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "238.68%",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "META",
+        "item": "Family of Apps revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "META",
+        "concept": "OperatingIncome",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": false
+    },
+    {
+     "role": "arbiter",
+     "model": "gemini:gemini-3.6-flash",
+     "answer": "51.55%",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "META",
+        "item": "Family of Apps income from operations",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "META",
+        "item": "Family of Apps revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "51.55%",
+    "tier": "WITNESSED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "51.55%",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 0.5155460132623356
+    },
+    "facts_ok": true,
+    "cited": "META_FY2025_10K page 62",
+    "used": "repeats the served answer"
+   },
+   "llm_calls": 7,
+   "llm_live": 0,
+   "tokens_in": 18188,
+   "tokens_out": 1127,
+   "llm_seconds": 43.9,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "gemini:gemini-3.6-flash",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 3,
+    "link": 4
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 3,
+    "gemini:gemini-3.1-flash-lite": 2,
+    "ollama:tieout-planner-8b-v32": 1,
+    "gemini:gemini-3.6-flash": 1
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "V11",
+   "type": "multi_hop",
+   "question": "What operating margin did Amazon's International segment make in 2025?",
+   "gold": "About 2.9%: International operating income $4,750 million over International net sales $161,894 million.",
+   "answer": "2.93%",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 0.029340185553510322,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 0
+   },
+   "leaves": [
+    {
+     "id": "AMZN_FY2025_10K:p68:x38:r5:c2",
+     "doc": "AMZN_FY2025_10K",
+     "page": 68,
+     "printed": "4,750"
+    },
+    {
+     "id": "AMZN_FY2025_10K:p68:x38:r3:c2",
+     "doc": "AMZN_FY2025_10K",
+     "page": 68,
+     "printed": "161,894"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "AMZN",
+      "item": "International segment operating income",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "AMZN",
+      "item": "International segment revenue",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 / s2"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "AMZN FY2025 ends 2025-12-31"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "a8b_r8",
+   "tags": [
+    "multi_hop",
+    "margin",
+    "segment"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "WITNESSED",
+   "tier_reasons": [],
+   "reading": "arbiter and one reader agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "2.93%",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "AMZN",
+        "item": "International segment operating income",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "AMZN",
+        "item": "International segment net sales",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "0.66%",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "metric",
+        "company": "AMZN",
+        "item": "International operating income",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "AMZN",
+        "concept": "Revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": false
+    },
+    {
+     "role": "arbiter",
+     "model": "gemini:gemini-3.6-flash",
+     "answer": "2.93%",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "AMZN",
+        "item": "International segment operating income",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "AMZN",
+        "item": "International segment revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "2.93%",
+    "tier": "WITNESSED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "0.029339943481231668",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 0.02933994348123167
+    },
+    "facts_ok": true,
+    "cited": "AMZN_FY2025_10K page 68",
+    "used": "repeats the served answer"
+   },
+   "llm_calls": 9,
+   "llm_live": 1,
+   "tokens_in": 21200,
+   "tokens_out": 1355,
+   "llm_seconds": 43.19,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "gemini:gemini-3.6-flash",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 3,
+    "link": 6
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 4,
+    "gemini:gemini-3.1-flash-lite": 3,
+    "ollama:tieout-planner-8b-v32": 1,
+    "gemini:gemini-3.6-flash": 1
+   },
+   "live_by_model": {
+    "gemini:gemini-3.1-flash-lite": 1
+   }
+  },
+  {
+   "id": "V12",
+   "type": "multi_hop",
+   "question": "By what percent did Exxon's Upstream earnings change in 2025 compared with 2024?",
+   "gold": "They fell about 15.9%: Upstream earnings (U.S. GAAP) were $21,354 million in 2025 versus $25,390 million in 2024.",
+   "answer": "-15.90%",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": -0.15896022055927528,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 0
+   },
+   "leaves": [
+    {
+     "id": "XOM_FY2025_10K:p47:x31:r2:c0",
+     "doc": "XOM_FY2025_10K",
+     "page": 47,
+     "printed": "21,354"
+    },
+    {
+     "id": "XOM_FY2025_10K:p47:x31:r2:c1",
+     "doc": "XOM_FY2025_10K",
+     "page": 47,
+     "printed": "25,390"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "XOM",
+      "item": "Upstream earnings",
+      "period": {
+       "fy": 2024
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "XOM",
+      "item": "Upstream earnings",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "(s2 / s1) - 1"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "XOM FY2025 ends 2025-12-31",
+    "XOM FY2024 ends 2024-12-31"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "a8b_r8",
+   "tags": [
+    "multi_hop",
+    "growth",
+    "segment"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "WITNESSED",
+   "tier_reasons": [],
+   "reading": "two readers agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "-15.90%",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "XOM",
+        "item": "Upstream earnings",
+        "period": {
+         "fy": 2024
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "XOM",
+        "item": "Upstream earnings",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "(s2 / s1) - 1"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "-15.90%",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "change",
+        "company": "XOM",
+        "item": "Upstream earnings",
+        "from": {
+         "fy": 2024
+        },
+        "to": {
+         "fy": 2025
+        },
+        "mode": "pct"
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "-15.90%",
+    "tier": "WITNESSED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "-15.89%",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": -0.1589208349744
+    },
+    "facts_ok": true,
+    "cited": "XOM_FY2025_10K page 47",
+    "used": "repeats the served answer"
+   },
+   "llm_calls": 2,
+   "llm_live": 0,
+   "tokens_in": 3179,
+   "tokens_out": 144,
+   "llm_seconds": 1.64,
+   "models": [
+    "gemini:gemini-3.5-flash-lite",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 2
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "V13",
+   "type": "cross_filing",
+   "question": "By what percent did Goldman Sachs' net earnings rise from 2022 to 2025?",
+   "gold": "Up about 52.5%: net earnings were $11,261 million in 2022 (per the 2024 annual report) and $17,176 million in 2025.",
+   "answer": "52.53%",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 0.5252641861291182,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "leaves": [
+    {
+     "id": "GS_FY2024_10K:p134:IS:r22:c2",
+     "doc": "GS_FY2024_10K",
+     "page": 134,
+     "printed": "11,261"
+    },
+    {
+     "id": "GS_FY2025_10K:p141:IS:r22:c0",
+     "doc": "GS_FY2025_10K",
+     "page": 141,
+     "printed": "17,176"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "GS",
+      "concept": "NetIncome",
+      "from": {
+       "fy": 2022
+      },
+      "to": {
+       "fy": 2025
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "GS FY2022 ends 2022-12-31",
+    "GS FY2025 ends 2025-12-31"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "a8b_r8",
+   "tags": [
+    "cross_filing",
+    "growth",
+    "two_annual_reports"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "reading": "two readers agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "52.53%",
+     "tier": "VERIFIED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "change",
+        "company": "GS",
+        "concept": "NetIncome",
+        "from": {
+         "fy": 2022
+        },
+        "to": {
+         "fy": 2025
+        },
+        "mode": "pct"
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "52.53%",
+     "tier": "VERIFIED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "change",
+        "company": "GS",
+        "concept": "NetIncome",
+        "from": {
+         "fy": 2022
+        },
+        "to": {
+         "fy": 2025
+        },
+        "mode": "pct"
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "52.53%",
+    "tier": "VERIFIED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "52.53%",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 0.5252730618683953
+    },
+    "facts_ok": true,
+    "cited": "GS_FY2024_10K page 71",
+    "used": "repeats the served answer"
+   },
+   "llm_calls": 2,
+   "llm_live": 0,
+   "tokens_in": 3265,
+   "tokens_out": 100,
+   "llm_seconds": 5.05,
+   "models": [
+    "gemini:gemini-3.5-flash-lite",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 2
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "V14",
+   "type": "cross_filing",
+   "question": "What was Coca-Cola's net profit margin in the fourth quarter of 2025, from net income attributable to shareowners over net operating revenues?",
+   "gold": "About 19.2%: Q4 net income attributable to shareowners of $2,271 million (13,107 full year minus 10,836 nine months) over Q4 revenues of $11,822 million (47,941 minus 36,119).",
+   "answer": "19.21%",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 0.19209947555405177,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 4,
+    "matched_retrieved": 4,
+    "gold": 4,
+    "matched_gold": 4,
+    "page_exact": 4
+   },
+   "leaves": [
+    {
+     "id": "KO_FY2025_10K:p63:IS:r14:c0",
+     "doc": "KO_FY2025_10K",
+     "page": 63,
+     "printed": "13,107"
+    },
+    {
+     "id": "KO_FY2025_Q3_10Q:p5:IS:r14:c2",
+     "doc": "KO_FY2025_Q3_10Q",
+     "page": 5,
+     "printed": "10,836"
+    },
+    {
+     "id": "KO_FY2025_10K:p63:IS:r0:c0",
+     "doc": "KO_FY2025_10K",
+     "page": 63,
+     "printed": "47,941"
+    },
+    {
+     "id": "KO_FY2025_Q3_10Q:p5:IS:r0:c2",
+     "doc": "KO_FY2025_Q3_10Q",
+     "page": 5,
+     "printed": "36,119"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "KO",
+      "concept": "NetIncome",
+      "period": {
+       "fy": 2025,
+       "q": 4
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "KO",
+      "concept": "Revenue",
+      "period": {
+       "fy": 2025,
+       "q": 4
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 / s2"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "KO FY2025 ends 2025-12-31",
+    "second reading: ConsolidatedNetIncome is $13.137 billion (KO_FY2025_10K page 63, 'Consolidated Net Income')",
+    "KO FY2025Q3YTD ends 2025-09-26",
+    "KO NetIncome: label 'Net Income Attributable to Shareowners o' matched by wording only, structure did not confirm it",
+    "second reading: ConsolidatedNetIncome is $10.821 billion (KO_FY2025_Q3_10Q page 5, 'Consolidated Net Income')",
+    "KO NetIncome for the fourth quarter is not printed; derived as the full year minus the nine months"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "a8b_r8",
+   "tags": [
+    "cross_filing",
+    "quarter_derivation",
+    "margin",
+    "10k_plus_10q"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "second reading: ConsolidatedNetIncome is $13.137 billion (KO_FY2025_10K page 63, 'Consolidated Net Income')",
+    "KO NetIncome: label 'Net Income Attributable to Shareowners o' matched by wording only, structure did not confirm it",
+    "second reading: ConsolidatedNetIncome is $10.821 billion (KO_FY2025_Q3_10Q page 5, 'Consolidated Net Income')"
+   ],
+   "reading": "two readers agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "19.21%",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "KO",
+        "concept": "NetIncome",
+        "period": {
+         "fy": 2025,
+         "q": 4
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "KO",
+        "concept": "Revenue",
+        "period": {
+         "fy": 2025,
+         "q": 4
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "19.21%",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "metric",
+        "company": "KO",
+        "metric": "net_margin",
+        "period": {
+         "fy": 2025,
+         "q": 4
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "19.21%",
+    "tier": "FLAGGED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "None",
+    "abstain": true,
+    "pred": {
+     "kind": "abstain",
+     "value": null
+    },
+    "facts_ok": false,
+    "cited": "its passages"
+   },
+   "llm_calls": 2,
+   "llm_live": 0,
+   "tokens_in": 3240,
+   "tokens_out": 130,
+   "llm_seconds": 4.68,
+   "models": [
+    "gemini:gemini-3.5-flash-lite",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 2
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "V15",
+   "type": "cross_filing",
+   "question": "Which one earned more in 2025, Ford or GM, and by how much? Use the net income attributable to the company.",
+   "gold": "GM earned more: net income attributable to stockholders of $2,697 million versus Ford's net loss attributable of $8,182 million, a gap of $10,879 million.",
+   "answer": "GM ($2.697 billion), F ($-8.182 billion); difference $10.879 billion",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "companies",
+    "value": [
+     [
+      "GM",
+      2697000000
+     ],
+     [
+      "F",
+      -8182000000
+     ]
+    ],
+    "extra": {
+     "ranked": 2,
+     "lines": [],
+     "gap": 10879000000
+    }
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "leaves": [
+    {
+     "id": "F_FY2025_10K:p115:IS:r15:c2",
+     "doc": "F_FY2025_10K",
+     "page": 115,
+     "printed": "(8,182)"
+    },
+    {
+     "id": "GM_FY2025_10K:p57:IS:r15:c0",
+     "doc": "GM_FY2025_10K",
+     "page": 57,
+     "printed": "2,697"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "rank",
+      "over": [
+       "F",
+       "GM"
+      ],
+      "by": {
+       "concept": "NetIncome"
+      },
+      "period": {
+       "fy": 2025
+      },
+      "order": "desc",
+      "k": 2
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "a8b_r8",
+   "tags": [
+    "cross_filing",
+    "comparison",
+    "difference",
+    "negative_value"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "CORROBORATED",
+   "tier_reasons": [
+    "a second method repeats this figure: a reader of the text read it in F_FY2025_10K page 51",
+    "F NetIncome: the row 'Net income/(loss) attributable to Ford M' was bound to the concept by one model's proposal (learned:T003), admitted by the structural gate; no second model made the same binding (F_FY2025_10K page 115)"
+   ],
+   "reading": "two readers agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "GM ($2.697 billion), F ($-8.182 billion); difference $10.879 billion",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "rank",
+        "over": [
+         "F",
+         "GM"
+        ],
+        "by": {
+         "concept": "NetIncome"
+        },
+        "period": {
+         "fy": 2025
+        },
+        "order": "desc",
+        "k": 2
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "GM ($2.697 billion), F ($-8.182 billion); difference $10.879 billion",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "rank",
+        "over": [
+         "F",
+         "GM"
+        ],
+        "by": {
+         "concept": "NetIncome"
+        },
+        "period": {
+         "fy": 2025
+        },
+        "order": "desc",
+        "k": 2
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "GM ($2.697 billion), F ($-8.182 billion); difference $10.879 billion",
+    "tier": "FLAGGED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "GM earned more in 2025 than Ford by $10,879 million.",
+    "abstain": false,
+    "pred": {
+     "kind": "companies",
+     "value": [
+      [
+       "GM",
+       null
+      ]
+     ]
+    },
+    "facts_ok": true,
+    "cited": "F_FY2025_10K page 51",
+    "used": "repeats the served answer"
+   },
+   "llm_calls": 2,
+   "llm_live": 0,
+   "tokens_in": 3502,
+   "tokens_out": 98,
+   "llm_seconds": 30.97,
+   "models": [
+    "gemini:gemini-3.5-flash-lite",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 2
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "V16",
+   "type": "cross_filing",
+   "question": "Rank Visa (fiscal 2026), Mastercard (2025) and American Express (2025) by net profit margin, meaning net income divided by net revenue, highest first.",
+   "gold": "Visa 51.2% (23,504 / 45,903), Mastercard 45.6% (14,968 / 32,791), American Express 15.0% (10,833 / 72,229).",
+   "answer": "V (51.20%), MA (45.65%), AXP (15.00%); first minus last 36.21%",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "companies",
+    "value": [
+     [
+      "V",
+      0.5120362503540073
+     ],
+     [
+      "MA",
+      0.45646671342746487
+     ],
+     [
+      "AXP",
+      0.14998130944634427
+     ]
+    ],
+    "extra": {
+     "ranked": 3,
+     "lines": [],
+     "gap": 0.055569536926542484,
+     "spread": 0.3620549409076631
+    }
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 6,
+    "matched_retrieved": 6,
+    "gold": 6,
+    "matched_gold": 6,
+    "page_exact": 4
+   },
+   "leaves": [
+    {
+     "id": "V_FY2026_10K:p60:IS:r15:c0",
+     "doc": "V_FY2026_10K",
+     "page": 60,
+     "printed": "23,504"
+    },
+    {
+     "id": "V_FY2026_10K:p60:IS:r0:c0",
+     "doc": "V_FY2026_10K",
+     "page": 60,
+     "printed": "45,903"
+    },
+    {
+     "id": "MA_FY2025_10K:p69:IS:r14:c0",
+     "doc": "MA_FY2025_10K",
+     "page": 69,
+     "printed": "14,968"
+    },
+    {
+     "id": "MA_FY2025_10K:p69:IS:r0:c0",
+     "doc": "MA_FY2025_10K",
+     "page": 69,
+     "printed": "32,791"
+    },
+    {
+     "id": "AXP_FY2025_10K:p95:IS:r27:c0",
+     "doc": "AXP_FY2025_10K",
+     "page": 95,
+     "printed": "10,833"
+    },
+    {
+     "id": "AXP_FY2025_10K:p95:IS:r12:c0",
+     "doc": "AXP_FY2025_10K",
+     "page": 95,
+     "printed": "72,229"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "V",
+      "concept": "NetIncome",
+      "period": {
+       "fy": 2026
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "V",
+      "concept": "Revenue",
+      "period": {
+       "fy": 2026
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 / s2"
+     },
+     {
+      "id": "s4",
+      "op": "get",
+      "company": "MA",
+      "concept": "NetIncome",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s5",
+      "op": "get",
+      "company": "MA",
+      "concept": "Revenue",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s6",
+      "op": "calc",
+      "expr": "s4 / s5"
+     },
+     {
+      "id": "s7",
+      "op": "get",
+      "company": "AXP",
+      "concept": "NetIncome",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s8",
+      "op": "get",
+      "company": "AXP",
+      "concept": "Revenue",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s9",
+      "op": "calc",
+      "expr": "s7 / s8"
+     },
+     {
+      "id": "s10",
+      "op": "rank",
+      "over": [
+       "V",
+       "MA",
+       "AXP"
+      ],
+      "by": {
+       "metric": "net_margin"
+      },
+      "period": {
+       "fy": "latest"
+      },
+      "order": "desc",
+      "k": 3
+     }
+    ],
+    "answer": "s10"
+   },
+   "notes": [],
+   "learned": [],
+   "seconds": 0.01,
+   "system": "a8b_r8",
+   "tags": [
+    "cross_filing",
+    "ranking",
+    "margin"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "two readers rank these in the same order but do not compute every figure the same way",
+    "second reading: a reader of the text answers 'Mastercard, Visa, American Express' (V_FY2026_10K page 40)"
+   ],
+   "reading": "two readers agree on the order",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "V (51.20%), MA (45.65%), AXP (15.00%); first minus last 36.21%",
+     "tier": "VERIFIED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "V",
+        "concept": "NetIncome",
+        "period": {
+         "fy": 2026
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "V",
+        "concept": "Revenue",
+        "period": {
+         "fy": 2026
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       },
+       {
+        "id": "s4",
+        "op": "get",
+        "company": "MA",
+        "concept": "NetIncome",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s5",
+        "op": "get",
+        "company": "MA",
+        "concept": "Revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s6",
+        "op": "calc",
+        "expr": "s4 / s5"
+       },
+       {
+        "id": "s7",
+        "op": "get",
+        "company": "AXP",
+        "concept": "NetIncome",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s8",
+        "op": "get",
+        "company": "AXP",
+        "concept": "Revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s9",
+        "op": "calc",
+        "expr": "s7 / s8"
+       },
+       {
+        "id": "s10",
+        "op": "rank",
+        "over": [
+         "V",
+         "MA",
+         "AXP"
+        ],
+        "by": {
+         "metric": "net_margin"
+        },
+        "period": {
+         "fy": "latest"
+        },
+        "order": "desc",
+        "k": 3
+       }
+      ],
+      "answer": "s10"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "V (50.14%), MA (45.65%), AXP (15.00%); first minus last 35.15%",
+     "tier": "VERIFIED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "rank",
+        "over": [
+         "V",
+         "MA",
+         "AXP"
+        ],
+        "by": {
+         "metric": "net_margin"
+        },
+        "period": {
+         "fy": 2025
+        },
+        "order": "desc",
+        "k": 3
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "V (51.20%), MA (45.65%), AXP (15.00%); first minus last 36.21%",
+    "tier": "FLAGGED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "Mastercard, Visa, American Express",
+    "abstain": false,
+    "pred": {
+     "kind": "companies",
+     "value": [
+      [
+       "Mastercard",
+       null
+      ],
+      [
+       "Visa",
+       null
+      ],
+      [
+       "American Express",
+       null
+      ]
+     ]
+    },
+    "facts_ok": true,
+    "cited": "V_FY2026_10K page 40",
+    "used": "differs: not served"
+   },
+   "llm_calls": 3,
+   "llm_live": 1,
+   "tokens_in": 17084,
+   "tokens_out": 682,
+   "llm_seconds": 7.35,
+   "models": [
+    "gemini:gemini-3.5-flash-lite",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 2,
+    "baseline": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 2,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1
+   }
+  },
+  {
+   "id": "V17",
+   "type": "cross_filing",
+   "question": "By what percent did Microsoft's operating income grow from fiscal 2023 to fiscal 2026?",
+   "gold": "Up about 75.4%: operating income of $88,523 million in fiscal 2023 (per the fiscal 2025 annual report) and $155,237 million in fiscal 2026.",
+   "answer": "75.36%",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 0.7536346486223919,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "leaves": [
+    {
+     "id": "MSFT_FY2025_10K:p50:IS:r10:c2",
+     "doc": "MSFT_FY2025_10K",
+     "page": 50,
+     "printed": "88,523"
+    },
+    {
+     "id": "MSFT_FY2026_10K:p50:IS:r10:c0",
+     "doc": "MSFT_FY2026_10K",
+     "page": 50,
+     "printed": "155,237"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "MSFT",
+      "concept": "OperatingIncome",
+      "from": {
+       "fy": 2023
+      },
+      "to": {
+       "fy": 2026
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "MSFT FY2023 ends 2023-06-30",
+    "MSFT FY2026 ends 2026-06-30"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "a8b_r8",
+   "tags": [
+    "cross_filing",
+    "growth",
+    "two_annual_reports"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "reading": "two readers agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "75.36%",
+     "tier": "VERIFIED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "change",
+        "company": "MSFT",
+        "concept": "OperatingIncome",
+        "from": {
+         "fy": 2023
+        },
+        "to": {
+         "fy": 2026
+        },
+        "mode": "pct"
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "75.36%",
+     "tier": "VERIFIED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "change",
+        "company": "MSFT",
+        "concept": "OperatingIncome",
+        "from": {
+         "fy": 2023
+        },
+        "to": {
+         "fy": 2026
+        },
+        "mode": "pct"
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "75.36%",
+    "tier": "VERIFIED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "0.7535",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 0.7534964645281745
+    },
+    "facts_ok": true,
+    "cited": "MSFT_FY2026_10K page 38",
+    "used": "repeats the served answer"
+   },
+   "llm_calls": 2,
+   "llm_live": 0,
+   "tokens_in": 3460,
+   "tokens_out": 102,
+   "llm_seconds": 3.24,
+   "models": [
+    "gemini:gemini-3.5-flash-lite",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 2
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "V18",
+   "type": "cross_filing",
+   "question": "How much profit did Alphabet make in the fourth quarter of 2025? Work it out from the annual report and the third-quarter report.",
+   "gold": "$34,455 million: 2025 net income of $132,170 million less nine-month net income of $97,715 million.",
+   "answer": "$34.455 billion",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 34455000000,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "leaves": [
+    {
+     "id": "GOOGL_FY2025_10K:p50:IS:r10:c2",
+     "doc": "GOOGL_FY2025_10K",
+     "page": 50,
+     "printed": "132,170"
+    },
+    {
+     "id": "GOOGL_FY2025_Q3_10Q:p7:IS:r10:c3",
+     "doc": "GOOGL_FY2025_Q3_10Q",
+     "page": 7,
+     "printed": "97,715"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "GOOGL",
+      "concept": "NetIncome",
+      "period": {
+       "fy": 2025,
+       "q": 4
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "GOOGL FY2025 ends 2025-12-31",
+    "GOOGL FY2025Q3YTD ends 2025-09-30",
+    "GOOGL NetIncome: label 'Net income' matched by wording only, structure did not confirm it",
+    "GOOGL NetIncome for the fourth quarter is not printed; derived as the full year minus the nine months"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "a8b_r8",
+   "tags": [
+    "cross_filing",
+    "quarter_derivation",
+    "10k_plus_10q"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "GOOGL NetIncome: label 'Net income' matched by wording only, structure did not confirm it",
+    "second reading: a reader of the text answers '$34,716 million' (GOOGL_FY2025_10K page 33)"
+   ],
+   "reading": "arbiter and one reader agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "30.27%",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "metric",
+        "company": "GOOGL",
+        "metric": "net_margin",
+        "period": {
+         "fy": 2025,
+         "q": 4
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": false
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "$34.455 billion",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "GOOGL",
+        "concept": "NetIncome",
+        "period": {
+         "fy": 2025,
+         "q": 4
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    },
+    {
+     "role": "arbiter",
+     "model": "gemini:gemini-3.6-flash",
+     "answer": "$34.455 billion",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "GOOGL",
+        "concept": "NetIncome",
+        "period": {
+         "fy": 2025,
+         "q": 4
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "$34.455 billion",
+    "tier": "FLAGGED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "$34,716 million",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 34716000000.0
+    },
+    "facts_ok": true,
+    "cited": "GOOGL_FY2025_10K page 33",
+    "used": "differs: not served"
+   },
+   "llm_calls": 3,
+   "llm_live": 0,
+   "tokens_in": 6458,
+   "tokens_out": 570,
+   "llm_seconds": 48.69,
+   "models": [
+    "gemini:gemini-3.5-flash-lite",
+    "gemini:gemini-3.6-flash",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 3
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1,
+    "ollama:tieout-planner-8b-v32": 1,
+    "gemini:gemini-3.6-flash": 1
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "W01",
+   "type": "single_fact",
+   "question": "Roughly what share of Procter & Gamble's fiscal 2026 sales went to Walmart?",
+   "gold": "Sales to Walmart Inc. and its affiliates were approximately 16% of P&G's total sales in fiscal 2026.",
+   "answer": "16.00%",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 0.16,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 0,
+    "gold": 2,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "leaves": [
+    {
+     "id": "PG_FY2026_10K:p3:s1:n1",
+     "doc": "PG_FY2026_10K",
+     "page": 3,
+     "printed": "16%"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "PG",
+      "item": "percentage of total sales to Walmart Inc. and its affiliates",
+      "period": {
+       "fy": 2026
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "PG",
+     "concept": null,
+     "phrase": "sales to Walmart",
+     "state": "rejected",
+     "label": null,
+     "doc": null,
+     "page": null,
+     "picked": "two readers agree"
+    },
+    {
+     "kind": "mention",
+     "ticker": "PG",
+     "concept": null,
+     "phrase": "percentage of total sales to Walmart Inc. and its affiliates",
+     "state": "flagged",
+     "label": "Sales to Walmart Inc. and its affiliates represent approximately <n1>% of our total sales in <n2>, <n3> and <n4>.",
+     "doc": "PG_FY2026_10K",
+     "page": 3,
+     "picked": "two readers agree"
+    }
+   ],
+   "seconds": 1.84,
+   "system": "a8b_r8",
+   "tags": [
+    "sentence_only",
+    "customer_concentration",
+    "percent"
+   ],
+   "repaired": true,
+   "plan_errors": [],
+   "tier": "CORROBORATED",
+   "tier_reasons": [
+    "a second method repeats this figure: a reader of the text read it in PG_FY2026_10K page 3",
+    "PG: the line was chosen by the linker from its words and its number is not inside a passing formula (PG_FY2026_10K page 3)"
+   ],
+   "reading": "arbiter and one reader agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "16.00%",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "PG",
+        "item": "Sales to Walmart Inc. and its affiliates represent approximately percent of our total sales",
+        "period": {
+         "fy": 2026
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "12.20%",
+     "tier": "VERIFIED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "PG",
+        "concept": "Revenue",
+        "period": {
+         "fy": 2026
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "WMT",
+        "concept": "Revenue",
+        "period": {
+         "fy": 2026
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": false
+    },
+    {
+     "role": "arbiter",
+     "model": "gemini:gemini-3.6-flash",
+     "answer": "16.00%",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "PG",
+        "item": "percentage of total sales to Walmart Inc. and its affiliates",
+        "period": {
+         "fy": 2026
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "16.00%",
+    "tier": "FLAGGED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "Approximately 16%",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 0.16
+    },
+    "facts_ok": true,
+    "cited": "PG_FY2026_10K page 3",
+    "used": "repeats the served answer"
+   },
+   "llm_calls": 16,
+   "llm_live": 0,
+   "tokens_in": 33025,
+   "tokens_out": 3981,
+   "llm_seconds": 155.34,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "gemini:gemini-3.6-flash",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 5,
+    "link": 9,
+    "labels": 2
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 8,
+    "gemini:gemini-3.1-flash-lite": 4,
+    "gemini:gemini-3.6-flash": 3,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "W02",
+   "type": "single_fact",
+   "question": "How big were ExxonMobil's total proved oil and gas reserves at the end of 2025, in billions of oil-equivalent barrels?",
+   "gold": "ExxonMobil reported 19.3 billion oil-equivalent barrels (GOEB) of proved reserves at year-end 2025, of which about 7.0 GOEB (36%) were proved undeveloped.",
+   "answer": "19,311,000,000 count",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": false,
+   "pred": {
+    "kind": "number",
+    "value": 19311000000,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 0,
+    "gold": 1,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "leaves": [
+    {
+     "id": "XOM_FY2025_10K:p126:x114:r14:c7",
+     "doc": "XOM_FY2025_10K",
+     "page": 126,
+     "printed": "19,311"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "XOM",
+      "item": "total proved oil and gas reserves",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "XOM FY2025 ends 2025-12-31",
+    "XOM item:total-proved-reserves-at-december-31-2025@proved-undeveloped-reserves#millions-of-oil-equivalent-barre FY2025: reading is not covered by any check"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "a8b_r8",
+   "tags": [
+    "sentence_only",
+    "physical_unit",
+    "balance_at_date"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "the linker's lines give 36,408,000,000 count; a reader of the text gives another figure (XOM_FY2025_10K page 125), and this plan run on the graph lines that reader points at gives that figure too. Every figure here is a node of the graph",
+    "a reader of the text named this line; no picker chose it from the linker's shortlist",
+    "XOM: the line was chosen by the linker from its words and its number is not inside a passing formula (XOM_FY2025_10K page 126)",
+    "XOM item:total-proved-reserves-at-december-31-2025@proved-undeveloped-reserves#millions-of-oil-equivalent-barre FY2025: reading is not covered by any check"
+   ],
+   "reading": "the text reader's lines against the linker's",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "36,408,000,000 count",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "XOM",
+        "item": "total proved oil and gas reserves",
+        "period": {
+         "fy": 2025
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": false
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "36,408,000,000 count",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "XOM",
+        "item": "total proved oil and gas reserves",
+        "period": {
+         "fy": 2025
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": false
+    }
+   ],
+   "plan_road": {
+    "answer": "36,408,000,000 count",
+    "tier": "WITNESSED",
+    "correct": false
+   },
+   "passage": {
+    "answer": "19.3",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 19.3
+    },
+    "facts_ok": true,
+    "cited": "XOM_FY2025_10K page 125",
+    "pointed": [
+     {
+      "phrase": "total proved oil and gas reserves",
+      "id": "XOM_FY2025_10K:p126:x114:r14:c7",
+      "kind": "row",
+      "doc": "XOM_FY2025_10K",
+      "page": 126,
+      "label": "Total proved reserves at December 31, 2025",
+      "printed": "19,311",
+      "cited": "XOM_FY2025_10K page 125"
+     }
+    ],
+    "used": "the text reader's lines against the linker's"
+   },
+   "llm_calls": 4,
+   "llm_live": 0,
+   "tokens_in": 8962,
+   "tokens_out": 183,
+   "llm_seconds": 20.4,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 2,
+    "link": 2
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 2,
+    "gemini:gemini-3.1-flash-lite": 1,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "W03",
+   "type": "single_fact",
+   "question": "How many hybrid vehicles did Ford sell in the U.S. in 2025?",
+   "gold": "Ford's U.S. sales volume of hybrid vehicles was 228,072 in 2025 (U.S. wholesales of hybrids were 216,599).",
+   "answer": "228,072 count",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 228072,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 1,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "leaves": [
+    {
+     "id": "F_FY2025_10K:p9:x3:r1:c1",
+     "doc": "F_FY2025_10K",
+     "page": 9,
+     "printed": "228,072"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "F",
+      "item": "number of hybrid vehicles sold in the U.S.",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "F FY2025 ends 2025-12-31"
+   ],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "F",
+     "concept": null,
+     "phrase": "number of hybrid vehicles sold in the U.S.",
+     "state": "active",
+     "label": "Hybrid Vehicles",
+     "doc": "F_FY2025_10K",
+     "page": 9,
+     "picked": "two readers agree"
+    }
+   ],
+   "seconds": 3.48,
+   "system": "a8b_r8",
+   "tags": [
+    "count",
+    "operating_metric",
+    "lookalike_column"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "WITNESSED",
+   "tier_reasons": [],
+   "reading": "arbiter and one reader agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "228,072 count",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "F",
+        "item": "hybrid vehicles sold in the U.S.",
+        "period": {
+         "fy": 2025
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "216,599 count",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "F",
+        "item": "hybrid vehicle sales in the United States",
+        "period": {
+         "fy": 2025
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": false
+    },
+    {
+     "role": "arbiter",
+     "model": "gemini:gemini-3.6-flash",
+     "answer": "228,072 count",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "F",
+        "item": "number of hybrid vehicles sold in the U.S.",
+        "period": {
+         "fy": 2025
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "228,072 count",
+    "tier": "WITNESSED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "228,072",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 228072.0
+    },
+    "facts_ok": true,
+    "cited": "F_FY2025_10K page 9",
+    "used": "repeats the served answer"
+   },
+   "llm_calls": 9,
+   "llm_live": 1,
+   "tokens_in": 19092,
+   "tokens_out": 962,
+   "llm_seconds": 54.88,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "gemini:gemini-3.6-flash",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 3,
+    "labels": 2,
+    "link": 4
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 5,
+    "ollama:tieout-planner-8b-v32": 1,
+    "gemini:gemini-3.1-flash-lite": 2,
+    "gemini:gemini-3.6-flash": 1
+   },
+   "live_by_model": {
+    "gemini:gemini-3.1-flash-lite": 1
+   }
+  },
+  {
+   "id": "W04",
+   "type": "single_fact",
+   "question": "What was Wells Fargo's credit card loan balance in its Consumer Banking and Lending segment at the end of 2025?",
+   "gold": "Credit Card loans in Consumer Banking and Lending were $54,059 million at period-end 2025 (the 2025 average was $51,027 million).",
+   "answer": "$54.059 billion",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 54059000000,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 1,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "leaves": [
+    {
+     "id": "WFC_FY2025_10K:p28:x12:r10:c0",
+     "doc": "WFC_FY2025_10K",
+     "page": 28,
+     "printed": "54,059"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "WFC",
+      "item": "Consumer Banking and Lending credit card loan balance",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "WFC FY2025 ends 2025-12-31"
+   ],
+   "learned": [],
+   "seconds": 0.01,
+   "system": "a8b_r8",
+   "tags": [
+    "balance_at_date",
+    "segment",
+    "average_vs_period_end"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "WITNESSED",
+   "tier_reasons": [],
+   "reading": "two readers agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "$54.059 billion",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "WFC",
+        "item": "Consumer Banking and Lending credit card loan balance",
+        "period": {
+         "fy": 2025
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "$54.059 billion",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "WFC",
+        "item": "Consumer Banking and Lending credit card loans",
+        "period": {
+         "fy": 2025
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "$54.059 billion",
+    "tier": "WITNESSED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "$54,059 million",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 54059.0
+    },
+    "facts_ok": true,
+    "cited": "WFC_FY2025_10K page 28",
+    "used": "repeats the served answer"
+   },
+   "llm_calls": 5,
+   "llm_live": 0,
+   "tokens_in": 11720,
+   "tokens_out": 690,
+   "llm_seconds": 21.12,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "gemini:gemini-3.6-flash",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 2,
+    "link": 3
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 2,
+    "ollama:tieout-planner-8b-v32": 1,
+    "gemini:gemini-3.1-flash-lite": 1,
+    "gemini:gemini-3.6-flash": 1
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "W05",
+   "type": "single_fact",
+   "question": "How much mortgage origination volume did JPMorgan Chase do firmwide in 2025?",
+   "gold": "Firmwide mortgage origination volume was $63.4 billion in 2025 (versus $52.8 billion for the CCB Home Lending channels alone).",
+   "answer": "$52.800 billion",
+   "correct": false,
+   "correct_final": false,
+   "correct_strict": false,
+   "pred": {
+    "kind": "number",
+    "value": 52800000000,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 0,
+    "gold": 1,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "leaves": [
+    {
+     "id": "JPM_FY2025_10K:p70:x27:r15:c0",
+     "doc": "JPM_FY2025_10K",
+     "page": 70,
+     "printed": "52.8"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "JPM",
+      "item": "mortgage origination volume",
+      "period": {
+       "fy": 2025
+      }
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "JPM FY2025 ends 2025-12-31",
+    "JPM item:total-mortgage-origination-volume@mortgage-origination-volume-by-channel FY2025: reading is not covered by any check"
+   ],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "JPM",
+     "concept": null,
+     "phrase": "mortgage origination volume",
+     "state": "flagged",
+     "label": "Total mortgage origination volume",
+     "doc": "JPM_FY2025_10K",
+     "page": 70,
+     "picked": "two readers agree"
+    }
+   ],
+   "seconds": 1.42,
+   "system": "a8b_r8",
+   "tags": [
+    "footnote_only",
+    "operating_metric",
+    "lookalike_line"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "JPM: the line was chosen by the linker from its words and its number is not inside a passing formula (JPM_FY2025_10K page 70)",
+    "JPM item:total-mortgage-origination-volume@mortgage-origination-volume-by-channel FY2025: reading is not covered by any check",
+    "second reading: a reader of the text answers '$63.4 billion' (JPM_FY2025_10K page 70)"
+   ],
+   "reading": "two readers agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "$52.800 billion",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "JPM",
+        "item": "mortgage origination volume",
+        "period": {
+         "fy": 2025
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": false
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "$52.800 billion",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "JPM",
+        "item": "mortgage origination volume",
+        "period": {
+         "fy": 2025
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": false
+    }
+   ],
+   "plan_road": {
+    "answer": "$52.800 billion",
+    "tier": "FLAGGED",
+    "correct": false
+   },
+   "passage": {
+    "answer": "$63.4 billion",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 63400000000.0
+    },
+    "facts_ok": true,
+    "cited": "JPM_FY2025_10K page 70",
+    "pointed": [
+     {
+      "phrase": "mortgage origination volume",
+      "id": "JPM_FY2025_10K:p70:x27:r15:c0",
+      "kind": "row",
+      "doc": "JPM_FY2025_10K",
+      "page": 70,
+      "label": "Total mortgage origination volume",
+      "printed": "52.8",
+      "cited": "JPM_FY2025_10K page 70"
+     }
+    ],
+    "used": "differs: not served"
+   },
+   "llm_calls": 4,
+   "llm_live": 0,
+   "tokens_in": 8455,
+   "tokens_out": 162,
+   "llm_seconds": 18.08,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 2,
+    "link": 2
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 2,
+    "gemini:gemini-3.1-flash-lite": 1,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "W06",
+   "type": "single_fact",
+   "question": "How many paid Creative Cloud subscribers did Adobe have at the end of fiscal 2025?",
+   "gold": "Adobe's fiscal 2025 10-K does not disclose a count of paid Creative Cloud subscribers or subscriptions; it reports revenue and ARR figures instead.",
+   "answer": "ABSTAIN: planner: Adobe does not disclose paid Creative Cloud subscriber counts in its SEC filings.",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "abstain",
+    "value": null,
+    "extra": {}
+   },
+   "abstained": true,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 0,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "leaves": [],
+   "plan": {
+    "steps": [],
+    "answer": null,
+    "cannot": "Adobe does not disclose paid Creative Cloud subscriber counts in its SEC filings."
+   },
+   "notes": [
+    "planner: Adobe does not disclose paid Creative Cloud subscriber counts in its SEC filings."
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "a8b_r8",
+   "tags": [
+    "unanswerable"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "ABSTAIN",
+   "tier_reasons": [],
+   "reading": "arbiter alone",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "ABSTAIN: no link yet for 'paid Creative Cloud subscribers' at ADBE",
+     "tier": "ABSTAIN",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "ADBE",
+        "item": "paid Creative Cloud subscribers",
+        "period": {
+         "fy": 2025
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "ABSTAIN: no link yet for 'Creative Cloud subscribers' at ADBE",
+     "tier": "ABSTAIN",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "ADBE",
+        "item": "Creative Cloud subscribers",
+        "period": {
+         "fy": 2025
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    },
+    {
+     "role": "arbiter",
+     "model": "gemini:gemini-3.6-flash",
+     "answer": "ABSTAIN: planner: Adobe does not disclose paid Creative Cloud subscriber counts in its SEC filings.",
+     "tier": "ABSTAIN",
+     "plan": {
+      "steps": [],
+      "answer": null,
+      "cannot": "Adobe does not disclose paid Creative Cloud subscriber counts in its SEC filings."
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "ABSTAIN: planner: Adobe does not disclose paid Creative Cloud subscriber counts in its SEC filings.",
+    "tier": "ABSTAIN",
+    "correct": true
+   },
+   "passage": {
+    "answer": "None",
+    "abstain": true,
+    "pred": {
+     "kind": "abstain",
+     "value": null
+    },
+    "facts_ok": false,
+    "cited": "its passages"
+   },
+   "llm_calls": 12,
+   "llm_live": 2,
+   "tokens_in": 24829,
+   "tokens_out": 1708,
+   "llm_seconds": 110.04,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "gemini:gemini-3.6-flash",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 4,
+    "labels": 2,
+    "link": 6
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 6,
+    "gemini:gemini-3.1-flash-lite": 2,
+    "gemini:gemini-3.6-flash": 3,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {
+    "gemini:gemini-3.1-flash-lite": 1,
+    "gemini:gemini-3.6-flash": 1
+   }
+  },
+  {
+   "id": "W08",
+   "type": "multi_hop",
+   "question": "Which of Citigroup's five businesses (Services, Markets, Banking, Wealth, U.S. Personal Banking) added the most revenue in dollars in 2025, and how much did it add?",
+   "gold": "Markets added the most: revenues rose from $19,836 million to $21,970 million, an increase of $2,134 million (Banking +2,014, Services +1,638, Wealth +1,076, USPB +916).",
+   "answer": "Markets ($2.134 billion)",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "lines",
+    "value": [
+     [
+      "Markets",
+      2134000000
+     ]
+    ],
+    "extra": {
+     "ranked": 7,
+     "lines": [
+      {
+       "ticker": "C",
+       "doc": "C_FY2025_10K",
+       "page": 28,
+       "label": "Markets",
+       "unit": "USD",
+       "cells": {
+        "FY2025": {
+         "id": "C_FY2025_10K:p28:x3:r1:c0",
+         "value": 21970000000,
+         "text": "21,970",
+         "ok": true
+        },
+        "FY2024": {
+         "id": "C_FY2025_10K:p28:x3:r1:c1",
+         "value": 19836000000,
+         "text": "19,836",
+         "ok": true
+        },
+        "FY2023": {
+         "id": "C_FY2025_10K:p28:x3:r1:c2",
+         "value": 18649000000,
+         "text": "18,649",
+         "ok": true
+        }
+       },
+       "grouped_by": "formula",
+       "witnessed": true
+      }
+     ]
+    }
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 14,
+    "matched_retrieved": 6,
+    "gold": 6,
+    "matched_gold": 6,
+    "page_exact": 6
+   },
+   "leaves": [
+    {
+     "id": "C_FY2025_10K:p28:x3:r0:c1",
+     "doc": "C_FY2025_10K",
+     "page": 28,
+     "printed": "19,618"
+    },
+    {
+     "id": "C_FY2025_10K:p28:x3:r0:c0",
+     "doc": "C_FY2025_10K",
+     "page": 28,
+     "printed": "21,256"
+    },
+    {
+     "id": "C_FY2025_10K:p28:x3:r1:c1",
+     "doc": "C_FY2025_10K",
+     "page": 28,
+     "printed": "19,836"
+    },
+    {
+     "id": "C_FY2025_10K:p28:x3:r1:c0",
+     "doc": "C_FY2025_10K",
+     "page": 28,
+     "printed": "21,970"
+    },
+    {
+     "id": "C_FY2025_10K:p28:x3:r2:c1",
+     "doc": "C_FY2025_10K",
+     "page": 28,
+     "printed": "6,201"
+    },
+    {
+     "id": "C_FY2025_10K:p28:x3:r2:c0",
+     "doc": "C_FY2025_10K",
+     "page": 28,
+     "printed": "8,215"
+    },
+    {
+     "id": "C_FY2025_10K:p28:x3:r3:c1",
+     "doc": "C_FY2025_10K",
+     "page": 28,
+     "printed": "7,483"
+    },
+    {
+     "id": "C_FY2025_10K:p28:x3:r3:c0",
+     "doc": "C_FY2025_10K",
+     "page": 28,
+     "printed": "8,559"
+    },
+    {
+     "id": "C_FY2025_10K:p28:x3:r4:c1",
+     "doc": "C_FY2025_10K",
+     "page": 28,
+     "printed": "20,055"
+    },
+    {
+     "id": "C_FY2025_10K:p28:x3:r4:c0",
+     "doc": "C_FY2025_10K",
+     "page": 28,
+     "printed": "20,971"
+    },
+    {
+     "id": "C_FY2025_10K:p28:x3:r5:c1",
+     "doc": "C_FY2025_10K",
+     "page": 28,
+     "printed": "7,503"
+    },
+    {
+     "id": "C_FY2025_10K:p28:x3:r5:c0",
+     "doc": "C_FY2025_10K",
+     "page": 28,
+     "printed": "4,430"
+    },
+    {
+     "id": "C_FY2025_10K:p28:x3:r6:c1",
+     "doc": "C_FY2025_10K",
+     "page": 28,
+     "printed": "26"
+    },
+    {
+     "id": "C_FY2025_10K:p28:x3:r6:c0",
+     "doc": "C_FY2025_10K",
+     "page": 28,
+     "printed": "(176)"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "members",
+      "company": "C",
+      "of": "revenue by segment",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "rank",
+      "over": "$s1",
+      "by": {
+       "delta": {
+        "value": true
+       }
+      },
+      "period": {
+       "fy": 2025
+      },
+      "order": "desc",
+      "k": 1
+     }
+    ],
+    "answer": "s2"
+   },
+   "notes": [],
+   "learned": [
+    {
+     "kind": "breakdown",
+     "ticker": "C",
+     "concept": null,
+     "phrase": "revenue by business",
+     "state": "rejected",
+     "label": null,
+     "doc": null,
+     "page": null,
+     "picked": null
+    }
+   ],
+   "seconds": 53.91,
+   "system": "a8b_r8",
+   "tags": [
+    "ranking",
+    "change",
+    "segment",
+    "trap_percent_vs_dollars"
+   ],
+   "repaired": true,
+   "plan_errors": [],
+   "tier": "WITNESSED",
+   "tier_reasons": [],
+   "reading": "arbiter and one reader agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "Markets ($2.134 billion)",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "members",
+        "company": "C",
+        "of": "Services, Markets, Banking, Wealth, U.S. Personal Banking revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "rank",
+        "over": "$s1",
+        "by": {
+         "delta": {
+          "value": true
+         }
+        },
+        "period": {
+         "fy": 2025
+        },
+        "order": "desc",
+        "k": 1
+       }
+      ],
+      "answer": "s2"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "ABSTAIN: no breakdown linked yet for 'revenue by business' at C",
+     "tier": "ABSTAIN",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "members",
+        "company": "C",
+        "of": "revenue by business",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "rank",
+        "over": "$s1",
+        "by": {
+         "delta": {
+          "value": true
+         }
+        },
+        "period": {
+         "fy": 2025
+        },
+        "order": "desc",
+        "k": 1
+       }
+      ],
+      "answer": "s2"
+     },
+     "correct": false
+    },
+    {
+     "role": "arbiter",
+     "model": "gemini:gemini-3.6-flash",
+     "answer": "Markets ($2.134 billion)",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "members",
+        "company": "C",
+        "of": "revenue by segment",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "rank",
+        "over": "$s1",
+        "by": {
+         "delta": {
+          "value": true
+         }
+        },
+        "period": {
+         "fy": 2025
+        },
+        "order": "desc",
+        "k": 1
+       }
+      ],
+      "answer": "s2"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "Markets ($2.134 billion)",
+    "tier": "WITNESSED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "Banking added the most revenue in dollars in 2025 among Citigroup's five businesses, adding 2,014 million dollars ($2,014,000,000 or $2.014 billion).",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 2014000000.0
+    },
+    "facts_ok": true,
+    "cited": "C_FY2025_10K page 28",
+    "used": "differs; the arbiter had already sided with a planner"
+   },
+   "llm_calls": 12,
+   "llm_live": 0,
+   "tokens_in": 30685,
+   "tokens_out": 4239,
+   "llm_seconds": 128.08,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "gemini:gemini-3.6-flash",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 4,
+    "breakdown": 8
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 4,
+    "gemini:gemini-3.1-flash-lite": 3,
+    "ollama:tieout-planner-8b-v32": 1,
+    "gemini:gemini-3.6-flash": 4
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "W09",
+   "type": "multi_hop",
+   "question": "What share of Cisco's fiscal 2026 gross profit came from services?",
+   "gold": "Services gross margin was $10,346 million out of total gross margin of $40,860 million, about 25.32%.",
+   "answer": "25.32%",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 0.25320606950562896,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 1
+   },
+   "leaves": [
+    {
+     "id": "CSCO_FY2026_10K:p58:x12:r1:c0",
+     "doc": "CSCO_FY2026_10K",
+     "page": 58,
+     "printed": "10,346"
+    },
+    {
+     "id": "CSCO_FY2026_10K:p76:IS:r6:c0",
+     "doc": "CSCO_FY2026_10K",
+     "page": 76,
+     "printed": "40,860"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "CSCO",
+      "item": "Services gross profit",
+      "period": {
+       "fy": 2026
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "CSCO",
+      "concept": "GrossProfit",
+      "period": {
+       "fy": 2026
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 / s2"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "CSCO FY2026 ends 2026-07-25"
+   ],
+   "learned": [],
+   "seconds": 0.01,
+   "system": "a8b_r8",
+   "tags": [
+    "share_of_total",
+    "mdna_table"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "WITNESSED",
+   "tier_reasons": [],
+   "reading": "arbiter and one reader agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "25.32%",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "CSCO",
+        "item": "services gross profit",
+        "period": {
+         "fy": 2026
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "CSCO",
+        "concept": "GrossProfit",
+        "period": {
+         "fy": 2026
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "23.73%",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "CSCO",
+        "concept": "Revenue",
+        "period": {
+         "fy": 2026
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "CSCO",
+        "item": "services revenue",
+        "period": {
+         "fy": 2026
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s2 / s1"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": false
+    },
+    {
+     "role": "arbiter",
+     "model": "gemini:gemini-3.6-flash",
+     "answer": "25.32%",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "CSCO",
+        "item": "Services gross profit",
+        "period": {
+         "fy": 2026
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "CSCO",
+        "concept": "GrossProfit",
+        "period": {
+         "fy": 2026
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "25.32%",
+    "tier": "WITNESSED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "0.25320582476749877",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 0.25320582476749876
+    },
+    "facts_ok": true,
+    "cited": "CSCO_FY2026_10K page 58",
+    "used": "repeats the served answer"
+   },
+   "llm_calls": 9,
+   "llm_live": 0,
+   "tokens_in": 20537,
+   "tokens_out": 1061,
+   "llm_seconds": 77.35,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "gemini:gemini-3.6-flash",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 4,
+    "labels": 1,
+    "link": 4
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 5,
+    "gemini:gemini-3.1-flash-lite": 2,
+    "ollama:tieout-planner-8b-v32": 1,
+    "gemini:gemini-3.6-flash": 1
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "W10",
+   "type": "multi_hop",
+   "question": "Pfizer books most of its revenue in the U.S. What share of its 2025 pre-tax income from continuing operations was earned in the United States?",
+   "gold": "U.S. income before taxes was $776 million out of $7,520 million total, about 10.32%.",
+   "answer": "10.32%",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 0.10319148936170212,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 1
+   },
+   "leaves": [
+    {
+     "id": "PFE_FY2025_10K:p77:x31:r0:c0",
+     "doc": "PFE_FY2025_10K",
+     "page": 77,
+     "printed": "776"
+    },
+    {
+     "id": "PFE_FY2025_10K:p58:IS:r11:c0",
+     "doc": "PFE_FY2025_10K",
+     "page": 58,
+     "printed": "7,520"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "PFE",
+      "item": "U.S. income before provision for taxes on income",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "PFE",
+      "concept": "PretaxIncome",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 / s2"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "PFE FY2025 ends 2025-12-31"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "a8b_r8",
+   "tags": [
+    "share_of_total",
+    "tax_note",
+    "geography"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "CORROBORATED",
+   "tier_reasons": [
+    "a second method repeats this figure: a reader of the text read it in PFE_FY2025_10K page 77",
+    "PFE PretaxIncome: the row 'Income from continuing operations before' was bound to the concept by one model's proposal (learned:T023), admitted by the structural gate; no second model made the same binding (PFE_FY2025_10K page 58)"
+   ],
+   "reading": "arbiter and one reader agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "10.32%",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "PFE",
+        "item": "U.S. income before provision for taxes on income from continuing operations",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "PFE",
+        "concept": "PretaxIncome",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "168.78%",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "PFE",
+        "concept": "Revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "PFE",
+        "item": "United States revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": false
+    },
+    {
+     "role": "arbiter",
+     "model": "gemini:gemini-3.6-flash",
+     "answer": "10.32%",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "PFE",
+        "item": "U.S. income before provision for taxes on income",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "PFE",
+        "concept": "PretaxIncome",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "10.32%",
+    "tier": "FLAGGED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "0.103191",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 0.10319148936170212
+    },
+    "facts_ok": true,
+    "cited": "PFE_FY2025_10K page 77",
+    "used": "repeats the served answer"
+   },
+   "llm_calls": 8,
+   "llm_live": 1,
+   "tokens_in": 17243,
+   "tokens_out": 1478,
+   "llm_seconds": 31.29,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "gemini:gemini-3.6-flash",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 3,
+    "labels": 1,
+    "link": 4
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 4,
+    "gemini:gemini-3.1-flash-lite": 2,
+    "ollama:tieout-planner-8b-v32": 1,
+    "gemini:gemini-3.6-flash": 1
+   },
+   "live_by_model": {
+    "gemini:gemini-3.1-flash-lite": 1
+   }
+  },
+  {
+   "id": "W11",
+   "type": "multi_hop",
+   "question": "What gross margin did Adobe earn on its subscription revenue in fiscal 2025?",
+   "gold": "Subscription revenue was $22,904 million and cost of subscription revenue $2,027 million, so subscription gross margin was (22,904 - 2,027) / 22,904, about 91.15%.",
+   "answer": "91.15%",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 0.911500174641984,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 0
+   },
+   "leaves": [
+    {
+     "id": "ADBE_FY2025_10K:p48:IS:r0:c0",
+     "doc": "ADBE_FY2025_10K",
+     "page": 48,
+     "printed": "22,904"
+    },
+    {
+     "id": "ADBE_FY2025_10K:p48:IS:r4:c0",
+     "doc": "ADBE_FY2025_10K",
+     "page": 48,
+     "printed": "2,027"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "ADBE",
+      "item": "subscription revenue",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "ADBE",
+      "item": "cost of subscription revenue",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "(s1 - abs(s2)) / s1"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "ADBE FY2025 ends 2025-11-28",
+    "second reading: a line with the same label 'Subscription' is printed on page 37 of ADBE_FY2025_10K under another heading with a different figure, and the words asked for do not tell the two apart"
+   ],
+   "learned": [
+    {
+     "kind": "item",
+     "ticker": "ADBE",
+     "concept": null,
+     "phrase": "cost of subscription revenue",
+     "state": "active",
+     "label": "Subscription",
+     "doc": "ADBE_FY2025_10K",
+     "page": 48,
+     "picked": "two readers agree"
+    }
+   ],
+   "seconds": 0.2,
+   "system": "a8b_r8",
+   "tags": [
+    "margin",
+    "difference_of_lines",
+    "mdna_table"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "CORROBORATED",
+   "tier_reasons": [
+    "a second method repeats this figure: a reader of the text read it in ADBE_FY2025_10K page 35",
+    "the planners read the question differently; this reading has no second witness",
+    "ADBE: the line was chosen by the linker from its words and one model alone; the arithmetic confirms the number, not that it is the line asked for (ADBE_FY2025_10K page 48)",
+    "second reading: a line with the same label 'Subscription' is printed on page 37 of ADBE_FY2025_10K under another heading with a different figure, and the words asked for do not tell the two apart"
+   ],
+   "reading": "arbiter alone",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "89.27%",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "ADBE",
+        "concept": "GrossProfit",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "ADBE",
+        "item": "Total subscription revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "get",
+        "company": "ADBE",
+        "concept": "Revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s4",
+        "op": "calc",
+        "expr": "s1 * (s2 / s3)"
+       },
+       {
+        "id": "s5",
+        "op": "calc",
+        "expr": "s4 / s2"
+       }
+      ],
+      "answer": "s5"
+     },
+     "correct": false
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "96.36%",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "ADBE",
+        "item": "subscription revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "ADBE",
+        "concept": "Revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": false
+    },
+    {
+     "role": "arbiter",
+     "model": "gemini:gemini-3.6-flash",
+     "answer": "91.15%",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "ADBE",
+        "item": "subscription revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "ADBE",
+        "item": "cost of subscription revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "(s1 - abs(s2)) / s1"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "91.15%",
+    "tier": "FLAGGED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "0.9112862382",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 0.9112862382203982
+    },
+    "facts_ok": true,
+    "cited": "ADBE_FY2025_10K page 35",
+    "used": "repeats the served answer"
+   },
+   "llm_calls": 12,
+   "llm_live": 0,
+   "tokens_in": 28887,
+   "tokens_out": 2190,
+   "llm_seconds": 42.09,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "gemini:gemini-3.6-flash",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 4,
+    "labels": 1,
+    "link": 7
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 6,
+    "gemini:gemini-3.1-flash-lite": 3,
+    "gemini:gemini-3.6-flash": 2,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "W12",
+   "type": "multi_hop",
+   "question": "Adding up its consumer credit, consumer debit and prepaid, and commercial programs, what was Mastercard's total gross dollar volume in 2025?",
+   "gold": "GDV was $3,878 billion + $5,349 billion + $1,405 billion = $10,632 billion (about $10.6 trillion, matching the highlights page).",
+   "answer": "$10,632.000 billion",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 10632000000000,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 3,
+    "matched_retrieved": 3,
+    "gold": 3,
+    "matched_gold": 3,
+    "page_exact": 3
+   },
+   "leaves": [
+    {
+     "id": "MA_FY2025_10K:p7:x0:r0:c0",
+     "doc": "MA_FY2025_10K",
+     "page": 7,
+     "printed": "3,878"
+    },
+    {
+     "id": "MA_FY2025_10K:p7:x0:r1:c0",
+     "doc": "MA_FY2025_10K",
+     "page": 7,
+     "printed": "5,349"
+    },
+    {
+     "id": "MA_FY2025_10K:p7:x0:r2:c0",
+     "doc": "MA_FY2025_10K",
+     "page": 7,
+     "printed": "1,405"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "MA",
+      "item": "consumer credit gross dollar volume",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "MA",
+      "item": "consumer debit and prepaid gross dollar volume",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s3",
+      "op": "get",
+      "company": "MA",
+      "item": "commercial programs gross dollar volume",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s4",
+      "op": "calc",
+      "expr": "s1 + s2 + s3"
+     }
+    ],
+    "answer": "s4"
+   },
+   "notes": [
+    "MA item:consumer-credit@business-the-following-chart-provides-gross-doll#gdv-in-billions *: reading is not covered by any check",
+    "MA 'consumer credit gross dollar volume': the source prints no period column for this figure",
+    "MA item:consumer-debit-and-prepaid-2@business-the-following-chart-provides-gross-doll#gdv-in-billions *: reading is not covered by any check",
+    "MA 'consumer debit and prepaid gross dollar volume': the source prints no period column for this figure",
+    "MA item:commercial-credit-and-debit@business-the-following-chart-provides-gross-doll#gdv-in-billions *: reading is not covered by any check",
+    "MA 'commercial programs gross dollar volume': the source prints no period column for this figure"
+   ],
+   "learned": [],
+   "seconds": 0.01,
+   "system": "a8b_r8",
+   "tags": [
+    "sum",
+    "operating_metric",
+    "volume"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "CORROBORATED",
+   "tier_reasons": [
+    "a second method repeats this figure: a reader of the text read it in MA_FY2025_10K page 7",
+    "MA: the line was chosen by the linker from its words and its number is not inside a passing formula (MA_FY2025_10K page 7)",
+    "MA item:consumer-credit@business-the-following-chart-provides-gross-doll#gdv-in-billions *: reading is not covered by any check",
+    "MA 'consumer credit gross dollar volume': the source prints no period column for this figure"
+   ],
+   "reading": "arbiter and one reader agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "$10,632.000 billion",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "MA",
+        "item": "consumer credit gross dollar volume",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "MA",
+        "item": "consumer debit and prepaid gross dollar volume",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "get",
+        "company": "MA",
+        "item": "commercial programs gross dollar volume",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s4",
+        "op": "calc",
+        "expr": "s1 + s2 + s3"
+       }
+      ],
+      "answer": "s4"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "ABSTAIN: no link yet for 'total gross dollar volume' at MA",
+     "tier": "ABSTAIN",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "MA",
+        "item": "total gross dollar volume",
+        "period": {
+         "fy": 2025
+        }
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": false
+    },
+    {
+     "role": "arbiter",
+     "model": "gemini:gemini-3.6-flash",
+     "answer": "$10,632.000 billion",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "MA",
+        "item": "consumer credit gross dollar volume",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "MA",
+        "item": "consumer debit and prepaid gross dollar volume",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "get",
+        "company": "MA",
+        "item": "commercial programs gross dollar volume",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s4",
+        "op": "calc",
+        "expr": "s1 + s2 + s3"
+       }
+      ],
+      "answer": "s4"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "$10,632.000 billion",
+    "tier": "FLAGGED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "$10,632,000,000,000",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 10632000000000.0
+    },
+    "facts_ok": true,
+    "cited": "MA_FY2025_10K page 7",
+    "used": "repeats the served answer"
+   },
+   "llm_calls": 12,
+   "llm_live": 2,
+   "tokens_in": 26233,
+   "tokens_out": 3118,
+   "llm_seconds": 113.73,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "gemini:gemini-3.6-flash",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 3,
+    "link": 9
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 5,
+    "gemini:gemini-3.1-flash-lite": 4,
+    "ollama:tieout-planner-8b-v32": 1,
+    "gemini:gemini-3.6-flash": 2
+   },
+   "live_by_model": {
+    "gemini:gemini-3.1-flash-lite": 1,
+    "gemini:gemini-3.6-flash": 1
+   }
+  },
+  {
+   "id": "W13",
+   "type": "cross_filing",
+   "question": "At the end of 2025, rank Coca-Cola, Mastercard and American Express by the share of their employees based outside the United States, highest first.",
+   "gold": "Coca-Cola about 86.5% (57,000 of 65,900 outside the U.S.), Mastercard about 70% (printed), American Express about 66.3% (50,900 of 76,800).",
+   "answer": "AXP (76,800 employees), KO (65,900 employees), MA (39,800 employees); first minus last 37,000 employees",
+   "correct": false,
+   "correct_final": false,
+   "correct_strict": false,
+   "pred": {
+    "kind": "companies",
+    "value": [
+     [
+      "AXP",
+      76800
+     ],
+     [
+      "KO",
+      65900
+     ],
+     [
+      "MA",
+      39800
+     ]
+    ],
+    "extra": {
+     "ranked": 3,
+     "lines": [],
+     "gap": 10900,
+     "spread": 37000
+    }
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 3,
+    "matched_retrieved": 2,
+    "gold": 5,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "leaves": [
+    {
+     "id": "KO_FY2025_10K:text:employees",
+     "doc": "KO_FY2025_10K",
+     "page": 12,
+     "printed": "As of December 31, 2025 and 2024, our Company had approximately 65,900 and 69,700 employees, respectively, of which approximately 8,900 were located in the Unit"
+    },
+    {
+     "id": "MA_FY2025_10K:text:employees",
+     "doc": "MA_FY2025_10K",
+     "page": 17,
+     "printed": "Our People As of December 31, 2025, we employed approximately 39,800 persons globally, of which approximately 70% were employed outside of the U.S. in more than"
+    },
+    {
+     "id": "AXP_FY2025_10K:text:employees",
+     "doc": "AXP_FY2025_10K",
+     "page": 9,
+     "printed": "As of December 31, 2025, we employed approximately 76,800 people, whom we refer to as colleagues, with approximately 25,900 colleagues in the United States and "
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "rank",
+      "over": [
+       "KO",
+       "MA",
+       "AXP"
+      ],
+      "by": {
+       "attr": "employees"
+      },
+      "period": {
+       "fy": 2025
+      },
+      "order": "desc",
+      "k": 3
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "a8b_r8",
+   "tags": [
+    "ranking",
+    "count",
+    "sentence_only",
+    "human_capital"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "the planners read the question differently; this reading has no second witness",
+    "KO employees: stated in a sentence only (KO_FY2025_10K page 12)",
+    "MA employees: stated in a sentence only (MA_FY2025_10K page 17)",
+    "AXP employees: stated in a sentence only (AXP_FY2025_10K page 9)"
+   ],
+   "reading": "one reader only",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "ABSTAIN: cannot rank the named companies: no fact for MA, AXP",
+     "tier": "ABSTAIN",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "rank",
+        "over": [
+         "KO",
+         "MA",
+         "AXP"
+        ],
+        "by": {
+         "item": "percentage of employees based outside the United States"
+        },
+        "period": {
+         "fy": 2025
+        },
+        "order": "desc",
+        "k": 3
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": false
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "AXP (76,800 employees), KO (65,900 employees), MA (39,800 employees); first minus last 37,000 employees",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "rank",
+        "over": [
+         "KO",
+         "MA",
+         "AXP"
+        ],
+        "by": {
+         "attr": "employees"
+        },
+        "period": {
+         "fy": 2025
+        },
+        "order": "desc",
+        "k": 3
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": false
+    },
+    {
+     "role": "arbiter",
+     "model": "gemini:gemini-3.6-flash",
+     "answer": "ABSTAIN: cannot rank the named companies: no fact for MA",
+     "tier": "ABSTAIN",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "rank",
+        "over": [
+         "KO",
+         "MA",
+         "AXP"
+        ],
+        "by": {
+         "ratio": [
+          {
+           "item": "employees outside the United States"
+          },
+          {
+           "item": "total employees"
+          }
+         ]
+        },
+        "period": {
+         "fy": 2025
+        },
+        "order": "desc",
+        "k": 3
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": false
+    }
+   ],
+   "plan_road": {
+    "answer": "AXP (76,800 employees), KO (65,900 employees), MA (39,800 employees); first minus last 37,000 employees",
+    "tier": "FLAGGED",
+    "correct": false
+   },
+   "passage": {
+    "answer": "American Express, Coca-Cola",
+    "abstain": false,
+    "pred": {
+     "kind": "companies",
+     "value": [
+      [
+       "American Express",
+       null
+      ],
+      [
+       "The Coca-Cola Company",
+       null
+      ]
+     ]
+    },
+    "facts_ok": true,
+    "cited": "KO_FY2025_10K page 12",
+    "used": "differs: not served"
+   },
+   "llm_calls": 34,
+   "llm_live": 0,
+   "tokens_in": 64843,
+   "tokens_out": 6463,
+   "llm_seconds": 236.78,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "gemini:gemini-3.6-flash",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 5,
+    "labels": 6,
+    "link": 23
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 18,
+    "gemini:gemini-3.1-flash-lite": 10,
+    "gemini:gemini-3.6-flash": 5,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "W14",
+   "type": "cross_filing",
+   "question": "By what percentage did the Coca-Cola system's unit case volume grow from 2023 to 2025?",
+   "gold": "Unit cases rose from 33.3 billion in 2023 (2024 10-K) to 33.8 billion in 2025 (2025 10-K), growth of about 1.50%.",
+   "answer": "1.50%",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 0.015015015015015015,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 0,
+    "gold": 2,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "leaves": [
+    {
+     "id": "KO_FY2024_10K:p47:s1:n2",
+     "doc": "KO_FY2024_10K",
+     "page": 47,
+     "printed": "33.3 billion"
+    },
+    {
+     "id": "KO_FY2025_10K:p47:s0:n1",
+     "doc": "KO_FY2025_10K",
+     "page": 47,
+     "printed": "33.8 billion"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "KO",
+      "item": "unit case volume",
+      "from": {
+       "fy": 2023
+      },
+      "to": {
+       "fy": 2025
+      },
+      "mode": "pct"
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "a8b_r8",
+   "tags": [
+    "older_report_only",
+    "physical_unit",
+    "growth",
+    "sentence_only"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "CORROBORATED",
+   "tier_reasons": [
+    "asked for each line of this plan on its own, a reader of the text points at lines that give the same answer",
+    "KO: the line was chosen by the linker from its words and its number is not inside a passing formula (KO_FY2024_10K page 47)",
+    "KO: the line was chosen by the linker from its words and its number is not inside a passing formula (KO_FY2025_10K page 47)"
+   ],
+   "reading": "two readers agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "1.50%",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "change",
+        "company": "KO",
+        "item": "unit case volume",
+        "from": {
+         "fy": 2023
+        },
+        "to": {
+         "fy": 2025
+        },
+        "mode": "pct"
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "1.50%",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "change",
+        "company": "KO",
+        "item": "unit case volume",
+        "from": {
+         "fy": 2023
+        },
+        "to": {
+         "fy": 2025
+        },
+        "mode": "pct"
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "1.50%",
+    "tier": "FLAGGED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "The provided passages do not contain data for unit case volume in the year 2025 (only up to 2024 in the relevant context, or 2025 compared to 2024 rather than 2023 to 2025 growth).",
+    "abstain": true,
+    "pred": {
+     "kind": "abstain",
+     "value": null
+    },
+    "facts_ok": false,
+    "cited": "its passages",
+    "pointed": [
+     {
+      "phrase": "unit case volume",
+      "id": "KO_FY2024_10K:p7:s2:n2",
+      "kind": "sentence",
+      "doc": "KO_FY2024_10K",
+      "page": 7,
+      "label": "The Coca-Cola system sold 33.7 billion and 33.3 billion unit cases of our products in 2024 and 2023, respectively.",
+      "printed": "33.3 billion",
+      "cited": "KO_FY2024_10K page 7"
+     },
+     {
+      "phrase": "unit case volume",
+      "id": "KO_FY2025_10K:p7:s2:n1",
+      "kind": "sentence",
+      "doc": "KO_FY2025_10K",
+      "page": 7,
+      "label": "The Coca-Cola system sold 33.8 billion and 33.7 billion unit cases of our products in 2025 and 2024, respectively.",
+      "printed": "33.8 billion",
+      "cited": "KO_FY2025_10K page 7"
+     }
+    ],
+    "used": "the pointed lines repeat the served answer"
+   },
+   "llm_calls": 2,
+   "llm_live": 0,
+   "tokens_in": 3156,
+   "tokens_out": 102,
+   "llm_seconds": 2.66,
+   "models": [
+    "gemini:gemini-3.5-flash-lite",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 2
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "W15",
+   "type": "cross_filing",
+   "question": "Which earned more before income taxes in 2025: JPMorgan Chase's Asset & Wealth Management segment or all of BlackRock, and by how much?",
+   "gold": "JPMorgan's AWM segment earned $8,644 million before income tax versus BlackRock's $7,619 million income before income taxes, so AWM was larger by $1,025 million.",
+   "answer": "JPM ($8.644 billion), BLK ($7.619 billion); difference $1.025 billion",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "companies",
+    "value": [
+     [
+      "JPM",
+      8644000000
+     ],
+     [
+      "BLK",
+      7619000000
+     ]
+    ],
+    "extra": {
+     "ranked": 2,
+     "gap": 1025000000
+    }
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 1
+   },
+   "leaves": [
+    {
+     "id": "JPM_FY2025_10K:p310:x245:r7:c6",
+     "doc": "JPM_FY2025_10K",
+     "page": 310,
+     "printed": "8,644"
+    },
+    {
+     "id": "BLK_FY2025_10K:p80:IS:r23:c0",
+     "doc": "BLK_FY2025_10K",
+     "page": 80,
+     "printed": "7,619"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "JPM",
+      "item": "Asset & Wealth Management income before income taxes",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "BLK",
+      "concept": "PretaxIncome",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s3",
+      "op": "compare",
+      "of": [
+       "s1",
+       "s2"
+      ],
+      "order": "desc"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "JPM FY2025 ends 2025-12-31",
+    "BLK FY2025 ends 2025-12-31"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "a8b_r8",
+   "tags": [
+    "segment_vs_whole",
+    "comparison",
+    "difference"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "WITNESSED",
+   "tier_reasons": [],
+   "reading": "arbiter and one reader agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "JPM ($8.644 billion), BLK ($7.619 billion); difference $1.025 billion",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "JPM",
+        "item": "Asset & Wealth Management income before income tax expense",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "BLK",
+        "concept": "PretaxIncome",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "compare",
+        "of": [
+         "s1",
+         "s2"
+        ],
+        "order": "desc"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "Income From Operations ($1,008.396 billion), Asset & Wealth Management earnings before income taxes ($8.644 billion); difference $999.752 billion",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "JPM",
+        "item": "Asset & Wealth Management earnings before income taxes",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "agg",
+        "company": "BLK",
+        "by": {
+         "item": "Income From Operations"
+        },
+        "period": {
+         "fy": 2025
+        },
+        "fn": "sum"
+       },
+       {
+        "id": "s3",
+        "op": "compare",
+        "of": [
+         "s1",
+         "s2"
+        ],
+        "order": "desc"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": false
+    },
+    {
+     "role": "arbiter",
+     "model": "gemini:gemini-3.6-flash",
+     "answer": "JPM ($8.644 billion), BLK ($7.619 billion); difference $1.025 billion",
+     "tier": "WITNESSED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "JPM",
+        "item": "Asset & Wealth Management income before income taxes",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "BLK",
+        "concept": "PretaxIncome",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "compare",
+        "of": [
+         "s1",
+         "s2"
+        ],
+        "order": "desc"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "JPM ($8.644 billion), BLK ($7.619 billion); difference $1.025 billion",
+    "tier": "WITNESSED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "JPMorgan Chase's Asset & Wealth Management segment earned more before income taxes in 2025 by $1287 million ($1.287 billion).",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 1287000000.0
+    },
+    "facts_ok": true,
+    "cited": "JPM_FY2025_10K page 78",
+    "used": "differs; the arbiter had already sided with a planner"
+   },
+   "llm_calls": 91,
+   "llm_live": 44,
+   "tokens_in": 222325,
+   "tokens_out": 6159,
+   "llm_seconds": 279.96,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "gemini:gemini-3.6-flash",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 3,
+    "link": 87,
+    "labels": 1
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 44,
+    "gemini:gemini-3.1-flash-lite": 42,
+    "ollama:tieout-planner-8b-v32": 1,
+    "gemini:gemini-3.6-flash": 4
+   },
+   "live_by_model": {
+    "gemini:gemini-3.1-flash-lite": 41,
+    "gemini:gemini-3.6-flash": 3
+   }
+  },
+  {
+   "id": "W16",
+   "type": "cross_filing",
+   "question": "How much did Bank of America's total deposits change during the fourth quarter of 2025, from September 30 to December 31, 2025?",
+   "gold": "Period-end deposits rose from $2,002,208 million at September 30, 2025 (Q3 10-Q) to $2,018,729 million at December 31, 2025 (10-K), an increase of $16,521 million.",
+   "answer": "$16.521 billion",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": true,
+   "pred": {
+    "kind": "number",
+    "value": 16521000000,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 2,
+    "matched_gold": 2,
+    "page_exact": 0
+   },
+   "leaves": [
+    {
+     "id": "BAC_FY2025_Q3_10Q:p51:BS:r23:c1",
+     "doc": "BAC_FY2025_Q3_10Q",
+     "page": 51,
+     "printed": "2,002,208"
+    },
+    {
+     "id": "BAC_FY2025_10K:p94:BS:r23:c1",
+     "doc": "BAC_FY2025_10K",
+     "page": 94,
+     "printed": "2,018,729"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "change",
+      "company": "BAC",
+      "concept": "Deposits",
+      "from": {
+       "fy": 2025,
+       "q": 3
+      },
+      "to": {
+       "fy": 2025,
+       "q": 4
+      },
+      "mode": "abs"
+     }
+    ],
+    "answer": "s1"
+   },
+   "notes": [
+    "BAC FY2025Q3@end ends 2025-09-30",
+    "BAC FY2025@end ends 2025-12-31"
+   ],
+   "learned": [],
+   "seconds": 0.01,
+   "system": "a8b_r8",
+   "tags": [
+    "balance_at_date",
+    "10k_plus_10q",
+    "change",
+    "average_vs_period_end"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "VERIFIED",
+   "tier_reasons": [],
+   "reading": "two readers agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "$16.521 billion",
+     "tier": "VERIFIED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "change",
+        "company": "BAC",
+        "concept": "Deposits",
+        "from": {
+         "fy": 2025,
+         "q": 3
+        },
+        "to": {
+         "fy": 2025,
+         "q": 4
+        },
+        "mode": "abs"
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "$16.521 billion",
+     "tier": "VERIFIED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "change",
+        "company": "BAC",
+        "concept": "Deposits",
+        "from": {
+         "fy": 2025,
+         "q": 3
+        },
+        "to": {
+         "fy": 2025,
+         "q": 4
+        },
+        "mode": "abs"
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "$16.521 billion",
+    "tier": "VERIFIED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "Bank of America's total deposits were $2.02 trillion as of December 31, 2025 (from the 10-K for fiscal year 2025, page 59) and $949,100 million ($949.1 billion) as of September 30, 2025 (from the 10-Q for the period ended September 30, 2025, page 13). However, because total deposits at September 30 from the Q3 10-Q only reflect a segment or specific table rather than the full consolidated period-end total deposits (which are reported as $1.97 trillion at December 31, 2024 and $2.02 trillion at December 31, 2025 in the 10-K), the exact consolidated deposit figure for September 30, 2025 is not provided in a comparable format to compute the exact change for the fourth quarter.",
+    "abstain": true,
+    "pred": {
+     "kind": "abstain",
+     "value": null
+    },
+    "facts_ok": true,
+    "cited": "BAC_FY2025_10K page 59"
+   },
+   "llm_calls": 2,
+   "llm_live": 0,
+   "tokens_in": 3228,
+   "tokens_out": 117,
+   "llm_seconds": 5.3,
+   "models": [
+    "gemini:gemini-3.5-flash-lite",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 2
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {}
+  },
+  {
+   "id": "W17",
+   "type": "cross_filing",
+   "question": "In 2025, how many more barrels per day did ExxonMobil's U.S. refineries process than Chevron's U.S. refineries?",
+   "gold": "ExxonMobil U.S. refinery throughput was 1,927 thousand barrels per day versus Chevron's 1,038 thousand barrels per day of U.S. crude unit inputs, a gap of 889 thousand barrels per day in ExxonMobil's favour.",
+   "answer": "889,000 count",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": false,
+   "pred": {
+    "kind": "number",
+    "value": 889000,
+    "extra": {}
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 0,
+    "gold": 2,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "leaves": [
+    {
+     "id": "XOM_FY2025_10K:p53:x35:r0:c0",
+     "doc": "XOM_FY2025_10K",
+     "page": 53,
+     "printed": "1,927"
+    },
+    {
+     "id": "CVX_FY2025_10K:p47:x17:r26:c0",
+     "doc": "CVX_FY2025_10K",
+     "page": 47,
+     "printed": "1,038"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "XOM",
+      "item": "U.S. refinery crude throughput",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "CVX",
+      "item": "U.S. refinery crude throughput",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 - s2"
+     }
+    ],
+    "answer": "s3"
+   },
+   "notes": [
+    "XOM FY2025 ends 2025-12-31",
+    "XOM item:united-states@refinery-throughput FY2025: reading is not covered by any check",
+    "second reading: a line with the same label 'United States' is printed on page 31 of XOM_FY2025_10K under another heading with a different figure, and the words asked for do not tell the two apart",
+    "CVX FY2025 ends 2025-12-31",
+    "CVX item:refinery-crude-unit-inputs8-mbd@u-s-downstream FY2025: reading is not covered by any check"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "a8b_r8",
+   "tags": [
+    "physical_unit",
+    "two_companies",
+    "difference"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "CORROBORATED",
+   "tier_reasons": [
+    "a second method repeats this figure: a reader of the text read it in XOM_FY2025_10K page 31",
+    "XOM: the line was chosen by the linker from its words and its number is not inside a passing formula (XOM_FY2025_10K page 53)",
+    "CVX: the line was chosen by the linker from its words and its number is not inside a passing formula (CVX_FY2025_10K page 47)",
+    "XOM item:united-states@refinery-throughput FY2025: reading is not covered by any check"
+   ],
+   "reading": "arbiter and one reader agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "889,000 count",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "XOM",
+        "item": "U.S. refinery throughput barrels per day",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "CVX",
+        "item": "U.S. refinery net input barrels per day",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 - s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "ABSTAIN: no link yet for 'U.S. refinery throughput' at XOM",
+     "tier": "ABSTAIN",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "XOM",
+        "item": "U.S. refinery throughput",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "CVX",
+        "item": "U.S. refinery throughput",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 - s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": false
+    },
+    {
+     "role": "arbiter",
+     "model": "gemini:gemini-3.6-flash",
+     "answer": "889,000 count",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "XOM",
+        "item": "U.S. refinery crude throughput",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "CVX",
+        "item": "U.S. refinery crude throughput",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 - s2"
+       }
+      ],
+      "answer": "s3"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "889,000 count",
+    "tier": "FLAGGED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "889,000 barrels per day",
+    "abstain": false,
+    "pred": {
+     "kind": "number",
+     "value": 889000.0
+    },
+    "facts_ok": true,
+    "cited": "XOM_FY2025_10K page 31",
+    "used": "repeats the served answer"
+   },
+   "llm_calls": 16,
+   "llm_live": 2,
+   "tokens_in": 40759,
+   "tokens_out": 3440,
+   "llm_seconds": 128.34,
+   "models": [
+    "gemini:gemini-3.1-flash-lite",
+    "gemini:gemini-3.5-flash-lite",
+    "gemini:gemini-3.6-flash",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 4,
+    "labels": 2,
+    "link": 10
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 8,
+    "gemini:gemini-3.1-flash-lite": 4,
+    "gemini:gemini-3.6-flash": 3,
+    "ollama:tieout-planner-8b-v32": 1
+   },
+   "live_by_model": {
+    "gemini:gemini-3.1-flash-lite": 1,
+    "gemini:gemini-3.6-flash": 1
+   }
+  },
+  {
+   "id": "W18",
+   "type": "cross_filing",
+   "question": "Which drew a bigger share of its 2025 revenue from the United States, Pfizer or Merck, and by how many percentage points?",
+   "gold": "Pfizer: 37,078 / 62,579 = 59.25% U.S.; Merck: 36,510 / 65,011 = 56.16% U.S.; Pfizer is higher by about 3.09 points.",
+   "answer": "PFE (59.25%), MRK (56.16%); difference 3.09%",
+   "correct": true,
+   "correct_final": true,
+   "correct_strict": false,
+   "pred": {
+    "kind": "companies",
+    "value": [
+     [
+      "PFE",
+      0.5924990811614119
+     ],
+     [
+      "MRK",
+      0.56159726815462
+     ]
+    ],
+    "extra": {
+     "ranked": 2,
+     "gap": 0.030901813006791956
+    }
+   },
+   "abstained": false,
+   "match": {
+    "retrieved": 4,
+    "matched_retrieved": 4,
+    "gold": 4,
+    "matched_gold": 4,
+    "page_exact": 0
+   },
+   "leaves": [
+    {
+     "id": "PFE_FY2025_10K:p107:x75:r0:c0",
+     "doc": "PFE_FY2025_10K",
+     "page": 107,
+     "printed": "37,078"
+    },
+    {
+     "id": "PFE_FY2025_10K:p58:IS:r3:c0",
+     "doc": "PFE_FY2025_10K",
+     "page": 58,
+     "printed": "62,579"
+    },
+    {
+     "id": "MRK_FY2025_10K:p135:x72:r0:c0",
+     "doc": "MRK_FY2025_10K",
+     "page": 135,
+     "printed": "36,510"
+    },
+    {
+     "id": "MRK_FY2025_10K:p79:IS:r0:c0",
+     "doc": "MRK_FY2025_10K",
+     "page": 79,
+     "printed": "65,011"
+    }
+   ],
+   "plan": {
+    "steps": [
+     {
+      "id": "s1",
+      "op": "get",
+      "company": "PFE",
+      "item": "United States revenue",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s2",
+      "op": "get",
+      "company": "PFE",
+      "concept": "Revenue",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s3",
+      "op": "calc",
+      "expr": "s1 / s2"
+     },
+     {
+      "id": "s4",
+      "op": "get",
+      "company": "MRK",
+      "item": "United States revenue",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s5",
+      "op": "get",
+      "company": "MRK",
+      "concept": "Revenue",
+      "period": {
+       "fy": 2025
+      }
+     },
+     {
+      "id": "s6",
+      "op": "calc",
+      "expr": "s4 / s5"
+     },
+     {
+      "id": "s7",
+      "op": "compare",
+      "of": [
+       "s3",
+       "s6"
+      ],
+      "order": "desc"
+     }
+    ],
+    "answer": "s7"
+   },
+   "notes": [
+    "PFE FY2025 ends 2025-12-31",
+    "MRK FY2025 ends 2025-12-31",
+    "MRK item:united-states@consolidated-sales-by-geographic-area-where-deri FY2025: reading is not covered by any check",
+    "second reading: a line with the same label 'United States' is printed on page 136 of MRK_FY2025_10K under another heading with a different figure, and the words asked for do not tell the two apart"
+   ],
+   "learned": [],
+   "seconds": 0.0,
+   "system": "a8b_r8",
+   "tags": [
+    "two_companies",
+    "share_of_total",
+    "percent_points"
+   ],
+   "repaired": false,
+   "plan_errors": [],
+   "tier": "FLAGGED",
+   "tier_reasons": [
+    "MRK: the line was chosen by the linker from its words and its number is not inside a passing formula (MRK_FY2025_10K page 135)",
+    "MRK item:united-states@consolidated-sales-by-geographic-area-where-deri FY2025: reading is not covered by any check",
+    "second reading: a line with the same label 'United States' is printed on page 136 of MRK_FY2025_10K under another heading with a different figure, and the words asked for do not tell the two apart",
+    "second reading: a reader of the text answers 'Merck drew a bigger share of its 2025 revenue from the United States than Pfizer' (PFE_FY2025_10K page 107)"
+   ],
+   "reading": "arbiter and one reader agree",
+   "readers": [
+    {
+     "role": "maker",
+     "model": "gemini:gemini-3.5-flash-lite",
+     "answer": "PFE (59.25%), MRK (56.16%); difference 3.09%",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "PFE",
+        "item": "United States revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "PFE",
+        "concept": "Revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       },
+       {
+        "id": "s4",
+        "op": "get",
+        "company": "MRK",
+        "item": "United States revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s5",
+        "op": "get",
+        "company": "MRK",
+        "concept": "Revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s6",
+        "op": "calc",
+        "expr": "s4 / s5"
+       },
+       {
+        "id": "s7",
+        "op": "compare",
+        "of": [
+         "s3",
+         "s6"
+        ],
+        "order": "desc"
+       }
+      ],
+      "answer": "s7"
+     },
+     "correct": true
+    },
+    {
+     "role": "checker",
+     "model": "ollama:tieout-planner-8b-v32",
+     "answer": "MRK (178.06%), PFE (168.78%); difference 9.29%",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "rank",
+        "over": [
+         "PFE",
+         "MRK"
+        ],
+        "by": {
+         "ratio": [
+          {
+           "concept": "Revenue"
+          },
+          {
+           "item": "United States revenues"
+          }
+         ]
+        },
+        "period": {
+         "fy": 2025
+        },
+        "order": "desc",
+        "k": 2
+       }
+      ],
+      "answer": "s1"
+     },
+     "correct": false
+    },
+    {
+     "role": "arbiter",
+     "model": "gemini:gemini-3.6-flash",
+     "answer": "PFE (59.25%), MRK (56.16%); difference 3.09%",
+     "tier": "FLAGGED",
+     "plan": {
+      "steps": [
+       {
+        "id": "s1",
+        "op": "get",
+        "company": "PFE",
+        "item": "United States revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s2",
+        "op": "get",
+        "company": "PFE",
+        "concept": "Revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s3",
+        "op": "calc",
+        "expr": "s1 / s2"
+       },
+       {
+        "id": "s4",
+        "op": "get",
+        "company": "MRK",
+        "item": "United States revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s5",
+        "op": "get",
+        "company": "MRK",
+        "concept": "Revenue",
+        "period": {
+         "fy": 2025
+        }
+       },
+       {
+        "id": "s6",
+        "op": "calc",
+        "expr": "s4 / s5"
+       },
+       {
+        "id": "s7",
+        "op": "compare",
+        "of": [
+         "s3",
+         "s6"
+        ],
+        "order": "desc"
+       }
+      ],
+      "answer": "s7"
+     },
+     "correct": true
+    }
+   ],
+   "plan_road": {
+    "answer": "PFE (59.25%), MRK (56.16%); difference 3.09%",
+    "tier": "FLAGGED",
+    "correct": true
+   },
+   "passage": {
+    "answer": "Merck drew a bigger share of its 2025 revenue from the United States than Pfizer by 4.79 percentage points.",
+    "abstain": false,
+    "pred": {
+     "kind": "companies",
+     "value": [
+      [
+       "Merck",
+       null
+      ]
+     ]
+    },
+    "facts_ok": true,
+    "cited": "PFE_FY2025_10K page 107",
+    "used": "differs: not served"
+   },
+   "llm_calls": 3,
+   "llm_live": 0,
+   "tokens_in": 6942,
+   "tokens_out": 1785,
+   "llm_seconds": 28.27,
+   "models": [
+    "gemini:gemini-3.5-flash-lite",
+    "gemini:gemini-3.6-flash",
+    "ollama:tieout-planner-8b-v32"
+   ],
+   "calls_by_kind": {
+    "plan": 3
+   },
+   "calls_by_model": {
+    "gemini:gemini-3.5-flash-lite": 1,
+    "ollama:tieout-planner-8b-v32": 1,
+    "gemini:gemini-3.6-flash": 1
+   },
+   "live_by_model": {}
+  }
+ ],
+ "llm": {
+  "live": 60,
+  "cached": 289,
+  "seconds": 192.4905867576599,
+  "tokens_in": 159552,
+  "tokens_out": 6023
+ },
+ "graph": {
+  "filings": 55,
+  "companies": 40,
+  "tables": 165,
+  "readings": 13770,
+  "reading_status": {
+   "verified": 13053,
+   "unverified": 672,
+   "failed": 10,
+   "text": 34,
+   "scaled_from_table": 1
+  },
+  "checks": {
+   "SUM:pass": 946,
+   "TIE:pass": 361,
+   "RATIO:pass": 136,
+   "SUM:fail": 3,
+   "SUM:rounded": 46,
+   "CARRY:pass": 1276,
+   "CARRY:restated": 32
+  },
+  "facts": 4775,
+  "bindings": 1868,
+  "bindings_active": 1826,
+  "textfacts": 758
+ }
+}

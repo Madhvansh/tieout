@@ -1,0 +1,36 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "By what percentage did Nvidia grow revenue in fiscal 2026 over fiscal 2025?",
+ "abstain": false,
+ "answer": "0.6547844053809635",
+ "pred": {
+  "kind": "number",
+  "value": 0.6547844053809635
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "NVDA",
+   "doc": "NVDA_FY2026_10K",
+   "page": 139,
+   "value": 215938.0,
+   "label": "Revenue",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "NVDA",
+   "doc": "NVDA_FY2026_10K",
+   "page": 139,
+   "value": 130497.0,
+   "label": "Revenue",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

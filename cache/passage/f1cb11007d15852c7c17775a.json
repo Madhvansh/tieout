@@ -1,0 +1,36 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Comparing each network's latest annual report in the set, did Visa or Mastercard earn more, and by how much?",
+ "abstain": false,
+ "answer": "Visa earned more than Mastercard by $13,112 million (or $13,112,000,000).",
+ "pred": {
+  "kind": "number",
+  "value": 13112000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "V",
+   "doc": "V_FY2026_10K",
+   "page": 43,
+   "value": 45903000000.0,
+   "label": "Net revenue",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "MA",
+   "doc": "MA_FY2025_10K",
+   "page": 57,
+   "value": 32791000000.0,
+   "label": "Total net revenue",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

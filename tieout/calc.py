@@ -34,6 +34,54 @@ PER_SHARE_RE = re.compile(r"per\s+(?:common\s+|ordinary\s+|diluted\s+|basic\s+)?
 SHARES_RE = re.compile(r"weighted[- ]average|shares used in|shares outstanding|number of shares|"
                        r"dilutive|^\s*(basic|diluted)\s*$", re.I)
 NOT_SHARES_RE = re.compile(r"par value|authorized|paid-in|issued", re.I)
+# a label whose head says it counts shares: "Weighted-average diluted shares", "Average common shares issued
+# and outstanding", "Shares used to compute basic net income per share". Tested before the decimal and
+# per-share tests: share counts printed in millions carry decimals ("2,781.5") and the "shares used to
+# compute ... per share" wording names the per-share figure the count is for.
+SHARE_COUNT_RE = re.compile(
+    r"^\W*(?:(?:basic|diluted)\s+)?(?:weighted[- ]?average|average)\b(?:(?!\bper\b).)*\bshares\b"
+    r"|^\W*shares\b.*\b(?:used|outstanding|basic|diluted)\b"
+    r"|^\W*(?:weighted[- ]?average\s+)?number of (?:common\s+)?shares\b(?!.*\bper\b)"
+    r"|^\W*anti-?dilutive\s+(?:shares|securities|stock)", re.I)
+# "Basic", "Diluted", "Diluted (including Subco Units)": a sub-row named only by its kind
+BARE_RE = re.compile(r"\s*(basic|diluted)\b(?:\s*\([^)]{0,40}\))?.{0,12}", re.I)
+
+
+def row_section(table: Table, r) -> str:
+    """The heading a row sits under. A bare "Basic" or "Diluted" with no heading of its own takes the
+    label of the nearest row above it that is not itself bare: the parser folds a heading printed on
+    the line of the first sub-row into that row ("Average shares outstanding  Basic  2,407.4")."""
+    if not BARE_RE.fullmatch(r.label):
+        return r.section
+    rows = table.rows
+    pos = r.idx if r.idx < len(rows) and rows[r.idx] is r else (rows.index(r) if r in rows else 0)
+    if pos:
+        # "Average shares outstanding  Basic  2,407.3" then "Diluted  2,429.4": the row above ends with the
+        # other kind word, so its label is the heading both rows sit under, whatever section the parser kept
+        above = rows[pos - 1].label
+        if re.search(r"\S.*\b(basic|diluted)\s*$", above, re.I) and not BARE_RE.fullmatch(above):
+            return re.sub(r"\s*\b(basic|diluted)\s*$", "", above, flags=re.I)
+    if r.section.strip():
+        return r.section
+    for prev in reversed(rows[:pos]):
+        if not BARE_RE.fullmatch(prev.label) and prev.label.strip():
+            return prev.label
+    return r.section
+
+
+def is_share_count(table: Table, r) -> bool:
+    """The row's wording says it is a number of shares, and no cell prints a dollar sign."""
+    if any(c.has_dollar for c in r.cells.values()):
+        return False
+    if SHARE_COUNT_RE.search(r.label):
+        # "Shares authorized: 3,500,000,000; Shares issued: ..." is the common-stock money line
+        return not re.search(r"authorized|par value|paid-in", r.label, re.I)
+    if BARE_RE.fullmatch(r.label):
+        sec = row_section(table, r)
+        if SHARE_COUNT_RE.search(sec):
+            return True
+        return bool(re.search(r"\bshares\b|weighted", sec, re.I)) and not PER_SHARE_RE.search(sec)
+    return False
 
 
 @dataclass
@@ -59,16 +107,21 @@ def row_pool(table: Table, r) -> str:
     only consulted for the bare sub-rows "Basic" and "Diluted".
     """
     cells = list(r.cells.values())
-    if any(c.is_percent for c in cells) or any("." in c.text for c in cells):
+    if any(c.is_percent for c in cells):
+        return "ratio"
+    if is_share_count(table, r):
+        return "shares"                             # before the decimal test: "2,781.5" million shares
+    if any("." in c.text for c in cells):
         return "ratio"                              # printed decimals: per-share amounts, ratios
     if NOT_SHARES_RE.search(r.label):
         return "money"
     if PER_SHARE_RE.search(r.label):
         return "ratio"
-    bare = re.fullmatch(r"\s*(basic|diluted)\b.{0,12}", r.label, re.I)
-    if bare and PER_SHARE_RE.search(r.section) and not re.search(r"shares|weighted", r.section, re.I):
+    bare = BARE_RE.fullmatch(r.label)
+    section = row_section(table, r)
+    if bare and PER_SHARE_RE.search(section) and not re.search(r"shares|weighted", section, re.I):
         return "ratio"
-    if (SHARES_RE.search(r.label) or (bare and re.search(r"shares|weighted", r.section, re.I))) \
+    if (SHARES_RE.search(r.label) or (bare and re.search(r"shares|weighted", section, re.I))) \
             and not any(c.has_dollar for c in cells):
         return "shares"
     return "money"

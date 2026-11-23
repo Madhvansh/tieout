@@ -1,0 +1,34 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What share of Cisco's fiscal 2026 product revenue came from networking gear?",
+ "abstain": false,
+ "answer": "0.7178",
+ "pred": {
+  "kind": "number",
+  "value": 0.7178237912827415
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "CSCO",
+   "doc": "CSCO_FY2026_10K",
+   "page": 86,
+   "value": 34668.0,
+   "label": "Product revenue: Networking",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "CSCO",
+   "doc": "CSCO_FY2026_10K",
+   "page": 86,
+   "value": 48295.0,
+   "label": "Total Product",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

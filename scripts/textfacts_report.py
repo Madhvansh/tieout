@@ -22,7 +22,11 @@ from dataclasses import asdict
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from collections import defaultdict  # noqa: E402
+
 from tieout import pdfio  # noqa: E402
+from tieout.mentions import load_mentions  # noqa: E402
+from tieout.rawlayer import load_raw  # noqa: E402
 from tieout.textfacts import extract_text_facts  # noqa: E402
 
 ATTRS = ["auditor", "auditor_since", "auditor_location", "state_of_incorporation",
@@ -30,6 +34,13 @@ ATTRS = ["auditor", "auditor_since", "auditor_location", "state_of_incorporation
          "shares_outstanding", "public_float_usd", "ceo", "cfo"]
 TENK_ONLY = {"auditor", "auditor_since", "auditor_location", "fiscal_year_end", "employees",
              "public_float_usd"}
+
+
+def by_doc_id(records: list) -> dict:
+    out = defaultdict(list)
+    for r in records:
+        out[r["doc"]].append(r)
+    return out
 
 
 def load_manifest() -> list:
@@ -58,17 +69,20 @@ def main() -> None:
     show = {t.strip().upper() for t in args.show.split(",") if t.strip()}
 
     rows = load_manifest()
+    raw, mentions = by_doc_id(load_raw()), by_doc_id(load_mentions())
     all_facts, by_doc, checks = [], {}, []
     t0 = time.time()
     for row in rows:
-        facts = extract_text_facts(row["doc_id"], pdfio.load_pages(row["doc_id"]))
+        doc = row["doc_id"]
+        facts = extract_text_facts(doc, pdfio.load_pages(doc), raw[doc], mentions[doc])
         by_doc[row["doc_id"]] = facts
         all_facts += facts
         checks += [f"{row['doc_id']}: {m}" for m in self_checks(row, facts)]
         if row["ticker"].upper() in show:
             print(f"\n== {row['doc_id']}")
             for f in facts:
-                print(f"  {f.attr:22s} {f.value:28s} p{f.page:<4d} {f.confidence:4s} | {f.quote[:150]}")
+                cls = f.share_class or ""
+                print(f"  {f.attr:22s} {f.value:28s} p{f.page:<4d} {f.confidence:4s} {cls:8s} | {f.quote[:150]}")
 
     out = ROOT / "data" / "textfacts.json"
     out.write_text(json.dumps([asdict(f) for f in all_facts], indent=1, ensure_ascii=False), encoding="utf-8")

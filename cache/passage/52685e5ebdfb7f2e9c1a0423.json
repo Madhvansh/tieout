@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How much in client assets did Morgan Stanley's Wealth Management business oversee at the end of 2025?",
+ "abstain": false,
+ "answer": "$7,381 billion",
+ "pred": {
+  "kind": "number",
+  "value": 7381000000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "MS",
+   "doc": "MS_FY2025_10K",
+   "page": 36,
+   "value": 7381.0,
+   "label": "Total client assets",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

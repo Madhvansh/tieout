@@ -1,0 +1,34 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "According to its 2024 annual report, how much cash did Exxon Mobil return to its shareholders in 2024 through dividends and share buybacks combined?",
+ "abstain": false,
+ "answer": "In 2024, Exxon Mobil returned $36.333 billion to its shareholders through dividends ($16.704 billion) and share buybacks/common stock acquired ($19.629 billion) combined.",
+ "pred": {
+  "kind": "number",
+  "value": 36333000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "XOM",
+   "doc": "XOM_FY2024_10K",
+   "page": 82,
+   "value": 16704000000.0,
+   "label": "Cash dividends to ExxonMobil shareholders",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "XOM",
+   "doc": "XOM_FY2024_10K",
+   "page": 82,
+   "value": 19629000000.0,
+   "label": "Common stock acquired",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

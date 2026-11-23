@@ -1,0 +1,14 @@
+{
+ "model": "groq:openai/gpt-oss-20b@low",
+ "system": "You map financial concepts to rows of one company's financial statement.\nYou are shown the printed row labels with their section headings and structural roles. You are never\nshown values. For each concept listed, give the single row that reports it for the whole company\n(consolidated, attributable to the parent where the statement separates it), or null if no row\nreports it. Never a component of the concept, never a per-share row for an amount.\nAnswer as JSON, one key per concept: {\"<Concept>\": <row number or null>, ...}",
+ "user": "Company: Advanced Micro Devices Inc. (AMD)\nStatement: IS\nConcepts:\nSalesAndMarketing: sales and marketing expense, where printed as its own line\nGeneralAndAdministrative: general and administrative expense, where printed as its own line\n\nRows (number: label (section) <role>):\n0: Net revenue  <operand> [already: Revenue]\n1: Cost of sales  <operand>\n2: Amortization of acquisition-related intangibles  <operand>\n3: Total cost of sales  <total> [already: CostOfRevenue]\n4: Gross profit  <total> [already: GrossProfit]\n5: Research and development  <operand> [already: ResearchAndDevelopment]\n6: Marketing, general and administrative  <operand> [already: SellingGeneralAdmin]\n7: Amortization of acquisition-related intangibles  <operand>\n8: Restructuring charges  <operand>\n9: Total operating expenses  <total>\n10: Operating income  <total> [already: OperatingIncome]\n11: Interest expense  <operand> [already: InterestExpense]\n12: Other income (expense), net  <operand>\n13: Income from continuing operations before income taxes and equity income  <total> [already: PretaxIncome]\n14: Income tax provision (benefit)  <operand> [already: IncomeTax]\n15: Equity income in investee  <operand>\n16: Income from continuing operations, net of tax  <total>\n17: Income from discontinued operations, net of tax  <operand>\n18: Net income  <total> [already: ConsolidatedNetIncome]\n19: Earnings from continuing operations - basic  (under: Earnings per share)  <loose> [already: EPSBasic]\n20: Earnings from discontinued operations - basic  (under: Earnings per share)  <loose>\n21: Basic earnings per share  (under: Earnings per share)  <loose>\n22: Earnings from continuing operations - diluted  (under: Earnings per share)  <loose>\n23: Earnings from discontinued operations - diluted  (under: Earnings per share)  <loose>\n24: Diluted earnings per share  (under: Earnings per share)  <loose> [already: EPSDiluted]",
+ "answer": {
+  "SalesAndMarketing": null,
+  "GeneralAndAdministrative": null
+ },
+ "seconds": 1.02,
+ "usage": {
+  "in": 684,
+  "out": 127
+ }
+}

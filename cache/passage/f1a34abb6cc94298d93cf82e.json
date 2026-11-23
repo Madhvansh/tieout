@@ -1,0 +1,35 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How many times as large was ExxonMobil's U.S. refining capacity at year-end 2025 (Total United States, thousands of barrels daily) as Chevron's U.S. operable refining capacity at December 31, 2025 (Total Consolidated Companies, United States)?",
+ "abstain": false,
+ "answer": "1.7898271155596",
+ "pred": {
+  "kind": "number",
+  "value": 1.7898271155596
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "XOM",
+   "doc": "XOM_FY2025_10K",
+   "page": 23,
+   "value": 1967.0,
+   "label": "Total United States Refining Capacity",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "CVX",
+   "doc": "CVX_FY2025_10K",
+   "page": 19,
+   "value": 1099.0,
+   "label": "Total Consolidated Companies \u2014 United States Operable Capacity",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

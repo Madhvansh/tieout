@@ -1,0 +1,14 @@
+{
+ "model": "groq:openai/gpt-oss-20b@low",
+ "system": "You map financial concepts to rows of one company's financial statement.\nYou are shown the printed row labels with their section headings and structural roles. You are never\nshown values. For each concept listed, give the single row that reports it for the whole company\n(consolidated, attributable to the parent where the statement separates it), or null if no row\nreports it. Never a component of the concept, never a per-share row for an amount.\nAnswer as JSON, one key per concept: {\"<Concept>\": <row number or null>, ...}",
+ "user": "Company: Microsoft Corp (MSFT)\nStatement: IS\nConcepts:\nSellingGeneralAdmin: selling, general and administrative expense (one combined line)\nInterestExpense: interest expense\n\nRows (number: label (section) <role>):\n0: Product  (under: Revenue)  <operand>\n1: Service and other  (under: Revenue)  <operand>\n2: Total revenue  (under: Revenue)  <total> [already: Revenue]\n3: Product  (under: Cost of revenue)  <operand>\n4: Service and other  (under: Cost of revenue)  <operand>\n5: Total cost of revenue  (under: Cost of revenue)  <total> [already: CostOfRevenue]\n6: Gross margin  (under: Cost of revenue)  <total> [already: GrossProfit]\n7: Research and development  (under: Cost of revenue)  <operand> [already: ResearchAndDevelopment]\n8: Sales and marketing  (under: Cost of revenue)  <operand> [already: SalesAndMarketing]\n9: General and administrative  (under: Cost of revenue)  <operand> [already: GeneralAndAdministrative]\n10: Operating income  (under: Cost of revenue)  <total> [already: OperatingIncome]\n11: Other income (expense), net  (under: Cost of revenue)  <operand>\n12: Income before income taxes  (under: Cost of revenue)  <total> [already: PretaxIncome]\n13: Provision for income taxes  (under: Cost of revenue)  <operand> [already: IncomeTax]\n14: Net income  (under: Cost of revenue)  <total> [already: ConsolidatedNetIncome]\n15: Basic  (under: Earnings per share)  <loose> [already: EPSBasic]\n16: Diluted  (under: Earnings per share)  <loose> [already: EPSDiluted]",
+ "answer": {
+  "SellingGeneralAdmin": 9,
+  "InterestExpense": null
+ },
+ "seconds": 0.74,
+ "usage": {
+  "in": 621,
+  "out": 41
+ }
+}

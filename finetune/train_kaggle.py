@@ -19,7 +19,10 @@ WARMUP_FRAC = 0.05
 WEIGHT_DECAY = 0.0
 MAX_LEN = 2048          # prompt + plan tokens; longer rows are dropped (and counted)
 NUM_CTX = 4096          # Ollama context window written into the Modelfile
-GRAD_CHECKPOINT = True
+GRAD_CHECKPOINT = True  # ignored (off) when PREFIX_CACHE is on
+PREFIX_CACHE = True     # the system prompt is ~85% of every sequence and identical: run it once per
+                        # optimizer step under no_grad and train on the question+plan suffix against
+                        # its KV cache (stop-gradient through the prefix; ~5x fewer tokens per step)
 EVAL_BATCH = 16
 EVAL_MAX_NEW_TOKENS = 384
 EVAL_LIMIT = 0          # 0 = whole val set
@@ -88,6 +91,7 @@ if _ov:
             raise KeyError(f"unknown hyperparameter override {_k}")
         globals()[_k] = _v; METRICS["hparams"][_k] = _v
     log("overrides", json.load(open(_ov[0])))
+METRICS["base_model"] = BASE_MODEL                 # after overrides (it used to record the default)
 
 # Kaggle image (Nov 2026) ships torchao 0.10 next to peft 0.21, and peft refuses to build LoRA
 # layers when it sees a torchao older than 0.16. Nothing here uses torchao, so remove it first.
@@ -134,8 +138,17 @@ if tok.pad_token is None:
 END_ID = tok.convert_tokens_to_ids(END)
 
 
+# Split at a special-token boundary so prefix ids + suffix ids == ids of the full string.
+SYS_PREFIX = PROMPT_FMT.split("{system}")[0] + SYSTEM + "<|im_end|>\n"
+SYS_IDS = tok(SYS_PREFIX, add_special_tokens=False)["input_ids"]
+_probe = PROMPT_FMT.format(system=SYSTEM, question="probe question?")
+assert tok(_probe, add_special_tokens=False)["input_ids"] == SYS_IDS + tok(_probe[len(SYS_PREFIX):], add_special_tokens=False)["input_ids"]
+NP = len(SYS_IDS)
+
+
 def encode(row):
-    p = tok(PROMPT_FMT.format(system=SYSTEM, question=row["question"]), add_special_tokens=False)["input_ids"]
+    full = PROMPT_FMT.format(system=SYSTEM, question=row["question"])
+    p = SYS_IDS + tok(full[len(SYS_PREFIX):], add_special_tokens=False)["input_ids"]
     t = tok(plan_text(row["plan"]) + END, add_special_tokens=False)["input_ids"]
     return {"input_ids": p + t, "labels": [-100] * len(p) + t}   # loss on the plan only
 
@@ -165,19 +178,39 @@ def batches(epoch):
     return out
 
 
-def collate(ids):
-    m = max(lens[j] for j in ids)
+def collate(ids, skip=0):
+    """Right-padded batch; skip drops the shared system prefix (PREFIX_CACHE mode)."""
+    m = max(lens[j] for j in ids) - skip
     x = torch.full((len(ids), m), tok.pad_token_id); y = torch.full((len(ids), m), -100); a = torch.zeros((len(ids), m), dtype=torch.long)
     for b, j in enumerate(ids):
-        n = lens[j]
-        x[b, :n] = torch.tensor(enc[j]["input_ids"]); y[b, :n] = torch.tensor(enc[j]["labels"]); a[b, :n] = 1
+        n = lens[j] - skip
+        x[b, :n] = torch.tensor(enc[j]["input_ids"][skip:]); y[b, :n] = torch.tensor(enc[j]["labels"][skip:]); a[b, :n] = 1
     return x.cuda(), y.cuda(), a.cuda()
+
+
+def prefix_kv():
+    """Per-layer (K, V) of the system prefix under the current LoRA weights, no grad."""
+    with torch.no_grad(), torch.autocast("cuda", dtype=DTYPE):
+        c = model(input_ids=torch.tensor([SYS_IDS], device="cuda"), use_cache=True).past_key_values
+    if hasattr(c, "layers"):
+        return [(l.keys, l.values) for l in c.layers]
+    return list(zip(c.key_cache, c.value_cache))
+
+
+def expand_cache(kv, bsz):
+    from transformers import DynamicCache
+    c = DynamicCache()
+    for li, (k, v) in enumerate(kv):
+        c.update(k.expand(bsz, -1, -1, -1), v.expand(bsz, -1, -1, -1), li)
+    return c
 
 
 # ---------------------------------------------------------------- model + LoRA
 t = time.time()
 model = AutoModelForCausalLM.from_pretrained(BASE_MODEL, dtype=DTYPE, attn_implementation="sdpa").cuda()
 METRICS["load_min"] = round((time.time() - t) / 60, 2)
+if PREFIX_CACHE:
+    GRAD_CHECKPOINT = False          # recompute would append to the KV cache twice
 if GRAD_CHECKPOINT:
     model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
     model.enable_input_require_grads()
@@ -200,24 +233,33 @@ try:
 except (AttributeError, TypeError):
     scaler = torch.cuda.amp.GradScaler(enabled=(DTYPE == torch.float16))
 model.train()
-t_train = time.time(); seen_tokens = 0; step = 0; losses = []
+t_train = time.time(); seen_tokens = 0; step = 0; losses = []; kv = None
 for ep in range(EPOCHS):
     bl = batches(ep)
     for i, ids in enumerate(bl):
-        x, y, a = collate(ids)
+        skip = NP if PREFIX_CACHE else 0
+        x, y, a = collate(ids, skip)
         L = x.shape[1]
-        keep = L - min(plen[j] for j in ids) + 1                # covers every plan token in the batch
+        keep = L - min(plen[j] for j in ids) + skip + 1         # covers every plan token in the batch
         with torch.autocast("cuda", dtype=DTYPE):
-            logits = model(input_ids=x, attention_mask=a, logits_to_keep=keep).logits   # positions L-keep .. L-1
+            if PREFIX_CACHE:
+                if kv is None:
+                    kv = prefix_kv()
+                am = torch.cat([torch.ones((len(ids), NP), dtype=a.dtype, device=a.device), a], 1)
+                logits = model(input_ids=x, attention_mask=am, past_key_values=expand_cache(kv, len(ids)),
+                               use_cache=True, logits_to_keep=keep).logits
+            else:
+                logits = model(input_ids=x, attention_mask=a, logits_to_keep=keep).logits   # positions L-keep .. L-1
         tgt = y[:, L - keep + 1:]                                # token at t+1 predicted from position t
         loss = torch.nn.functional.cross_entropy(logits[:, :-1].float().reshape(-1, logits.shape[-1]),
                                                  tgt.reshape(-1), ignore_index=-100) / GRAD_ACCUM
         scaler.scale(loss).backward()
-        seen_tokens += int(a.sum())
+        seen_tokens += int(a.sum()) + skip * len(ids)          # full-sequence tokens, comparable across modes
         if (i + 1) % GRAD_ACCUM == 0 or i + 1 == len(bl):
             scaler.unscale_(opt)
             torch.nn.utils.clip_grad_norm_([p for p in model.parameters() if p.requires_grad], 1.0)
             scaler.step(opt); scaler.update(); opt.zero_grad(set_to_none=True); sched.step(); step += 1
+            kv = None                                            # weights changed: recompute prefix KV
             losses.append(loss.item() * GRAD_ACCUM)
             if step % 10 == 0 or step == total_steps:
                 el = time.time() - t_train
@@ -282,8 +324,10 @@ log("merged ->", merged_dir)
 # ---------------------------------------------------------------- GGUF export
 t = time.time()
 lc = os.path.join(SCRATCH, "llama.cpp")
-if not os.path.isdir(lc):
-    sh(f'git clone --depth 1 https://github.com/ggml-org/llama.cpp "{lc}"')
+if not os.path.exists(os.path.join(lc, "convert_hf_to_gguf.py")):
+    import shutil; shutil.rmtree(lc, ignore_errors=True)
+    # core.longpaths: llama.cpp's web-UI paths exceed Windows MAX_PATH and abort the checkout otherwise
+    sh(f'git -c core.longpaths=true clone --depth 1 https://github.com/ggml-org/llama.cpp "{lc}"')
 METRICS["llama_cpp_commit"] = sh("git rev-parse --short HEAD", cwd=lc).stdout.strip()
 sh(f'"{sys.executable}" -m pip install -q "{lc}/gguf-py" sentencepiece protobuf')
 f16 = os.path.join(SCRATCH, f"{MODEL_NAME}-f16.gguf")

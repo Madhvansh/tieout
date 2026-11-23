@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How many customer transactions did The Home Depot record in fiscal 2025 (the year ended February 1, 2026)? Use the company's own customer transactions measure, which leaves out HD Supply and SRS.",
+ "abstain": false,
+ "answer": "1,601.5 million",
+ "pred": {
+  "kind": "number",
+  "value": 1601500000.0
+ },
+ "unit": "count",
+ "facts": [
+  {
+   "ticker": "HD",
+   "doc": "HD_FY2025_10K",
+   "page": 37,
+   "value": 1601.5,
+   "label": "Customer transactions (in millions)",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

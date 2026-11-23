@@ -1,0 +1,36 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How large was Meta's 2025 Reality Labs operating loss relative to the company's consolidated income from operations?",
+ "abstain": false,
+ "answer": "-0.2305",
+ "pred": {
+  "kind": "number",
+  "value": -0.2304740889214157
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "META",
+   "doc": "META_FY2025_10K",
+   "page": 62,
+   "value": -19193.0,
+   "label": "Reality Labs Income (loss) from operations 2025",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "META",
+   "doc": "META_FY2025_10K",
+   "page": 62,
+   "value": 83276.0,
+   "label": "Total Income (loss) from operations 2025",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

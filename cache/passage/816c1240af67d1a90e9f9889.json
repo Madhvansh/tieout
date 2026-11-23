@@ -1,0 +1,34 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was AWS segment square footage of Amazon.com Inc. for fiscal year 2025 (for a balance: at the end of fiscal year 2025)? Give the one figure the filing prints for it.",
+ "abstain": false,
+ "answer": "28,370 thousand leased square footage and 28,469 thousand owned square footage",
+ "pred": {
+  "kind": "text",
+  "value": "28,370 leased and 28,469 owned (in thousands)"
+ },
+ "unit": "text",
+ "facts": [
+  {
+   "ticker": "AMZN",
+   "doc": "AMZN_FY2025_10K",
+   "page": 18,
+   "value": 28370.0,
+   "label": "AWS Leased Square Footage",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "AMZN",
+   "doc": "AMZN_FY2025_10K",
+   "page": 18,
+   "value": 28469.0,
+   "label": "AWS Owned Square Footage",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

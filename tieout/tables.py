@@ -9,11 +9,11 @@ Nothing here knows any accounting. It returns what is printed and where.
 """
 from __future__ import annotations
 
+import calendar
 import re
 from dataclasses import dataclass, field
 from typing import Optional
 
-import pymupdf
 
 # "28," (a day inside a printed date) must not count as a value, so a comma is
 # only allowed as a thousands separator.
@@ -35,6 +35,16 @@ MONTHS = {
     )
 }
 MONTH_ABBR = {k[:3]: v for k, v in MONTHS.items()}
+LABEL_MARK = "⁠"     # a word joiner glued to a number that belongs to a label (alltables), not a printed character
+# a line inside a table that holds only a date starts a block of rows for that date
+# ("December 2024" between two stacked blocks of the same columns)
+PERIOD_LINE_RE = re.compile(
+    r"^(?:(?:as of|as at|at|years? ended|fiscal years? ended|(?:three|six|nine|twelve) months ended|quarter ended)\s+)?"
+    r"(?:(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?\s+(?:\d{1,2},?\s+)?)?(?:19|20)\d\d:?$", re.I)
+# the same with a full date, at the start of a line that goes on with column names
+PERIOD_HEAD_RE = re.compile(
+    r"^(?:(?:as of|as at|at|years? ended|fiscal years? ended|(?:three|six|nine|twelve) months ended|quarter ended)\s+)?"
+    r"(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?\s+\d{1,2},?\s+(?:19|20)\d\d\b", re.I)
 
 
 @dataclass
@@ -71,6 +81,7 @@ class Row:
     label_bbox: Optional[tuple]
     cells: dict = field(default_factory=dict)   # col index -> Cell
     section: str = ""                           # nearest label-only row above
+    period_mark: str = ""                       # nearest date-only line above inside the table ("December 2024")
 
     def values(self, ncols: int) -> list:
         return [self.cells[c].value if c in self.cells else None for c in range(ncols)]
@@ -105,15 +116,6 @@ class Table:
 
 
 # ----------------------------------------------------------------- words/lines
-
-def page_words(page) -> list:
-    out = []
-    for x0, y0, x1, y1, text, *_ in page.get_text("words"):
-        text = text.strip()
-        if text:
-            out.append(Word(x0, y0, x1, y1, text))
-    return out
-
 
 def group_lines(words: list, tol: float = 2.5) -> list:
     """Cluster words into text lines by vertical centre."""
@@ -168,25 +170,47 @@ def parse_number(tok: str) -> Optional[float]:
 
 # --------------------------------------------------------------------- columns
 
-def find_columns(lines: list, tol: float = 3.5, min_hits: int = 3) -> list:
-    """Cluster the right edges of numeric tokens into value columns."""
+def find_columns(lines: list, tol: float = 3.5, min_hits: int = 3, merge_ragged: bool = False) -> list:
+    """Cluster the right edges of numeric tokens into value columns.
+
+    merge_ragged: two neighbouring clusters a few points apart that never meet on one line are one
+    column whose rows end at slightly different points: a rate printed with "%" after it stops one
+    character short of the amounts above it (AXP p56: "2.5 %" under "$ 114,368"). Used for the tables
+    outside the primary statements only."""
     edges = []
-    for ln in lines:
+    for li, ln in enumerate(lines):
         for w in ln:
             if is_numeric(w.text) and not (YEAR_RE.match(w.text) and len(ln) < 12 and _mostly_years(ln)):
-                edges.append((right_edge(w), w.x0))
+                edges.append((right_edge(w), w.x0, li))
             elif w.text in DASH_TOKENS:
-                edges.append((w.x1, w.x0))
+                edges.append((w.x1, w.x0, li))
     edges.sort()
     clusters: list = []
-    for xr, x0 in edges:
+    for xr, x0, li in edges:
         if clusters and xr - clusters[-1]["hi"] <= tol:
             c = clusters[-1]
             c["hi"] = xr
             c["xs"].append(xr)
             c["x0s"].append(x0)
+            c["lines"].add(li)
         else:
-            clusters.append({"hi": xr, "xs": [xr], "x0s": [x0]})
+            clusters.append({"hi": xr, "xs": [xr], "x0s": [x0], "lines": {li}})
+    if merge_ragged:
+        merged: list = []
+        for c in clusters:
+            p = merged[-1] if merged else None
+            # the merged column stays narrow enough for every token to sit within _col_of's 4.5 points of
+            # its midpoint (two stacked blocks offset by 5 points, CVX p84, merge; two columns never do)
+            if p is not None and min(c["xs"]) - p["hi"] <= 6 and c["hi"] - min(p["xs"]) <= 8 \
+                    and not (p["lines"] & c["lines"]) and min(len(p["xs"]), len(c["xs"])) >= 2:
+                p["hi"] = c["hi"]
+                p["xs"].extend(c["xs"])
+                p["x0s"].extend(c["x0s"])
+                p["lines"] |= c["lines"]
+                p["mid"] = True
+            else:
+                merged.append(c)
+        clusters = merged
     # Numbers inside long labels ("100,000 shares authorized; 10,731 issued")
     # sometimes line up three times by chance. A real value column is hit by a
     # large share of the rows, so thin clusters are dropped.
@@ -196,7 +220,8 @@ def find_columns(lines: list, tol: float = 3.5, min_hits: int = 3) -> list:
     for c in clusters:
         if len(c["xs"]) >= need:
             xs = sorted(c["xs"])
-            cols.append((xs[len(xs) // 2], min(c["x0s"])))
+            xr = (xs[0] + xs[-1]) / 2 if c.get("mid") else xs[len(xs) // 2]
+            cols.append((xr, min(c["x0s"])))
     return [Column(i, xr, xl) for i, (xr, xl) in enumerate(cols)]
 
 
@@ -245,12 +270,85 @@ def _col_of(w: Word, cols: list, tol: float = 4.5) -> Optional[int]:
 
 # ---------------------------------------------------------------------- header
 
-def _parse_header(header_lines: list, cols: list, context: str = "") -> str:
+DATE_RE = re.compile(r"\b(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?\s+(\d{1,2})(?!\d),?"
+                     r"(?:\s+((?:19|20)\d\d))?", re.I)
+MONTH_YEAR_RE = re.compile(r"\b(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?,?\s+((?:19|20)\d\d)\b", re.I)
+DAY_END_RE = re.compile(r"\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?\s+\d{1,2},?$", re.I)   # "... December 31,"
+DURATIONS = ((r"three months|quarter ended|13 weeks|12 weeks|thirteen weeks|16 weeks", 3),
+             (r"six months|26 weeks|twenty-six weeks|24 weeks|28 weeks", 6),
+             (r"nine months|39 weeks|thirty-nine weeks|36 weeks|40 weeks", 9),
+             (r"years? ended|fiscal years?|twelve months|52 weeks|53 weeks|for the years?", 12))
+
+
+def duration(text: str) -> Optional[int]:
+    """Months of the period a header phrase names ("Nine Months Ended" is 9), or None."""
+    for pat, months in DURATIONS:
+        if re.search(pat, text, re.I):
+            return months
+    return None
+
+
+def _part_year(text: str) -> Optional[int]:
+    """The one period shorter than a year that a title names ("for the fiscal nine months" is 9);
+    None when it names none or several ("the three and nine months ended")."""
+    named = {m for pat, m in DURATIONS if m < 12 and re.search(pat, text, re.I)}
+    if len(named) != 1 or re.search(r"\b(?:three|six|nine)\s+and\s+(?:three|six|nine)\b", text, re.I):
+        return None
+    return named.pop()
+
+
+def printed_date(text: str, year: Optional[int] = None, month_only: bool = True) -> Optional[str]:
+    """ISO date of the first date printed in text, with `year` when the text prints none.
+    "December 2025" (a month without a day) is the last day of that month."""
+    dm = DATE_RE.search(text)
+    if dm:
+        yr = year or (int(dm.group(3)) if dm.group(3) else None)
+        if not yr:
+            return None
+        mon = MONTH_ABBR[dm.group(1)[:3].lower()]
+        return f"{yr:04d}-{mon:02d}-{min(int(dm.group(2)), calendar.monthrange(yr, mon)[1]):02d}"
+    my = MONTH_YEAR_RE.search(text) if month_only else None
+    if my:
+        yr, mon = year or int(my.group(2)), MONTH_ABBR[my.group(1)[:3].lower()]
+        return f"{yr:04d}-{mon:02d}-{calendar.monthrange(yr, mon)[1]:02d}"
+    return None
+
+
+def _phrases_of(ln: list) -> list:
+    """A header line cut into phrases at wide gaps. A phrase that repeats one dated piece
+    ("FISCAL 2026 FISCAL 2025", "2025 2024", "December 31, 2024 December 31, 2023") is one
+    phrase per piece, each ending at its year."""
+    phrases, cur = [], [ln[0]] if ln else []
+    for a, b in zip(ln, ln[1:]):
+        if b.x0 - a.x1 > 9:
+            phrases.append(cur)
+            cur = [b]
+        else:
+            cur.append(b)
+    if cur:
+        phrases.append(cur)
+    out = []
+    for ph in phrases:
+        ends = [k + 1 for k, w in enumerate(ph) if YEAR_RE.match(w.text.replace(LABEL_MARK, ""))]
+        pieces = [ph[a:b] for a, b in zip([0] + ends, ends)]
+        shapes = {tuple(re.sub(r"\d", "#", w.text.replace(LABEL_MARK, "").lower()) for w in p) for p in pieces}
+        if len(ends) < 2 or ends[-1] != len(ph) or len(shapes) != 1:
+            out.append(ph)
+        else:
+            out.extend(pieces)
+    return out
+
+
+def _parse_header(header_lines: list, cols: list, context: str = "", title: str = "") -> str:
     """Attach printed period information to each column.
 
     A header word belongs to a column if its centre falls inside the column's
     horizontal band. Words that span several bands ("Years ended") apply to
-    every column they cover.
+    every column they cover. A date or a year sits over one column, the
+    nearest. The length of a column's period comes from its own words, else
+    from the nearest phrase that names a length ("Three Months Ended" over the
+    first pair of columns, "Nine Months Ended" over the second), else from the
+    caption, else from a title that names one length shorter than a year.
     """
     if not cols:
         return ""
@@ -259,23 +357,15 @@ def _parse_header(header_lines: list, cols: list, context: str = "") -> str:
         left = cols[i - 1].x_right + 2 if i else min(c.x_left, c.x_right - 70) - 25
         bands.append((left, c.x_right + 14))
     full = " ".join(w.text for ln in header_lines for w in ln)
-    span_text = []
     per_col = [[] for _ in cols]
+    lengths = []                                   # (x0, x1, months) of phrases that name a length
     for ln in header_lines:
-        # split the line into phrases separated by wide gaps
-        phrases, cur = [], [ln[0]] if ln else []
-        for a, b in zip(ln, ln[1:]):
-            if b.x0 - a.x1 > 9:
-                phrases.append(cur)
-                cur = [b]
-            else:
-                cur.append(b)
-        if cur:
-            phrases.append(cur)
-        for ph in phrases:
+        for ph in _phrases_of(ln):
             x0, x1 = ph[0].x0, ph[-1].x1
             text = " ".join(w.text for w in ph)
             centre = (x0 + x1) / 2
+            if duration(text):
+                lengths.append((x0, x1, duration(text)))
             dated = bool(re.search(r"(19|20)\d\d|\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)", text, re.I))
             if dated and x1 - x0 < 110:
                 # a date or a year sits over exactly one column: the nearest one
@@ -291,35 +381,23 @@ def _parse_header(header_lines: list, cols: list, context: str = "") -> str:
                 hit = [i for i, (l, r) in enumerate(bands) if not (x1 < l or x0 > r)]
                 for i in hit:
                     per_col[i].append(text)
-                span_text.append(text)
-    date_re = (r"\b(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?\s+(\d{1,2}),?"
-               r"(?:\s+((?:19|20)\d\d))?")
-    wide = (full + " || " + context).lower()
-    # "December 31," printed once above "2025  2024" belongs to every column
-    shared = re.search(date_re, wide)
+    wide = full + " || " + context
     for c, parts in zip(cols, per_col):
         c.header = " ".join(parts).strip()
-        own = c.header.lower()
         ym = re.findall(r"\b((?:19|20)\d\d)\b", c.header)
         if ym:
             c.year = int(ym[-1])
-        dm = re.search(date_re, own) or shared
-        if dm:
-            mon = MONTH_ABBR[dm.group(1)[:3]]
-            yr = c.year or (int(dm.group(3)) if dm.group(3) else None)
-            if yr:
-                c.end_date = f"{yr:04d}-{mon:02d}-{int(dm.group(2)):02d}"
-        # the column's own words win; the shared context is the fallback
-        for text in (own, wide):
-            for pat, m in ((r"three months|quarter ended|13 weeks|12 weeks|thirteen weeks|16 weeks", 3),
-                           (r"six months|26 weeks|twenty-six weeks|24 weeks|28 weeks", 6),
-                           (r"nine months|39 weeks|thirty-nine weeks|36 weeks|40 weeks", 9),
-                           (r"years? ended|fiscal years?|twelve months|52 weeks|53 weeks|for the years?", 12)):
-                if re.search(pat, text):
-                    c.months = m
-                    break
-            if c.months:
-                break
+    several_years = len({c.year for c in cols if c.year}) > 1
+    for c in cols:
+        # "December 31," printed once above "2025  2024" belongs to every column. A column without
+        # a year of its own beside columns of different years ("Thereafter", "Total"), or with only
+        # part of a date of its own ("31,"), is given none.
+        shared = c.year or not (several_years or re.search(r"\d", c.header))
+        c.end_date = printed_date(c.header, c.year) or (
+            printed_date(full, c.year) or printed_date(wide, c.year, month_only=False) if shared else None)
+        mid = (c.x_left + c.x_right) / 2
+        nearest = min(lengths, key=lambda s: max(s[0] - mid, mid - s[1], 0), default=None)
+        c.months = duration(c.header) or (nearest[2] if nearest else None) or duration(wide) or _part_year(title)
     return full
 
 
@@ -353,9 +431,11 @@ def _scale(caption: str) -> tuple:
     return scale, share_scale
 
 
-def build_table(doc_name: str, page_no: int, lines: list, title: str = "") -> Optional[Table]:
-    """Turn the text lines of one table region into a Table."""
-    cols = find_columns(lines)
+def build_table(doc_name: str, page_no: int, lines: list, title: str = "", min_hits: int = 3,
+                merge_ragged: bool = False) -> Optional[Table]:
+    """Turn the text lines of one table region into a Table. `min_hits`: values a column needs (a
+    one-line table under a year header has one value per column). `merge_ragged`: see find_columns."""
+    cols = find_columns(lines, min_hits=min_hits, merge_ragged=merge_ragged)
     if not cols:
         return None
     label_limit = min(c.x_left for c in cols) - 4
@@ -393,11 +473,12 @@ def build_table(doc_name: str, page_no: int, lines: list, title: str = "") -> Op
     # section labels ("Net sales:"); anything else ends the header (title, caption).
     header_idx: list = []
     i = first_num - 1
+    depth = 0           # ")" in the lines below line i that still lack their "(": a caption broken over lines
     while i >= 0 and first_num - i <= 14:
         ln = lines[i]
         text = " ".join(w.text for w in ln)
         in_cols = [w for w in ln if w.x1 > label_limit - 20]
-        if HEADER_HINT.search(" ".join(w.text for w in in_cols)) and in_cols:
+        if in_cols and (HEADER_HINT.search(" ".join(w.text for w in in_cols)) or all(is_month(w.text) for w in in_cols)):
             # the scale caption often shares a line with the years:
             # "(Amounts in millions, except per share data)  2026  2025  2024"
             header_idx.append(i)
@@ -405,24 +486,40 @@ def build_table(doc_name: str, page_no: int, lines: list, title: str = "") -> Op
             break                                   # statement title: nothing above belongs to the table
         elif CAPTION_RE.search(text):
             pass                                    # "(In millions, except ...)" above or below the header
-        elif header_idx:
+        elif header_idx and depth <= 0:
             break                                   # something else above the header
-        # else: a label between the header and the first numeric row
-        # ("ASSETS:", "Net sales:", first half of a wrapped label); keep climbing
+        # else: a label between the header and the first numeric row ("ASSETS:", "Net sales:", first half of
+        # a wrapped label), or the middle of a caption in parentheses that the header line closes ("(in
+        # billions, except ratios" / "and where otherwise" / "noted) 2025 2024 2023", JPM p70); keep climbing
+        depth += text.count(")") - text.count("(")
         i -= 1
     header_idx.sort()
     # only the words over the value columns are header; a caption on the same line is not
     header_lines = [[w for w in lines[j] if w.x1 > label_limit - 20] for j in header_idx]
     body_start = header_idx[-1] + 1 if header_idx else first_num
     caption = " ".join(w.text for ln in lines[max(0, i):first_num] for w in ln)
-    header_text = _parse_header(header_lines, cols, context=caption)
+    header_text = _parse_header(header_lines, cols, context=caption, title=title)
     scale, share_scale = _scale(caption + " " + header_text)
 
     rows: list = []
     section = ""
+    # a date-only line above the first row ("2025" over a block of segment columns) dates the rows below it
+    period_mark = next((_plain(ln).rstrip(":") for ln in reversed(lines[max(0, i):first_num])
+                        if PERIOD_LINE_RE.match(_plain(ln))), "")
     pending_label: list = []          # label-only line that may continue below
     for ln in lines[body_start:]:
         found = cells_of(ln)
+        # a block header inside the table: "As of December 2024", or a date before the column
+        # names repeated for the next block ("July 26, 2025  Loan Receivables  Total")
+        head = PERIOD_HEAD_RE.match(_plain(ln)) if rows else None
+        if not found and (PERIOD_LINE_RE.match(_plain(ln)) or head):
+            if YEAR_RE.match(_plain(ln)) and rows and not pending_label and DAY_END_RE.search(rows[-1].label):
+                rows[-1].label += " " + _plain(ln)      # "Balance as of December 31," / "2022": the end of a label
+                continue
+            section = " ".join(w.text for w in pending_label) if pending_label else ""
+            pending_label = []
+            period_mark = head.group(0) if head else _plain(ln).rstrip(":")
+            continue
         label_words = [w for w in ln if w.x1 <= label_limit + 2 or
                        (not is_numeric(w.text) and w.text not in DASH_TOKENS and w.text != "$"
                         and _col_of(w, cols) is None and w.x0 < label_limit + 40)]
@@ -461,17 +558,30 @@ def build_table(doc_name: str, page_no: int, lines: list, title: str = "") -> Op
         pending_label = []
         r = Row(idx=len(rows), page=page_no, y=ln[0].yc, label=label,
                 indent=label_words[0].x0 if label_words else 0.0,
-                label_bbox=_bbox(label_words) if label_words else None, section=section)
+                label_bbox=_bbox(label_words) if label_words else None, section=section,
+                period_mark=period_mark)
         dollar_x = [w.x0 for w in ln if w.text == "$"]
         for ci, (w, v) in found.items():
             r.cells[ci] = Cell(page=page_no, bbox=(w.x0, w.y0, w.x1, w.y1), text=w.text,
                                value=v, col=ci, is_percent=w.text.rstrip(")").endswith("%"),
                                has_dollar=any(0 < w.x0 - dx < 60 for dx in dollar_x))
         rows.append(r)
-    if len(rows) < 2:
+    if len(rows) < (1 if min_hits == 1 else 2):
         return None
     return Table(doc=doc_name, page=page_no, title=title, caption=caption, scale=scale,
                  share_scale=share_scale, columns=cols, rows=rows, header_text=header_text)
+
+
+def _plain(ln: list) -> str:
+    """The printed text of a line."""
+    return " ".join(w.text for w in ln).replace(LABEL_MARK, "").strip()
+
+
+def is_month(text: str) -> bool:
+    """"September", "Sept.", "Dec": a month name with no day ("September" printed over each
+    column, the day and year on the line below)."""
+    t = text.lower().rstrip(".,")
+    return t in MONTHS or t in MONTH_ABBR or t == "sept"
 
 
 JOIN_TAIL = re.compile(r"(,|;|\band|\bof|\bthe|\bto|\bfor|\bin|\bat|\bor|\bby|\bon)$")
@@ -492,22 +602,6 @@ def _continues(above: str, below: str) -> bool:
 def _bbox(words: list) -> tuple:
     return (min(w.x0 for w in words), min(w.y0 for w in words),
             max(w.x1 for w in words), max(w.y1 for w in words))
-
-
-def page_table(pdf_path: str, page_no: int, doc_name: str = "") -> Optional[Table]:
-    """Treat one whole page (1-based) as a single table. Used for primary statements."""
-    with pymupdf.open(pdf_path) as d:
-        page = d[page_no - 1]
-        h = page.rect.height
-        words = [w for w in page_words(page) if 30 < w.yc < h - 30]
-    lines = group_lines(words)
-    title = " ".join(w.text for w in lines[0]) if lines else ""
-    for ln in lines[:6]:
-        text = " ".join(w.text for w in ln)
-        if re.search(r"CONSOLIDATED|STATEMENTS? OF|BALANCE SHEETS?", text, re.I):
-            title = text
-            break
-    return build_table(doc_name or pdf_path, page_no, lines, title)
 
 
 def show(t: Table) -> str:

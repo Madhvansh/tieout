@@ -1,0 +1,46 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Apple's September 2025 balance sheet appears in both of its last two annual reports. Did the 'other non-current assets' figure for that date change, and if so by how much and why?",
+ "abstain": false,
+ "answer": "Yes, the 'other non-current assets' figure for September 27, 2025 changed from $83,727 million as reported in the 2025 Form 10-K to $72,634 million as reported in the 2026 Form 10-K (a decrease of $11,093 million), due to the reclassification of intangible assets to a separate line item.",
+ "pred": {
+  "kind": "number",
+  "value": -11093.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "AAPL",
+   "doc": "AAPL_FY2025_10K",
+   "page": 34,
+   "value": 83727.0,
+   "label": "Other non-current assets",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "AAPL",
+   "doc": "AAPL_FY2026_10K",
+   "page": 37,
+   "value": 72634.0,
+   "label": "Other non-current assets",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "AAPL",
+   "doc": "AAPL_FY2026_10K",
+   "page": 37,
+   "value": 11093.0,
+   "label": "Intangible assets, net",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

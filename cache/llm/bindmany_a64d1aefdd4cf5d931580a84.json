@@ -1,0 +1,20 @@
+{
+ "model": "groq:openai/gpt-oss-20b@low",
+ "system": "You map financial concepts to rows of one company's financial statement.\nYou are shown the printed row labels with their section headings and structural roles. You are never\nshown values. For each concept listed, give the single row that reports it for the whole company\n(consolidated, attributable to the parent where the statement separates it), or null if no row\nreports it. Never a component of the concept, never a per-share row for an amount.\nAnswer as JSON, one key per concept: {\"<Concept>\": <row number or null>, ...}",
+ "user": "Company: Caterpillar Inc. (CAT)\nStatement: IS\nConcepts:\nGrossProfit: revenue minus cost of revenue, if printed as its own line\nEPSDiluted: diluted earnings per share\nEPSBasic: basic earnings per share\nSharesDiluted: diluted weighted-average number of shares used for diluted earnings per share\nSharesBasic: basic weighted-average number of shares outstanding\nInterestExpense: interest expense\nSalesAndMarketing: sales and marketing expense, where printed as its own line\nGeneralAndAdministrative: general and administrative expense, where printed as its own line\n\nRows (number: label (section) <role>):\n0: Sales of Machinery, Power & Energy  (under: Sales and revenues)  <operand>\n1: Revenues of Financial Products  (under: Sales and revenues)  <operand>\n2: Total sales and revenues  (under: Sales and revenues)  <total> [already: Revenue]\n3: Cost of goods sold  (under: Operating costs)  <operand> [already: CostOfRevenue]\n4: Selling, general and administrative expenses  (under: Operating costs)  <operand> [already: SellingGeneralAdmin]\n5: Research and development expenses  (under: Operating costs)  <operand> [already: ResearchAndDevelopment]\n6: Interest expense of Financial Products  (under: Operating costs)  <operand>\n7: Other operating (income) expenses  (under: Operating costs)  <operand>\n8: Total operating costs  (under: Operating costs)  <total>\n9: Operating profit  (under: Operating costs)  <total> [already: OperatingIncome]\n10: Interest expense excluding Financial Products  (under: Operating costs)  <operand>\n11: Other income (expense)  (under: Operating costs)  <operand>\n12: Consolidated profit before taxes  (under: Operating costs)  <total> [already: PretaxIncome]\n13: Provision (benefit) for income taxes  (under: Operating costs)  <operand> [already: IncomeTax]\n14: Profit of consolidated companies  (under: Operating costs)  <total>\n15: Equity in profit (loss) of unconsolidated affiliated companies  (under: Operating costs)  <operand>\n16: Profit of consolidated and affiliated companies  (under: Operating costs)  <total> [already: ConsolidatedNetIncome]\n17: Less: Profit (loss) attributable to noncontrolling interests  (under: Operating costs)  <operand>\n18: Profit 1  (under: Operating costs)  <total> [already: NetIncome]\n19: Profit per common share  (under: Operating costs)  <loose>\n20: Profit per common share \u2014 diluted 2  (under: Operating costs)  <loose>\n21: - Basic  (under: Weighted-average common shares outstanding (millio)  <loose>\n22: - Diluted 2  (under: Weighted-average common shares outstanding (millio)  <loose>",
+ "answer": {
+  "GrossProfit": null,
+  "EPSDiluted": 20,
+  "EPSBasic": 19,
+  "SharesDiluted": 22,
+  "SharesBasic": 21,
+  "InterestExpense": null,
+  "SalesAndMarketing": null,
+  "GeneralAndAdministrative": 4
+ },
+ "seconds": 1.0,
+ "usage": {
+  "in": 843,
+  "out": 199
+ }
+}

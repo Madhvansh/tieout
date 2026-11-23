@@ -27,14 +27,16 @@ The store only grows; every entry records where it came from.
 from __future__ import annotations
 
 import json
+import re
 import pathlib
 import time
 from collections import defaultdict
 from typing import Optional
 
-from .concepts import Binding, concept_defs, norm_label
+from .concepts import Binding, concept_defs, label_objections, label_unrelated, norm_label
 from .graph import Fact, Graph
-from .llm import ask_json
+from .llm import DailyLimit, ask_json, link_model
+from .witness import WITNESSED
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 LEARNED = ROOT / "semantics" / "learned.jsonl"
@@ -107,7 +109,7 @@ def gate(g: Graph, doc: str, concept: str, row: int, rows: dict) -> tuple:
     evidence, objections = [], []
     if not d["label"].strip():
         objections.append("row has no printed label")
-    want = "USD/share" if c.unit == "USD/share" else "USD"
+    want = c.unit if c.unit in ("USD/share", "shares") else "USD"
     if d["unit"] != want:
         objections.append(f"unit is {d['unit']}, concept needs {want}")
     if d["verified"]:
@@ -118,6 +120,17 @@ def gate(g: Graph, doc: str, concept: str, row: int, rows: dict) -> tuple:
              and b.state == "active" and b.concept != concept]
     if taken:
         objections.append(f"row is already bound to {taken[0].concept}")
+    if concept in COST_PARTS and _is_all_costs(g, doc, d):
+        objections.append("revenue minus this row is operating income: it is all operating costs, not one of them")
+    if re.search(r"\band other\b", d["label"], re.I) and not concept.lower().startswith("other"):
+        objections.append("the line also holds other items ('and other'), so it is broader than the concept")
+    objections += label_objections(concept, d["label"], _siblings(rows, row))
+    if label_unrelated(concept, d["label"]):
+        evidence.append("label shares no word with the concept's seed labels: served as matched by wording only")
+    siblings = _one_of_several(concept, row, rows)
+    if siblings:
+        objections.append(f"the heading names the concept and this is one of {siblings} lines under it; "
+                          "the concept is their total")
     s = c.structure
     if s.get("total_of"):
         if d["role"] == "total":
@@ -156,6 +169,43 @@ def gate(g: Graph, doc: str, concept: str, row: int, rows: dict) -> tuple:
     elif prior:
         evidence.append(f"role agrees with other companies ({'total' if prior == 'total' else 'line item'})")
     return (not objections), evidence, objections
+
+
+def _siblings(rows: dict, row: int) -> list:
+    """Labels of the other rows under the same heading of the same statement."""
+    sec = rows[row]["section"] if row in rows else ""
+    return [d["label"] for r, d in rows.items() if r != row and d["section"] == sec]
+
+
+COST_PARTS = {"CostOfRevenue", "SellingGeneralAdmin", "ResearchAndDevelopment", "SalesAndMarketing",
+              "GeneralAndAdministrative"}
+
+
+def _is_all_costs(g: Graph, doc: str, d: dict) -> bool:
+    """True when the row, taken from revenue, leaves exactly operating income for some printed period:
+    then it is the total of all operating costs, which no single cost concept may be bound to."""
+    ticker = g.filings[doc]["ticker"]
+    for r in d["readings"]:
+        rev, oi = g.fact(ticker, "Revenue", r.period), g.fact(ticker, "OperatingIncome", r.period)
+        if rev is None or oi is None or r.value is None:
+            continue
+        rv, ov = g.best_reading(rev).value, g.best_reading(oi).value
+        if rv is not None and ov is not None and abs(rv - abs(r.value) - ov) <= max(1.0, 0.0005 * abs(rv)):
+            return True
+    return False
+
+
+def _one_of_several(concept: str, row: int, rows: dict) -> int:
+    """How many amount lines share this row's heading, when the heading (not the row's own label) carries
+    the concept's words: "Long-term debt due after one year" over two lines is the total of both."""
+    def words(text: str) -> set:
+        return {w for w in re.findall(r"[a-z]+", text.lower()) if len(w) > 3}
+    key = words(SAYS.get(concept, "")) or {concept.lower()}
+    d = rows[row]
+    if not d["section"] or (key & words(d["label"])) or not (key & words(d["section"])):
+        return 0
+    same = [r for r, x in rows.items() if x["section"] == d["section"] and x["unit"] == d["unit"]]
+    return len(same) if len(same) >= 2 else 0
 
 
 def _derived_from_cf_row(g: Graph, doc: str, d: dict, rows: dict):
@@ -198,6 +248,18 @@ def describe(rows: dict, bound: dict) -> str:
     return "\n".join(lines)
 
 
+def binding_prompt(g: Graph, ticker: str, concept: str, doc: str) -> tuple:
+    """(the user prompt of the binding question, the statement's rows) for (ticker, concept) on one
+    filing. Labels, sections and roles only, never a value."""
+    c = concept_defs()[concept]
+    rows = row_table(g, doc, c.statement)
+    bound = {b.row: b.concept for b in g.bindings if b.doc == doc and b.kind == c.statement and b.state == "active"}
+    user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nStatement: {c.statement}\n"
+            f"Concept: {concept}: {SAYS.get(concept, '')}\n\nRows (number: label (section) <role>):\n"
+            + describe(rows, bound))
+    return user, rows
+
+
 def learn(g: Graph, ticker: str, concept: str, question_id: str = "", question: str = "",
           model: Optional[str] = None, use_gate: bool = True, offline: bool = False) -> dict:
     """Try to learn a binding for (ticker, concept). Returns the store entry."""
@@ -209,29 +271,32 @@ def learn(g: Graph, ticker: str, concept: str, question_id: str = "", question: 
     if doc is None:
         entry["objections"] = ["no readable filing"]
         return entry
-    rows = row_table(g, doc, c.statement)
+    user, rows = binding_prompt(g, ticker, concept, doc)
     if not rows:
         entry["objections"] = [f"no {c.statement} statement was parsed for this filing"]
         return entry
-    bound = {b.row: b.concept for b in g.bindings if b.doc == doc and b.kind == c.statement and b.state == "active"}
-    user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nStatement: {c.statement}\n"
-            f"Concept: {concept}: {SAYS.get(concept, '')}\n\nRows (number: label (section) <role>):\n"
-            + describe(rows, bound))
-    try:
-        ans = ask_json(SYSTEM, user, schema=None, model=model, tag="bind", offline=offline)
-    except Exception as e:  # noqa: BLE001 - a failed proposal is recorded, not fatal
-        entry["objections"] = [f"proposer failed: {type(e).__name__}"]
-        return entry
-    row = ans.get("row")
+    # The row is a model's choice, so it is made under the four-eyes rule of the row picks (link._pick:
+    # a second model when TIEOUT_LINK_CHECKER is set, the arbiter on a dispute). A binding one model made
+    # alone is still applied, but every answer that rests on it is FLAGGED (execute.trust); one two
+    # models made is WITNESSED, never VERIFIED (23 Nov red team, research/17 Top 1).
+    from .link import _pick
+    ans, case, seen = _pick(SYSTEM, user, "bind", model, offline, field="row")
+    row = ans.get("row") if ans else None
     if isinstance(row, str) and row.strip().isdigit():
         row = int(row)                                   # small models answer "24" for 24
-    entry["reason"] = str(ans.get("reason", ""))[:200]
+    entry["reason"] = str((ans or {}).get("reason", ""))[:200]
     if row is None or not isinstance(row, int) or row not in rows:
         entry["objections"] = ["proposer found no row"]
         return entry
     entry["row"], entry["label"] = row, rows[row]["label"]
+    entry["picked"] = case
+    entry["proposer"] = entry["proposer"] or " + ".join(m for m, _a in seen)
     ok, evidence, objections = gate(g, doc, concept, row, rows)
     entry["evidence"], entry["objections"] = evidence, objections
+    if case in WITNESSED:
+        entry["evidence"].append(f"bound by two models ({case})")
+    else:
+        entry["objections"].append("one model chose this row" + (f" ({case})" if case else ""))
     if ok or not use_gate:
         entry["state"] = "active"
         apply_entry(g, entry)
@@ -255,15 +320,25 @@ def apply_entry(g: Graph, entry: dict) -> int:
         row = entry["row"] if (doc == entry["doc"] and entry["row"] in match) else match[0]
         if any(b.doc == doc and b.concept == concept and b.state == "active" for b in g.bindings):
             continue
+        if any(b.doc == doc and b.concept == concept and b.row == row and b.kind == kind
+               and any(str(e).startswith("audit") for e in b.evidence) for b in g.bindings):
+            continue                                   # the binding audit already ruled on this row
+        if label_objections(concept, rows[row]["label"], _siblings(rows, row)):
+            continue                                   # the label itself says it is another line
+        state = "proposed" if label_unrelated(concept, rows[row]["label"]) else "active"
         g.bindings.append(Binding(doc=doc, kind=kind, row=row, label=rows[row]["label"], concept=concept,
-                                  origin=f"learned:{entry.get('taught_by', '')}", state="active",
+                                  origin=f"learned:{entry.get('taught_by', '')}", state=state,
                                   evidence=list(entry.get("evidence", []))))
+        if entry.get("picked") in WITNESSED:          # two models chose this label (learn, or the witness pass)
+            g.__dict__.setdefault("witnessed_bindings", set()).add((doc, kind, row, concept))
         for r in rows[row]["readings"]:
             key = f"{ticker}|{concept}|{r.period}"
-            fact = g.facts.setdefault(key, Fact(ticker, concept, r.period, [], "active"))
+            fact = g.facts.setdefault(key, Fact(ticker, concept, r.period, [], state))
             if r.id not in fact.readings:
                 fact.readings.append(r.id)
                 added += 1
+            if state == "active":
+                fact.binding_state = "active"
     return added
 
 
@@ -310,11 +385,62 @@ def load_learned(g: Graph, path: pathlib.Path = LEARNED) -> int:
             e = json.loads(line)
             if (e.get("ticker"), e.get("concept")) in ruling["rejected"]:
                 continue                                 # rejected by the human reviewer
-            if e.get("kind") == "item":
-                continue                                 # line items are re-applied by items.load_items
+            if e.get("kind") in ("item", "mention", "breakdown"):
+                continue                                 # links are re-applied by link.load_links
             if e.get("state") == "active" and e.get("label"):
                 n += apply_entry(g, e)
     return n
+
+
+# ------------------------------------------------------------ the coverage pass and absence
+
+ABSENT = ROOT / "semantics" / "absent.jsonl"
+
+SYSTEM_MANY = """You map financial concepts to rows of one company's financial statement.
+You are shown the printed row labels with their section headings and structural roles. You are never
+shown values. For each concept listed, give the single row that reports it for the whole company
+(consolidated, attributable to the parent where the statement separates it), or null if no row
+reports it. Never a component of the concept, never a per-share row for an amount.
+Answer as JSON, one key per concept: {"<Concept>": <row number or null>, ...}"""
+
+
+def propose_rows(g: Graph, ticker: str, kind: str, concepts: list, model: Optional[str] = None,
+                 offline: bool = False) -> dict:
+    """One model call for every unbound concept of one statement: {concept: row or None}. Labels only."""
+    doc = latest_doc(g, ticker)
+    rows = row_table(g, doc, kind) if doc else {}
+    if not rows or not concepts:
+        return {}
+    bound = {b.row: b.concept for b in g.bindings if b.doc == doc and b.kind == kind and b.state == "active"}
+    user = (f"Company: {g.companies[ticker]['name']} ({ticker})\nStatement: {kind}\nConcepts:\n"
+            + "\n".join(f"{c}: {SAYS.get(c, '')}" for c in concepts)
+            + "\n\nRows (number: label (section) <role>):\n" + describe(rows, bound))
+    ans = ask_json(SYSTEM_MANY, user, model=link_model(model, offline), tag="bindmany", offline=offline)
+    out = {}
+    for c in concepts:
+        row = ans.get(c) if isinstance(ans, dict) else None
+        row = int(row) if isinstance(row, str) and row.strip().isdigit() else row
+        out[c] = row if isinstance(row, int) and not isinstance(row, bool) and row in rows else None
+    return out
+
+
+def closure(g: Graph, doc: str, kind: str) -> tuple:
+    """(rows inside a passing formula, amount rows) of one statement: how completely it was read."""
+    rows = [d for d in row_table(g, doc, kind).values() if d["unit"] == "USD" and d["label"].strip()]
+    return sum(1 for d in rows if d["verified"]), len(rows)
+
+
+def load_absent(g: Graph, path: pathlib.Path = ABSENT) -> int:
+    """Facts of the form "this company does not report this concept", each with its evidence."""
+    if not hasattr(g, "absent"):
+        g.absent = {}
+    if not path.exists():
+        return 0
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if line.strip():
+            e = json.loads(line)
+            g.absent[(e["ticker"], e["concept"])] = e["evidence"]
+    return len(g.absent)
 
 
 SAYS = {
@@ -326,9 +452,16 @@ SAYS = {
     "OperatingIncome": "operating income / income from operations / earnings from operations",
     "PretaxIncome": "income before income taxes",
     "IncomeTax": "provision for income taxes (income tax expense)",
-    "NetIncome": "net income for the period (attributable to the company if the statement separates noncontrolling interests)",
+    "NetIncome": "net income attributable to the company's own shareholders (the usual meaning of net income, profit or earnings)",
+    "ConsolidatedNetIncome": "net income including the share of noncontrolling (minority) interests; same as NetIncome when there are none",
     "EPSDiluted": "diluted earnings per share",
+    "EPSBasic": "basic earnings per share",
     "SharesDiluted": "diluted weighted-average number of shares used for diluted earnings per share",
+    "SharesBasic": "basic weighted-average number of shares outstanding",
+    "InterestExpense": "interest expense",
+    "SalesAndMarketing": "sales and marketing expense, where printed as its own line",
+    "GeneralAndAdministrative": "general and administrative expense, where printed as its own line",
+    "NoninterestIncome": "total noninterest income (banks)",
     "NetInterestIncome": "net interest income (banks)",
     "ProvisionForCreditLosses": "provision for credit losses (banks)",
     "NoninterestExpense": "total noninterest expense (banks)",
@@ -337,7 +470,14 @@ SAYS = {
     "TotalAssets": "total assets",
     "TotalCurrentLiabilities": "total current liabilities",
     "TotalLiabilities": "total liabilities (only if printed as a line)",
-    "TotalEquity": "total shareholders' equity (total equity)",
+    "ShareholdersEquity": "equity belonging to the company's own shareholders (stockholders' equity, book value)",
+    "TotalEquity": "total equity including noncontrolling interests; same as ShareholdersEquity when there are none",
+    "AccountsReceivable": "accounts receivable, net",
+    "PropertyPlantEquipment": "property, plant and equipment, net",
+    "IntangibleAssets": "intangible assets other than goodwill, net",
+    "AccountsPayable": "accounts payable",
+    "RetainedEarnings": "retained earnings (or accumulated deficit)",
+    "Loans": "total loans, net (banks)",
     "TotalLiabilitiesAndEquity": "total liabilities and equity (equals total assets)",
     "Inventory": "inventories",
     "Goodwill": "goodwill",

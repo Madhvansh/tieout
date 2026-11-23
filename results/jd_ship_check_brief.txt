@@ -1,0 +1,5 @@
+h3_r7.json: 34 answers served, 93 proof leaves, 93 are graph nodes, 0 outside the graph; 0 answers on lines a text reader pointed at; 0 served with no leaf []
+h3_r8.json: 33 answers served, 78 proof leaves, 78 are graph nodes, 0 outside the graph; 1 answers on lines a text reader pointed at; 0 served with no leaf []
+h3_r9.json: 33 answers served, 83 proof leaves, 83 are graph nodes, 0 outside the graph; 2 answers on lines a text reader pointed at; 0 served with no leaf []
+h3_r10.json: 31 answers served, 76 proof leaves, 76 are graph nodes, 0 outside the graph; 4 answers on lines a text reader pointed at; 0 served with no leaf []
+PASS: every proof leaf is a node of the graph

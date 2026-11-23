@@ -1,0 +1,26 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What did Apple sell in Greater China in its fiscal third quarter of 2026 (the three months to June 27, 2026)?",
+ "abstain": false,
+ "answer": "$18,816 million",
+ "pred": {
+  "kind": "number",
+  "value": 18816.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "AAPL",
+   "doc": "AAPL_FY2026_Q3_10Q",
+   "page": 15,
+   "value": 18816.0,
+   "label": "Three Months Ended June 27, 2026 Greater China Net sales",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

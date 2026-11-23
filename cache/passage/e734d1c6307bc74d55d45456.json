@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How much cash did Visa pay to buy back its class A shares in fiscal 2026?",
+ "abstain": false,
+ "answer": "$20,451,000,000",
+ "pred": {
+  "kind": "number",
+  "value": 20451000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "V",
+   "doc": "V_FY2026_10K",
+   "page": 66,
+   "value": 20451000000.0,
+   "label": "Repurchases of class A common stock",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

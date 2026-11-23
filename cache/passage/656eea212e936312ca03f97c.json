@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What net interest income did Bank of America report for the third quarter of 2025?",
+ "abstain": false,
+ "answer": "$15,233 million",
+ "pred": {
+  "kind": "number",
+  "value": 15233000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "BAC",
+   "doc": "BAC_FY2025_Q3_10Q",
+   "page": 50,
+   "value": 15233000000.0,
+   "label": "Net interest income",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

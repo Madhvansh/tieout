@@ -1,0 +1,35 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Dividing fiscal 2026 membership fee revenue by year-end paid members, what did Costco earn per paid member?",
+ "abstain": false,
+ "answer": "$70.24",
+ "pred": {
+  "kind": "number",
+  "value": 70.23781212841855
+ },
+ "unit": "USD/share",
+ "facts": [
+  {
+   "ticker": "COST",
+   "doc": "COST_FY2026_10K",
+   "page": 6,
+   "value": 84100000.0,
+   "label": "Paid members",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "COST",
+   "doc": "COST_FY2026_10K",
+   "page": 26,
+   "value": 5907000000.0,
+   "label": "Membership fees",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

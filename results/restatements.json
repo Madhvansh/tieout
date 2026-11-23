@@ -1,0 +1,536 @@
+{
+  "events": 18,
+  "by_kind": {
+    "reclassification": 6,
+    "presentation": 7,
+    "restatement": 5
+  },
+  "examples": {
+    "reclassification": {
+      "ticker": "AAPL",
+      "statement": "BS",
+      "period": "FY2025@end",
+      "kind": "reclassification",
+      "old_doc": "AAPL_FY2025_10K",
+      "new_doc": "AAPL_FY2026_10K",
+      "line": {
+        "label": "Other non-current assets",
+        "old": 83727000000,
+        "new": 72634000000,
+        "delta": -11093000000,
+        "old_printed": "83,727",
+        "new_printed": "72,634",
+        "new_line": false,
+        "dropped": false,
+        "old_reading": {
+          "id": "AAPL_FY2025_10K:p34:BS:r9:c0",
+          "doc": "AAPL_FY2025_10K",
+          "page": 34,
+          "label": "Other non-current assets",
+          "printed": "83,727",
+          "value": 83727000000
+        },
+        "new_reading": {
+          "id": "AAPL_FY2026_10K:p37:BS:r10:c1",
+          "doc": "AAPL_FY2026_10K",
+          "page": 37,
+          "label": "Other non-current assets",
+          "printed": "72,634",
+          "value": 72634000000
+        }
+      },
+      "counterparts": [
+        {
+          "label": "Intangible assets, net",
+          "old": null,
+          "new": 11093000000,
+          "delta": 11093000000,
+          "old_printed": null,
+          "new_printed": "11,093",
+          "new_line": true,
+          "dropped": false,
+          "old_reading": null,
+          "new_reading": {
+            "id": "AAPL_FY2026_10K:p37:BS:r9:c1",
+            "doc": "AAPL_FY2026_10K",
+            "page": 37,
+            "label": "Intangible assets, net",
+            "printed": "11,093",
+            "value": 11093000000
+          },
+          "kind": "reclassification"
+        }
+      ],
+      "unchanged_totals": [
+        {
+          "label": "Total non-current assets",
+          "value": 211284000000,
+          "printed": "211,284",
+          "old_reading": {
+            "id": "AAPL_FY2025_10K:p34:BS:r10:c0",
+            "doc": "AAPL_FY2025_10K",
+            "page": 34,
+            "label": "Total non-current assets",
+            "printed": "211,284",
+            "value": 211284000000
+          },
+          "new_reading": {
+            "id": "AAPL_FY2026_10K:p37:BS:r11:c1",
+            "doc": "AAPL_FY2026_10K",
+            "page": 37,
+            "label": "Total non-current assets",
+            "printed": "211,284",
+            "value": 211284000000
+          }
+        },
+        {
+          "label": "Total assets",
+          "value": 359241000000,
+          "printed": "359,241",
+          "old_reading": {
+            "id": "AAPL_FY2025_10K:p34:BS:r11:c0",
+            "doc": "AAPL_FY2025_10K",
+            "page": 34,
+            "label": "Total assets",
+            "printed": "359,241",
+            "value": 359241000000
+          },
+          "new_reading": {
+            "id": "AAPL_FY2026_10K:p37:BS:r12:c1",
+            "doc": "AAPL_FY2026_10K",
+            "page": 37,
+            "label": "Total assets",
+            "printed": "359,241",
+            "value": 359241000000
+          }
+        }
+      ],
+      "carried_from": null,
+      "explanations": [
+        {
+          "doc": "AAPL_FY2026_10K",
+          "page": 40,
+          "sentence": "Certain prior period amounts in the consolidated financial statements and accompanying notes have been reclassified to conform to the current period\u2019s presentation."
+        }
+      ]
+    },
+    "presentation": {
+      "ticker": "AAPL",
+      "statement": "CF",
+      "period": "FY2024",
+      "kind": "presentation",
+      "old_doc": "AAPL_FY2025_10K",
+      "new_doc": "AAPL_FY2026_10K",
+      "line": {
+        "label": "Cash paid for income taxes, net",
+        "old": 26102000000,
+        "new": null,
+        "delta": -26102000000,
+        "old_printed": "26,102",
+        "new_printed": null,
+        "new_line": false,
+        "dropped": true,
+        "old_reading": {
+          "id": "AAPL_FY2025_10K:p36:CF:r28:c1",
+          "doc": "AAPL_FY2025_10K",
+          "page": 36,
+          "label": "Cash paid for income taxes, net",
+          "printed": "26,102",
+          "value": 26102000000
+        },
+        "new_reading": null
+      },
+      "counterparts": [],
+      "unchanged_totals": [],
+      "carried_from": null,
+      "explanations": [
+        {
+          "doc": "AAPL_FY2026_10K",
+          "page": 40,
+          "sentence": "Certain prior period amounts in the consolidated financial statements and accompanying notes have been reclassified to conform to the current period\u2019s presentation."
+        }
+      ]
+    },
+    "restatement": {
+      "ticker": "BAC",
+      "statement": "BS",
+      "period": "FY2024@end",
+      "kind": "restatement",
+      "old_doc": "BAC_FY2024_10K",
+      "new_doc": "BAC_FY2025_10K",
+      "line": {
+        "label": "Other assets (includes and",
+        "old": 162056000000,
+        "new": 161836000000,
+        "delta": -220000000,
+        "old_printed": "162,056",
+        "new_printed": "161,836",
+        "new_line": false,
+        "dropped": false,
+        "old_reading": {
+          "id": "BAC_FY2024_10K:p93:BS:r17:c0",
+          "doc": "BAC_FY2024_10K",
+          "page": 93,
+          "label": "Other assets (includes $13,176 and $11,861 measured at fair value)",
+          "printed": "162,056",
+          "value": 162056000000
+        },
+        "new_reading": {
+          "id": "BAC_FY2025_10K:p94:BS:r17:c2",
+          "doc": "BAC_FY2025_10K",
+          "page": 94,
+          "label": "Other assets (includes and",
+          "printed": "161,836",
+          "value": 161836000000
+        }
+      },
+      "counterparts": [
+        {
+          "label": "Total assets",
+          "old": 3261519000000,
+          "new": 3261299000000,
+          "delta": -220000000,
+          "old_printed": "3,261,519",
+          "new_printed": "3,261,299",
+          "new_line": false,
+          "dropped": false,
+          "old_reading": {
+            "id": "BAC_FY2024_10K:p93:BS:r18:c0",
+            "doc": "BAC_FY2024_10K",
+            "page": 93,
+            "label": "Total assets",
+            "printed": "3,261,519",
+            "value": 3261519000000
+          },
+          "new_reading": {
+            "id": "BAC_FY2025_10K:p94:BS:r18:c2",
+            "doc": "BAC_FY2025_10K",
+            "page": 94,
+            "label": "Total assets",
+            "printed": "3,261,299",
+            "value": 3261299000000
+          },
+          "kind": "restatement"
+        },
+        {
+          "label": "Accrued expenses and other liabilities (includes and $1,177 and $1,096 of reserve for unfunded",
+          "old": 210169000000,
+          "new": 211545000000,
+          "delta": 1376000000,
+          "old_printed": "210,169",
+          "new_printed": "211,545",
+          "new_line": false,
+          "dropped": false,
+          "old_reading": {
+            "id": "BAC_FY2024_10K:p93:BS:r28:c0",
+            "doc": "BAC_FY2024_10K",
+            "page": 93,
+            "label": "Accrued expenses and other liabilities (includes $13,199 and $11,473 measured at fair value and $1,096 and $1,209 of reserve for unfunded lending commitments)",
+            "printed": "210,169",
+            "value": 210169000000
+          },
+          "new_reading": {
+            "id": "BAC_FY2025_10K:p94:BS:r28:c2",
+            "doc": "BAC_FY2025_10K",
+            "page": 94,
+            "label": "Accrued expenses and other liabilities (includes and $1,177 and $1,096 of reserve for unfunded",
+            "printed": "211,545",
+            "value": 211545000000
+          },
+          "kind": "restatement"
+        },
+        {
+          "label": "Total liabilities",
+          "old": 2965960000000,
+          "new": 2967336000000,
+          "delta": 1376000000,
+          "old_printed": "2,965,960",
+          "new_printed": "2,967,336",
+          "new_line": false,
+          "dropped": false,
+          "old_reading": {
+            "id": "BAC_FY2024_10K:p93:BS:r30:c0",
+            "doc": "BAC_FY2024_10K",
+            "page": 93,
+            "label": "Total liabilities",
+            "printed": "2,965,960",
+            "value": 2965960000000
+          },
+          "new_reading": {
+            "id": "BAC_FY2025_10K:p94:BS:r30:c2",
+            "doc": "BAC_FY2025_10K",
+            "page": 94,
+            "label": "Total liabilities",
+            "printed": "2,967,336",
+            "value": 2967336000000
+          },
+          "kind": "restatement"
+        },
+        {
+          "label": "Retained earnings",
+          "old": 242349000000,
+          "new": 240753000000,
+          "delta": -1596000000,
+          "old_printed": "242,349",
+          "new_printed": "240,753",
+          "new_line": false,
+          "dropped": false,
+          "old_reading": {
+            "id": "BAC_FY2024_10K:p93:BS:r33:c0",
+            "doc": "BAC_FY2024_10K",
+            "page": 93,
+            "label": "Retained earnings",
+            "printed": "242,349",
+            "value": 242349000000
+          },
+          "new_reading": {
+            "id": "BAC_FY2025_10K:p94:BS:r34:c2",
+            "doc": "BAC_FY2025_10K",
+            "page": 94,
+            "label": "Retained earnings",
+            "printed": "240,753",
+            "value": 240753000000
+          },
+          "kind": "restatement"
+        },
+        {
+          "label": "Total shareholders\u2019 equity",
+          "old": 295559000000,
+          "new": 293963000000,
+          "delta": -1596000000,
+          "old_printed": "295,559",
+          "new_printed": "293,963",
+          "new_line": false,
+          "dropped": false,
+          "old_reading": {
+            "id": "BAC_FY2024_10K:p93:BS:r35:c0",
+            "doc": "BAC_FY2024_10K",
+            "page": 93,
+            "label": "Total shareholders\u2019 equity",
+            "printed": "295,559",
+            "value": 295559000000
+          },
+          "new_reading": {
+            "id": "BAC_FY2025_10K:p94:BS:r36:c2",
+            "doc": "BAC_FY2025_10K",
+            "page": 94,
+            "label": "Total shareholders\u2019 equity",
+            "printed": "293,963",
+            "value": 293963000000
+          },
+          "kind": "restatement"
+        },
+        {
+          "label": "Total liabilities and shareholders\u2019 equity",
+          "old": 3261519000000,
+          "new": 3261299000000,
+          "delta": -220000000,
+          "old_printed": "3,261,519",
+          "new_printed": "3,261,299",
+          "new_line": false,
+          "dropped": false,
+          "old_reading": {
+            "id": "BAC_FY2024_10K:p93:BS:r36:c0",
+            "doc": "BAC_FY2024_10K",
+            "page": 93,
+            "label": "Total liabilities and shareholders\u2019 equity",
+            "printed": "3,261,519",
+            "value": 3261519000000
+          },
+          "new_reading": {
+            "id": "BAC_FY2025_10K:p94:BS:r37:c2",
+            "doc": "BAC_FY2025_10K",
+            "page": 94,
+            "label": "Total liabilities and shareholders\u2019 equity",
+            "printed": "3,261,299",
+            "value": 3261299000000
+          },
+          "kind": "restatement"
+        }
+      ],
+      "unchanged_totals": [],
+      "carried_from": null,
+      "explanations": [
+        {
+          "doc": "BAC_FY2025_10K",
+          "page": 97,
+          "sentence": "The accounting changes were applied retrospectively to the earliest period presented, resulting in a cumulative adjustment that decreased retained earnings by $1.2 billion as of January 1, 2023."
+        },
+        {
+          "doc": "BAC_FY2025_10K",
+          "page": 51,
+          "sentence": "Capital Composition and Ratios Effective in the fourth quarter of 2025, the Corporation elected to change its accounting methods related to certain tax-related equity investments and applied those changes retrospectively through a cumulative adjustment to retained earnings."
+        },
+        {
+          "doc": "BAC_FY2025_10K",
+          "page": 148,
+          "sentence": "(6) Effective in the fourth quarter of 2025, the Corporation elected to change its accounting methods for certain tax-related equity investments and applied those changes retrospectively through cumulative adjustment to retained earnings."
+        }
+      ]
+    }
+  },
+  "all_events": [
+    {
+      "ticker": "AAPL",
+      "statement": "BS",
+      "period": "FY2025@end",
+      "kind": "reclassification",
+      "old_doc": "AAPL_FY2025_10K",
+      "new_doc": "AAPL_FY2026_10K",
+      "line": "Other non-current assets"
+    },
+    {
+      "ticker": "AAPL",
+      "statement": "CF",
+      "period": "FY2024",
+      "kind": "presentation",
+      "old_doc": "AAPL_FY2025_10K",
+      "new_doc": "AAPL_FY2026_10K",
+      "line": "Cash paid for income taxes, net"
+    },
+    {
+      "ticker": "AAPL",
+      "statement": "CF",
+      "period": "FY2025",
+      "kind": "presentation",
+      "old_doc": "AAPL_FY2025_10K",
+      "new_doc": "AAPL_FY2026_10K",
+      "line": "Cash paid for income taxes, net"
+    },
+    {
+      "ticker": "BAC",
+      "statement": "BS",
+      "period": "FY2024@end",
+      "kind": "restatement",
+      "old_doc": "BAC_FY2024_10K",
+      "new_doc": "BAC_FY2025_10K",
+      "line": "Other assets (includes and"
+    },
+    {
+      "ticker": "BAC",
+      "statement": "CF",
+      "period": "FY2023",
+      "kind": "restatement",
+      "old_doc": "BAC_FY2024_10K",
+      "new_doc": "BAC_FY2025_10K",
+      "line": "Net income"
+    },
+    {
+      "ticker": "BAC",
+      "statement": "CF",
+      "period": "FY2023",
+      "kind": "presentation",
+      "old_doc": "BAC_FY2024_10K",
+      "new_doc": "BAC_FY2025_10K",
+      "line": "Income taxes paid, net"
+    },
+    {
+      "ticker": "BAC",
+      "statement": "CF",
+      "period": "FY2024",
+      "kind": "reclassification",
+      "old_doc": "BAC_FY2024_10K",
+      "new_doc": "BAC_FY2025_10K",
+      "line": "Originations and purchases"
+    },
+    {
+      "ticker": "BAC",
+      "statement": "CF",
+      "period": "FY2024",
+      "kind": "restatement",
+      "old_doc": "BAC_FY2024_10K",
+      "new_doc": "BAC_FY2025_10K",
+      "line": "Net income"
+    },
+    {
+      "ticker": "BAC",
+      "statement": "CF",
+      "period": "FY2024",
+      "kind": "presentation",
+      "old_doc": "BAC_FY2024_10K",
+      "new_doc": "BAC_FY2025_10K",
+      "line": "Income taxes paid, net"
+    },
+    {
+      "ticker": "BAC",
+      "statement": "IS",
+      "period": "FY2023",
+      "kind": "restatement",
+      "old_doc": "BAC_FY2024_10K",
+      "new_doc": "BAC_FY2025_10K",
+      "line": "Other income (loss)"
+    },
+    {
+      "ticker": "BAC",
+      "statement": "IS",
+      "period": "FY2024",
+      "kind": "restatement",
+      "old_doc": "BAC_FY2024_10K",
+      "new_doc": "BAC_FY2025_10K",
+      "line": "Other income (loss)"
+    },
+    {
+      "ticker": "GOOGL",
+      "statement": "CF",
+      "period": "FY2023",
+      "kind": "presentation",
+      "old_doc": "GOOGL_FY2024_10K",
+      "new_doc": "GOOGL_FY2025_10K",
+      "line": "Purchases of property and equipment included in accrued liabilities and accounts payable"
+    },
+    {
+      "ticker": "GOOGL",
+      "statement": "CF",
+      "period": "FY2024",
+      "kind": "presentation",
+      "old_doc": "GOOGL_FY2024_10K",
+      "new_doc": "GOOGL_FY2025_10K",
+      "line": "Purchases of property and equipment included in accrued liabilities and accounts payable"
+    },
+    {
+      "ticker": "JNJ",
+      "statement": "CF",
+      "period": "FY2024",
+      "kind": "presentation",
+      "old_doc": "JNJ_FY2024_10K",
+      "new_doc": "JNJ_FY2025_10K",
+      "line": "Fair value of assets acquired"
+    },
+    {
+      "ticker": "KO",
+      "statement": "BS",
+      "period": "FY2024@end",
+      "kind": "reclassification",
+      "old_doc": "KO_FY2024_10K",
+      "new_doc": "KO_FY2025_10K",
+      "line": "Prepaid expenses and other current assets"
+    },
+    {
+      "ticker": "KO",
+      "statement": "BS",
+      "period": "FY2024@end",
+      "kind": "reclassification",
+      "old_doc": "KO_FY2024_10K",
+      "new_doc": "KO_FY2025_10K",
+      "line": "Accounts payable and accrued expenses"
+    },
+    {
+      "ticker": "MSFT",
+      "statement": "CF",
+      "period": "FY2024",
+      "kind": "reclassification",
+      "old_doc": "MSFT_FY2025_10K",
+      "new_doc": "MSFT_FY2026_10K",
+      "line": "Depreciation, amortization, and other"
+    },
+    {
+      "ticker": "MSFT",
+      "statement": "CF",
+      "period": "FY2025",
+      "kind": "reclassification",
+      "old_doc": "MSFT_FY2025_10K",
+      "new_doc": "MSFT_FY2026_10K",
+      "line": "Depreciation, amortization, and other"
+    }
+  ]
+}

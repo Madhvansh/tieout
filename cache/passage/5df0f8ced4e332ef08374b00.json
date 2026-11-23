@@ -1,0 +1,88 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Rank Apple, Microsoft and Nvidia by net profit margin (net income as a share of revenue) for each company's fiscal 2026, highest first.",
+ "abstain": false,
+ "answer": "Nvidia, Microsoft, Apple",
+ "pred": {
+  "kind": "companies",
+  "value": [
+   [
+    "Nvidia Corporation",
+    null
+   ],
+   [
+    "Microsoft Corporation",
+    null
+   ],
+   [
+    "Apple Inc.",
+    null
+   ]
+  ]
+ },
+ "unit": "company",
+ "facts": [
+  {
+   "ticker": "AAPL",
+   "doc": "AAPL_FY2026_10K",
+   "page": 42,
+   "value": 478834.0,
+   "label": "Total net sales",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "AAPL",
+   "doc": "AAPL_FY2026_10K",
+   "page": 42,
+   "value": 478834.0,
+   "label": "Total net sales",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "MSFT",
+   "doc": "MSFT_FY2026_10K",
+   "page": 37,
+   "value": 331839.0,
+   "label": "Total revenue",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "MSFT",
+   "doc": "MSFT_FY2026_10K",
+   "page": 37,
+   "value": 133749.0,
+   "label": "Net income",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "NVDA",
+   "doc": "NVDA_FY2026_10K",
+   "page": 139,
+   "value": 215938.0,
+   "label": "Revenue",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "NVDA",
+   "doc": "NVDA_FY2026_10K",
+   "page": 139,
+   "value": 120067.0,
+   "label": "Net income",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

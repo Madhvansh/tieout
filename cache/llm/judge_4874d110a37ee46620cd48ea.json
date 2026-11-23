@@ -1,0 +1,14 @@
+{
+ "model": "ollama:phi4-mini",
+ "system": "You check one proposed mapping from a financial concept to a row of a company's financial statement.\nYou see the row's printed label, the section heading above it and its role in the statement's arithmetic.\nYou never see values. Answer whether this row reports exactly the concept for the whole company (not a\npart of it, not a broader line that includes other items, not a gross amount when the concept is net).\nAnswer as JSON: {\"reports\": true or false, \"reason\": \"<one short sentence>\"}",
+ "user": "Concept: RetainedEarnings: retained earnings (or accumulated deficit)\nStatement: BS\nRow label: Retained earnings (deficit)\nSection: Common stock at stated value\nRole: total",
+ "answer": {
+  "reports": false,
+  "reason": "The row is labeled as 'Common Stock' not 'Retained Earnings'."
+ },
+ "seconds": 4.57,
+ "usage": {
+  "in": 147,
+  "out": 26
+ }
+}

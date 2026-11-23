@@ -1,0 +1,116 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Which of Procter & Gamble's five business segments made the most pre-tax profit per dollar of sales in fiscal 2026, and what was that margin?",
+ "abstain": false,
+ "answer": "Fabric & Home Care, with a pre-tax profit margin of approximately 0.2405 (or 24.05%)",
+ "pred": {
+  "kind": "number",
+  "value": 0.24048294517384378
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "PG",
+   "doc": "PG_FY2026_10K",
+   "page": 25,
+   "value": 30314.0,
+   "label": "Fabric & Home Care Net sales",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "PG",
+   "doc": "PG_FY2026_10K",
+   "page": 46,
+   "value": 7290.0,
+   "label": "Fabric & Home Care Earnings/(loss) before income taxes",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "PG",
+   "doc": "PG_FY2026_10K",
+   "page": 22,
+   "value": 16023.0,
+   "label": "Beauty Net sales",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "PG",
+   "doc": "PG_FY2026_10K",
+   "page": 46,
+   "value": 3473.0,
+   "label": "Beauty Earnings/(loss) before income taxes",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "PG",
+   "doc": "PG_FY2026_10K",
+   "page": 46,
+   "value": 6918.0,
+   "label": "Grooming Net sales",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "PG",
+   "doc": "PG_FY2026_10K",
+   "page": 14,
+   "value": 1966.0,
+   "label": "Grooming Earnings/(loss) before income taxes",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "PG",
+   "doc": "PG_FY2026_10K",
+   "page": 25,
+   "value": 12456.0,
+   "label": "Health Care Net sales",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "PG",
+   "doc": "PG_FY2026_10K",
+   "page": 46,
+   "value": 3163.0,
+   "label": "Health Care Earnings/(loss) before income taxes",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "PG",
+   "doc": "PG_FY2026_10K",
+   "page": 26,
+   "value": 20401.0,
+   "label": "Baby, Feminine & Family Care Net sales",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "PG",
+   "doc": "PG_FY2026_10K",
+   "page": 46,
+   "value": 5145.0,
+   "label": "Baby, Feminine & Family Care Earnings/(loss) before income taxes",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

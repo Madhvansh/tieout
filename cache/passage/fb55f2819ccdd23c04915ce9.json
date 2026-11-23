@@ -1,0 +1,36 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was Microsoft's operating margin in fiscal 2026?",
+ "abstain": false,
+ "answer": "46.78%",
+ "pred": {
+  "kind": "number",
+  "value": 0.4678120612708293
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "MSFT",
+   "doc": "MSFT_FY2026_10K",
+   "page": 38,
+   "value": 331839.0,
+   "label": "Total revenue",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "MSFT",
+   "doc": "MSFT_FY2026_10K",
+   "page": 38,
+   "value": 155237.0,
+   "label": "Operating income",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

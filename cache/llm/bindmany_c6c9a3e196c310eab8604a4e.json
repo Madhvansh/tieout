@@ -1,0 +1,19 @@
+{
+ "model": "groq:openai/gpt-oss-20b@low",
+ "system": "You map financial concepts to rows of one company's financial statement.\nYou are shown the printed row labels with their section headings and structural roles. You are never\nshown values. For each concept listed, give the single row that reports it for the whole company\n(consolidated, attributable to the parent where the statement separates it), or null if no row\nreports it. Never a component of the concept, never a per-share row for an amount.\nAnswer as JSON, one key per concept: {\"<Concept>\": <row number or null>, ...}",
+ "user": "Company: Target Corp (TGT)\nStatement: IS\nConcepts:\nGrossProfit: revenue minus cost of revenue, if printed as its own line\nResearchAndDevelopment: research and development expense\nSharesDiluted: diluted weighted-average number of shares used for diluted earnings per share\nSharesBasic: basic weighted-average number of shares outstanding\nInterestExpense: interest expense\nSalesAndMarketing: sales and marketing expense, where printed as its own line\nGeneralAndAdministrative: general and administrative expense, where printed as its own line\n\nRows (number: label (section) <role>):\n0: Net sales  <operand> [already: Revenue]\n1: Cost of sales  <operand> [already: CostOfRevenue]\n2: Selling, general, and administrative expenses  <operand> [already: SellingGeneralAdmin]\n3: Depreciation and amortization (exclusive of depreciation included in cost of sales)  <operand>\n4: Operating income  <total> [already: OperatingIncome]\n5: Net interest expense  <operand>\n6: Net other income  <operand>\n7: Earnings before income taxes  <total> [already: PretaxIncome]\n8: Provision for income taxes  <operand> [already: IncomeTax]\n9: Net earnings  <total> [already: ConsolidatedNetIncome]\n10: Basic earnings per share  <loose>\n11: Diluted earnings per share  <loose>\n12: Basic  (under: Weighted average common shares outstanding)  <loose>\n13: Diluted  (under: Weighted average common shares outstanding)  <loose>\n14: Antidilutive shares  (under: Weighted average common shares outstanding)  <loose>\n15: TARGET CORPORATION 2025 Form 10-K  (under: See accompanying Notes to Consolidated Financial S)  <loose>",
+ "answer": {
+  "GrossProfit": null,
+  "ResearchAndDevelopment": null,
+  "SharesDiluted": 13,
+  "SharesBasic": 12,
+  "InterestExpense": 5,
+  "SalesAndMarketing": null,
+  "GeneralAndAdministrative": 2
+ },
+ "seconds": 0.75,
+ "usage": {
+  "in": 596,
+  "out": 123
+ }
+}

@@ -1,0 +1,14 @@
+{
+  "B15": {
+    "ruling": "author",
+    "reason": "GM_FY2025_10K p36 prints GM Financial EBT-adjusted $2,802M (2025) and $2,965M (2024); F_FY2025_10K p56 prints Ford Credit EBT $2,557M (2025) and $1,654M (2024). Both sides agree on the higher earner, the $245M gap, and that only Ford Credit grew; the checker keyed the gap as answer_value while the author keyed the higher earner, a difference of form for a multi-part question. The author's answer text already states the $245M gap and both growth figures.",
+    "corrected": null,
+    "also_accept": null
+  },
+  "H15": {
+    "ruling": "author",
+    "reason": "NVDA_FY2026_10K p167 'Revenue by End Market' prints Professional Visualization 3,191 vs 1,878 (+69.9%), ahead of Data Center 193,737 vs 115,186 (+68.2%), OEM and Other +59.1%, Gaming +41.3%, Automotive +38.7%. Both sides name the same segment and the same $3,191M revenue; the checker keyed the revenue figure while the author keyed the segment name, a difference of form. The author's answer text carries the $3,191M figure.",
+    "corrected": null,
+    "also_accept": null
+  }
+}

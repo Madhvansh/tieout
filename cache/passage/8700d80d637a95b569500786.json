@@ -1,0 +1,44 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What share of its 2025 revenue did Meta spend on research and development?",
+ "abstain": false,
+ "answer": "Meta spent 29% of its 2025 revenue on research and development.",
+ "pred": {
+  "kind": "number",
+  "value": 0.29
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "META",
+   "doc": "META_FY2025_10K",
+   "page": 73,
+   "value": 200966.0,
+   "label": "Revenue",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "META",
+   "doc": "META_FY2025_10K",
+   "page": 73,
+   "value": 57372.0,
+   "label": "Research and development",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "META",
+   "doc": "META_FY2025_10K",
+   "page": 61,
+   "value": 0.29,
+   "label": "Research and development Percentage of revenue",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

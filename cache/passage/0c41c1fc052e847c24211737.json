@@ -1,0 +1,61 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "In 2025, which added more advertising revenue in dollars, Alphabet's Google or Meta, and by how much more?",
+ "abstain": false,
+ "answer": "Alphabet's Google added more advertising revenue than Meta in 2025, by $4,567,000,000 more.",
+ "pred": {
+  "kind": "companies",
+  "value": [
+   [
+    "Alphabet's Google",
+    null
+   ],
+   [
+    "Meta",
+    null
+   ]
+  ]
+ },
+ "unit": "company",
+ "facts": [
+  {
+   "ticker": "GOOGL",
+   "doc": "GOOGL_FY2025_10K",
+   "page": 34,
+   "value": 294691.0,
+   "label": "Google advertising for 2025",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "GOOGL",
+   "doc": "GOOGL_FY2025_10K",
+   "page": 34,
+   "value": 264590.0,
+   "label": "Google advertising for 2024",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "META",
+   "doc": "META_FY2025_10K",
+   "page": 74,
+   "value": 196175.0,
+   "label": "Advertising revenue for 2025",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "META",
+   "doc": "META_FY2025_10K",
+   "page": 74,
+   "value": 160633.0,
+   "label": "Advertising revenue for 2024",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

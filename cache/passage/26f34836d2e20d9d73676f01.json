@@ -1,0 +1,43 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How many of the 39 readable companies in the set ended their latest fiscal year with more than $1 trillion of total assets, and which are they?",
+ "abstain": false,
+ "answer": "Based on the provided passages, JPMorgan Chase & Co. and Wells Fargo & Co. ended their latest fiscal year with more than $1 trillion of total assets.",
+ "pred": {
+  "kind": "companies",
+  "value": [
+   [
+    "JPMorgan Chase & Co.",
+    null
+   ],
+   [
+    "Wells Fargo & Co.",
+    null
+   ]
+  ]
+ },
+ "unit": "company",
+ "facts": [
+  {
+   "ticker": "JPM",
+   "doc": "JPM_FY2025_10K",
+   "page": 3,
+   "value": 4400000000000.0,
+   "label": "JPMorganChase had $4.4 trillion in assets",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "WFC",
+   "doc": "WFC_FY2025_10K",
+   "page": 20,
+   "value": 1986258.0,
+   "label": "Total assets",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

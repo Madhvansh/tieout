@@ -1,0 +1,15 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Rank the six big banks in the set (JPMorgan, Bank of America, Citi, Wells Fargo, Goldman Sachs, Morgan Stanley) by 2025 net income attributable to the company.",
+ "abstain": true,
+ "answer": "The passages do not contain 2025 net income data for JPMorgan, Bank of America, and Goldman Sachs, so a complete ranking of the six big banks cannot be determined.",
+ "pred": {
+  "kind": "abstain",
+  "value": null
+ },
+ "unit": "text",
+ "facts": [],
+ "facts_ok": false
+}

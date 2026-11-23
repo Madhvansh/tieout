@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was Apple's top line for fiscal 2026?",
+ "abstain": false,
+ "answer": "$478,834 million",
+ "pred": {
+  "kind": "number",
+  "value": 478834000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "AAPL",
+   "doc": "AAPL_FY2026_10K",
+   "page": 29,
+   "value": 478834000000.0,
+   "label": "Total net sales",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

@@ -1,0 +1,16 @@
+{
+ "model": "groq:openai/gpt-oss-20b@low",
+ "system": "You map financial concepts to rows of one company's financial statement.\nYou are shown the printed row labels with their section headings and structural roles. You are never\nshown values. For each concept listed, give the single row that reports it for the whole company\n(consolidated, attributable to the parent where the statement separates it), or null if no row\nreports it. Never a component of the concept, never a per-share row for an amount.\nAnswer as JSON, one key per concept: {\"<Concept>\": <row number or null>, ...}",
+ "user": "Company: Costco Wholesale Corp (COST)\nStatement: IS\nConcepts:\nGrossProfit: revenue minus cost of revenue, if printed as its own line\nResearchAndDevelopment: research and development expense\nSalesAndMarketing: sales and marketing expense, where printed as its own line\nGeneralAndAdministrative: general and administrative expense, where printed as its own line\n\nRows (number: label (section) <role>):\n0: Net sales  (under: REVENUE)  <operand>\n1: Membership fees  (under: REVENUE)  <operand>\n2: Total revenue  (under: REVENUE)  <total> [already: Revenue]\n3: Merchandise costs  (under: OPERATING EXPENSES)  <operand> [already: CostOfRevenue]\n4: Selling, general and administrative  (under: OPERATING EXPENSES)  <operand> [already: SellingGeneralAdmin]\n5: Operating income  (under: OPERATING EXPENSES)  <total> [already: OperatingIncome]\n6: Interest expense  (under: OTHER INCOME (EXPENSE))  <operand> [already: InterestExpense]\n7: Interest income and other, net  (under: OTHER INCOME (EXPENSE))  <operand>\n8: INCOME BEFORE INCOME TAXES  (under: OTHER INCOME (EXPENSE))  <total> [already: PretaxIncome]\n9: Provision for income taxes  (under: OTHER INCOME (EXPENSE))  <operand> [already: IncomeTax]\n10: NET INCOME  (under: OTHER INCOME (EXPENSE))  <total> [already: ConsolidatedNetIncome]\n11: Basic  (under: NET INCOME PER COMMON SHARE)  <loose> [already: EPSBasic]\n12: Diluted  (under: NET INCOME PER COMMON SHARE)  <loose> [already: EPSDiluted]",
+ "answer": {
+  "GrossProfit": null,
+  "ResearchAndDevelopment": null,
+  "SalesAndMarketing": null,
+  "GeneralAndAdministrative": 4
+ },
+ "seconds": 0.82,
+ "usage": {
+  "in": 615,
+  "out": 74
+ }
+}

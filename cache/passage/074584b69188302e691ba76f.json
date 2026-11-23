@@ -1,0 +1,35 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was Pfizer's R&D spend as a percentage of total revenues in 2025?",
+ "abstain": false,
+ "answer": "Pfizer's R&D spend as a percentage of total revenues in 2025 was approximately 16.68% (calculated using Research and development expenses of $10,437 million and Total revenues of $62,579 million).",
+ "pred": {
+  "kind": "number",
+  "value": 0.1667794308
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "PFE",
+   "doc": "PFE_FY2025_10K",
+   "page": 45,
+   "value": 10437.0,
+   "label": "Research and development expenses",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "PFE",
+   "doc": "PFE_FY2025_10K",
+   "page": 38,
+   "value": 62579.0,
+   "label": "Total revenues",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

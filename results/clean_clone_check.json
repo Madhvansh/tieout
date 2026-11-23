@@ -1,0 +1,213 @@
+{
+ "command": "python scripts/clean_clone_check.py",
+ "url": "https://github.com/Madhvansh/tieout",
+ "branch": "v2",
+ "dest": "C:\\Users\\Administrator\\Downloads\\tieout_clean_check",
+ "clone_commit": "980a956b58347c8bfa33b7317478f728f3ec711e",
+ "worktree_head": "980a956b58347c8bfa33b7317478f728f3ec711e",
+ "worktree_modified_tracked_files": [],
+ "seconds": 233.3,
+ "all_passed": false,
+ "steps": [
+  {
+   "step": "1 clone",
+   "ok": true,
+   "seconds": 7.6,
+   "detail": "commit 980a956b58347c8bfa33b7317478f728f3ec711e (1499 tracked files)"
+  },
+  {
+   "step": "2 venv + pip install",
+   "ok": true,
+   "seconds": 177.8,
+   "detail": "pip install -r requirements.txt: ok"
+  },
+  {
+   "step": "3 pytest -q",
+   "ok": true,
+   "seconds": 6.8,
+   "detail": "........................................................................ [ 63%]\n..........................................                               [100%]\n114 passed in 4.16s"
+  },
+  {
+   "step": "4a python -m tieout stats",
+   "ok": true,
+   "seconds": 0.4,
+   "detail": "stats keys: filings, companies, tables, readings, reading_status, checks"
+  },
+  {
+   "step": "4b python -m tieout ask (cached plan)",
+   "ok": false,
+   "seconds": 4.0,
+   "detail": "Q: What was Apple's top line for fiscal 2026? | ANSWER: ABSTAIN: planner: planner failed (KeyError: 'GEMINI_API_KEY')"
+  },
+  {
+   "step": "replay: round1 cached planner plans",
+   "ok": true,
+   "seconds": 3.6,
+   "detail": "round1 cached planner plans: clone 2/30"
+  },
+  {
+   "step": "replay: round1 hand-written plans",
+   "ok": true,
+   "seconds": 2.6,
+   "detail": "round1 hand-written plans: clone 28/30"
+  },
+  {
+   "step": "replay: round2-dev cached planner plans",
+   "ok": true,
+   "seconds": 3.1,
+   "detail": "round2-dev cached planner plans: clone 3/39"
+  },
+  {
+   "step": "replay: round2-dev hand-written plans",
+   "ok": true,
+   "seconds": 3.4,
+   "detail": "round2-dev hand-written plans: clone 37/39"
+  },
+  {
+   "step": "5 size and secrets",
+   "ok": true,
+   "seconds": 23.9,
+   "detail": "1499 tracked files, largest 4472 KB, no secrets"
+  }
+ ],
+ "replays": [
+  {
+   "label": "round1 cached planner plans",
+   "bench": "benchmark/questions.jsonl",
+   "oracle": null,
+   "clone": {
+    "correct": 2,
+    "n": 30,
+    "complete": true,
+    "live": 0,
+    "cached": 0,
+    "ok_ids": [
+     "C32",
+     "C48"
+    ]
+   },
+   "needs_pythonpath_in_clone": false,
+   "clone_error": "",
+   "worktree_error": ""
+  },
+  {
+   "label": "round1 hand-written plans",
+   "bench": "benchmark/questions.jsonl",
+   "oracle": "benchmark/oracle_plans.json",
+   "clone": {
+    "correct": 28,
+    "n": 30,
+    "complete": true,
+    "live": 0,
+    "cached": 0,
+    "ok_ids": [
+     "C01",
+     "C03",
+     "C04",
+     "C07",
+     "C08",
+     "C09",
+     "C11",
+     "C12",
+     "C14",
+     "C17",
+     "C19",
+     "C20",
+     "C21",
+     "C24",
+     "C25",
+     "C27",
+     "C29",
+     "C31",
+     "C32",
+     "C34",
+     "C35",
+     "C37",
+     "C40",
+     "C42",
+     "C44",
+     "C45",
+     "C46",
+     "C48"
+    ]
+   },
+   "needs_pythonpath_in_clone": false,
+   "clone_error": "",
+   "worktree_error": ""
+  },
+  {
+   "label": "round2-dev cached planner plans",
+   "bench": "benchmark/round2/dev.jsonl",
+   "oracle": null,
+   "clone": {
+    "correct": 3,
+    "n": 39,
+    "complete": true,
+    "live": 0,
+    "cached": 0,
+    "ok_ids": [
+     "A18",
+     "A27",
+     "B20"
+    ]
+   },
+   "needs_pythonpath_in_clone": false,
+   "clone_error": "",
+   "worktree_error": ""
+  },
+  {
+   "label": "round2-dev hand-written plans",
+   "bench": "benchmark/round2/dev.jsonl",
+   "oracle": "benchmark/oracle_plans_r2dev.json",
+   "clone": {
+    "correct": 37,
+    "n": 39,
+    "complete": true,
+    "live": 0,
+    "cached": 0,
+    "ok_ids": [
+     "A01",
+     "A02",
+     "A03",
+     "A04",
+     "A05",
+     "A06",
+     "A07",
+     "A09",
+     "A10",
+     "A11",
+     "A12",
+     "A13",
+     "A14",
+     "A15",
+     "A16",
+     "A17",
+     "A18",
+     "A19",
+     "A20",
+     "A21",
+     "A22",
+     "A23",
+     "A24",
+     "A25",
+     "A26",
+     "A27",
+     "B01",
+     "B02",
+     "B07",
+     "B08",
+     "B10",
+     "B12",
+     "B13",
+     "B14",
+     "B20",
+     "B22",
+     "B24"
+    ]
+   },
+   "needs_pythonpath_in_clone": false,
+   "clone_error": "",
+   "worktree_error": ""
+  }
+ ]
+}

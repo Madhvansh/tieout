@@ -1,0 +1,22 @@
+{
+ "model": "groq:openai/gpt-oss-20b@low",
+ "system": "You map financial concepts to rows of one company's financial statement.\nYou are shown the printed row labels with their section headings and structural roles. You are never\nshown values. For each concept listed, give the single row that reports it for the whole company\n(consolidated, attributable to the parent where the statement separates it), or null if no row\nreports it. Never a component of the concept, never a per-share row for an amount.\nAnswer as JSON, one key per concept: {\"<Concept>\": <row number or null>, ...}",
+ "user": "Company: Chevron Corp (CVX)\nStatement: IS\nConcepts:\nCostOfRevenue: total cost of sales / cost of revenue / cost of goods sold\nGrossProfit: revenue minus cost of revenue, if printed as its own line\nResearchAndDevelopment: research and development expense\nOperatingIncome: operating income / income from operations / earnings from operations\nEPSDiluted: diluted earnings per share\nEPSBasic: basic earnings per share\nSharesDiluted: diluted weighted-average number of shares used for diluted earnings per share\nSharesBasic: basic weighted-average number of shares outstanding\nSalesAndMarketing: sales and marketing expense, where printed as its own line\nGeneralAndAdministrative: general and administrative expense, where printed as its own line\n\nRows (number: label (section) <role>):\n0: Sales and other operating revenues  (under: Revenues and Other Income)  <operand>\n1: Income (loss) from equity affiliates  (under: Revenues and Other Income)  <operand>\n2: Other income (loss)  (under: Revenues and Other Income)  <operand>\n3: Total Revenues and Other Income  (under: Revenues and Other Income)  <total> [already: Revenue]\n4: Purchased crude oil and products  (under: Costs and Other Deductions)  <operand>\n5: Operating expenses  (under: Costs and Other Deductions)  <operand>\n6: Selling, general and administrative expenses  (under: Costs and Other Deductions)  <operand> [already: SellingGeneralAdmin]\n7: Exploration expenses  (under: Costs and Other Deductions)  <operand>\n8: Depreciation, depletion and amortization  (under: Costs and Other Deductions)  <operand>\n9: Taxes other than on income  (under: Costs and Other Deductions)  <operand>\n10: Interest and debt expense  (under: Costs and Other Deductions)  <operand> [already: InterestExpense]\n11: Other components of net periodic benefit costs  (under: Costs and Other Deductions)  <operand>\n12: Total Costs and Other Deductions  (under: Costs and Other Deductions)  <total>\n13: Income (Loss) Before Income Tax Expense  (under: Costs and Other Deductions)  <total> [already: PretaxIncome]\n14: Income Tax Expense (Benefit)  (under: Costs and Other Deductions)  <operand> [already: IncomeTax]\n15: Net Income (Loss)  (under: Costs and Other Deductions)  <total>\n16: Less: Net income (loss) attributable to noncontrolling interests  (under: Costs and Other Deductions)  <operand>\n17: Net Income (Loss) Attributable to Chevron Corporation  (under: Costs and Other Deductions)  <total> [already: NetIncome]",
+ "answer": {
+  "CostOfRevenue": 4,
+  "GrossProfit": null,
+  "ResearchAndDevelopment": null,
+  "OperatingIncome": 13,
+  "EPSDiluted": null,
+  "EPSBasic": null,
+  "SharesDiluted": null,
+  "SharesBasic": null,
+  "SalesAndMarketing": null,
+  "GeneralAndAdministrative": 6
+ },
+ "seconds": 0.83,
+ "usage": {
+  "in": 826,
+  "out": 138
+ }
+}

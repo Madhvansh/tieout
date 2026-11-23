@@ -1,0 +1,53 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Which generated more revenue per employee in 2025, Coca-Cola (net operating revenues divided by its approximately 65,900 year-end employees) or PepsiCo (net revenue divided by its approximately 306,000 employees at December 27, 2025), and by how many dollars per employee?",
+ "abstain": false,
+ "answer": "PepsiCo generated more revenue per employee in 2025 by 350587.40 dollars per employee.",
+ "pred": {
+  "kind": "number",
+  "value": 350587.4
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "KO",
+   "doc": "KO_FY2025_10K",
+   "page": 12,
+   "value": 65900.0,
+   "label": "employees",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "KO",
+   "doc": "KO_FY2025_10K",
+   "page": 63,
+   "value": 47941000000.0,
+   "label": "Net Operating Revenues",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "PEP",
+   "doc": "PEP_FY2025_10K",
+   "page": 12,
+   "value": 306000.0,
+   "label": "employees worldwide",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "PEP",
+   "doc": "PEP_FY2025_10K",
+   "page": 44,
+   "value": 93925000000.0,
+   "label": "Net Revenue",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

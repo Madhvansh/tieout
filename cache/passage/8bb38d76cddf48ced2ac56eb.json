@@ -1,0 +1,57 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Coca-Cola has roughly half of PepsiCo's revenue. Which of the two earned more operating income in 2025, by how much, and what were their operating margins?",
+ "abstain": false,
+ "answer": "PepsiCo earned more operating income in 2025 than Coca-Cola. PepsiCo's operating profit was $11,498 million ($11.498 billion) with an operating margin of 12.2%, while Coca-Cola's operating income was $13,762 million ($13.762 billion) with an operating margin of 28.7%. Wait, Coca-Cola's operating income is actually higher than PepsiCo's ($13,762 million vs $11,498 million). Therefore, Coca-Cola earned more by $2,264 million.",
+ "pred": {
+  "kind": "companies",
+  "value": [
+   [
+    "The Coca-Cola Company",
+    null
+   ]
+  ]
+ },
+ "unit": "company",
+ "facts": [
+  {
+   "ticker": "KO",
+   "doc": "KO_FY2025_10K",
+   "page": 50,
+   "value": 13762000000.0,
+   "label": "Operating income was $13,762 million in 2025",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "KO",
+   "doc": "KO_FY2025_10K",
+   "page": 50,
+   "value": 0.287,
+   "label": "Consolidated operating margin",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "PEP",
+   "doc": "PEP_FY2025_10K",
+   "page": 44,
+   "value": 11498000000.0,
+   "label": "Operating profit",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "PEP",
+   "doc": "PEP_FY2025_10K",
+   "page": 44,
+   "value": 0.122,
+   "label": "Operating margin",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

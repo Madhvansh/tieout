@@ -1,0 +1,13 @@
+{
+ "model": "gemini:gemini-3.5-flash-lite",
+ "system": "You answered a question about SEC filings from passages. Below are the figures you cited, numbered f1, f2, ..., each with its label, filing, page, the figure as printed and its value in full units (a percentage as a fraction: 12.5% is 0.125). Write the arithmetic that gives YOUR answer as ONE expression over these names: + - * / ** abs( ) parentheses, the names f1..fn and plain numbers only. If your answer is one of the figures, the expression is that name alone. If no expression over these figures gives your answer, write null. Reply JSON {\"expr\": \"<expression>\" or null}.",
+ "user": "Question: Across 2022 through 2025, in which year did Exxon Mobil earn the most net income attributable to ExxonMobil, and how far below that peak was 2025?\n\nYour answer: Exxon Mobil earned the most net income attributable to ExxonMobil in 2022, with $55,740 million. In 2025, net income attributable to ExxonMobil was $28,844 million, which was $26,896 million below the 2022 peak. (as a number: 26896000000.0)\n\nThe figures you cited:\nf1: 'Net income (loss) attributable to ExxonMobil (U.S. GAAP)' (you called it 'Net income (loss) attributable to ExxonMobil (U.S. GAAP)') | XOM_FY2024_10K page 40 | period FY2022 | printed 55,740 | value 55740000000.0 USD\nf2: 'Net income (loss) attributable to ExxonMobil' (you called it 'Net income (loss) attributable to ExxonMobil') | XOM_FY2025_10K page 32 | period FY2025 | printed 28,844 | value 28844000000.0 USD",
+ "answer": {
+  "expr": "f1 - f2"
+ },
+ "seconds": 1.26,
+ "usage": {
+  "in": 457,
+  "out": 10
+ }
+}

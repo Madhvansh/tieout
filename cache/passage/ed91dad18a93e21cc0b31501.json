@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How much did Home Depot spend on capital expenditures in fiscal 2025?",
+ "abstain": false,
+ "answer": "$3,679,000,000",
+ "pred": {
+  "kind": "number",
+  "value": 3679000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "HD",
+   "doc": "HD_FY2025_10K",
+   "page": 51,
+   "value": 3679000000.0,
+   "label": "Capital expenditures",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

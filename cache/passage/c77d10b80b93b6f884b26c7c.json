@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was number of warehouses of Costco Wholesale Corp for fiscal year 2026 (for a balance: at the end of fiscal year 2026)? Give the one figure the filing prints for it.",
+ "abstain": false,
+ "answer": "939",
+ "pred": {
+  "kind": "number",
+  "value": 939.0
+ },
+ "unit": "count",
+ "facts": [
+  {
+   "ticker": "COST",
+   "doc": "COST_FY2026_10K",
+   "page": 4,
+   "value": 939.0,
+   "label": "Costco operated 939, 914, and 890 warehouses worldwide at August 30, 2026, August 31, 2025, and September 1, 2024.",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

@@ -1,0 +1,15 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Which of UnitedHealth Group's businesses posted an operating loss in 2025, and how big was the loss?",
+ "abstain": true,
+ "answer": "The provided passages do not contain operating income or loss figures for each individual business or reportable segment in 2025, so the question cannot be answered from the text.",
+ "pred": {
+  "kind": "abstain",
+  "value": null
+ },
+ "unit": "none",
+ "facts": [],
+ "facts_ok": false
+}

@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was Reality Labs operating loss of Meta Platforms Inc. for fiscal year 2025 (for a balance: at the end of fiscal year 2025)? Give the one figure the filing prints for it.",
+ "abstain": false,
+ "answer": "-$19,193 million",
+ "pred": {
+  "kind": "number",
+  "value": -19193000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "META",
+   "doc": "META_FY2025_10K",
+   "page": 62,
+   "value": -19193.0,
+   "label": "Income (loss) from operations, Reality Labs, Year Ended December 31, 2025",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

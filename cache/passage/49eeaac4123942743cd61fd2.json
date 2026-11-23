@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How much Digital Media annualized recurring revenue did Adobe have going out of fiscal 2025?",
+ "abstain": false,
+ "answer": "$19.20 billion",
+ "pred": {
+  "kind": "number",
+  "value": 19200000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "ADBE",
+   "doc": "ADBE_FY2025_10K",
+   "page": 35,
+   "value": 19200000000.0,
+   "label": "Digital Media ARR of approximately $19.20 billion as of November 28, 2025",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

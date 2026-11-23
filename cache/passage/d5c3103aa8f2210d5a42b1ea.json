@@ -1,0 +1,43 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "ExxonMobil's year-end 2025 refining capacity table lists capacity by refinery in thousands of barrels daily. What share of its worldwide refining capacity sat in its two Texas refineries (Baytown and Beaumont)?",
+ "abstain": false,
+ "answer": "0.2861",
+ "pred": {
+  "kind": "number",
+  "value": 0.2861463651835643
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "XOM",
+   "doc": "XOM_FY2025_10K",
+   "page": 23,
+   "value": 565.0,
+   "label": "Baytown refining capacity",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "XOM",
+   "doc": "XOM_FY2025_10K",
+   "page": 23,
+   "value": 612.0,
+   "label": "Beaumont refining capacity",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "XOM",
+   "doc": "XOM_FY2025_10K",
+   "page": 23,
+   "value": 4113.0,
+   "label": "Total Worldwide refining capacity",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

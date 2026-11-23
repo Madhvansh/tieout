@@ -1,0 +1,36 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "In its 2024 annual report, how much did Exxon Mobil say it spent on Upstream capital and exploration expenditures in 2024?",
+ "abstain": false,
+ "answer": "21,848 million dollars",
+ "pred": {
+  "kind": "number",
+  "value": 21848000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "XOM",
+   "doc": "XOM_FY2024_10K",
+   "page": 34,
+   "value": 21848.0,
+   "label": "Upstream Total Capital and Exploration Expenditures 2024",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "XOM",
+   "doc": "XOM_FY2024_10K",
+   "page": 34,
+   "value": 21848.0,
+   "label": "Upstream (including exploration expenses) Total 2024",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

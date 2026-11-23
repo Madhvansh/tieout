@@ -1,0 +1,45 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Which investment bank paid out a bigger slice of its 2025 net revenues as compensation and benefits, Goldman Sachs or Morgan Stanley, and what were the two ratios?",
+ "abstain": false,
+ "answer": "Morgan Stanley paid out a higher slice of its 2025 net revenues as compensation and benefits (0.4135 or 41.35%) compared to Goldman Sachs (which does not provide total compensation and benefits explicitly in the passages, or alternatively Goldman's ratio cannot be determined from the provided text).",
+ "pred": {
+  "kind": "companies",
+  "value": [
+   [
+    "Morgan Stanley",
+    null
+   ],
+   [
+    "None",
+    null
+   ]
+  ]
+ },
+ "unit": "company",
+ "facts": [
+  {
+   "ticker": "MS",
+   "doc": "MS_FY2025_10K",
+   "page": 12,
+   "value": 29216000000.0,
+   "label": "Compensation Total compensation and benefits expense in 2025 (millions)",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "MS",
+   "doc": "MS_FY2025_10K",
+   "page": 27,
+   "value": 70645000000.0,
+   "label": "Net Revenues",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

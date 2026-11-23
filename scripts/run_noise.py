@@ -23,7 +23,7 @@ from tieout.ask import answer
 from tieout.eval.bench import is_correct, load_benchmark
 from tieout.execute import Executor
 from tieout.graph import build
-from tieout.items import load_items
+from tieout.link import load_links
 
 logging.getLogger("pdfminer").setLevel(logging.ERROR)
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -41,7 +41,7 @@ def main():
     for rate in rates:
         for seed in (seeds if rate > 0 else seeds[:1]):
             g = build(verbose=False, learned=True, corrupt=(rate, seed) if rate > 0 else None)
-            load_items(g)
+            load_links(g)
             damaged = sum(f.get("corrupted_cells", 0) for f in g.filings.values())
             stats = g.stats()["reading_status"]
             for policy, strict in (("serve_all", False), ("verified_only", True)):

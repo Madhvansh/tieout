@@ -2,20 +2,17 @@
 # from the metric to its concepts to the facts.
 #
 # formula   arithmetic over concept names; abs() takes a magnitude
-# fallback  used when a concept in `formula` is missing for a company
 # unit      ratio (shown as a percentage or a multiple) or USD
 # A stock concept inside a flow metric is taken at the end of the same period.
 
 metrics:
   - name: gross_margin
     formula: GrossProfit / Revenue
-    fallback: (Revenue - CostOfRevenue) / Revenue
     unit: ratio
     says: gross profit as a share of revenue
 
   - name: gross_profit
     formula: GrossProfit
-    fallback: Revenue - CostOfRevenue
     unit: USD
     says: revenue minus cost of revenue
 
@@ -35,7 +32,7 @@ metrics:
     says: research and development spending as a share of revenue
 
   - name: effective_tax_rate
-    formula: IncomeTax / PretaxIncome
+    formula: abs(IncomeTax) / PretaxIncome
     unit: ratio
     says: income tax as a share of pre-tax income
 
@@ -50,9 +47,9 @@ metrics:
     says: capital expenditures as a share of revenue
 
   - name: return_on_equity
-    formula: NetIncome / TotalEquity
+    formula: NetIncome / ShareholdersEquity
     unit: ratio
-    says: net income divided by total equity at period end
+    says: net income divided by shareholders' equity at period end
 
   - name: return_on_assets
     formula: NetIncome / TotalAssets
@@ -66,13 +63,11 @@ metrics:
 
   - name: total_liabilities
     formula: TotalLiabilities
-    fallback: TotalLiabilitiesAndEquity - TotalEquity
     unit: USD
-    says: total liabilities, derived from the balance-sheet identity when no total is printed
+    says: total liabilities (solved from the balance-sheet identity when no total is printed)
 
   - name: liabilities_to_equity
     formula: TotalLiabilities / TotalEquity
-    fallback: (TotalLiabilitiesAndEquity - TotalEquity) / TotalEquity
     unit: ratio
     says: total liabilities divided by total equity
 
@@ -95,3 +90,12 @@ metrics:
     formula: StockBasedCompensation / Revenue
     unit: ratio
     says: stock-based compensation as a share of revenue
+
+# Identities: equations every filer satisfies, written as "coefficient x concept" terms that
+# sum to zero. When a question needs a concept a company does not print, the executor solves
+# the identity in which that concept is the only unknown (tieout/execute.py, Executor._derive).
+
+identities:
+  - {GrossProfit: 1, Revenue: -1, CostOfRevenue: 1}                      # gross profit = revenue - cost of revenue
+  - {TotalLiabilitiesAndEquity: 1, TotalLiabilities: -1, TotalEquity: -1}  # liabilities + equity = their total
+  - {TotalAssets: 1, TotalLiabilitiesAndEquity: -1}                        # the balance sheet balances

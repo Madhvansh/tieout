@@ -1,0 +1,36 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was Mastercard's net profit margin in 2025?",
+ "abstain": false,
+ "answer": "0.456457534",
+ "pred": {
+  "kind": "number",
+  "value": 0.45645753416788143
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "MA",
+   "doc": "MA_FY2025_10K",
+   "page": 50,
+   "value": 14968.0,
+   "label": "Net income",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "MA",
+   "doc": "MA_FY2025_10K",
+   "page": 50,
+   "value": 32791.0,
+   "label": "Net revenue",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

@@ -1,141 +1,170 @@
 {
- "readings_checked": 11077,
- "confirmed": 9751,
- "confirmed_share": 0.8802924979687641,
+ "readings_checked": 12189,
+ "confirmed": 10741,
+ "confirmed_share": 0.8812043645910247,
  "by_status": {
   "verified": {
-   "confirmed": 9566,
-   "not_confirmed": 1222
+   "confirmed": 10568,
+   "not_confirmed": 1349
   },
   "unverified": {
-   "confirmed": 185,
-   "not_confirmed": 104
+   "confirmed": 168,
+   "not_confirmed": 96
   },
   "failed": {
-   "confirmed": 0,
-   "not_confirmed": 0
+   "confirmed": 5,
+   "not_confirmed": 3
   }
  },
- "period_not_in_xbrl": 672,
- "bindings_compared": 2149,
- "bindings_agree": 2118,
- "bindings_agree_share": 0.9855746859004187,
+ "period_not_in_xbrl": 106,
+ "bindings_compared": 2912,
+ "bindings_agree": 2874,
+ "bindings_agree_share": 0.9869505494505495,
  "by_concept": {
   "Revenue": {
-   "agree": 133,
+   "agree": 143,
    "disagree": 5,
-   "no_xbrl_value": 5
+   "no_xbrl_value": 2
   },
   "CostOfRevenue": {
-   "agree": 92,
-   "no_xbrl_value": 1,
+   "agree": 99,
+   "no_xbrl_value": 2,
    "disagree": 0
   },
   "GrossProfit": {
-   "agree": 49,
-   "no_xbrl_value": 1,
+   "agree": 53,
+   "no_xbrl_value": 2,
    "disagree": 0
   },
   "ResearchAndDevelopment": {
    "agree": 48,
-   "no_xbrl_value": 9,
+   "no_xbrl_value": 11,
    "disagree": 3
   },
   "OperatingIncome": {
-   "agree": 95,
+   "agree": 98,
    "no_xbrl_value": 1,
    "disagree": 0
   },
   "IncomeTax": {
-   "agree": 136,
-   "no_xbrl_value": 5,
+   "agree": 148,
+   "no_xbrl_value": 2,
    "disagree": 0
   },
   "NetIncome": {
-   "agree": 125,
-   "disagree": 8,
-   "no_xbrl_value": 5
+   "agree": 147,
+   "no_xbrl_value": 3,
+   "disagree": 0
+  },
+  "ConsolidatedNetIncome": {
+   "agree": 143,
+   "no_xbrl_value": 2,
+   "disagree": 5
+  },
+  "AccountsReceivable": {
+   "agree": 51,
+   "no_xbrl_value": 15,
+   "disagree": 5
+  },
+  "PropertyPlantEquipment": {
+   "agree": 64,
+   "no_xbrl_value": 21,
+   "disagree": 3
+  },
+  "AccountsPayable": {
+   "agree": 60,
+   "no_xbrl_value": 16,
+   "disagree": 0
+  },
+  "RetainedEarnings": {
+   "agree": 85,
+   "no_xbrl_value": 2,
+   "disagree": 0
+  },
+  "ShareholdersEquity": {
+   "agree": 81,
+   "no_xbrl_value": 7,
+   "disagree": 5
   },
   "TotalAssets": {
-   "agree": 88,
-   "no_xbrl_value": 3,
+   "agree": 95,
    "disagree": 0
   },
   "TotalCurrentAssets": {
-   "agree": 74,
+   "agree": 76,
    "disagree": 0
   },
   "TotalLiabilities": {
-   "agree": 69,
-   "no_xbrl_value": 3,
-   "disagree": 0
-  },
-  "TotalCurrentLiabilities": {
    "agree": 74,
    "disagree": 0
   },
+  "TotalCurrentLiabilities": {
+   "agree": 76,
+   "disagree": 0
+  },
   "TotalEquity": {
-   "agree": 75,
-   "disagree": 11,
-   "no_xbrl_value": 3
+   "agree": 89,
+   "disagree": 4
   },
   "TotalLiabilitiesAndEquity": {
-   "agree": 84,
-   "no_xbrl_value": 3,
-   "disagree": 0
+   "agree": 93,
+   "disagree": 2
   },
   "Cash": {
-   "agree": 82,
-   "no_xbrl_value": 9,
-   "disagree": 0
-  },
-  "OperatingCashFlow": {
-   "agree": 127,
-   "disagree": 1,
-   "no_xbrl_value": 8
-  },
-  "InvestingCashFlow": {
-   "agree": 124,
-   "disagree": 1,
-   "no_xbrl_value": 8
-  },
-  "FinancingCashFlow": {
-   "agree": 119,
-   "no_xbrl_value": 7,
-   "disagree": 0
-  },
-  "CapitalExpenditures": {
-   "agree": 113,
-   "no_xbrl_value": 11,
-   "disagree": 0
-  },
-  "StockBasedCompensation": {
-   "agree": 104,
+   "agree": 87,
    "no_xbrl_value": 6,
    "disagree": 0
   },
+  "OperatingCashFlow": {
+   "agree": 136,
+   "disagree": 1,
+   "no_xbrl_value": 2
+  },
+  "InvestingCashFlow": {
+   "agree": 136,
+   "disagree": 1,
+   "no_xbrl_value": 2
+  },
+  "FinancingCashFlow": {
+   "agree": 134,
+   "no_xbrl_value": 1,
+   "disagree": 0
+  },
+  "CapitalExpenditures": {
+   "agree": 122,
+   "no_xbrl_value": 5,
+   "disagree": 0
+  },
+  "StockBasedCompensation": {
+   "agree": 111,
+   "no_xbrl_value": 2,
+   "disagree": 0
+  },
   "DividendsPaid": {
-   "agree": 95,
-   "no_xbrl_value": 23,
+   "agree": 110,
+   "no_xbrl_value": 17,
    "disagree": 0
   },
   "ShareRepurchases": {
-   "agree": 109,
-   "no_xbrl_value": 12,
-   "disagree": 0
-  },
-  "Goodwill": {
-   "agree": 69,
+   "agree": 122,
+   "no_xbrl_value": 6,
    "disagree": 2
   },
+  "InterestExpense": {
+   "agree": 78,
+   "no_xbrl_value": 24,
+   "disagree": 2
+  },
+  "Goodwill": {
+   "agree": 71,
+   "disagree": 0
+  },
   "NetInterestIncome": {
-   "agree": 22,
-   "no_xbrl_value": 4,
+   "agree": 27,
    "disagree": 0
   },
   "Deposits": {
-   "agree": 12,
-   "no_xbrl_value": 3,
+   "agree": 17,
    "disagree": 0
   }
  },
@@ -235,126 +264,99 @@
    "binding": "active"
   },
   {
-   "ticker": "CAT",
-   "concept": "NetIncome",
+   "ticker": "BLK",
+   "concept": "TotalEquity",
+   "period": "FY2025@end",
+   "graph": 55888000000,
+   "xbrl": [
+    56115000000,
+    56115000000,
+    56115000000
+   ],
+   "label": "Total BlackRock, Inc. stockholders\u2019 equity",
+   "doc": "BLK_FY2025_10K",
+   "page": 79,
+   "binding": "active"
+  },
+  {
+   "ticker": "BLK",
+   "concept": "TotalEquity",
+   "period": "FY2024@end",
+   "graph": 47495000000,
+   "xbrl": [
+    47664000000,
+    47664000000,
+    47664000000
+   ],
+   "label": "Total BlackRock, Inc. stockholders\u2019 equity",
+   "doc": "BLK_FY2025_10K",
+   "page": 79,
+   "binding": "active"
+  },
+  {
+   "ticker": "CVX",
+   "concept": "AccountsReceivable",
+   "period": "FY2025@end",
+   "graph": 18075000000,
+   "xbrl": [
+    15986000000
+   ],
+   "label": "Accounts and notes receivable (less allowance: 2025 - $176; 2024 - $259)",
+   "doc": "CVX_FY2025_10K",
+   "page": 68,
+   "binding": "active"
+  },
+  {
+   "ticker": "CVX",
+   "concept": "AccountsReceivable",
+   "period": "FY2024@end",
+   "graph": 20684000000,
+   "xbrl": [
+    18338000000
+   ],
+   "label": "Accounts and notes receivable (less allowance: 2025 - $176; 2024 - $259)",
+   "doc": "CVX_FY2025_10K",
+   "page": 68,
+   "binding": "active"
+  },
+  {
+   "ticker": "CVX",
+   "concept": "ShareRepurchases",
    "period": "FY2025",
-   "graph": 8882000000,
+   "graph": -11855000000,
    "xbrl": [
-    8884000000
+    12079000000
    ],
-   "label": "Profit of consolidated and affiliated companies",
-   "doc": "CAT_FY2025_10K",
-   "page": 61,
+   "label": "Net sales (purchases) of treasury shares",
+   "doc": "CVX_FY2025_10K",
+   "page": 69,
    "binding": "active"
   },
   {
-   "ticker": "CAT",
-   "concept": "NetIncome",
+   "ticker": "CVX",
+   "concept": "ShareRepurchases",
    "period": "FY2024",
-   "graph": 10788000000,
+   "graph": -15044000000,
    "xbrl": [
-    10792000000
+    15229000000,
+    15229000000
    ],
-   "label": "Profit of consolidated and affiliated companies",
-   "doc": "CAT_FY2025_10K",
-   "page": 61,
-   "binding": "active"
-  },
-  {
-   "ticker": "CAT",
-   "concept": "NetIncome",
-   "period": "FY2023",
-   "graph": 10332000000,
-   "xbrl": [
-    10335000000
-   ],
-   "label": "Profit of consolidated and affiliated companies",
-   "doc": "CAT_FY2025_10K",
-   "page": 61,
-   "binding": "active"
-  },
-  {
-   "ticker": "CAT",
-   "concept": "NetIncome",
-   "period": "FY2022",
-   "graph": 6704000000,
-   "xbrl": [
-    6705000000
-   ],
-   "label": "Profit of consolidated and affiliated companies",
-   "doc": "CAT_FY2024_10K",
-   "page": 60,
+   "label": "Net sales (purchases) of treasury shares",
+   "doc": "CVX_FY2025_10K",
+   "page": 69,
    "binding": "active"
   },
   {
    "ticker": "F",
-   "concept": "NetIncome",
-   "period": "FY2025",
-   "graph": -8182000000,
+   "concept": "InterestExpense",
+   "period": "FY2023",
+   "graph": 1302000000,
    "xbrl": [
-    -8162000000
+    7613000000
    ],
-   "label": "Net income/(loss) attributable to Ford Motor Company",
+   "label": "Interest expense on Company debt excluding Ford Credit",
    "doc": "F_FY2025_10K",
    "page": 115,
-   "binding": "active"
-  },
-  {
-   "ticker": "F",
-   "concept": "TotalEquity",
-   "period": "FY2024@end",
-   "graph": 44858000000,
-   "xbrl": [
-    44835000000,
-    44835000000,
-    44835000000
-   ],
-   "label": "Total equity",
-   "doc": "F_FY2025_10K",
-   "page": 116,
-   "binding": "active"
-  },
-  {
-   "ticker": "F",
-   "concept": "TotalEquity",
-   "period": "FY2025@end",
-   "graph": 35980000000,
-   "xbrl": [
-    35952000000,
-    35952000000,
-    35952000000
-   ],
-   "label": "Total equity",
-   "doc": "F_FY2025_10K",
-   "page": 116,
-   "binding": "active"
-  },
-  {
-   "ticker": "GM",
-   "concept": "Goodwill",
-   "period": "FY2025@end",
-   "graph": 4366000000,
-   "xbrl": [
-    1900000000
-   ],
-   "label": "Goodwill and intangible assets, net (Note",
-   "doc": "GM_FY2025_10K",
-   "page": 58,
-   "binding": "active"
-  },
-  {
-   "ticker": "GM",
-   "concept": "Goodwill",
-   "period": "FY2024@end",
-   "graph": 4551000000,
-   "xbrl": [
-    1900000000,
-    1900000000,
-    1900000000
-   ],
-   "label": "Goodwill and intangible assets, net (Note",
-   "doc": "GM_FY2025_10K",
-   "page": 58,
    "binding": "active"
   },
   {
@@ -400,66 +402,21 @@
    "binding": "active"
   },
   {
-   "ticker": "KO",
-   "concept": "TotalEquity",
-   "period": "FY2025@end",
-   "graph": 34275000000,
-   "xbrl": [
-    32169000000,
-    32169000000,
-    32169000000
-   ],
-   "label": "Total Equity",
-   "doc": "KO_FY2025_10K",
-   "page": 65,
-   "binding": "active"
-  },
-  {
-   "ticker": "KO",
-   "concept": "TotalEquity",
-   "period": "FY2024@end",
-   "graph": 26372000000,
-   "xbrl": [
-    24856000000,
-    24856000000,
-    24856000000
-   ],
-   "label": "Total Equity",
-   "doc": "KO_FY2025_10K",
-   "page": 65,
-   "binding": "active"
-  },
-  {
-   "ticker": "KO",
-   "concept": "TotalEquity",
-   "period": "FY2023@end",
-   "graph": 27480000000,
-   "xbrl": [
-    25941000000,
-    25941000000,
-    25941000000
-   ],
-   "label": "Total Equity",
-   "doc": "KO_FY2024_10K",
-   "page": 66,
-   "binding": "active"
-  },
-  {
-   "ticker": "KO",
-   "concept": "TotalEquity",
+   "ticker": "JNJ",
+   "concept": "PropertyPlantEquipment",
    "period": "FY2025Q3@end",
-   "graph": 33267000000,
+   "graph": 53375000000,
    "xbrl": [
-    31247000000
+    22338000000
    ],
-   "label": "Total Equity",
-   "doc": "KO_FY2025_Q3_10Q",
-   "page": 7,
+   "label": "Property, plant and equipment at cost",
+   "doc": "JNJ_FY2025_Q3_10Q",
+   "page": 6,
    "binding": "active"
   },
   {
    "ticker": "MA",
-   "concept": "TotalEquity",
+   "concept": "ShareholdersEquity",
    "period": "FY2025@end",
    "graph": 7746000000,
    "xbrl": [
@@ -474,7 +431,7 @@
   },
   {
    "ticker": "MA",
-   "concept": "TotalEquity",
+   "concept": "ShareholdersEquity",
    "period": "FY2024@end",
    "graph": 6515000000,
    "xbrl": [
@@ -488,50 +445,219 @@
    "binding": "active"
   },
   {
-   "ticker": "UNH",
-   "concept": "NetIncome",
-   "period": "FY2025",
-   "graph": 12807000000,
+   "ticker": "MCD",
+   "concept": "PropertyPlantEquipment",
+   "period": "FY2025@end",
+   "graph": 49290000000,
    "xbrl": [
-    12056000000
+    28241000000,
+    28241000000,
+    28241000000
    ],
-   "label": "Net earnings................................................................................................................",
-   "doc": "UNH_FY2025_10K",
-   "page": 44,
+   "label": "Property and equipment, at cost",
+   "doc": "MCD_FY2025_10K",
+   "page": 49,
    "binding": "active"
   },
   {
-   "ticker": "UNH",
-   "concept": "NetIncome",
-   "period": "FY2024",
-   "graph": 15242000000,
+   "ticker": "MCD",
+   "concept": "PropertyPlantEquipment",
+   "period": "FY2024@end",
+   "graph": 44177000000,
    "xbrl": [
-    14405000000,
-    14405000000
+    25295000000,
+    25295000000,
+    25295000000
    ],
-   "label": "Net earnings................................................................................................................",
-   "doc": "UNH_FY2025_10K",
-   "page": 44,
+   "label": "Property and equipment, at cost",
+   "doc": "MCD_FY2025_10K",
+   "page": 49,
    "binding": "active"
   },
   {
-   "ticker": "UNH",
-   "concept": "NetIncome",
+   "ticker": "MS",
+   "concept": "InterestExpense",
    "period": "FY2023",
-   "graph": 23144000000,
+   "graph": 37619000000,
    "xbrl": [
-    22381000000,
-    22381000000,
-    22381000000
+    42051000000
    ],
-   "label": "Net earnings................................................................................................................",
-   "doc": "UNH_FY2025_10K",
-   "page": 44,
+   "label": "Interest expense1",
+   "doc": "MS_FY2025_10K",
+   "page": 80,
+   "binding": "active"
+  },
+  {
+   "ticker": "ORCL",
+   "concept": "ConsolidatedNetIncome",
+   "period": "FY2026",
+   "graph": 17087000000,
+   "xbrl": [
+    17309000000
+   ],
+   "label": "Net income................................................................................................",
+   "doc": "ORCL_FY2026_10K",
+   "page": 67,
+   "binding": "active"
+  },
+  {
+   "ticker": "ORCL",
+   "concept": "ConsolidatedNetIncome",
+   "period": "FY2025",
+   "graph": 12443000000,
+   "xbrl": [
+    12627000000,
+    12627000000
+   ],
+   "label": "Net income................................................................................................",
+   "doc": "ORCL_FY2026_10K",
+   "page": 67,
+   "binding": "active"
+  },
+  {
+   "ticker": "ORCL",
+   "concept": "ConsolidatedNetIncome",
+   "period": "FY2024",
+   "graph": 10467000000,
+   "xbrl": [
+    10653000000,
+    10653000000,
+    10653000000
+   ],
+   "label": "Net income................................................................................................",
+   "doc": "ORCL_FY2026_10K",
+   "page": 67,
+   "binding": "active"
+  },
+  {
+   "ticker": "TSLA",
+   "concept": "TotalEquity",
+   "period": "FY2025@end",
+   "graph": 82137000000,
+   "xbrl": [
+    82807000000,
+    82807000000,
+    82807000000
+   ],
+   "label": "Total stockholders\u2019 equity",
+   "doc": "TSLA_FY2025_10K",
+   "page": 52,
+   "binding": "active"
+  },
+  {
+   "ticker": "TSLA",
+   "concept": "TotalEquity",
+   "period": "FY2024@end",
+   "graph": 72913000000,
+   "xbrl": [
+    73617000000,
+    73617000000,
+    73617000000
+   ],
+   "label": "Total stockholders\u2019 equity",
+   "doc": "TSLA_FY2025_10K",
+   "page": 52,
+   "binding": "active"
+  },
+  {
+   "ticker": "V",
+   "concept": "TotalLiabilitiesAndEquity",
+   "period": "FY2026@end",
+   "graph": 4349000000,
+   "xbrl": [
+    94360000000
+   ],
+   "label": "Customer collateral",
+   "doc": "V_FY2026_10K",
+   "page": 59,
+   "binding": "active"
+  },
+  {
+   "ticker": "V",
+   "concept": "TotalLiabilitiesAndEquity",
+   "period": "FY2025@end",
+   "graph": 3625000000,
+   "xbrl": [
+    99627000000,
+    99627000000,
+    99627000000
+   ],
+   "label": "Customer collateral",
+   "doc": "V_FY2026_10K",
+   "page": 59,
+   "binding": "active"
+  },
+  {
+   "ticker": "WFC",
+   "concept": "ConsolidatedNetIncome",
+   "period": "FY2025",
+   "graph": 21358000000,
+   "xbrl": [
+    21338000000
+   ],
+   "label": "Net income before noncontrolling interests",
+   "doc": "WFC_FY2025_10K",
+   "page": 91,
+   "binding": "active"
+  },
+  {
+   "ticker": "WFC",
+   "concept": "ConsolidatedNetIncome",
+   "period": "FY2024",
+   "graph": 19965000000,
+   "xbrl": [
+    19722000000,
+    19722000000
+   ],
+   "label": "Net income before noncontrolling interests",
+   "doc": "WFC_FY2025_10K",
+   "page": 91,
    "binding": "active"
   },
   {
    "ticker": "XOM",
-   "concept": "TotalEquity",
+   "concept": "AccountsReceivable",
+   "period": "FY2025@end",
+   "graph": 44562000000,
+   "xbrl": [
+    35744000000
+   ],
+   "label": "Notes and accounts receivable \u2013 net",
+   "doc": "XOM_FY2025_10K",
+   "page": 75,
+   "binding": "active"
+  },
+  {
+   "ticker": "XOM",
+   "concept": "AccountsReceivable",
+   "period": "FY2024@end",
+   "graph": 43681000000,
+   "xbrl": [
+    35282000000,
+    35282000000
+   ],
+   "label": "Notes and accounts receivable \u2013 net",
+   "doc": "XOM_FY2025_10K",
+   "page": 75,
+   "binding": "active"
+  },
+  {
+   "ticker": "XOM",
+   "concept": "AccountsReceivable",
+   "period": "FY2023@end",
+   "graph": 38015000000,
+   "xbrl": [
+    30296000000,
+    30296000000
+   ],
+   "label": "Notes and accounts receivable \u2013 net",
+   "doc": "XOM_FY2024_10K",
+   "page": 81,
+   "binding": "active"
+  },
+  {
+   "ticker": "XOM",
+   "concept": "ShareholdersEquity",
    "period": "FY2025@end",
    "graph": 266626000000,
    "xbrl": [
@@ -545,7 +671,7 @@
   },
   {
    "ticker": "XOM",
-   "concept": "TotalEquity",
+   "concept": "ShareholdersEquity",
    "period": "FY2024@end",
    "graph": 270606000000,
    "xbrl": [
@@ -560,7 +686,7 @@
   },
   {
    "ticker": "XOM",
-   "concept": "TotalEquity",
+   "concept": "ShareholdersEquity",
    "period": "FY2023@end",
    "graph": 212538000000,
    "xbrl": [
@@ -608,12 +734,12 @@
    "confirmed_verified": 181
   },
   "BAC": {
-   "confirmed": 602,
-   "confirmed_verified": 596,
-   "not_confirmed": 179,
-   "not_confirmed_verified": 174,
-   "confirmed_unverified": 6,
-   "not_confirmed_unverified": 5
+   "confirmed": 620,
+   "confirmed_verified": 615,
+   "not_confirmed": 157,
+   "not_confirmed_verified": 155,
+   "not_confirmed_unverified": 2,
+   "confirmed_unverified": 5
   },
   "BLK": {
    "not_confirmed": 53,
@@ -624,10 +750,12 @@
    "not_confirmed_unverified": 4
   },
   "C": {
-   "confirmed": 211,
-   "confirmed_verified": 211,
-   "not_confirmed": 27,
-   "not_confirmed_verified": 27
+   "confirmed": 301,
+   "confirmed_verified": 293,
+   "not_confirmed": 38,
+   "not_confirmed_verified": 36,
+   "confirmed_unverified": 8,
+   "not_confirmed_unverified": 2
   },
   "CAT": {
    "not_confirmed": 80,
@@ -658,11 +786,10 @@
    "not_confirmed_unverified": 6
   },
   "CVX": {
-   "confirmed": 125,
-   "confirmed_verified": 125,
-   "not_confirmed": 7,
-   "not_confirmed_verified": 7,
-   "period_not_in_xbrl": 61
+   "confirmed": 179,
+   "confirmed_verified": 179,
+   "not_confirmed": 14,
+   "not_confirmed_verified": 14
   },
   "F": {
    "not_confirmed": 35,
@@ -673,11 +800,11 @@
   },
   "GM": {
    "confirmed": 185,
-   "confirmed_verified": 175,
+   "confirmed_verified": 178,
    "not_confirmed": 38,
    "not_confirmed_verified": 32,
    "not_confirmed_unverified": 6,
-   "confirmed_unverified": 10
+   "confirmed_unverified": 7
   },
   "GOOGL": {
    "confirmed": 510,
@@ -687,7 +814,12 @@
    "confirmed_unverified": 3
   },
   "GS": {
-   "period_not_in_xbrl": 539
+   "confirmed": 474,
+   "confirmed_verified": 470,
+   "not_confirmed": 65,
+   "not_confirmed_verified": 63,
+   "not_confirmed_unverified": 2,
+   "confirmed_unverified": 4
   },
   "HD": {
    "confirmed": 152,
@@ -698,21 +830,23 @@
    "confirmed_unverified": 5
   },
   "JNJ": {
-   "confirmed": 420,
-   "confirmed_verified": 390,
-   "not_confirmed": 45,
-   "not_confirmed_verified": 31,
-   "not_confirmed_unverified": 14,
-   "confirmed_unverified": 30,
-   "period_not_in_xbrl": 29
+   "confirmed": 543,
+   "confirmed_verified": 534,
+   "not_confirmed": 71,
+   "not_confirmed_verified": 64,
+   "not_confirmed_unverified": 4,
+   "confirmed_failed": 5,
+   "not_confirmed_failed": 3,
+   "confirmed_unverified": 4,
+   "period_not_in_xbrl": 63
   },
   "JPM": {
    "confirmed": 231,
-   "confirmed_verified": 222,
+   "confirmed_verified": 225,
    "not_confirmed": 59,
    "not_confirmed_verified": 57,
-   "confirmed_unverified": 9,
-   "not_confirmed_unverified": 2
+   "not_confirmed_unverified": 2,
+   "confirmed_unverified": 6
   },
   "KO": {
    "confirmed": 564,
@@ -726,7 +860,14 @@
    "not_confirmed": 21,
    "not_confirmed_verified": 21
   },
-  "MCD": {},
+  "MCD": {
+   "not_confirmed": 32,
+   "not_confirmed_verified": 31,
+   "confirmed": 189,
+   "confirmed_verified": 185,
+   "not_confirmed_unverified": 1,
+   "confirmed_unverified": 4
+  },
   "META": {
    "confirmed": 177,
    "confirmed_verified": 177,
@@ -776,10 +917,10 @@
    "confirmed_unverified": 9
   },
   "PEP": {
-   "confirmed": 188,
-   "confirmed_verified": 188,
-   "not_confirmed": 8,
-   "not_confirmed_verified": 8
+   "confirmed": 230,
+   "confirmed_verified": 230,
+   "not_confirmed": 11,
+   "not_confirmed_verified": 11
   },
   "PFE": {
    "not_confirmed": 25,
@@ -848,8 +989,8 @@
   }
  },
  "disagreements_by_origin": {
-  "seed": 28,
-  "learned": 3,
+  "seed": 31,
+  "learned": 7,
   "human": 0
  }
 }

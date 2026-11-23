@@ -1,0 +1,34 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was Tesla's total revenue for 2025?",
+ "abstain": false,
+ "answer": "$94,827 million",
+ "pred": {
+  "kind": "number",
+  "value": 94827000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "TSLA",
+   "doc": "TSLA_FY2025_10K",
+   "page": 40,
+   "value": 94827.0,
+   "label": "Total revenues",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "TSLA",
+   "doc": "TSLA_FY2025_10K",
+   "page": 53,
+   "value": 94827.0,
+   "label": "Total revenues",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

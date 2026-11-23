@@ -1,0 +1,71 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "On the Basel III Standardized approach, rank JPMorgan Chase, Bank of America, Citigroup and Wells Fargo by their CET1 capital ratio at December 31, 2025, strongest first.",
+ "abstain": false,
+ "answer": "['JPMorgan Chase', 'Citigroup', 'Bank of America', 'Wells Fargo']",
+ "pred": {
+  "kind": "companies",
+  "value": [
+   [
+    "JPMorgan Chase",
+    null
+   ],
+   [
+    "Citigroup",
+    null
+   ],
+   [
+    "Bank of America",
+    null
+   ],
+   [
+    "Wells Fargo",
+    null
+   ]
+  ]
+ },
+ "unit": "company",
+ "facts": [
+  {
+   "ticker": "JPM",
+   "doc": "JPM_FY2025_10K",
+   "page": 96,
+   "value": 0.146,
+   "label": "CET1 capital ratio",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "BAC",
+   "doc": "BAC_FY2025_10K",
+   "page": 52,
+   "value": 0.114,
+   "label": "Common equity tier 1 capital ratio",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "C",
+   "doc": "C_FY2025_10K",
+   "page": 53,
+   "value": 0.132,
+   "label": "Citi\u2019s CET1 Capital ratio under the Basel III Standardized Approach",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "WFC",
+   "doc": "WFC_FY2025_10K",
+   "page": 16,
+   "value": 0.1061,
+   "label": "Common Equity Tier 1 (CET1)",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

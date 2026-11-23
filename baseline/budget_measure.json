@@ -1,0 +1,57 @@
+{
+ "questions": 87,
+ "v2": {
+  "prompt_chars": {
+   "mean": 17260,
+   "p50": 17292,
+   "p95": 17861,
+   "max": 17934
+  },
+  "est_tokens_chars_div_4": {
+   "mean": 4315,
+   "p50": 4323,
+   "p95": 4465,
+   "max": 4484
+  },
+  "est_tokens_chars_div_3": {
+   "mean": 5753,
+   "p50": 5764,
+   "p95": 5954,
+   "max": 5978
+  },
+  "items_per_prompt": {
+   "mean": 12,
+   "p50": 11,
+   "p95": 13,
+   "max": 14
+  },
+  "system_prompt_chars": 1585
+ },
+ "v1": {
+  "prompt_chars": {
+   "mean": 20357,
+   "p50": 21037,
+   "p95": 21568,
+   "max": 21725
+  },
+  "est_tokens_chars_div_4": {
+   "mean": 5089,
+   "p50": 5259,
+   "p95": 5392,
+   "max": 5431
+  },
+  "est_tokens_chars_div_3": {
+   "mean": 6786,
+   "p50": 7012,
+   "p95": 7189,
+   "max": 7242
+  },
+  "items_per_prompt": {
+   "mean": 8,
+   "p50": 8,
+   "p95": 8,
+   "max": 8
+  },
+  "system_prompt_chars": 1457
+ }
+}

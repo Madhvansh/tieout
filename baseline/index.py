@@ -50,26 +50,29 @@ def tokenize(text: str) -> list:
     return _TOKEN.findall(text.lower())
 
 
-def _manifest() -> dict:
+def manifest() -> dict:
+    """data/manifest.csv as {doc_id: row}."""
     with open(MANIFEST, newline="", encoding="utf-8") as f:
         return {r["doc_id"]: r for r in csv.DictReader(f)}
 
 
+def line_text(line: list) -> str:
+    """One line's words left to right; a gap wider than GAP_PT is written as " | "."""
+    parts = [line[0].text]
+    for prev, w in zip(line, line[1:]):
+        parts.append((" | " if w.x0 - prev.x1 > GAP_PT else " ") + w.text)
+    return "".join(parts)
+
+
 def page_text(words: list) -> str:
     from tieout.tables import group_lines
-    out = []
-    for ln in group_lines(words):
-        parts = [ln[0].text]
-        for prev, w in zip(ln, ln[1:]):
-            parts.append((" | " if w.x0 - prev.x1 > GAP_PT else " ") + w.text)
-        out.append("".join(parts))
-    return "\n".join(out)
+    return "\n".join(line_text(ln) for ln in group_lines(words))
 
 
 def build_chunks(verbose: bool = True) -> list:
     from tieout import pdfio
     chunks = []
-    for doc_id, m in _manifest().items():
+    for doc_id, m in manifest().items():
         if doc_id in SKIP or not pdfio.cache_path(doc_id).exists():
             continue
         pages = pdfio.load_pages(doc_id)
@@ -87,7 +90,7 @@ def build_chunks(verbose: bool = True) -> list:
 def _fingerprint() -> str:
     from tieout import pdfio
     parts = [VERSION]
-    for doc_id in sorted(_manifest()):
+    for doc_id in sorted(manifest()):
         p = pdfio.cache_path(doc_id)
         if doc_id not in SKIP and p.exists():
             st = p.stat()

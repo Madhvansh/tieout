@@ -1,0 +1,70 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Before netting out client incentives, what was Visa's gross revenue in fiscal 2026, and what share of it was handed back to clients as incentives?",
+ "abstain": false,
+ "answer": "Visa's gross revenue in fiscal 2026 before netting out client incentives was $64,220 million, and client incentives of $18,317 million represented approximately 28.52% (or a ratio of 0.2852) of that gross revenue.",
+ "pred": {
+  "kind": "number",
+  "value": 0.2852
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "V",
+   "doc": "V_FY2026_10K",
+   "page": 43,
+   "value": 19918.0,
+   "label": "Service revenue",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "V",
+   "doc": "V_FY2026_10K",
+   "page": 43,
+   "value": 23374.0,
+   "label": "Data processing revenue",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "V",
+   "doc": "V_FY2026_10K",
+   "page": 43,
+   "value": 15251.0,
+   "label": "International transaction revenue",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "V",
+   "doc": "V_FY2026_10K",
+   "page": 43,
+   "value": 5677.0,
+   "label": "Other revenue",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "V",
+   "doc": "V_FY2026_10K",
+   "page": 43,
+   "value": 18317.0,
+   "label": "Client incentives",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "V",
+   "doc": "V_FY2026_10K",
+   "page": 43,
+   "value": 45903.0,
+   "label": "Net revenue",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

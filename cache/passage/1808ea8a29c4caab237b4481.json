@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How fast did Microsoft's Azure cloud business grow its revenue in fiscal 2026?",
+ "abstain": false,
+ "answer": "41%",
+ "pred": {
+  "kind": "number",
+  "value": 0.41
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "MSFT",
+   "doc": "MSFT_FY2026_10K",
+   "page": 34,
+   "value": 0.41,
+   "label": "Azure and other cloud services revenue increased 41%",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}
