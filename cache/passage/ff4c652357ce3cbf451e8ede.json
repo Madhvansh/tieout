@@ -1,0 +1,89 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Measured as research and development expense over revenue in each company's latest fiscal year in the set, rank AMD, Adobe and Cisco by R&D intensity, highest first.",
+ "abstain": false,
+ "answer": "['Adobe', 'AMD', 'Cisco']",
+ "pred": {
+  "kind": "companies",
+  "value": [
+   [
+    "Adobe",
+    null
+   ],
+   [
+    "AMD",
+    null
+   ],
+   [
+    "Cisco",
+    null
+   ]
+  ]
+ },
+ "unit": "company",
+ "facts": [
+  {
+   "ticker": "AMD",
+   "doc": "AMD_FY2025_10K",
+   "page": 56,
+   "value": 34639.0,
+   "label": "Net revenue",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "AMD",
+   "doc": "AMD_FY2025_10K",
+   "page": 56,
+   "value": 8091.0,
+   "label": "Research and development",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "ADBE",
+   "doc": "ADBE_FY2025_10K",
+   "page": 38,
+   "value": 4294.0,
+   "label": "Research and development",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "ADBE",
+   "doc": "ADBE_FY2025_10K",
+   "page": 37,
+   "value": 0.18,
+   "label": "Percentage of total revenue",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "CSCO",
+   "doc": "CSCO_FY2026_10K",
+   "page": 60,
+   "value": 9563.0,
+   "label": "Research and development ...............................",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "CSCO",
+   "doc": "CSCO_FY2026_10K",
+   "page": 60,
+   "value": 0.151,
+   "label": "Percentage of revenue...............................................",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

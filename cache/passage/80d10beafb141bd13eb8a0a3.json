@@ -1,0 +1,61 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "By how much did Pfizer's combined revenue from its two COVID-19 products, Comirnaty and Paxlovid, fall in 2025 compared with 2024?",
+ "abstain": false,
+ "answer": "Pfizer's combined revenue from Comirnaty and Paxlovid fell by $4,397 million (or $4.397 billion) in 2025 compared with 2024.",
+ "pred": {
+  "kind": "number",
+  "value": 4397000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "PFE",
+   "doc": "PFE_FY2025_10K",
+   "page": 108,
+   "value": 5353000000.0,
+   "label": "Comirnaty 2024 revenue",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "PFE",
+   "doc": "PFE_FY2025_10K",
+   "page": 108,
+   "value": 5716000000.0,
+   "label": "Paxlovid 2024 revenue",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "PFE",
+   "doc": "PFE_FY2025_10K",
+   "page": 108,
+   "value": 4367000000.0,
+   "label": "Comirnaty 2025 revenue",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "PFE",
+   "doc": "PFE_FY2025_10K",
+   "page": 108,
+   "value": 2362000000.0,
+   "label": "Paxlovid 2025 revenue",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "PFE",
+   "doc": "PFE_FY2025_10K",
+   "page": 38,
+   "value": 4397000000.0,
+   "label": "Operational impact of Comirnaty and Paxlovid Revenues",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

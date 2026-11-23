@@ -1,0 +1,76 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Of NVIDIA's five end markets (Data Center, Gaming, Professional Visualization, Automotive, and OEM and Other), which grew revenue fastest in fiscal 2026, and how much revenue did it bring in?",
+ "abstain": false,
+ "answer": "Professional Visualization grew revenue the fastest in fiscal 2026 (up 70%), bringing in $3,191 million (or $3.191 billion).",
+ "pred": {
+  "kind": "text",
+  "value": "Professional Visualization"
+ },
+ "unit": "text",
+ "facts": [
+  {
+   "ticker": "NVDA",
+   "doc": "NVDA_FY2026_10K",
+   "page": 167,
+   "value": 3191000000.0,
+   "label": "Professional Visualization revenue",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "NVDA",
+   "doc": "NVDA_FY2026_10K",
+   "page": 167,
+   "value": 3191.0,
+   "label": "Professional Visualization revenue Year Ended Jan 25, 2026",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "NVDA",
+   "doc": "NVDA_FY2026_10K",
+   "page": 23,
+   "value": 193700000000.0,
+   "label": "Data Center revenue",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "NVDA",
+   "doc": "NVDA_FY2026_10K",
+   "page": 14,
+   "value": 16000000000.0,
+   "label": "Gaming revenue",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "NVDA",
+   "doc": "NVDA_FY2026_10K",
+   "page": 23,
+   "value": 3200000000.0,
+   "label": "Automotive revenue",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "NVDA",
+   "doc": "NVDA_FY2026_10K",
+   "page": 23,
+   "value": 2300000000.0,
+   "label": "Professional Visualization revenue",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

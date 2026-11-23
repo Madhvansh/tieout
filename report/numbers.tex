@@ -1,18 +1,24 @@
-\newcommand{\HeldRows}{TieOut, declared configuration (plans on the graph; a text reader as witness and pointer) & n/a & n/a & n/a & n/a & n/a & n/a \\
-Baseline: hybrid retrieval, same model reads (the text reader, alone) & n/a & n/a & n/a & n/a & n/a & n/a \\
-Baseline: dense retrieval, same model reads & n/a & n/a & n/a & n/a & n/a & n/a \\
-TieOut, one planner (no second planner, no arbiter) & n/a & n/a & n/a & n/a & n/a & n/a \\
-TieOut, one picker (no second picker) & n/a & n/a & n/a & n/a & n/a & n/a \\
-TieOut, no arbiter & n/a & n/a & n/a & n/a & n/a & n/a \\
-TieOut, empty link store & n/a & n/a & n/a & n/a & n/a & n/a \\
-TieOut, no equation solving & n/a & n/a & n/a & n/a & n/a & n/a \\
-TieOut, no linking (statement concepts only) & n/a & n/a & n/a & n/a & n/a & n/a \\
-TieOut, checks off & n/a & n/a & n/a & n/a & n/a & n/a \\
-TieOut, no checks read from the question's words & n/a & n/a & n/a & n/a & n/a & n/a \\}
-\newcommand{\TierLine}{n/a}
-\newcommand{\CostLine}{n/a}
+\newcommand{\HeldRows}{TieOut, the declared configuration on one free key (the headline) & 8/10 & 9/10 & 8/10 & \textbf{25/30} & 82\% & 72\% \\
+TieOut, plans alone (no text reader) & 6/10 & 6/10 & 7/10 & \textbf{19/30} & -- & -- \\
+Baseline: hybrid retrieval, the same model reads 16,000 characters & 7/10 & 5/10 & 3/10 & \textbf{15/30} & 53\% & 19\% \\
+Baseline: the same with 48,000 characters, as the text reader inside TieOut gets & 9/10 & 8/10 & 5/10 & \textbf{22/30} & 53\% & 39\% \\
+\midrule
+Baseline: dense retrieval, the same model reads & 8/10 & 4/10 & 3/10 & \textbf{15/30} & 41\% & 17\% \\
+\midrule
+Paid side run: Claude Sonnet 5.5 plans and picks, gemini-3.1-pro arbitrates & 9/10 & 9/10 & 8/10 & \textbf{26/30} & 82\% & 72\% \\
+Reference for the rows below: TieOut on a key without the free tier's daily limit & 9/10 & 9/10 & 9/10 & \textbf{27/30} & 82\% & 73\% \\
+... one planner (no second planner, no arbiter) & 7/10 & 8/10 & 8/10 & \textbf{23/30} & 72\% & 61\% \\
+... no arbiter & 7/10 & 9/10 & 8/10 & \textbf{24/30} & 75\% & 68\% \\
+... no linking (statement concepts only) & 8/10 & 4/10 & 9/10 & \textbf{21/30} & 83\% & 47\% \\
+... one picker (no second picker) & 9/10 & 9/10 & 9/10 & \textbf{27/30} & 82\% & 73\% \\
+... empty link store & 9/10 & 9/10 & 9/10 & \textbf{27/30} & 82\% & 73\% \\
+... no equation solving & 9/10 & 9/10 & 9/10 & \textbf{27/30} & 82\% & 73\% \\
+... checks off & 9/10 & 9/10 & 9/10 & \textbf{27/30} & 82\% & 73\% \\
+... no checks read from the question's words & 9/10 & 9/10 & 9/10 & \textbf{27/30} & 82\% & 73\% \\}
+\newcommand{\TierLine}{VERIFIED 4/4, WITNESSED 3/4, CORROBORATED 9/9, FLAGGED 8/11, ABSTAIN 1/2; wrong while VERIFIED: 0; wrong while WITNESSED: 1}
+\newcommand{\CostLine}{6.8 model calls and 15.8 s per question; 3 strong-model calls in the run}
 \newcommand{\RoundTenLine}{Round 10 (35 questions nobody had seen; first run of the design in which the text reader can only point at a graph node): the plans alone 24/35, with the text reader 26/35; VERIFIED 1/1, WITNESSED 7/7, CORROBORATED 10/10, FLAGGED 7/12, ABSTAIN 1/5. A version withdrawn the same night, which served answers the reader had written, scored 27/35.}
-\newcommand{\CaseLine}{n/a}
+\newcommand{\CaseLine}{two readers agree: 15/17; one reader only: 3/5; the text reader's arithmetic, computed on the graph nodes it cited: 2/2; the lines the text reader cited against the linker's: 2/2; arbiter alone: 1/1; arbiter and one reader agree: 0/1; a plan on lines the text reader cited for the whole question: 1/1; one reader and the passage reader agree: 1/1}
 \newcommand{\RoundRows}{round 3 & 25/36 & 36/36 \\
 round 4 & 22/34 & 35/35 \\
 round 5 & 20/36 & 35/36 \\
@@ -22,11 +28,11 @@ round 8 & 28/35 & 34/35 \\
 round 9 & 27/36 & 31/36 \\
 round 10 & 26/35 & 28/35 \\
 round 11 & 29/36 & 31/36 \\
-held-out & n/a & n/a \\}
+held-out & 25/30 & -- \\}
 \newcommand{\StoreLine}{empty store 30/35, 8.9 calls and 1.6 s per question; with links learned on the earlier rounds 30/35, 8.9 calls and 6.4 s}
 \newcommand{\ScaleLine}{8667 questions: 8083 correct, 517 abstained, None silent wrong}
-\newcommand{\StrictLine}{n/a}
-\newcommand{\McNemarLine}{n/a}
-\newcommand{\ScaledLine}{n/a}
+\newcommand{\StrictLine}{final scorer 25/30, strict scorer (the 21 Nov rules) 24/30, 95\% interval (final) 66\% to 93\%}
+\newcommand{\McNemarLine}{on the 30 held-out questions TieOut alone is right on 14, the retrieval baseline alone on 4; exact McNemar two-sided p = 0.0309}
+\newcommand{\ScaledLine}{labelled side experiment, paid models (Claude Sonnet 5.5 reads and picks, gemini-3.1-pro arbitrates): 26/30 (strict 25/30)}
 \newcommand{\TransferLine}{n/a}
-\newcommand{\RoadLine}{n/a}
+\newcommand{\RoadLine}{the plan road alone 19/30; with the text reader as witness and pointer 25/30}

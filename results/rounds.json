@@ -380,7 +380,24 @@
  {
   "round": "held-out",
   "note": "run once",
-  "first_run": null,
+  "first_run": {
+   "n": 30,
+   "right": 25,
+   "right_by_tier": {
+    "VERIFIED": 4,
+    "WITNESSED": 3,
+    "CORROBORATED": 9,
+    "FLAGGED": 8,
+    "ABSTAIN": 1
+   },
+   "wrong_by_tier": {
+    "VERIFIED": 0,
+    "WITNESSED": 1,
+    "CORROBORATED": 0,
+    "FLAGGED": 3,
+    "ABSTAIN": 1
+   }
+  },
   "final_code": null,
   "first_file": "heldout_v2.json",
   "final_file": null

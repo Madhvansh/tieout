@@ -87,6 +87,21 @@ def heldout_block() -> tuple:
     notes[-1] += (f"; TieOut's plans alone, without the text reader, {plans}/{o['n']}" if plans is not None
                   else f"; TieOut's plans alone, without the text reader, {GAP}")
     notes[-1] += " (`results/heldout_v2.json`, `results/heldout_baseline_hybrid.json`)."
+    wide = score(load("heldout_baseline_hybrid_b48.json")).get("overall")
+    if wide:                                          # the same reader with the context it gets inside TieOut
+        notes[-1] += (f" The baseline reads 16,000 characters of passages; with the 48,000 the text reader gets inside "
+                      f"TieOut it scores {wide['correct']}/{wide['n']} (`results/heldout_baseline_hybrid_b48.json`).")
+    rows = (held or {}).get("rows") or []
+    ref = score(load("heldout_abl_none.json")).get("overall")
+    if rows:                                          # how far one free key carried the arbiter
+        seen = sum(1 for r in rows if any(s.get("role") == "arbiter" for s in r.get("readers") or []))
+        alone = sum(1 for r in rows if str(r.get("reading")) == "one reader only")
+        note = (f"One free key was the limit of this run: the stronger arbiter models answered on {seen} of {len(rows)} questions "
+                f"before their free daily quota was spent, and {alone} answers were then served on one planner's reading, FLAGGED.")
+        if ref:
+            note += (f" The same frozen system on a key without that daily limit, a side number and not the headline: "
+                     f"{ref['correct']}/{ref['n']} (`results/heldout_abl_none.json`).")
+        notes.append(note)
     if o:
         bt = o.get("by_tier", {})
         tiers = ", ".join(f"{t} {bt[t]['correct']}/{bt[t]['n']}" for t in TIERS if bt.get(t, {}).get("n"))

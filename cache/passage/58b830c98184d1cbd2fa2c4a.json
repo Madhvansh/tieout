@@ -1,0 +1,15 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was Delta Air Lines' total fuel expense for 2025?",
+ "abstain": true,
+ "answer": "The provided passages do not contain information about Delta Air Lines' total fuel expense for 2025.",
+ "pred": {
+  "kind": "abstain",
+  "value": null
+ },
+ "unit": "none",
+ "facts": [],
+ "facts_ok": false
+}

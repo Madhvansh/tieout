@@ -1,0 +1,4634 @@
+{
+ "system": "baseline v2 (passage BM25 + dense bge-small, RRF, company scope, LLM reads and computes)",
+ "model": "gemini:gemini-3.5-flash-lite",
+ "benchmark": "benchmark/round2/questions.jsonl",
+ "params": {
+  "retriever": "v2",
+  "budget_chars": 16000,
+  "passage_chars": "1000-1500",
+  "mode": "dense",
+  "dense_model": "BAAI/bge-small-en-v1.5",
+  "bm25_k1": 1.5,
+  "bm25_b": 0.75,
+  "rrf_k": 60,
+  "rrf_depth": 200
+ },
+ "stopped": null,
+ "tokens": {
+  "questions": 30,
+  "live_questions": 30,
+  "prompt_chars_mean": 17302.9,
+  "est_tokens_in_mean": 4325.366666666667,
+  "tokens_in_mean_live": 5578.8,
+  "tokens_out_mean_live": 158.4
+ },
+ "llm_calls": {
+  "live": 30,
+  "cached": 0,
+  "seconds": 54.95581078529358,
+  "tokens_in": 167364,
+  "tokens_out": 4752
+ },
+ "score_fact_level": {
+  "overall": {
+   "n": 30,
+   "correct": 15,
+   "accuracy": 0.5,
+   "accuracy_ci95": [
+    0.3315,
+    0.6685
+   ],
+   "correct_final": 15,
+   "correct_strict": 15,
+   "accuracy_strict_ci95": [
+    0.3315,
+    0.6685
+   ],
+   "precision_macro": 0.4122222222222222,
+   "recall_macro": 0.16666666666666669,
+   "precision_micro": 0.2037037037037037,
+   "recall_micro": 0.13580246913580246,
+   "page_exact_share": 0.5454545454545454,
+   "abstained": 10,
+   "by_tier": {
+    "VERIFIED": {
+     "n": 0,
+     "correct": 0
+    },
+    "WITNESSED": {
+     "n": 0,
+     "correct": 0
+    },
+    "CORROBORATED": {
+     "n": 0,
+     "correct": 0
+    },
+    "FLAGGED": {
+     "n": 0,
+     "correct": 0
+    },
+    "ABSTAIN": {
+     "n": 0,
+     "correct": 0
+    }
+   },
+   "silent_wrong": 0,
+   "witnessed_wrong": 0,
+   "plan_road_correct": null,
+   "answered_accuracy": 0.65
+  },
+  "single_fact": {
+   "n": 10,
+   "correct": 8,
+   "accuracy": 0.8,
+   "accuracy_ci95": [
+    0.4902,
+    0.9433
+   ],
+   "correct_final": 8,
+   "correct_strict": 8,
+   "accuracy_strict_ci95": [
+    0.4902,
+    0.9433
+   ],
+   "precision_macro": 0.4,
+   "recall_macro": 0.2222222222222222,
+   "precision_micro": 0.2222222222222222,
+   "recall_micro": 0.2222222222222222,
+   "page_exact_share": 1.0,
+   "abstained": 2,
+   "by_tier": {
+    "VERIFIED": {
+     "n": 0,
+     "correct": 0
+    },
+    "WITNESSED": {
+     "n": 0,
+     "correct": 0
+    },
+    "CORROBORATED": {
+     "n": 0,
+     "correct": 0
+    },
+    "FLAGGED": {
+     "n": 0,
+     "correct": 0
+    },
+    "ABSTAIN": {
+     "n": 0,
+     "correct": 0
+    }
+   },
+   "silent_wrong": 0,
+   "witnessed_wrong": 0,
+   "plan_road_correct": null,
+   "answered_accuracy": 0.875
+  },
+  "multi_hop": {
+   "n": 10,
+   "correct": 4,
+   "accuracy": 0.4,
+   "accuracy_ci95": [
+    0.1682,
+    0.6873
+   ],
+   "correct_final": 4,
+   "correct_strict": 4,
+   "accuracy_strict_ci95": [
+    0.1682,
+    0.6873
+   ],
+   "precision_macro": 0.37,
+   "recall_macro": 0.16666666666666669,
+   "precision_micro": 0.25,
+   "recall_micro": 0.1724137931034483,
+   "page_exact_share": 0.4,
+   "abstained": 2,
+   "by_tier": {
+    "VERIFIED": {
+     "n": 0,
+     "correct": 0
+    },
+    "WITNESSED": {
+     "n": 0,
+     "correct": 0
+    },
+    "CORROBORATED": {
+     "n": 0,
+     "correct": 0
+    },
+    "FLAGGED": {
+     "n": 0,
+     "correct": 0
+    },
+    "ABSTAIN": {
+     "n": 0,
+     "correct": 0
+    }
+   },
+   "silent_wrong": 0,
+   "witnessed_wrong": 0,
+   "plan_road_correct": null,
+   "answered_accuracy": 0.5
+  },
+  "cross_filing": {
+   "n": 10,
+   "correct": 3,
+   "accuracy": 0.3,
+   "accuracy_ci95": [
+    0.1078,
+    0.6032
+   ],
+   "correct_final": 3,
+   "correct_strict": 3,
+   "accuracy_strict_ci95": [
+    0.1078,
+    0.6032
+   ],
+   "precision_macro": 0.4666666666666667,
+   "recall_macro": 0.1111111111111111,
+   "precision_micro": 0.16,
+   "recall_micro": 0.09302325581395349,
+   "page_exact_share": 0.5,
+   "abstained": 6,
+   "by_tier": {
+    "VERIFIED": {
+     "n": 0,
+     "correct": 0
+    },
+    "WITNESSED": {
+     "n": 0,
+     "correct": 0
+    },
+    "CORROBORATED": {
+     "n": 0,
+     "correct": 0
+    },
+    "FLAGGED": {
+     "n": 0,
+     "correct": 0
+    },
+    "ABSTAIN": {
+     "n": 0,
+     "correct": 0
+    }
+   },
+   "silent_wrong": 0,
+   "witnessed_wrong": 0,
+   "plan_road_correct": null,
+   "answered_accuracy": 0.5
+  }
+ },
+ "score_page_level": {
+  "overall": {
+   "n": 30,
+   "precision_macro": 0.09313325563325563,
+   "recall_macro": 0.6355555555555555,
+   "precision_micro": 0.09206349206349207,
+   "recall_micro": 0.5882352941176471,
+   "all_gold_pages_retrieved": 0.5,
+   "recall_relaxed_macro": 0.7422222222222222
+  },
+  "single_fact": {
+   "n": 10,
+   "precision_macro": 0.06467754467754468,
+   "recall_macro": 0.7,
+   "precision_micro": 0.06363636363636363,
+   "recall_micro": 0.7,
+   "all_gold_pages_retrieved": 0.7,
+   "recall_relaxed_macro": 0.8
+  },
+  "multi_hop": {
+   "n": 10,
+   "precision_macro": 0.10053030303030304,
+   "recall_macro": 0.75,
+   "precision_micro": 0.1,
+   "recall_micro": 0.7586206896551724,
+   "all_gold_pages_retrieved": 0.7,
+   "recall_relaxed_macro": 0.75
+  },
+  "cross_filing": {
+   "n": 10,
+   "precision_macro": 0.1141919191919192,
+   "recall_macro": 0.45666666666666667,
+   "precision_micro": 0.11428571428571428,
+   "recall_micro": 0.45652173913043476,
+   "all_gold_pages_retrieved": 0.1,
+   "recall_relaxed_macro": 0.6766666666666666
+  }
+ },
+ "rows": [
+  {
+   "id": "H01",
+   "type": "single_fact",
+   "question": "After stripping out the share belonging to minority holders, how much did Ford Motor Company make or lose in 2025?",
+   "tags": [],
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 0,
+    "gold": 1,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 13,
+    "gold": 1,
+    "recalled": 1,
+    "relevant_pages": 1,
+    "recalled_relaxed": 1
+   },
+   "answer": "Ford Motor Company had a net loss attributable to Ford Motor Company of $8,182 million (or a net loss of $8.182 billion) in 2025.",
+   "pred": {
+    "kind": "number",
+    "value": -8182000000.0
+   },
+   "gold": "Ford reported a net loss attributable to Ford Motor Company of $8,182 million for 2025.",
+   "gold_value": -8182000000,
+   "retrieved_pages": [
+    {
+     "doc": "F_FY2025_10K",
+     "page": 46,
+     "part": 0,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "F_FY2025_10K",
+     "page": 51,
+     "part": 0,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "F_FY2025_10K",
+     "page": 52,
+     "part": 1,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "F_FY2025_10K",
+     "page": 53,
+     "part": 1,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "F_FY2025_10K",
+     "page": 54,
+     "part": 1,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "F_FY2025_10K",
+     "page": 56,
+     "part": 1,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "F_FY2025_10K",
+     "page": 70,
+     "part": 0,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "F_FY2025_10K",
+     "page": 88,
+     "part": 0,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "F_FY2025_10K",
+     "page": 115,
+     "part": 1,
+     "scope": 0,
+     "rank": 13
+    },
+    {
+     "doc": "F_FY2025_10K",
+     "page": 118,
+     "part": 2,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "F_FY2025_10K",
+     "page": 132,
+     "part": 0,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "F_FY2025_10K",
+     "page": 148,
+     "part": 2,
+     "scope": 0,
+     "rank": 12
+    },
+    {
+     "doc": "F_FY2025_10K",
+     "page": 166,
+     "part": 1,
+     "scope": 0,
+     "rank": 11
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "F",
+     "doc": "F_FY2025_10K",
+     "page": 51,
+     "value": -8182.0,
+     "label": "The net loss attributable to Ford Motor Company was $8,182 million in 2025.",
+     "in_context": true
+    }
+   ],
+   "seconds": 2.14,
+   "retrieval_seconds": 0.51,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 16672,
+   "filing_chars": 14654,
+   "est_tokens_in": 4168,
+   "live_calls": 1,
+   "tokens_in": 5273,
+   "tokens_out": 137
+  },
+  {
+   "id": "H02",
+   "type": "single_fact",
+   "question": "What share of U.S. vehicle sales did General Motors capture in 2025?",
+   "tags": [
+    "outside_statements"
+   ],
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 1,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "page_match": {
+    "pages": 10,
+    "gold": 1,
+    "recalled": 1,
+    "relevant_pages": 1,
+    "recalled_relaxed": 1
+   },
+   "answer": "17.2%",
+   "pred": {
+    "kind": "number",
+    "value": 0.172
+   },
+   "gold": "GM held a 17.2% share of total U.S. vehicle sales in 2025 (2,853 thousand of 16,631 thousand industry vehicles).",
+   "gold_value": 0.172,
+   "retrieved_pages": [
+    {
+     "doc": "GM_FY2025_10K",
+     "page": 5,
+     "part": 3,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "GM_FY2025_10K",
+     "page": 6,
+     "part": 0,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "GM_FY2025_10K",
+     "page": 6,
+     "part": 1,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "GM_FY2025_10K",
+     "page": 7,
+     "part": 0,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "GM_FY2025_10K",
+     "page": 30,
+     "part": 3,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "GM_FY2025_10K",
+     "page": 31,
+     "part": 2,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "GM_FY2025_10K",
+     "page": 31,
+     "part": 3,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "GM_FY2025_10K",
+     "page": 32,
+     "part": 0,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "GM_FY2025_10K",
+     "page": 37,
+     "part": 1,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "GM_FY2025_10K",
+     "page": 68,
+     "part": 3,
+     "scope": 0,
+     "rank": 12
+    },
+    {
+     "doc": "GM_FY2025_10K",
+     "page": 69,
+     "part": 1,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "GM_FY2025_10K",
+     "page": 75,
+     "part": 2,
+     "scope": 0,
+     "rank": 5
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "GM",
+     "doc": "GM_FY2025_10K",
+     "page": 6,
+     "value": 0.172,
+     "label": "United States Market Share",
+     "in_context": true
+    }
+   ],
+   "seconds": 1.56,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17228,
+   "filing_chars": 15277,
+   "est_tokens_in": 4307,
+   "live_calls": 1,
+   "tokens_in": 5843,
+   "tokens_out": 82
+  },
+  {
+   "id": "H03",
+   "type": "single_fact",
+   "question": "How many transactions did Visa process across its network in fiscal 2026?",
+   "tags": [
+    "fiscal_year_trap",
+    "scale_trap",
+    "outside_statements"
+   ],
+   "correct": false,
+   "abstained": true,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 1,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 13,
+    "gold": 1,
+    "recalled": 0,
+    "relevant_pages": 0,
+    "recalled_relaxed": 0
+   },
+   "answer": "None",
+   "pred": {
+    "kind": "abstain",
+    "value": null
+   },
+   "gold": "Visa processed 281,331 million transactions (about 281.3 billion) in fiscal 2026, the year ended September 30, 2026.",
+   "gold_value": 281331000000,
+   "retrieved_pages": [
+    {
+     "doc": "V_FY2026_10K",
+     "page": 5,
+     "part": 2,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "V_FY2026_10K",
+     "page": 13,
+     "part": 2,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "V_FY2026_10K",
+     "page": 40,
+     "part": 1,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "V_FY2026_10K",
+     "page": 41,
+     "part": 1,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "V_FY2026_10K",
+     "page": 43,
+     "part": 2,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "V_FY2026_10K",
+     "page": 44,
+     "part": 0,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "V_FY2026_10K",
+     "page": 45,
+     "part": 1,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "V_FY2026_10K",
+     "page": 50,
+     "part": 2,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "V_FY2026_10K",
+     "page": 51,
+     "part": 0,
+     "scope": 0,
+     "rank": 13
+    },
+    {
+     "doc": "V_FY2026_10K",
+     "page": 61,
+     "part": 0,
+     "scope": 0,
+     "rank": 12
+    },
+    {
+     "doc": "V_FY2026_10K",
+     "page": 66,
+     "part": 0,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "V_FY2026_10K",
+     "page": 86,
+     "part": 1,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "V_FY2026_10K",
+     "page": 97,
+     "part": 1,
+     "scope": 0,
+     "rank": 5
+    }
+   ],
+   "facts_used": [],
+   "seconds": 2.13,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 16945,
+   "filing_chars": 14968,
+   "est_tokens_in": 4236,
+   "live_calls": 1,
+   "tokens_in": 4960,
+   "tokens_out": 29
+  },
+  {
+   "id": "H04",
+   "type": "single_fact",
+   "question": "What share of American Express's worldwide Card Member loans was tied to its Delta co-brand cards at the end of 2025?",
+   "tags": [
+    "text_fact",
+    "outside_statements"
+   ],
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 1,
+    "gold": 1,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "page_match": {
+    "pages": 11,
+    "gold": 1,
+    "recalled": 1,
+    "relevant_pages": 1,
+    "recalled_relaxed": 1
+   },
+   "answer": "0.21",
+   "pred": {
+    "kind": "number",
+    "value": 0.21
+   },
+   "gold": "The Delta cobrand portfolio represented approximately 21 percent of worldwide Card Member loans as of December 31, 2025.",
+   "gold_value": 0.21,
+   "retrieved_pages": [
+    {
+     "doc": "AXP_FY2025_10K",
+     "page": 5,
+     "part": 3,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "AXP_FY2025_10K",
+     "page": 6,
+     "part": 1,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "AXP_FY2025_10K",
+     "page": 7,
+     "part": 0,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "AXP_FY2025_10K",
+     "page": 7,
+     "part": 1,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "AXP_FY2025_10K",
+     "page": 27,
+     "part": 1,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "AXP_FY2025_10K",
+     "page": 46,
+     "part": 1,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "AXP_FY2025_10K",
+     "page": 52,
+     "part": 0,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "AXP_FY2025_10K",
+     "page": 100,
+     "part": 0,
+     "scope": 0,
+     "rank": 12
+    },
+    {
+     "doc": "AXP_FY2025_10K",
+     "page": 106,
+     "part": 2,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "AXP_FY2025_10K",
+     "page": 112,
+     "part": 0,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "AXP_FY2025_10K",
+     "page": 124,
+     "part": 0,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "AXP_FY2025_10K",
+     "page": 172,
+     "part": 1,
+     "scope": 0,
+     "rank": 4
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "AXP",
+     "doc": "AXP_FY2025_10K",
+     "page": 7,
+     "value": 0.21,
+     "label": "approximately 21 percent of worldwide Card Member loans as of December 31, 2025",
+     "in_context": true
+    }
+   ],
+   "seconds": 1.71,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17638,
+   "filing_chars": 15638,
+   "est_tokens_in": 4409,
+   "live_calls": 1,
+   "tokens_in": 5150,
+   "tokens_out": 95
+  },
+  {
+   "id": "H05",
+   "type": "single_fact",
+   "question": "How much net revenue did PepsiCo generate in Russia in 2025?",
+   "tags": [
+    "outside_statements"
+   ],
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 0,
+    "gold": 1,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 11,
+    "gold": 1,
+    "recalled": 1,
+    "relevant_pages": 1,
+    "recalled_relaxed": 1
+   },
+   "answer": "$4,768 million",
+   "pred": {
+    "kind": "number",
+    "value": 4768000000.0
+   },
+   "gold": "PepsiCo's net revenue in Russia was $4,768 million in 2025.",
+   "gold_value": 4768000000,
+   "retrieved_pages": [
+    {
+     "doc": "PEP_FY2025_10K",
+     "page": 36,
+     "part": 1,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "PEP_FY2025_10K",
+     "page": 38,
+     "part": 2,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "PEP_FY2025_10K",
+     "page": 44,
+     "part": 0,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "PEP_FY2025_10K",
+     "page": 53,
+     "part": 0,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "PEP_FY2025_10K",
+     "page": 60,
+     "part": 0,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "PEP_FY2025_10K",
+     "page": 62,
+     "part": 0,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "PEP_FY2025_10K",
+     "page": 62,
+     "part": 1,
+     "scope": 0,
+     "rank": 12
+    },
+    {
+     "doc": "PEP_FY2025_10K",
+     "page": 68,
+     "part": 2,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "PEP_FY2025_10K",
+     "page": 69,
+     "part": 0,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "PEP_FY2025_10K",
+     "page": 71,
+     "part": 1,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "PEP_FY2025_10K",
+     "page": 80,
+     "part": 2,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "PEP_FY2025_10K",
+     "page": 81,
+     "part": 0,
+     "scope": 0,
+     "rank": 2
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "PEP",
+     "doc": "PEP_FY2025_10K",
+     "page": 71,
+     "value": 4768.0,
+     "label": "Russia",
+     "in_context": true
+    }
+   ],
+   "seconds": 2.45,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17279,
+   "filing_chars": 15336,
+   "est_tokens_in": 4319,
+   "live_calls": 1,
+   "tokens_in": 6291,
+   "tokens_out": 86
+  },
+  {
+   "id": "H06",
+   "type": "single_fact",
+   "question": "How much did JPMorgan Chase set aside for credit losses in 2025?",
+   "tags": [
+    "segment_vs_consolidated"
+   ],
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 0,
+    "gold": 1,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 8,
+    "gold": 1,
+    "recalled": 0,
+    "relevant_pages": 0,
+    "recalled_relaxed": 1
+   },
+   "answer": "$14.2 billion",
+   "pred": {
+    "kind": "number",
+    "value": 14212000000.0
+   },
+   "gold": "JPMorgan Chase recorded a provision for credit losses of $14,212 million in 2025.",
+   "gold_value": 14212000000,
+   "retrieved_pages": [
+    {
+     "doc": "JPM_FY2025_10K",
+     "page": 50,
+     "part": 0,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "JPM_FY2025_10K",
+     "page": 55,
+     "part": 0,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "JPM_FY2025_10K",
+     "page": 55,
+     "part": 1,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "JPM_FY2025_10K",
+     "page": 68,
+     "part": 0,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "JPM_FY2025_10K",
+     "page": 69,
+     "part": 2,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "JPM_FY2025_10K",
+     "page": 105,
+     "part": 3,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "JPM_FY2025_10K",
+     "page": 131,
+     "part": 1,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "JPM_FY2025_10K",
+     "page": 132,
+     "part": 0,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "JPM_FY2025_10K",
+     "page": 132,
+     "part": 1,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "JPM_FY2025_10K",
+     "page": 132,
+     "part": 2,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "JPM_FY2025_10K",
+     "page": 263,
+     "part": 1,
+     "scope": 0,
+     "rank": 7
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "JPM",
+     "doc": "JPM_FY2025_10K",
+     "page": 55,
+     "value": 14212.0,
+     "label": "Total provision for credit losses",
+     "in_context": true
+    }
+   ],
+   "seconds": 1.56,
+   "retrieval_seconds": 0.0,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 16572,
+   "filing_chars": 14646,
+   "est_tokens_in": 4143,
+   "live_calls": 1,
+   "tokens_in": 6308,
+   "tokens_out": 88
+  },
+  {
+   "id": "H07",
+   "type": "single_fact",
+   "question": "What was the value of the inventories on Caterpillar's balance sheet at the end of 2025?",
+   "tags": [],
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 0,
+    "gold": 1,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 13,
+    "gold": 1,
+    "recalled": 1,
+    "relevant_pages": 1,
+    "recalled_relaxed": 1
+   },
+   "answer": "$18,135 million",
+   "pred": {
+    "kind": "number",
+    "value": 18135000000.0
+   },
+   "gold": "Caterpillar carried inventories of $18,135 million at December 31, 2025.",
+   "gold_value": 18135000000,
+   "retrieved_pages": [
+    {
+     "doc": "CAT_FY2024_10K",
+     "page": 43,
+     "part": 2,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "CAT_FY2024_10K",
+     "page": 53,
+     "part": 1,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 38,
+     "part": 2,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 44,
+     "part": 2,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 54,
+     "part": 1,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 55,
+     "part": 1,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 56,
+     "part": 0,
+     "scope": 0,
+     "rank": 12
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 63,
+     "part": 0,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 66,
+     "part": 0,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 68,
+     "part": 0,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 87,
+     "part": 1,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 89,
+     "part": 1,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 90,
+     "part": 0,
+     "scope": 0,
+     "rank": 13
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "CAT",
+     "doc": "CAT_FY2025_10K",
+     "page": 63,
+     "value": 18135.0,
+     "label": "Inventories",
+     "in_context": true
+    }
+   ],
+   "seconds": 1.42,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17512,
+   "filing_chars": 15520,
+   "est_tokens_in": 4378,
+   "live_calls": 1,
+   "tokens_in": 7553,
+   "tokens_out": 86
+  },
+  {
+   "id": "H08",
+   "type": "single_fact",
+   "question": "What proportion of its premium revenue did UnitedHealth Group pay out in medical costs in 2025 (its medical cost ratio)?",
+   "tags": [
+    "outside_statements"
+   ],
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 0,
+    "gold": 1,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 9,
+    "gold": 1,
+    "recalled": 1,
+    "relevant_pages": 1,
+    "recalled_relaxed": 1
+   },
+   "answer": "0.8914619482863435",
+   "pred": {
+    "kind": "number",
+    "value": 0.8914619482863435
+   },
+   "gold": "UnitedHealth Group's medical care ratio was 89.1% in 2025.",
+   "gold_value": 0.891,
+   "retrieved_pages": [
+    {
+     "doc": "UNH_FY2025_10K",
+     "page": 29,
+     "part": 3,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "UNH_FY2025_10K",
+     "page": 30,
+     "part": 0,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "UNH_FY2025_10K",
+     "page": 30,
+     "part": 3,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "UNH_FY2025_10K",
+     "page": 31,
+     "part": 0,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "UNH_FY2025_10K",
+     "page": 32,
+     "part": 1,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "UNH_FY2025_10K",
+     "page": 44,
+     "part": 0,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "UNH_FY2025_10K",
+     "page": 50,
+     "part": 0,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "UNH_FY2025_10K",
+     "page": 61,
+     "part": 1,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "UNH_FY2025_10K",
+     "page": 72,
+     "part": 3,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "UNH_FY2025_10K",
+     "page": 73,
+     "part": 2,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "UNH_FY2025_10K",
+     "page": 73,
+     "part": 4,
+     "scope": 0,
+     "rank": 8
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "UNH",
+     "doc": "UNH_FY2025_10K",
+     "page": 30,
+     "value": 352229.0,
+     "label": "Premiums",
+     "in_context": true
+    },
+    {
+     "ticker": "UNH",
+     "doc": "UNH_FY2025_10K",
+     "page": 30,
+     "value": 313995.0,
+     "label": "Medical costs",
+     "in_context": true
+    }
+   ],
+   "seconds": 1.56,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17009,
+   "filing_chars": 15027,
+   "est_tokens_in": 4252,
+   "live_calls": 1,
+   "tokens_in": 5091,
+   "tokens_out": 154
+  },
+  {
+   "id": "H09",
+   "type": "single_fact",
+   "question": "How much cash did Walmart actually pay in income taxes during fiscal 2026?",
+   "tags": [
+    "fiscal_year_trap"
+   ],
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 1,
+    "matched_retrieved": 0,
+    "gold": 1,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 12,
+    "gold": 1,
+    "recalled": 0,
+    "relevant_pages": 0,
+    "recalled_relaxed": 0
+   },
+   "answer": "$5,364 million",
+   "pred": {
+    "kind": "number",
+    "value": 5364.0
+   },
+   "gold": "Walmart paid $5,364 million in income taxes in fiscal 2026 (the year ended January 31, 2026).",
+   "gold_value": 5364000000,
+   "retrieved_pages": [
+    {
+     "doc": "WMT_FY2025_10K",
+     "page": 44,
+     "part": 0,
+     "scope": 0,
+     "rank": 13
+    },
+    {
+     "doc": "WMT_FY2025_10K",
+     "page": 71,
+     "part": 2,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "WMT_FY2026_10K",
+     "page": 37,
+     "part": 2,
+     "scope": 0,
+     "rank": 12
+    },
+    {
+     "doc": "WMT_FY2026_10K",
+     "page": 38,
+     "part": 2,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "WMT_FY2026_10K",
+     "page": 39,
+     "part": 0,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "WMT_FY2026_10K",
+     "page": 40,
+     "part": 1,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "WMT_FY2026_10K",
+     "page": 41,
+     "part": 2,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "WMT_FY2026_10K",
+     "page": 43,
+     "part": 0,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "WMT_FY2026_10K",
+     "page": 70,
+     "part": 0,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "WMT_FY2026_10K",
+     "page": 70,
+     "part": 1,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "WMT_FY2026_10K",
+     "page": 71,
+     "part": 1,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "WMT_FY2026_10K",
+     "page": 72,
+     "part": 2,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "WMT_FY2026_10K",
+     "page": 73,
+     "part": 0,
+     "scope": 0,
+     "rank": 6
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "WMT",
+     "doc": "WMT_FY2026_10K",
+     "page": 70,
+     "value": 5364.0,
+     "label": "Cash taxes paid in total",
+     "in_context": true
+    }
+   ],
+   "seconds": 2.11,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 16887,
+   "filing_chars": 14909,
+   "est_tokens_in": 4221,
+   "live_calls": 1,
+   "tokens_in": 5073,
+   "tokens_out": 85
+  },
+  {
+   "id": "H10",
+   "type": "single_fact",
+   "question": "What was Delta Air Lines' total fuel expense for 2025?",
+   "tags": [
+    "unanswerable"
+   ],
+   "correct": true,
+   "abstained": true,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 0,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 10,
+    "gold": 1,
+    "recalled": 1,
+    "relevant_pages": 1,
+    "recalled_relaxed": 1
+   },
+   "answer": "None",
+   "pred": {
+    "kind": "abstain",
+    "value": null
+   },
+   "gold": "Not answerable from these filings: Delta Air Lines is not one of the companies in the set. It appears only as American Express's co-brand partner in the AmEx 10-K, which gives no Delta fuel cost.",
+   "gold_value": null,
+   "retrieved_pages": [
+    {
+     "doc": "AXP_FY2025_10K",
+     "page": 7,
+     "part": 1,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "BLK_FY2025_10K",
+     "page": 54,
+     "part": 1,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 13,
+     "part": 1,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 45,
+     "part": 1,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 45,
+     "part": 2,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 93,
+     "part": 2,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 98,
+     "part": 2,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 112,
+     "part": 2,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "GM_FY2025_10K",
+     "page": 99,
+     "part": 1,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "TGT_FY2025_10K",
+     "page": 34,
+     "part": 1,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 128,
+     "part": 0,
+     "scope": 0,
+     "rank": 10
+    }
+   ],
+   "facts_used": [],
+   "seconds": 1.69,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 16851,
+   "filing_chars": 14935,
+   "est_tokens_in": 4212,
+   "live_calls": 1,
+   "tokens_in": 6181,
+   "tokens_out": 29
+  },
+  {
+   "id": "B04",
+   "type": "cross_filing",
+   "question": "Across 2022 through 2025, in which year did Exxon Mobil earn the most net income attributable to ExxonMobil, and how far below that peak was 2025?",
+   "tags": [
+    "ranking",
+    "derived_metric"
+   ],
+   "correct": false,
+   "abstained": true,
+   "match": {
+    "retrieved": 3,
+    "matched_retrieved": 0,
+    "gold": 4,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 12,
+    "gold": 4,
+    "recalled": 1,
+    "relevant_pages": 1,
+    "recalled_relaxed": 3
+   },
+   "answer": "Exxon Mobil earned the most net income attributable to ExxonMobil in 2022, with net income of $55,740 million, which was $22,060 million above the 2025 net income of $33,680 million (assuming 2025 net income was $33,680 million as reported in 2024, or if 2025 is not explicitly listed in the 2025 10-K passages provided, based on available data through 2024).",
+   "pred": {
+    "kind": "abstain",
+    "value": null
+   },
+   "gold": "2022 was the peak at $55,740 million; 2025's $28,844 million was $26,896 million (about 48.3%) lower. The series declined every year: $55,740M, $36,010M, $33,680M, $28,844M.",
+   "gold_value": 26896000000,
+   "retrieved_pages": [
+    {
+     "doc": "XOM_FY2024_10K",
+     "page": 35,
+     "part": 0,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "XOM_FY2024_10K",
+     "page": 40,
+     "part": 0,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "XOM_FY2024_10K",
+     "page": 68,
+     "part": 0,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "XOM_FY2024_10K",
+     "page": 79,
+     "part": 0,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "XOM_FY2024_10K",
+     "page": 119,
+     "part": 0,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 25,
+     "part": 1,
+     "scope": 0,
+     "rank": 12
+    },
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 47,
+     "part": 0,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 63,
+     "part": 2,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 84,
+     "part": 0,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 85,
+     "part": 0,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 114,
+     "part": 0,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 117,
+     "part": 2,
+     "scope": 0,
+     "rank": 7
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "XOM",
+     "doc": "XOM_FY2024_10K",
+     "page": 35,
+     "value": 33680.0,
+     "label": "Net income (loss) attributable to ExxonMobil",
+     "in_context": true
+    },
+    {
+     "ticker": "XOM",
+     "doc": "XOM_FY2024_10K",
+     "page": 35,
+     "value": 36010.0,
+     "label": "Net income (loss) attributable to ExxonMobil",
+     "in_context": true
+    },
+    {
+     "ticker": "XOM",
+     "doc": "XOM_FY2024_10K",
+     "page": 35,
+     "value": 55740.0,
+     "label": "Net income (loss) attributable to ExxonMobil",
+     "in_context": true
+    }
+   ],
+   "seconds": 1.88,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17828,
+   "filing_chars": 15799,
+   "est_tokens_in": 4457,
+   "live_calls": 1,
+   "tokens_in": 6645,
+   "tokens_out": 296
+  },
+  {
+   "id": "B06",
+   "type": "cross_filing",
+   "question": "Sam's Club U.S. grocery net sales for fiscal 2025 appear in both of Walmart's last two annual reports. Was the figure changed in the fiscal 2026 report, by how much, and why?",
+   "tags": [
+    "restated",
+    "segment_vs_consolidated",
+    "fiscal_year_trap",
+    "outside_statements"
+   ],
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 0,
+    "gold": 6,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 10,
+    "gold": 6,
+    "recalled": 5,
+    "relevant_pages": 2,
+    "recalled_relaxed": 5
+   },
+   "answer": "Sam's Club U.S. grocery net sales for fiscal 2025 were reported as $59,976 million in the fiscal 2025 10-K and changed to $61,253 million in the fiscal 2026 10-K (an increase of $1,277 million), due to category reclassifications or reporting updates in the later report.",
+   "pred": {
+    "kind": "number",
+    "value": 1277000000.0
+   },
+   "gold": "Yes. The fiscal 2025 10-K showed $59,976 million; the fiscal 2026 10-K shows $61,253 million, an increase of $1,277 million. Walmart says it periodically revises which merchandise category an item's sales are assigned to and reclassifies prior periods to match; Sam's Club health and wellness fell by a similar amount (6,089 to 4,810) and the segment total stayed $90,238 million.",
+   "gold_value": 1277000000,
+   "retrieved_pages": [
+    {
+     "doc": "WMT_FY2025_10K",
+     "page": 35,
+     "part": 3,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "WMT_FY2025_10K",
+     "page": 36,
+     "part": 0,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "WMT_FY2025_10K",
+     "page": 42,
+     "part": 1,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "WMT_FY2025_10K",
+     "page": 78,
+     "part": 2,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "WMT_FY2025_10K",
+     "page": 80,
+     "part": 0,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "WMT_FY2026_10K",
+     "page": 34,
+     "part": 2,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "WMT_FY2026_10K",
+     "page": 39,
+     "part": 2,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "WMT_FY2026_10K",
+     "page": 41,
+     "part": 0,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "WMT_FY2026_10K",
+     "page": 41,
+     "part": 1,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "WMT_FY2026_10K",
+     "page": 77,
+     "part": 1,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "WMT_FY2026_10K",
+     "page": 79,
+     "part": 0,
+     "scope": 0,
+     "rank": 8
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "WMT",
+     "doc": "WMT_FY2025_10K",
+     "page": 80,
+     "value": 59976.0,
+     "label": "Sam's Club U.S. net sales by merchandise category Grocery 2025",
+     "in_context": true
+    },
+    {
+     "ticker": "WMT",
+     "doc": "WMT_FY2026_10K",
+     "page": 79,
+     "value": 61253.0,
+     "label": "Sam's Club U.S. net sales by merchandise category Grocery 2025",
+     "in_context": true
+    }
+   ],
+   "seconds": 1.98,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17052,
+   "filing_chars": 15016,
+   "est_tokens_in": 4263,
+   "live_calls": 1,
+   "tokens_in": 5986,
+   "tokens_out": 256
+  },
+  {
+   "id": "B09",
+   "type": "cross_filing",
+   "question": "Rank the four health-care companies in the set (Johnson & Johnson, Pfizer, Merck and UnitedHealth Group) by their reported 2025 effective income tax rate, highest first.",
+   "tags": [
+    "ranking",
+    "outside_statements",
+    "text_fact"
+   ],
+   "correct": false,
+   "abstained": true,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 4,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 11,
+    "gold": 4,
+    "recalled": 0,
+    "relevant_pages": 0,
+    "recalled_relaxed": 0
+   },
+   "answer": "The provided passages do not contain the reported 2025 effective income tax rates for all four companies (Johnson & Johnson, Pfizer, Merck, and UnitedHealth Group).",
+   "pred": {
+    "kind": "abstain",
+    "value": null
+   },
+   "gold": "Johnson & Johnson 17.7%, Merck 13.3%, UnitedHealth Group 12.9%, Pfizer (3.5)% (a net tax benefit on continuing operations).",
+   "gold_value": [
+    "Johnson & Johnson",
+    "Merck",
+    "UnitedHealth Group",
+    "Pfizer"
+   ],
+   "retrieved_pages": [
+    {
+     "doc": "JNJ_FY2024_10K",
+     "page": 27,
+     "part": 2,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "JNJ_FY2024_10K",
+     "page": 90,
+     "part": 0,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "JNJ_FY2025_10K",
+     "page": 95,
+     "part": 0,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 4,
+     "part": 0,
+     "scope": 1,
+     "rank": 1
+    },
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 5,
+     "part": 0,
+     "scope": 1,
+     "rank": 3
+    },
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 108,
+     "part": 0,
+     "scope": 1,
+     "rank": 2
+    },
+    {
+     "doc": "MRK_FY2025_10K",
+     "page": 33,
+     "part": 0,
+     "scope": 2,
+     "rank": 1
+    },
+    {
+     "doc": "MRK_FY2025_10K",
+     "page": 48,
+     "part": 0,
+     "scope": 2,
+     "rank": 2
+    },
+    {
+     "doc": "MRK_FY2025_10K",
+     "page": 130,
+     "part": 0,
+     "scope": 2,
+     "rank": 3
+    },
+    {
+     "doc": "UNH_FY2025_10K",
+     "page": 63,
+     "part": 1,
+     "scope": 3,
+     "rank": 2
+    },
+    {
+     "doc": "UNH_FY2025_10K",
+     "page": 66,
+     "part": 0,
+     "scope": 3,
+     "rank": 1
+    }
+   ],
+   "facts_used": [],
+   "seconds": 1.43,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17638,
+   "filing_chars": 15607,
+   "est_tokens_in": 4409,
+   "live_calls": 1,
+   "tokens_in": 6012,
+   "tokens_out": 64
+  },
+  {
+   "id": "B15",
+   "type": "cross_filing",
+   "question": "Comparing the carmakers' in-house lenders, did Ford Credit or GM Financial earn more before taxes in 2025, by how much, and which of the two grew its pre-tax earnings over 2024?",
+   "tags": [
+    "segment_vs_consolidated",
+    "outside_statements",
+    "derived_metric"
+   ],
+   "correct": false,
+   "abstained": true,
+   "match": {
+    "retrieved": 3,
+    "matched_retrieved": 2,
+    "gold": 4,
+    "matched_gold": 2,
+    "page_exact": 2
+   },
+   "page_match": {
+    "pages": 11,
+    "gold": 4,
+    "recalled": 4,
+    "relevant_pages": 2,
+    "recalled_relaxed": 4
+   },
+   "answer": "In 2025, GM Financial earned more before taxes than Ford Credit ($2,802 million versus $2,600 million), by $202 million ($0.202 billion). Between the two, Ford Credit grew its pre-tax earnings over 2024 (increasing by $0.9 billion to $2.6 billion), whereas GM Financial's EBT-adjusted decreased from $2,965 million to $2,802 million.",
+   "pred": {
+    "kind": "abstain",
+    "value": null
+   },
+   "gold": "GM Financial earned more: EBT-adjusted of $2,802 million versus Ford Credit's EBT of $2,557 million, a $245 million gap. But Ford Credit grew (from $1,654M, up 54.6%) while GM Financial declined (from $2,965M, down 5.5%).",
+   "gold_value": "General Motors",
+   "retrieved_pages": [
+    {
+     "doc": "F_FY2025_10K",
+     "page": 56,
+     "part": 1,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "F_FY2025_10K",
+     "page": 64,
+     "part": 1,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "F_FY2025_10K",
+     "page": 65,
+     "part": 0,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "F_FY2025_10K",
+     "page": 70,
+     "part": 0,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "F_FY2025_10K",
+     "page": 142,
+     "part": 1,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "F_FY2025_10K",
+     "page": 162,
+     "part": 2,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "GM_FY2025_10K",
+     "page": 32,
+     "part": 0,
+     "scope": 1,
+     "rank": 5
+    },
+    {
+     "doc": "GM_FY2025_10K",
+     "page": 36,
+     "part": 1,
+     "scope": 1,
+     "rank": 4
+    },
+    {
+     "doc": "GM_FY2025_10K",
+     "page": 38,
+     "part": 1,
+     "scope": 1,
+     "rank": 2
+    },
+    {
+     "doc": "GM_FY2025_10K",
+     "page": 38,
+     "part": 2,
+     "scope": 1,
+     "rank": 3
+    },
+    {
+     "doc": "GM_FY2025_10K",
+     "page": 40,
+     "part": 2,
+     "scope": 1,
+     "rank": 1
+    },
+    {
+     "doc": "GM_FY2025_10K",
+     "page": 42,
+     "part": 0,
+     "scope": 1,
+     "rank": 6
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "F",
+     "doc": "F_FY2025_10K",
+     "page": 56,
+     "value": 2600000000.0,
+     "label": "Ford Credit\u2019s 2025 EBT",
+     "in_context": true
+    },
+    {
+     "ticker": "GM",
+     "doc": "GM_FY2025_10K",
+     "page": 36,
+     "value": 2802000000.0,
+     "label": "GM Financial EBT-adjusted for 2025",
+     "in_context": true
+    },
+    {
+     "ticker": "GM",
+     "doc": "GM_FY2025_10K",
+     "page": 36,
+     "value": 2965000000.0,
+     "label": "GM Financial EBT-adjusted for 2024",
+     "in_context": true
+    }
+   ],
+   "seconds": 2.13,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17952,
+   "filing_chars": 15892,
+   "est_tokens_in": 4488,
+   "live_calls": 1,
+   "tokens_in": 5171,
+   "tokens_out": 315
+  },
+  {
+   "id": "B16",
+   "type": "cross_filing",
+   "question": "Did Caterpillar's 2025 annual report change the 2024 total sales and revenues it shows for the Resource Industries segment compared with the 2024 annual report? If so, by how much and why?",
+   "tags": [
+    "restated",
+    "segment_vs_consolidated",
+    "outside_statements"
+   ],
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 2,
+    "gold": 4,
+    "matched_gold": 2,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 9,
+    "gold": 4,
+    "recalled": 3,
+    "relevant_pages": 2,
+    "recalled_relaxed": 3
+   },
+   "answer": "Yes, Caterpillar's 2025 annual report changed the 2024 total sales and revenues for the Resource Industries segment to $12.471 billion (an increase of $82 million compared to the $12.389 billion reported in the 2024 annual report), but the provided passages do not state why.",
+   "pred": {
+    "kind": "text",
+    "value": "Yes, the 2024 total sales and revenues for Resource Industries were changed from $12.389 billion to $12.471 billion (an increase of $82 million or $82000000), but no reason is given in the passages."
+   },
+   "gold": "Yes. The 2024 10-K showed Resource Industries 2024 total sales and revenues of $12,389 million; the 2025 10-K shows $12,471 million, $82 million higher. Effective July 1, 2025 Caterpillar moved responsibility for wear and maintenance components from the All Other Segment to Resource Industries (and moved electronics and control systems and some automation R&D the other way), and recast prior periods. Consolidated 2024 sales and revenues stayed $64,809 million.",
+   "gold_value": 82000000,
+   "retrieved_pages": [
+    {
+     "doc": "CAT_FY2024_10K",
+     "page": 30,
+     "part": 2,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "CAT_FY2024_10K",
+     "page": 31,
+     "part": 2,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "CAT_FY2024_10K",
+     "page": 33,
+     "part": 0,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "CAT_FY2024_10K",
+     "page": 36,
+     "part": 2,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "CAT_FY2024_10K",
+     "page": 119,
+     "part": 0,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "CAT_FY2024_10K",
+     "page": 119,
+     "part": 2,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 31,
+     "part": 2,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 34,
+     "part": 0,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 37,
+     "part": 2,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 37,
+     "part": 3,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 121,
+     "part": 1,
+     "scope": 0,
+     "rank": 7
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "CAT",
+     "doc": "CAT_FY2024_10K",
+     "page": 36,
+     "value": 12389000000.0,
+     "label": "Resource Industries' total sales were $12.389 billion in 2024",
+     "in_context": true
+    },
+    {
+     "ticker": "CAT",
+     "doc": "CAT_FY2025_10K",
+     "page": 37,
+     "value": 12471000000.0,
+     "label": "compared with $12.471 billion in 2024",
+     "in_context": true
+    }
+   ],
+   "seconds": 2.27,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 16811,
+   "filing_chars": 14761,
+   "est_tokens_in": 4202,
+   "live_calls": 1,
+   "tokens_in": 5264,
+   "tokens_out": 300
+  },
+  {
+   "id": "B17",
+   "type": "cross_filing",
+   "question": "What was Caterpillar's compound annual growth rate in total sales and revenues from 2022 to 2025, and which of those four years was the high point?",
+   "tags": [
+    "derived_metric"
+   ],
+   "correct": false,
+   "abstained": true,
+   "match": {
+    "retrieved": 4,
+    "matched_retrieved": 0,
+    "gold": 4,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 10,
+    "gold": 4,
+    "recalled": 0,
+    "relevant_pages": 0,
+    "recalled_relaxed": 4
+   },
+   "answer": "The passages do not provide Caterpillar's total sales and revenues for 2021, so the CAGR from 2022 to 2025 cannot be calculated.",
+   "pred": {
+    "kind": "abstain",
+    "value": null
+   },
+   "gold": "About 4.4% a year, from $59,427 million in 2022 to $67,589 million in 2025; 2025 was the high point, just above 2023's $67,060 million (2024: $64,809 million).",
+   "gold_value": 0.0438,
+   "retrieved_pages": [
+    {
+     "doc": "CAT_FY2024_10K",
+     "page": 28,
+     "part": 0,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "CAT_FY2024_10K",
+     "page": 30,
+     "part": 2,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "CAT_FY2024_10K",
+     "page": 30,
+     "part": 3,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "CAT_FY2024_10K",
+     "page": 31,
+     "part": 2,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "CAT_FY2024_10K",
+     "page": 31,
+     "part": 3,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "CAT_FY2024_10K",
+     "page": 123,
+     "part": 1,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 31,
+     "part": 2,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 31,
+     "part": 3,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 32,
+     "part": 1,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 32,
+     "part": 3,
+     "scope": 0,
+     "rank": 13
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 34,
+     "part": 0,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 37,
+     "part": 0,
+     "scope": 0,
+     "rank": 14
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 38,
+     "part": 2,
+     "scope": 0,
+     "rank": 12
+    },
+    {
+     "doc": "CAT_FY2025_10K",
+     "page": 121,
+     "part": 1,
+     "scope": 0,
+     "rank": 6
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "CAT",
+     "doc": "CAT_FY2024_10K",
+     "page": 6,
+     "value": 59427.0,
+     "label": "Total sales and revenues 2022",
+     "in_context": false
+    },
+    {
+     "ticker": "CAT",
+     "doc": "CAT_FY2024_10K",
+     "page": 6,
+     "value": 67060.0,
+     "label": "Total sales and revenues 2023",
+     "in_context": false
+    },
+    {
+     "ticker": "CAT",
+     "doc": "CAT_FY2024_10K",
+     "page": 6,
+     "value": 64809.0,
+     "label": "Total sales and revenues 2024",
+     "in_context": false
+    },
+    {
+     "ticker": "CAT",
+     "doc": "CAT_FY2025_10K",
+     "page": 14,
+     "value": 67589.0,
+     "label": "Total sales and revenues 2025",
+     "in_context": false
+    }
+   ],
+   "seconds": 2.41,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 18019,
+   "filing_chars": 15947,
+   "est_tokens_in": 4504,
+   "live_calls": 1,
+   "tokens_in": 5448,
+   "tokens_out": 254
+  },
+  {
+   "id": "B18",
+   "type": "cross_filing",
+   "question": "In Alphabet's breakdown of other income (expense), net, the catch-all 'Other' component for 2024 appears in both its 2024 and 2025 annual reports. Did that 2024 figure change, by how much, and what explains the difference?",
+   "tags": [
+    "restated",
+    "outside_statements"
+   ],
+   "correct": false,
+   "abstained": true,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 5,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 11,
+    "gold": 5,
+    "recalled": 2,
+    "relevant_pages": 1,
+    "recalled_relaxed": 3
+   },
+   "answer": "The passages provided do not contain the 2025 annual report (Form 10-K for the fiscal year ended December 31, 2025), so it is not possible to compare the 2024 'Other' component across both annual reports.",
+   "pred": {
+    "kind": "abstain",
+    "value": null
+   },
+   "gold": "Yes. The 2024 10-K showed 'Other' of $919 million for 2024; the 2025 10-K shows $1,137 million, $218 million more. The 2024 10-K listed 'Performance fees' of $218 million as a separate line; that line is gone in the 2025 10-K and the amount is now included in 'Other' (2023 likewise: $299M + $257M = $556M). Total OI&E for 2024 is unchanged at $7,425 million. The 2025 10-K says only that certain prior-period amounts were reclassified to conform with the current presentation.",
+   "gold_value": 218000000,
+   "retrieved_pages": [
+    {
+     "doc": "GOOGL_FY2024_10K",
+     "page": 36,
+     "part": 2,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "GOOGL_FY2024_10K",
+     "page": 39,
+     "part": 2,
+     "scope": 0,
+     "rank": 12
+    },
+    {
+     "doc": "GOOGL_FY2024_10K",
+     "page": 40,
+     "part": 0,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "GOOGL_FY2024_10K",
+     "page": 41,
+     "part": 1,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "GOOGL_FY2024_10K",
+     "page": 54,
+     "part": 0,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "GOOGL_FY2024_10K",
+     "page": 55,
+     "part": 0,
+     "scope": 0,
+     "rank": 13
+    },
+    {
+     "doc": "GOOGL_FY2024_10K",
+     "page": 64,
+     "part": 3,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "GOOGL_FY2024_10K",
+     "page": 78,
+     "part": 0,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "GOOGL_FY2025_10K",
+     "page": 68,
+     "part": 0,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "GOOGL_FY2025_10K",
+     "page": 68,
+     "part": 1,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "GOOGL_FY2025_Q3_10Q",
+     "page": 40,
+     "part": 0,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "GOOGL_FY2025_Q3_10Q",
+     "page": 40,
+     "part": 1,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "GOOGL_FY2025_Q3_10Q",
+     "page": 47,
+     "part": 1,
+     "scope": 0,
+     "rank": 1
+    }
+   ],
+   "facts_used": [],
+   "seconds": 1.85,
+   "retrieval_seconds": 0.02,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17690,
+   "filing_chars": 15564,
+   "est_tokens_in": 4422,
+   "live_calls": 1,
+   "tokens_in": 6116,
+   "tokens_out": 87
+  },
+  {
+   "id": "B19",
+   "type": "cross_filing",
+   "question": "How many dollars of revenue did Microsoft's Azure bring in during fiscal 2026, and was that more or less than Google Cloud's 2025 revenue?",
+   "tags": [
+    "unanswerable",
+    "fiscal_year_trap"
+   ],
+   "correct": true,
+   "abstained": true,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 0,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 11,
+    "gold": 3,
+    "recalled": 2,
+    "relevant_pages": 2,
+    "recalled_relaxed": 2
+   },
+   "answer": "The provided passages do not contain the specific dollar revenue for Microsoft's Azure in fiscal 2026 or Google Cloud's 2025 revenue.",
+   "pred": {
+    "kind": "abstain",
+    "value": null
+   },
+   "gold": "Not answerable from these filings. Microsoft does not disclose Azure revenue in dollars; it reports only that Azure and other cloud services revenue grew 41%, inside a broader 'Server products and cloud services' line ($129,425 million) that also includes on-premises server products. Google Cloud's 2025 revenue ($58,705 million) is disclosed, but the comparison cannot be made.",
+   "gold_value": null,
+   "retrieved_pages": [
+    {
+     "doc": "MSFT_FY2025_10K",
+     "page": 35,
+     "part": 1,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "MSFT_FY2025_10K",
+     "page": 40,
+     "part": 0,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "MSFT_FY2025_10K",
+     "page": 85,
+     "part": 0,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "MSFT_FY2026_10K",
+     "page": 34,
+     "part": 1,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "MSFT_FY2026_10K",
+     "page": 39,
+     "part": 1,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "MSFT_FY2026_10K",
+     "page": 85,
+     "part": 0,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "GOOGL_FY2024_10K",
+     "page": 38,
+     "part": 0,
+     "scope": 1,
+     "rank": 3
+    },
+    {
+     "doc": "GOOGL_FY2024_10K",
+     "page": 89,
+     "part": 2,
+     "scope": 1,
+     "rank": 5
+    },
+    {
+     "doc": "GOOGL_FY2025_10K",
+     "page": 29,
+     "part": 2,
+     "scope": 1,
+     "rank": 2
+    },
+    {
+     "doc": "GOOGL_FY2025_10K",
+     "page": 31,
+     "part": 2,
+     "scope": 1,
+     "rank": 4
+    },
+    {
+     "doc": "GOOGL_FY2025_10K",
+     "page": 35,
+     "part": 1,
+     "scope": 1,
+     "rank": 1
+    }
+   ],
+   "facts_used": [],
+   "seconds": 2.28,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 16457,
+   "filing_chars": 14457,
+   "est_tokens_in": 4114,
+   "live_calls": 1,
+   "tokens_in": 4560,
+   "tokens_out": 62
+  },
+  {
+   "id": "B21",
+   "type": "cross_filing",
+   "question": "Rank Apple, Microsoft and Nvidia by net profit margin (net income as a share of revenue) for each company's fiscal 2026, highest first.",
+   "tags": [
+    "ranking",
+    "derived_metric",
+    "fiscal_year_trap"
+   ],
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 5,
+    "matched_retrieved": 0,
+    "gold": 6,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 11,
+    "gold": 6,
+    "recalled": 4,
+    "relevant_pages": 2,
+    "recalled_relaxed": 4
+   },
+   "answer": "Nvidia, Microsoft, Apple",
+   "pred": {
+    "kind": "companies",
+    "value": [
+     [
+      "NVDA",
+      null
+     ],
+     [
+      "MSFT",
+      null
+     ],
+     [
+      "AAPL",
+      null
+     ]
+    ]
+   },
+   "gold": "Nvidia 55.6%, Microsoft 40.3%, Apple 27.6%.",
+   "gold_value": [
+    "NVIDIA",
+    "Microsoft",
+    "Apple"
+   ],
+   "retrieved_pages": [
+    {
+     "doc": "AAPL_FY2025_10K",
+     "page": 27,
+     "part": 1,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "AAPL_FY2025_10K",
+     "page": 50,
+     "part": 1,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "AAPL_FY2026_10K",
+     "page": 21,
+     "part": 0,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "AAPL_FY2026_10K",
+     "page": 30,
+     "part": 1,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "AAPL_FY2026_10K",
+     "page": 42,
+     "part": 1,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "MSFT_FY2025_10K",
+     "page": 38,
+     "part": 0,
+     "scope": 1,
+     "rank": 2
+    },
+    {
+     "doc": "MSFT_FY2026_10K",
+     "page": 37,
+     "part": 0,
+     "scope": 1,
+     "rank": 3
+    },
+    {
+     "doc": "MSFT_FY2026_10K",
+     "page": 37,
+     "part": 1,
+     "scope": 1,
+     "rank": 1
+    },
+    {
+     "doc": "MSFT_FY2026_10K",
+     "page": 50,
+     "part": 0,
+     "scope": 1,
+     "rank": 4
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 23,
+     "part": 0,
+     "scope": 2,
+     "rank": 3
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 139,
+     "part": 0,
+     "scope": 2,
+     "rank": 2
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 151,
+     "part": 1,
+     "scope": 2,
+     "rank": 1
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "AAPL",
+     "doc": "AAPL_FY2026_10K",
+     "page": 42,
+     "value": 132175.0,
+     "label": "Net income",
+     "in_context": true
+    },
+    {
+     "ticker": "MSFT",
+     "doc": "MSFT_FY2026_10K",
+     "page": 37,
+     "value": 331839.0,
+     "label": "Revenue",
+     "in_context": true
+    },
+    {
+     "ticker": "MSFT",
+     "doc": "MSFT_FY2026_10K",
+     "page": 37,
+     "value": 133749.0,
+     "label": "Net income",
+     "in_context": true
+    },
+    {
+     "ticker": "NVDA",
+     "doc": "NVDA_FY2026_10K",
+     "page": 139,
+     "value": 215938.0,
+     "label": "Revenue",
+     "in_context": true
+    },
+    {
+     "ticker": "NVDA",
+     "doc": "NVDA_FY2026_10K",
+     "page": 139,
+     "value": 120067.0,
+     "label": "Net income",
+     "in_context": true
+    }
+   ],
+   "seconds": 1.57,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17761,
+   "filing_chars": 15743,
+   "est_tokens_in": 4440,
+   "live_calls": 1,
+   "tokens_in": 6309,
+   "tokens_out": 252
+  },
+  {
+   "id": "B23",
+   "type": "cross_filing",
+   "question": "Measured as research and development expense over revenue in each company's latest fiscal year in the set, rank AMD, Adobe and Cisco by R&D intensity, highest first.",
+   "tags": [
+    "ranking",
+    "derived_metric",
+    "fiscal_year_trap"
+   ],
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 6,
+    "matched_retrieved": 0,
+    "gold": 6,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 9,
+    "gold": 6,
+    "recalled": 0,
+    "relevant_pages": 0,
+    "recalled_relaxed": 3
+   },
+   "answer": "Adobe, Cisco, AMD",
+   "pred": {
+    "kind": "companies",
+    "value": [
+     [
+      "ADBE",
+      null
+     ],
+     [
+      "CSCO",
+      null
+     ],
+     [
+      "AMD",
+      null
+     ]
+    ]
+   },
+   "gold": "AMD 23.4%, Adobe 18.1%, Cisco 15.1%.",
+   "gold_value": [
+    "AMD",
+    "Adobe",
+    "Cisco"
+   ],
+   "retrieved_pages": [
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 5,
+     "part": 0,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 55,
+     "part": 0,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 56,
+     "part": 1,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "AMD_FY2025_10K",
+     "page": 73,
+     "part": 1,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "ADBE_FY2025_10K",
+     "page": 38,
+     "part": 1,
+     "scope": 1,
+     "rank": 3
+    },
+    {
+     "doc": "ADBE_FY2025_10K",
+     "page": 70,
+     "part": 1,
+     "scope": 1,
+     "rank": 1
+    },
+    {
+     "doc": "ADBE_FY2025_10K",
+     "page": 86,
+     "part": 1,
+     "scope": 1,
+     "rank": 2
+    },
+    {
+     "doc": "CSCO_FY2026_10K",
+     "page": 26,
+     "part": 3,
+     "scope": 2,
+     "rank": 3
+    },
+    {
+     "doc": "CSCO_FY2026_10K",
+     "page": 60,
+     "part": 0,
+     "scope": 2,
+     "rank": 2
+    },
+    {
+     "doc": "CSCO_FY2026_10K",
+     "page": 60,
+     "part": 1,
+     "scope": 2,
+     "rank": 1
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "AMD",
+     "doc": "AMD_FY2025_10K",
+     "page": 3,
+     "value": 34639.0,
+     "label": "Net revenue",
+     "in_context": false
+    },
+    {
+     "ticker": "AMD",
+     "doc": "AMD_FY2025_10K",
+     "page": 3,
+     "value": 8091.0,
+     "label": "Research and development",
+     "in_context": false
+    },
+    {
+     "ticker": "ADBE",
+     "doc": "ADBE_FY2025_10K",
+     "page": 38,
+     "value": 4294.0,
+     "label": "Research and development",
+     "in_context": true
+    },
+    {
+     "ticker": "ADBE",
+     "doc": "ADBE_FY2025_10K",
+     "page": 38,
+     "value": 0.18,
+     "label": "Percentage of total revenue",
+     "in_context": true
+    },
+    {
+     "ticker": "CSCO",
+     "doc": "CSCO_FY2026_10K",
+     "page": 60,
+     "value": 9563.0,
+     "label": "Research and development",
+     "in_context": true
+    },
+    {
+     "ticker": "CSCO",
+     "doc": "CSCO_FY2026_10K",
+     "page": 60,
+     "value": 0.151,
+     "label": "Percentage of revenue",
+     "in_context": true
+    }
+   ],
+   "seconds": 2.42,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17321,
+   "filing_chars": 15315,
+   "est_tokens_in": 4330,
+   "live_calls": 1,
+   "tokens_in": 4933,
+   "tokens_out": 310
+  },
+  {
+   "id": "B03",
+   "type": "multi_hop",
+   "question": "Nvidia's total revenue soared in fiscal 2026, but how did revenue from customers headquartered in China (including Hong Kong) move? Give the percentage change from fiscal 2025.",
+   "tags": [
+    "derived_metric",
+    "restated",
+    "outside_statements",
+    "fiscal_year_trap"
+   ],
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 0,
+    "gold": 2,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 9,
+    "gold": 2,
+    "recalled": 2,
+    "relevant_pages": 1,
+    "recalled_relaxed": 2
+   },
+   "answer": "-21.4%",
+   "pred": {
+    "kind": "number",
+    "value": -0.2144283
+   },
+   "gold": "It fell about 21.4%, from $25,048 million in fiscal 2025 to $19,677 million in fiscal 2026 (customer-headquarters basis).",
+   "gold_value": -0.2144,
+   "retrieved_pages": [
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 23,
+     "part": 0,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 23,
+     "part": 1,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 63,
+     "part": 1,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 125,
+     "part": 2,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 129,
+     "part": 3,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 144,
+     "part": 0,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 156,
+     "part": 1,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 157,
+     "part": 0,
+     "scope": 0,
+     "rank": 12
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 165,
+     "part": 1,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 166,
+     "part": 0,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 166,
+     "part": 1,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 166,
+     "part": 2,
+     "scope": 0,
+     "rank": 3
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "NVDA",
+     "doc": "NVDA_FY2026_10K",
+     "page": 166,
+     "value": 19677.0,
+     "label": "China (including Hong Kong) Jan 25, 2026",
+     "in_context": true
+    },
+    {
+     "ticker": "NVDA",
+     "doc": "NVDA_FY2026_10K",
+     "page": 166,
+     "value": 25048.0,
+     "label": "China (including Hong Kong) Jan 26, 2025",
+     "in_context": true
+    }
+   ],
+   "seconds": 1.71,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 16935,
+   "filing_chars": 14876,
+   "est_tokens_in": 4233,
+   "live_calls": 1,
+   "tokens_in": 5079,
+   "tokens_out": 164
+  },
+  {
+   "id": "B11",
+   "type": "multi_hop",
+   "question": "Johnson & Johnson does not print a separate fourth-quarter income statement. What were its net earnings for the fiscal fourth quarter of 2025?",
+   "tags": [
+    "quarter_derived",
+    "fiscal_year_trap"
+   ],
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 0,
+    "gold": 2,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 11,
+    "gold": 2,
+    "recalled": 2,
+    "relevant_pages": 2,
+    "recalled_relaxed": 2
+   },
+   "answer": "$5,116 million",
+   "pred": {
+    "kind": "number",
+    "value": 5116.0
+   },
+   "gold": "About $5,116 million: full-year 2025 net earnings of $26,804 million minus $21,688 million for the fiscal nine months ended September 28, 2025.",
+   "gold_value": 5116000000,
+   "retrieved_pages": [
+    {
+     "doc": "JNJ_FY2024_10K",
+     "page": 34,
+     "part": 1,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "JNJ_FY2024_10K",
+     "page": 36,
+     "part": 2,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "JNJ_FY2024_10K",
+     "page": 50,
+     "part": 0,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "JNJ_FY2024_10K",
+     "page": 110,
+     "part": 4,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "JNJ_FY2025_10K",
+     "page": 50,
+     "part": 0,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "JNJ_FY2025_10K",
+     "page": 50,
+     "part": 1,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "JNJ_FY2025_10K",
+     "page": 113,
+     "part": 0,
+     "scope": 0,
+     "rank": 13
+    },
+    {
+     "doc": "JNJ_FY2025_Q3_10Q",
+     "page": 7,
+     "part": 0,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "JNJ_FY2025_Q3_10Q",
+     "page": 8,
+     "part": 0,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "JNJ_FY2025_Q3_10Q",
+     "page": 10,
+     "part": 0,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "JNJ_FY2025_Q3_10Q",
+     "page": 55,
+     "part": 1,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "JNJ_FY2025_Q3_10Q",
+     "page": 56,
+     "part": 0,
+     "scope": 0,
+     "rank": 12
+    },
+    {
+     "doc": "JNJ_FY2025_Q3_10Q",
+     "page": 56,
+     "part": 1,
+     "scope": 0,
+     "rank": 11
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "JNJ",
+     "doc": "JNJ_FY2025_10K",
+     "page": 50,
+     "value": 26804.0,
+     "label": "Net earnings",
+     "in_context": true
+    },
+    {
+     "ticker": "JNJ",
+     "doc": "JNJ_FY2025_Q3_10Q",
+     "page": 9,
+     "value": 21688.0,
+     "label": "Net earnings",
+     "in_context": false
+    }
+   ],
+   "seconds": 1.49,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17930,
+   "filing_chars": 15884,
+   "est_tokens_in": 4482,
+   "live_calls": 1,
+   "tokens_in": 6733,
+   "tokens_out": 133
+  },
+  {
+   "id": "B25",
+   "type": "multi_hop",
+   "question": "How much operating income did the Google Cloud segment earn in the fourth quarter of 2025?",
+   "tags": [
+    "quarter_derived",
+    "segment_vs_consolidated"
+   ],
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 0,
+    "gold": 2,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 11,
+    "gold": 2,
+    "recalled": 2,
+    "relevant_pages": 2,
+    "recalled_relaxed": 2
+   },
+   "answer": "To find the operating income of the Google Cloud segment in the fourth quarter of 2025, we subtract the operating income for the first nine months of 2025 from the full-year 2025 operating income. \nFull-year 2025 Google Cloud operating income = $13,910 million (Passage 7 and 9).\nNine months ended September 30, 2025 Google Cloud operating income = $8,597 million (Passage 10).\n$13,910 million - $8,597 million = $5,313 million (or $5,313,000,000).",
+   "pred": {
+    "kind": "number",
+    "value": 5313000000.0
+   },
+   "gold": "About $5,313 million: full-year 2025 Google Cloud operating income of $13,910 million minus $8,597 million for the nine months ended September 30, 2025.",
+   "gold_value": 5313000000,
+   "retrieved_pages": [
+    {
+     "doc": "GOOGL_FY2024_10K",
+     "page": 38,
+     "part": 0,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "GOOGL_FY2024_10K",
+     "page": 40,
+     "part": 2,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "GOOGL_FY2024_10K",
+     "page": 41,
+     "part": 0,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "GOOGL_FY2024_10K",
+     "page": 89,
+     "part": 1,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "GOOGL_FY2024_10K",
+     "page": 89,
+     "part": 2,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "GOOGL_FY2025_10K",
+     "page": 35,
+     "part": 1,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "GOOGL_FY2025_10K",
+     "page": 37,
+     "part": 0,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "GOOGL_FY2025_10K",
+     "page": 87,
+     "part": 2,
+     "scope": 0,
+     "rank": 12
+    },
+    {
+     "doc": "GOOGL_FY2025_10K",
+     "page": 88,
+     "part": 1,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "GOOGL_FY2025_Q3_10Q",
+     "page": 35,
+     "part": 2,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "GOOGL_FY2025_Q3_10Q",
+     "page": 46,
+     "part": 2,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "GOOGL_FY2025_Q3_10Q",
+     "page": 47,
+     "part": 0,
+     "scope": 0,
+     "rank": 2
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "GOOGL",
+     "doc": "GOOGL_FY2025_10K",
+     "page": 87,
+     "value": 13910.0,
+     "label": "Google Cloud operating income for 2025",
+     "in_context": true
+    },
+    {
+     "ticker": "GOOGL",
+     "doc": "GOOGL_FY2025_Q3_10Q",
+     "page": 35,
+     "value": 8597.0,
+     "label": "Google Cloud operating income for nine months ended September 30, 2025",
+     "in_context": true
+    }
+   ],
+   "seconds": 1.93,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17875,
+   "filing_chars": 15902,
+   "est_tokens_in": 4468,
+   "live_calls": 1,
+   "tokens_in": 5818,
+   "tokens_out": 311
+  },
+  {
+   "id": "B26",
+   "type": "multi_hop",
+   "question": "Dividing fiscal 2026 net sales by the number of warehouses open at year-end, how much did Costco sell per warehouse?",
+   "tags": [
+    "derived_metric",
+    "outside_statements",
+    "fiscal_year_trap"
+   ],
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 1,
+    "gold": 2,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "page_match": {
+    "pages": 10,
+    "gold": 2,
+    "recalled": 1,
+    "relevant_pages": 1,
+    "recalled_relaxed": 1
+   },
+   "answer": "$316.56 million",
+   "pred": {
+    "kind": "number",
+    "value": 316.5569755058573
+   },
+   "gold": "About $316.6 million per warehouse: net sales of $297,247 million over 939 warehouses at August 30, 2026.",
+   "gold_value": 316556976,
+   "retrieved_pages": [
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 4,
+     "part": 2,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 21,
+     "part": 1,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 23,
+     "part": 0,
+     "scope": 0,
+     "rank": 12
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 23,
+     "part": 1,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 26,
+     "part": 0,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 26,
+     "part": 1,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 27,
+     "part": 0,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 28,
+     "part": 1,
+     "scope": 0,
+     "rank": 13
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 30,
+     "part": 1,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 43,
+     "part": 0,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 64,
+     "part": 1,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 65,
+     "part": 0,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "COST_FY2026_10K",
+     "page": 65,
+     "part": 1,
+     "scope": 0,
+     "rank": 2
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "COST",
+     "doc": "COST_FY2026_10K",
+     "page": 21,
+     "value": 939.0,
+     "label": "Total warehouses at August 30, 2026",
+     "in_context": true
+    },
+    {
+     "ticker": "COST",
+     "doc": "COST_FY2026_10K",
+     "page": 27,
+     "value": 297247.0,
+     "label": "Net Sales for 2026",
+     "in_context": true
+    }
+   ],
+   "seconds": 1.73,
+   "retrieval_seconds": 0.02,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17795,
+   "filing_chars": 15775,
+   "est_tokens_in": 4448,
+   "live_calls": 1,
+   "tokens_in": 5966,
+   "tokens_out": 150
+  },
+  {
+   "id": "B27",
+   "type": "multi_hop",
+   "question": "Chevron's total earnings fell in 2025. Which of its two operating segments, upstream or downstream, still grew earnings, and by what percentage?",
+   "tags": [
+    "derived_metric",
+    "segment_vs_consolidated"
+   ],
+   "correct": false,
+   "abstained": true,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 4,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 9,
+    "gold": 4,
+    "recalled": 4,
+    "relevant_pages": 1,
+    "recalled_relaxed": 4
+   },
+   "answer": "Downstream",
+   "pred": {
+    "kind": "abstain",
+    "value": null
+   },
+   "gold": "Downstream: earnings rose from $1,727 million in 2024 to $3,022 million in 2025, up about 75.0%, while upstream fell from $18,602 million to $12,822 million.",
+   "gold_value": 0.7499,
+   "retrieved_pages": [
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 6,
+     "part": 0,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 36,
+     "part": 1,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 39,
+     "part": 1,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 41,
+     "part": 1,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 43,
+     "part": 2,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 44,
+     "part": 0,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 44,
+     "part": 1,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 82,
+     "part": 1,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 83,
+     "part": 0,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 83,
+     "part": 1,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "CVX_FY2025_10K",
+     "page": 84,
+     "part": 2,
+     "scope": 0,
+     "rank": 10
+    }
+   ],
+   "facts_used": [],
+   "seconds": 1.39,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 16856,
+   "filing_chars": 14850,
+   "est_tokens_in": 4214,
+   "live_calls": 1,
+   "tokens_in": 5191,
+   "tokens_out": 33
+  },
+  {
+   "id": "H11",
+   "type": "multi_hop",
+   "question": "By how much did Pfizer's combined revenue from its two COVID-19 products, Comirnaty and Paxlovid, fall in 2025 compared with 2024?",
+   "tags": [
+    "derived_metric",
+    "outside_statements"
+   ],
+   "correct": false,
+   "abstained": true,
+   "match": {
+    "retrieved": 0,
+    "matched_retrieved": 0,
+    "gold": 4,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 11,
+    "gold": 4,
+    "recalled": 0,
+    "relevant_pages": 0,
+    "recalled_relaxed": 0
+   },
+   "answer": "None",
+   "pred": {
+    "kind": "abstain",
+    "value": null
+   },
+   "gold": "Combined Comirnaty and Paxlovid revenue fell by $4,340 million, from $11,069 million in 2024 to $6,729 million in 2025, a decline of about 39.2%.",
+   "gold_value": 4340000000,
+   "retrieved_pages": [
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 8,
+     "part": 3,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 23,
+     "part": 3,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 30,
+     "part": 5,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 37,
+     "part": 4,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 38,
+     "part": 0,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 39,
+     "part": 6,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 40,
+     "part": 0,
+     "scope": 0,
+     "rank": 12
+    },
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 46,
+     "part": 0,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 46,
+     "part": 1,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 48,
+     "part": 3,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 107,
+     "part": 3,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "PFE_FY2025_10K",
+     "page": 109,
+     "part": 3,
+     "scope": 0,
+     "rank": 2
+    }
+   ],
+   "facts_used": [],
+   "seconds": 1.43,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17819,
+   "filing_chars": 15806,
+   "est_tokens_in": 4454,
+   "live_calls": 1,
+   "tokens_in": 4550,
+   "tokens_out": 29
+  },
+  {
+   "id": "H12",
+   "type": "multi_hop",
+   "question": "Adding up 2023, 2024 and 2025, how much did Meta's Reality Labs segment lose from operations in total?",
+   "tags": [
+    "derived_metric",
+    "segment_vs_consolidated"
+   ],
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 3,
+    "matched_retrieved": 3,
+    "gold": 3,
+    "matched_gold": 3,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 8,
+    "gold": 3,
+    "recalled": 3,
+    "relevant_pages": 1,
+    "recalled_relaxed": 3
+   },
+   "answer": "$53.04 billion",
+   "pred": {
+    "kind": "number",
+    "value": -53042000000.0
+   },
+   "gold": "Reality Labs lost $53,042 million from operations over 2023 to 2025 ($16,120 million, $17,729 million and $19,193 million).",
+   "gold_value": 53042000000,
+   "retrieved_pages": [
+    {
+     "doc": "META_FY2025_10K",
+     "page": 27,
+     "part": 1,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "META_FY2025_10K",
+     "page": 27,
+     "part": 2,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "META_FY2025_10K",
+     "page": 62,
+     "part": 0,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "META_FY2025_10K",
+     "page": 62,
+     "part": 1,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "META_FY2025_10K",
+     "page": 64,
+     "part": 0,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "META_FY2025_10K",
+     "page": 74,
+     "part": 0,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "META_FY2025_10K",
+     "page": 74,
+     "part": 1,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "META_FY2025_10K",
+     "page": 75,
+     "part": 1,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "META_FY2025_10K",
+     "page": 76,
+     "part": 1,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "META_FY2025_10K",
+     "page": 103,
+     "part": 1,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "META_FY2025_10K",
+     "page": 127,
+     "part": 1,
+     "scope": 0,
+     "rank": 9
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "META",
+     "doc": "META_FY2025_10K",
+     "page": 127,
+     "value": -19193000000.0,
+     "label": "Reality Labs Loss from operations for 2025",
+     "in_context": true
+    },
+    {
+     "ticker": "META",
+     "doc": "META_FY2025_10K",
+     "page": 127,
+     "value": -17729000000.0,
+     "label": "Reality Labs Loss from operations for 2024",
+     "in_context": true
+    },
+    {
+     "ticker": "META",
+     "doc": "META_FY2025_10K",
+     "page": 127,
+     "value": -16120000000.0,
+     "label": "Reality Labs Loss from operations for 2023",
+     "in_context": true
+    }
+   ],
+   "seconds": 1.99,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17542,
+   "filing_chars": 15578,
+   "est_tokens_in": 4385,
+   "live_calls": 1,
+   "tokens_in": 5327,
+   "tokens_out": 226
+  },
+  {
+   "id": "H13",
+   "type": "multi_hop",
+   "question": "What was Google Cloud's operating margin in the third quarter of 2025?",
+   "tags": [
+    "derived_metric",
+    "segment_vs_consolidated"
+   ],
+   "correct": true,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 0,
+    "gold": 2,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 12,
+    "gold": 2,
+    "recalled": 2,
+    "relevant_pages": 1,
+    "recalled_relaxed": 2
+   },
+   "answer": "0.23705",
+   "pred": {
+    "kind": "number",
+    "value": 0.23705218707
+   },
+   "gold": "Google Cloud earned $3,594 million of operating income on $15,157 million of revenue in the quarter ended September 30, 2025, an operating margin of about 23.7%.",
+   "gold_value": 0.2371,
+   "retrieved_pages": [
+    {
+     "doc": "GOOGL_FY2024_10K",
+     "page": 13,
+     "part": 3,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "GOOGL_FY2024_10K",
+     "page": 38,
+     "part": 0,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "GOOGL_FY2024_10K",
+     "page": 41,
+     "part": 0,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "GOOGL_FY2025_10K",
+     "page": 12,
+     "part": 1,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "GOOGL_FY2025_10K",
+     "page": 29,
+     "part": 2,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "GOOGL_FY2025_10K",
+     "page": 31,
+     "part": 2,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "GOOGL_FY2025_10K",
+     "page": 35,
+     "part": 1,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "GOOGL_FY2025_Q3_10Q",
+     "page": 13,
+     "part": 2,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "GOOGL_FY2025_Q3_10Q",
+     "page": 27,
+     "part": 2,
+     "scope": 0,
+     "rank": 12
+    },
+    {
+     "doc": "GOOGL_FY2025_Q3_10Q",
+     "page": 35,
+     "part": 2,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "GOOGL_FY2025_Q3_10Q",
+     "page": 41,
+     "part": 0,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "GOOGL_FY2025_Q3_10Q",
+     "page": 47,
+     "part": 0,
+     "scope": 0,
+     "rank": 1
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "GOOGL",
+     "doc": "GOOGL_FY2025_Q3_10Q",
+     "page": 35,
+     "value": 15157.0,
+     "label": "Google Cloud Revenues for Three Months Ended September 30, 2025",
+     "in_context": true
+    },
+    {
+     "ticker": "GOOGL",
+     "doc": "GOOGL_FY2025_Q3_10Q",
+     "page": 35,
+     "value": 3594.0,
+     "label": "Google Cloud Operating Income for Three Months Ended September 30, 2025",
+     "in_context": true
+    }
+   ],
+   "seconds": 2.26,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 16961,
+   "filing_chars": 15008,
+   "est_tokens_in": 4240,
+   "live_calls": 1,
+   "tokens_in": 4644,
+   "tokens_out": 174
+  },
+  {
+   "id": "H14",
+   "type": "multi_hop",
+   "question": "According to its 2024 annual report, how much cash did Exxon Mobil return to its shareholders in 2024 through dividends and share buybacks combined?",
+   "tags": [
+    "derived_metric"
+   ],
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 2,
+    "matched_retrieved": 0,
+    "gold": 2,
+    "matched_gold": 0,
+    "page_exact": 0
+   },
+   "page_match": {
+    "pages": 10,
+    "gold": 2,
+    "recalled": 0,
+    "relevant_pages": 0,
+    "recalled_relaxed": 0
+   },
+   "answer": "35.8 billion dollars",
+   "pred": {
+    "kind": "number",
+    "value": 35800000000.0
+   },
+   "gold": "Exxon Mobil returned $36,333 million in 2024: $16,704 million of cash dividends to ExxonMobil shareholders plus $19,629 million of common stock acquired.",
+   "gold_value": 36333000000,
+   "retrieved_pages": [
+    {
+     "doc": "XOM_FY2024_10K",
+     "page": 29,
+     "part": 0,
+     "scope": 0,
+     "rank": 12
+    },
+    {
+     "doc": "XOM_FY2024_10K",
+     "page": 29,
+     "part": 1,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "XOM_FY2024_10K",
+     "page": 63,
+     "part": 0,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "XOM_FY2024_10K",
+     "page": 63,
+     "part": 1,
+     "scope": 0,
+     "rank": 4
+    },
+    {
+     "doc": "XOM_FY2024_10K",
+     "page": 64,
+     "part": 2,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "XOM_FY2024_10K",
+     "page": 65,
+     "part": 0,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "XOM_FY2024_10K",
+     "page": 76,
+     "part": 0,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "XOM_FY2024_10K",
+     "page": 91,
+     "part": 0,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 26,
+     "part": 1,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 60,
+     "part": 1,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 61,
+     "part": 3,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "XOM_FY2025_10K",
+     "page": 62,
+     "part": 0,
+     "scope": 0,
+     "rank": 2
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "XOM",
+     "doc": "XOM_FY2024_10K",
+     "page": 63,
+     "value": 16700000000.0,
+     "label": "dividends to shareholders",
+     "in_context": true
+    },
+    {
+     "ticker": "XOM",
+     "doc": "XOM_FY2024_10K",
+     "page": 63,
+     "value": 19600000000.0,
+     "label": "the purchase of ExxonMobil stock",
+     "in_context": true
+    }
+   ],
+   "seconds": 1.44,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 17656,
+   "filing_chars": 15625,
+   "est_tokens_in": 4414,
+   "live_calls": 1,
+   "tokens_in": 5130,
+   "tokens_out": 156
+  },
+  {
+   "id": "H15",
+   "type": "multi_hop",
+   "question": "Of NVIDIA's five end markets (Data Center, Gaming, Professional Visualization, Automotive, and OEM and Other), which grew revenue fastest in fiscal 2026, and how much revenue did it bring in?",
+   "tags": [
+    "ranking",
+    "derived_metric",
+    "fiscal_year_trap",
+    "outside_statements"
+   ],
+   "correct": false,
+   "abstained": false,
+   "match": {
+    "retrieved": 5,
+    "matched_retrieved": 1,
+    "gold": 6,
+    "matched_gold": 1,
+    "page_exact": 1
+   },
+   "page_match": {
+    "pages": 9,
+    "gold": 6,
+    "recalled": 6,
+    "relevant_pages": 1,
+    "recalled_relaxed": 6
+   },
+   "answer": "Professional Visualization, $3,191 million",
+   "pred": {
+    "kind": "number",
+    "value": 3191000000.0
+   },
+   "gold": "Professional Visualization grew fastest, up about 69.9% to $3,191 million in fiscal 2026 (from $1,878 million), just ahead of Data Center at about 68.2%.",
+   "gold_value": "Professional Visualization",
+   "retrieved_pages": [
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 23,
+     "part": 0,
+     "scope": 0,
+     "rank": 1
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 23,
+     "part": 1,
+     "scope": 0,
+     "rank": 3
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 94,
+     "part": 1,
+     "scope": 0,
+     "rank": 9
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 124,
+     "part": 1,
+     "scope": 0,
+     "rank": 7
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 125,
+     "part": 2,
+     "scope": 0,
+     "rank": 2
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 129,
+     "part": 2,
+     "scope": 0,
+     "rank": 8
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 156,
+     "part": 1,
+     "scope": 0,
+     "rank": 10
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 165,
+     "part": 1,
+     "scope": 0,
+     "rank": 6
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 166,
+     "part": 1,
+     "scope": 0,
+     "rank": 5
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 166,
+     "part": 2,
+     "scope": 0,
+     "rank": 11
+    },
+    {
+     "doc": "NVDA_FY2026_10K",
+     "page": 167,
+     "part": 0,
+     "scope": 0,
+     "rank": 4
+    }
+   ],
+   "facts_used": [
+    {
+     "ticker": "NVDA",
+     "doc": "NVDA_FY2026_10K",
+     "page": 23,
+     "value": 193700000000.0,
+     "label": "Data Center revenue",
+     "in_context": true
+    },
+    {
+     "ticker": "NVDA",
+     "doc": "NVDA_FY2026_10K",
+     "page": 23,
+     "value": 16000000000.0,
+     "label": "Gaming revenue",
+     "in_context": true
+    },
+    {
+     "ticker": "NVDA",
+     "doc": "NVDA_FY2026_10K",
+     "page": 23,
+     "value": 3200000000.0,
+     "label": "Professional Visualization revenue",
+     "in_context": true
+    },
+    {
+     "ticker": "NVDA",
+     "doc": "NVDA_FY2026_10K",
+     "page": 23,
+     "value": 2300000000.0,
+     "label": "Automotive revenue",
+     "in_context": true
+    },
+    {
+     "ticker": "NVDA",
+     "doc": "NVDA_FY2026_10K",
+     "page": 167,
+     "value": 3191000000.0,
+     "label": "Professional Visualization revenue ended Jan 25, 2026",
+     "in_context": true
+    }
+   ],
+   "seconds": 1.88,
+   "retrieval_seconds": 0.01,
+   "llm_calls": 1,
+   "error": null,
+   "system": "baseline",
+   "prompt_chars": 16596,
+   "filing_chars": 14543,
+   "est_tokens_in": 4149,
+   "live_calls": 1,
+   "tokens_in": 4759,
+   "tokens_out": 309
+  }
+ ]
+}

@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How much did JPMorgan Chase set aside for credit losses in 2025?",
+ "abstain": false,
+ "answer": "$14.212 billion",
+ "pred": {
+  "kind": "number",
+  "value": 14212000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "JPM",
+   "doc": "JPM_FY2025_10K",
+   "page": 55,
+   "value": 14212.0,
+   "label": "Total provision for credit losses",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

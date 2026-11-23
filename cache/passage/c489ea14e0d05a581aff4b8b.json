@@ -1,0 +1,43 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Adding up 2023, 2024 and 2025, how much did Meta's Reality Labs segment lose from operations in total?",
+ "abstain": false,
+ "answer": "$53.042 billion",
+ "pred": {
+  "kind": "number",
+  "value": 53042000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "META",
+   "doc": "META_FY2025_10K",
+   "page": 76,
+   "value": 19193.0,
+   "label": "Reality Labs 2025 loss from operations",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "META",
+   "doc": "META_FY2025_10K",
+   "page": 76,
+   "value": 17729.0,
+   "label": "Reality Labs 2024 loss from operations",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "META",
+   "doc": "META_FY2025_10K",
+   "page": 76,
+   "value": 16120.0,
+   "label": "Reality Labs 2023 loss from operations",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

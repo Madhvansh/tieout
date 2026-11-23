@@ -1,0 +1,44 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Sam's Club U.S. grocery net sales for fiscal 2025 appear in both of Walmart's last two annual reports. Was the figure changed in the fiscal 2026 report, by how much, and why?",
+ "abstain": false,
+ "answer": "Sam's Club U.S. grocery net sales for fiscal 2025 were reported as $59,976 million in the fiscal 2025 10-K and were changed to $61,253 million (an increase of $1,277 million) in the fiscal 2026 10-K. The change was made because the company periodically revises the assignment of net sales of particular items to merchandise categories, and when such assignments change, previous period amounts are reclassified to maintain comparability with the current period's presentation.",
+ "pred": {
+  "kind": "number",
+  "value": 1277000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "WMT",
+   "doc": "WMT_FY2025_10K",
+   "page": 80,
+   "value": 59976000000.0,
+   "label": "Sam's Club U.S. net sales by merchandise category - Grocery (2025)",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "WMT",
+   "doc": "WMT_FY2026_10K",
+   "page": 79,
+   "value": 61253000000.0,
+   "label": "Sam's Club U.S. net sales by merchandise category - Grocery (2025)",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "WMT",
+   "doc": "WMT_FY2025_10K",
+   "page": 80,
+   "value": 59976000000.0,
+   "label": "revises the assignment of net sales of a particular item to a merchandise category",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

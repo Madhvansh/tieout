@@ -16,17 +16,23 @@ RES = ROOT / "results"
 TYPES = ("single_fact", "multi_hop", "cross_filing", "overall")
 # (row label in the table, result file, what was switched off)
 SYSTEMS = [
-    ("TieOut, declared configuration (plans on the graph; a text reader as witness and pointer)", "heldout_v2.json", ""),
-    ("Baseline: hybrid retrieval, same model reads (the text reader, alone)", "heldout_baseline_hybrid.json", ""),
-    ("Baseline: dense retrieval, same model reads", "heldout_baseline_dense.json", "baseline"),
-    ("TieOut, one planner (no second planner, no arbiter)", "heldout_abl_onereader.json", "ablation"),
-    ("TieOut, one picker (no second picker)", "heldout_abl_onepicker.json", "ablation"),
-    ("TieOut, no arbiter", "heldout_abl_noarbiter.json", "ablation"),
-    ("TieOut, empty link store", "heldout_abl_store.json", "ablation"),
-    ("TieOut, no equation solving", "heldout_abl_solve.json", "ablation"),
-    ("TieOut, no linking (statement concepts only)", "heldout_abl_link.json", "ablation"),
-    ("TieOut, checks off", "heldout_abl_checks.json", "ablation"),
-    ("TieOut, no checks read from the question's words", "heldout_abl_words.json", "ablation"),
+    ("TieOut, the declared configuration on one free key (the headline)", "heldout_v2.json", ""),
+    ("Baseline: hybrid retrieval, the same model reads 16,000 characters", "heldout_baseline_hybrid.json", ""),
+    ("Baseline: the same with 48,000 characters, as the text reader inside TieOut gets", "heldout_baseline_hybrid_b48.json",
+     "baseline"),
+    ("Baseline: dense retrieval, the same model reads", "heldout_baseline_dense.json", "baseline"),
+    ("Paid side run: Claude Sonnet 5.5 plans and picks, gemini-3.1-pro arbitrates", "heldout_v2_scaled.json", "scaled"),
+    # The ablations ran on the development key, where the stronger arbiter models answer. On the free key they
+    # answered three calls and stopped, so the like-for-like reference of the rows below is this run, not the headline
+    ("Reference for the rows below: TieOut on a key without the free tier's daily limit", "heldout_abl_none.json", "reference"),
+    ("... one planner (no second planner, no arbiter)", "heldout_abl_onereader.json", "ablation"),
+    ("... no arbiter", "heldout_abl_noarbiter.json", "ablation"),
+    ("... no linking (statement concepts only)", "heldout_abl_link.json", "ablation"),
+    ("... one picker (no second picker)", "heldout_abl_onepicker.json", "ablation"),
+    ("... empty link store", "heldout_abl_store.json", "ablation"),
+    ("... no equation solving", "heldout_abl_solve.json", "ablation"),
+    ("... checks off", "heldout_abl_checks.json", "ablation"),
+    ("... no checks read from the question's words", "heldout_abl_words.json", "ablation"),
 ]
 
 

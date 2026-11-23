@@ -1,0 +1,34 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Did Caterpillar's 2025 annual report change the 2024 total sales and revenues it shows for the Resource Industries segment compared with the 2024 annual report? If so, by how much and why?",
+ "abstain": false,
+ "answer": "Yes, Caterpillar's 2025 annual report changed the 2024 total sales and revenues for the Resource Industries segment from $12,389 million (reported in the 2024 annual report) to $12,471 million (reported in the 2025 annual report), an increase of $82 million. This change was due to segment reporting changes made effective July 1, 2025, to reflect changes in organizational accountabilities and refinements to internal reporting (specifically, responsibility for wear and maintenance components and related parts moving from All Other Segment to Resource Industries, and other adjustments).",
+ "pred": {
+  "kind": "number",
+  "value": 82000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "CAT",
+   "doc": "CAT_FY2024_10K",
+   "page": 36,
+   "value": 12389.0,
+   "label": "Resource Industries\u2019 total sales",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "CAT",
+   "doc": "CAT_FY2025_10K",
+   "page": 37,
+   "value": 12471.0,
+   "label": "Resource Industries\u2019 total sales",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

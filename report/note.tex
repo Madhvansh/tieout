@@ -1,0 +1,97 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,margin=1.3cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{caption}
+\captionsetup{font=scriptsize,labelfont=bf,skip=2pt}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2.6pt}
+\newcommand{\head}[1]{\vspace{5pt}{\normalsize\bfseries #1}\vspace{1pt}\par}
+\newcommand{\sub}[1]{\textbf{#1}}
+\newenvironment{tight}{\begin{list}{\textbullet}{\setlength{\leftmargin}{9pt}\setlength{\itemsep}{0.8pt}\setlength{\parsep}{0pt}\setlength{\topsep}{1pt}\setlength{\labelsep}{4pt}}}{\end{list}}
+\renewcommand{\arraystretch}{1.1}
+% A number that exists only after the single held-out run. Replace each use by hand after the freeze.
+\newcommand{\HeldPending}{\textcolor{red!70!black}{[run after the freeze]}}
+\newcommand{\rf}[1]{{\footnotesize\texttt{#1}}}
+\newcommand{\PruneReplay}{Replayed with the 213 solvable facts dropped: 125 of 142 right, the same verdict as the unpruned graph on the same code on every one of the 142 questions, with no cache miss (\rf{jd\_prune\_solvable\_r7.json} to \rf{\_r10.json} against \rf{g1\_r7.json} to \rf{\_r10.json}). Replayed with the 11,967 row cells dropped and no solver: 102 of 142, but 83 questions lacked cached calls, so that cost is not cleanly measured.}
+\begin{document}
+\small
+
+{\Large\bfseries When does a context graph carry accuracy?}\par\vspace{1pt}
+{\large Evidence from the arithmetic of 55 filings}\par\vspace{3pt}
+{\normalsize Madhvansh Choksi \quad\textbar\quad A research note to accompany the TieOut take-home; the required results are in \texttt{results.pdf}}\par
+{\footnotesize Every number about TieOut is read from a file of the repository, named beside it (paths under \texttt{results/} unless given). Numbers about LCG are the paper's own.}\par\vspace{2pt}
+
+\head{1. The question}
+Living Context Graphs (LCG)~[1] separates what a context layer knows from how it serves it. On 146 held-out BIRD questions over three databases, with a split built so that every fact a held-out question needs has a teacher in the learning history, a semantic store learned from verified outcomes answers 53 right against 20 for a bootstrapped catalog. Removing the concept graph changes held-out accuracy by at most one question per database and raises per-query cost 2.3 to 3.3 times. In the paper's words, ``continually learned semantics drive accuracy, while the graph makes that context efficient to serve.'' It is a careful result: a transfer-aware split, a paired bootstrap interval, absolute deltas, one run per condition said plainly.
+
+Their graph's edges are routes (keyword to concept to object), earned by use. The take-home brief asks how a graph's structure can do the work of answering. This note asks the complementary question on a domain where numbers over-determine each other: \emph{can the edges themselves carry accuracy and trust?}
+
+\sub{Thesis.} A graph carries accuracy when its edges are constraints that can be checked, not associations.
+
+\head{2. The graph in five lines}
+\begin{minipage}[t]{0.53\textwidth}
+\vspace{0pt}
+\begin{tight}
+\item \emph{Node}: a reading (one printed number in one cell of one page), the fact it reports (company, concept, period), a binding (``this row means this concept''), and every other table row and numeric sentence of the filings.
+\item \emph{Edge}: an equation among readings, recovered from the printed numbers alone, with no model and no XBRL (Table~1). Each edge holds or fails on the page; anyone can check it again.
+\item \emph{Question to traversal}: a model compiles the question into a typed plan (get, calc, compare, rank, filter, series, members) and never sees a figure. A deterministic executor resolves each step to nodes. A figure printed nowhere is solved from the one equation in which it is the only unknown.
+\item \emph{Proof}: each answer returns its proof leaves (filing, page, printed figure); \texttt{scripts/check\_brief.py} fails a run if any leaf is not a graph node.
+\item \emph{Trust}, read off the edges around the leaves. VERIFIED: every line bound by structure, inside an equation that holds, both planners agree. WITNESSED: some lines chosen by two models that agreed. CORROBORATED: a named weakness, and the text reader repeats the figure. FLAGGED: each weakness named. ABSTAIN: names what is missing.
+\end{tight}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.44\textwidth}
+\vspace{0pt}
+{\footnotesize\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}p{1.15cm}p{3.55cm}r@{}}
+\toprule
+Edge & What it asserts & Count \\
+\midrule
+SUM & a signed run of rows or columns adds to a total, in every period column & 995 \\
+TIE & a value printed twice is one fact & 361 \\
+RATIO & net income over shares gives the printed earnings per share, which pins the scale & 136 \\
+CARRY & last year's column equals last year's filing & 1,308 \\
+\midrule
+All & 55 filings of 40 companies & 2,800 \\
+\bottomrule
+\end{tabular}}
+
+\vspace{2pt}
+{\scriptsize\textbf{Table 1.} The four equation kinds (\rf{graph\_stats.json}). 2,719 hold as printed, 46 hold after rounding, 32 carries mark a restatement, 3 sums fail. Against the SEC's calculation linkbase, which the build never reads: of 418 declared relations whose lines are printed, 416 are recovered under the lenient mapping of rows to SEC elements, 314 under the strict one (\rf{lab\_linkbase.json}).}
+\end{minipage}
+
+\head{3. Four measurements, one per research direction of the role}
+Unless said otherwise: rounds 7 to 10 (142 questions), replayed offline from cached model calls; a call the cache does not hold is counted as a miss, never made.
+
+\sub{(1) Correlation: graph quality against answer accuracy.} \emph{Done}: a share of the statement money cells is damaged before the checks run; then each of 4,158 facts is graded against the clean graph's own value, with the checks off (every reading served as verified) and on (only verified readings trusted). Mean over 5 seeds; no model. \emph{Number}: facts silently wrong, checks off against checks on: 66 against 13 at a damage rate of 0.01 (248 cells damaged on average); 342 against 64 at 0.05 (1,235 cells); 650 against 96 at 0.10 (2,405 cells). The gate has a cost, said plainly: at 0.05 it withholds 1,030 facts, 991 of which were right, and on the undamaged graph it already withholds 116 right facts (\rf{damage\_curve.json}). At the answer level, round 1 with its cached plans (30 questions, 3 seeds, no model call) at rate 0.10: serving all readings gives 22.7 right and 3.3 wrong, serving verified readings only 14.3 right and 2.0 wrong, against 27 and 1 undamaged (\rf{noise.json}). With the full configuration on rounds 7 to 10, no wrong answer was VERIFIED at 0, 10, 25 or 50 percent damage of all numeric nodes (\rf{jd\_dose.json}); the fall in accuracy in that replay mixes damage with model calls the cache lacks, so it is not quoted. The same coupling shows on first runs of fresh rounds 3 to 9, answered once before anyone read an answer: VERIFIED 34 of 35 right, WITNESSED 23 of 30, FLAGGED 92 of 136 (\rf{pooled\_first\_runs.json}). The graph alone, with templated plans and no model, keyed by the SEC's own data: 8,083 of 8,667 right, 517 abstained, 67 wrong without a warning, 46 of which equal a second SEC element for the same concept (\rf{scale\_test.json}). \emph{Limit}: the faults are synthetic, and real extraction errors may cluster on hard tables; a fact graded against the clean graph is not an answer to a question. On the 30 held-out questions the checks change no verdict: 27 of 30 with them and 27 without, question for question, on a key where the arbiter answers (\rf{heldout\_abl\_none.json}, \rf{heldout\_abl\_checks.json}). On unseen, undamaged questions the checks buy the tier and the protection above, not raw accuracy. What carries accuracy there is the linking of a question's words to lines: 21 of 30 without it (\rf{heldout\_abl\_link.json}).
+
+\sub{(2) Pruning and consolidation.} \emph{Done}: a node is redundant when an exact recovered formula recomputes it from nodes that stay; one node per equation is dropped, greedily, and each dropped value is checked to recompute to its printed value. \emph{Number}: 1,649 of 13,384 statement cells (12.3 percent; that layer 11.8 percent smaller gzipped); 11,967 of 192,920 cells of the other tables (6.2 percent; 4.0 percent smaller); 213 of 4,263 facts that the executor already solves for when they are missing. Consolidation: 9,794 of 15,813 sentences restate a table cell. 18 figures printed differently by two filings (5 restatements, 6 reclassifications, 7 presentation changes) are kept both and labelled, never overwritten (\rf{jd\_prune.json}). \PruneReplay{} \emph{Limit}: a greedy choice; a better one may drop more. LCG's store never deletes: it withdraws, supersedes or refuses. Here a deletion carries its own proof, the formula that restores the node.
+
+\sub{(3) Capture with access control and provenance.} \emph{Done}: an answer is served only if the asker may read every proof leaf; a derived figure carries the labels of all its leaves; a withheld answer names the place, never the value. The gate is replayed over the saved runs of rounds 7 to 10 under four policies. \emph{Number}: an asker barred from Chevron (the company the served answers cite most) gets 123 of 131 answers, 109 of them right against 115 before, and none rests on a Chevron leaf. An asker allowed the companies whose filings hold the question's gold facts gets 131 of 131; allowed only the first of them, 107, and all 24 withheld rest on leaves of two or more filings (\rf{jd\_access.json}). \emph{Limit}: the zero is true by construction, since the gate checks the leaves it reports. What this shows is the cost, and that the leaves are complete enough to gate on. \texttt{check\_brief} proves each leaf is a node, not that no figure is missing from the list. Policies are by company, not by row or role.
+
+\sub{(4) Shipping into a stack, with evals.} \emph{Done}: every model call is cached, so a reported run replays with no key; a brief check and a clean-clone check guard each build. \emph{Number}: the offline replay of rounds 7 to 10 gives the reported answer on 142 of 142 questions (\rf{jd\_dose.json}, $p$ = 0). \texttt{check\_brief} passes on the 4 development files (round 10: 76 of 76 proof leaves are graph nodes; \rf{README.md}). The clean-clone check of 22 November passed 9 of 10 steps, 114 tests among them; the failed step asked the planner with no key (\rf{clean\_clone\_check.json}). Accuracy on the 30 held-out questions, run once on the frozen code: 25 of 30 on one free key (\rf{heldout\_v2.json}); 27 of 30 on a key without the free tier's daily limit on the arbiter models, which answered three calls of the free run and then stopped (\rf{heldout\_abl\_none.json}). \emph{Limit}: a replay is exact only for cached calls; a live run asks the models again. The clean-clone result predates the latest code.
+
+\head{4. What did not transfer}
+\sub{A learned link store, on new questions.} Round 8 scored 30 of 35 with the links learned on rounds 1 to 7 and 30 of 35 without them, although the stored links added 305 facts to the graph (4,657 against 4,352; \rf{store\_round8.json}, \rf{nolinks\_round8.json}). LCG reads its judge ablation (29 held-out right with the judge off and a larger store, against 53 with it) as admission, not volume, carrying the gain; this agrees on the volume half: more stored links bought nothing on a new round. Our round was not built as a transfer-aware split, so it is the weaker test.
+
+\sub{A model judge to admit a binding.} 70 proposed bindings (a row proposed for a concept) were keyed by the SEC's own figures; the proposer alone was right on 66. A local judge model (\texttt{phi4-mini}; shown label, heading and role, never a value) admitted 33, 32 of them right (precision 0.97), and refused 34 of the 66 right ones. Structure did no better here: the gate admitted all 4 wrong proposals (two are GM's ``Goodwill and intangible assets, net'' for Goodwill) and refused 4 right ones (\rf{judge\_vs\_gate.json}). A sum checks a value and its place, not what a label means. LCG finds that admission carries the gain and says its judge's agreement with human reviewers is unmeasured; against an outside key, our judge bought precision with half the recall, and arithmetic did not settle the label.
+
+\head{5. Limits, and what the internship could do next}
+\begin{tight}
+\item \emph{Limits.} One corpus of 55 filings; questions written by language-model authors; development rounds are not held out, and first runs on fresh rounds (163 of 240 right on rounds 3 to 9, \rf{pooled\_first\_runs.json}) stay well below the same rounds on later code. The judge was one small local model.
+\item Arithmetic proves values and places, not labels or scales across companies: Exxon's refining capacity keeps its caption's thousands and Chevron's does not, so their ratio comes out 1,895 instead of 1.79 (\rf{report/failures.tex}).
+\item \emph{Admission grounded in execution evidence}, which LCG names as its open problem: admit a learned rule only when an equation holds, and test it on a transfer-aware split.
+\item \emph{Judge agreement, measured}, the gap LCG states: the protocol of \rf{judge\_vs\_gate.json} keys a judge against an outside source instead of a reviewer's taste.
+\item \emph{Growth with proof}: LCG's per-query cost rises 2.7 to 5.9 times over each stream as rules accumulate; a recomputability rule could retire what other context restores, and gate access per proof leaf.
+\end{tight}
+
+\vspace{3pt}
+{\footnotesize\textbf{References.} [1] V.~Agrawal, A.~Srivastava, E.~Gujar, K.~Kumar, A.~Gupta. \emph{Living Context Graphs}. arXiv:2611.20976, 2026; NeurIPS 2026 workshop poster. \quad [2] TieOut, code, benchmark and every result file: \texttt{github.com/Madhvansh/tieout}.}
+\end{document}

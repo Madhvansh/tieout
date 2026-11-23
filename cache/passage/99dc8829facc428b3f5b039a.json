@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was Delta co-brand cards Card Member loans of American Express Co. for fiscal year 2025 (for a balance: at the end of fiscal year 2025)? Give the one figure the filing prints for it.",
+ "abstain": true,
+ "answer": "The provided passages do not contain the specific dollar amount or figure for Delta co-brand cards Card Member loans as of December 31, 2025 (they only state that the Delta cobrand portfolio represented approximately 21 percent of worldwide Card Member loans as of December 31, 2025).",
+ "pred": {
+  "kind": "abstain",
+  "value": null
+ },
+ "unit": "none",
+ "facts": [
+  {
+   "ticker": "AXP",
+   "doc": "AXP_FY2025_10K",
+   "page": 7,
+   "value": 0.21,
+   "label": "Delta cobrand portfolio represented approximately 21 percent of worldwide Card Member loans as of December 31, 2025",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

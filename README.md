@@ -9,26 +9,28 @@ Written by blind authors and committed before any run (`benchmark/round2/questio
 <!-- gen:heldout (written by scripts/readme_numbers.py from results/; never edit by hand) -->
 | Question type | Questions | Accuracy | Precision | Recall |
 |---|---|---|---|---|
-| Single fact | [[...]] | [[...]] | [[...]] | [[...]] |
-| Multi-hop | [[...]] | [[...]] | [[...]] | [[...]] |
-| Cross-filing comparison | [[...]] | [[...]] | [[...]] | [[...]] |
-| **Overall** | [[...]] | [[...]] | [[...]] | [[...]] |
+| Single fact | 10 | 8/10 (80%) | 80% | 67% |
+| Multi-hop | 10 | 9/10 (90%) | 91% | 98% |
+| Cross-filing comparison | 10 | 8/10 (80%) | 75% | 48% |
+| **Overall** | 30 | 25/30 (83%) | 82% | 72% |
 
-- On the same 30 questions: the retrieval baseline (passages, the same free model reads) [[...]]; TieOut's plans alone, without the text reader, [[...]] (`results/heldout_v2.json`, `results/heldout_baseline_hybrid.json`).
-- Right by tier: [[...]]. Under the strict scorer (the rules of 21 November, before six were relaxed after misses were read): [[...]].
-- `python scripts/check_brief.py results/heldout_v2.json`: [[...]].
-- Paid side experiment, is the model the bottleneck? (Claude Sonnet 5.5 plans and picks, gemini-3.1-pro arbitrates, labelled and never mixed into the headline): [[...]].
+- On the same 30 questions: the retrieval baseline (passages, the same free model reads) 15/30; TieOut's plans alone, without the text reader, 19/30 (`results/heldout_v2.json`, `results/heldout_baseline_hybrid.json`). The baseline reads 16,000 characters of passages; with the 48,000 the text reader gets inside TieOut it scores 22/30 (`results/heldout_baseline_hybrid_b48.json`).
+- One free key was the limit of this run: the stronger arbiter models answered on 2 of 30 questions before their free daily quota was spent, and 5 answers were then served on one planner's reading, FLAGGED. The same frozen system on a key without that daily limit, a side number and not the headline: 27/30 (`results/heldout_abl_none.json`).
+- Right by tier: VERIFIED 4/4, WITNESSED 3/4, CORROBORATED 9/9, FLAGGED 8/11, ABSTAIN 1/2. Wrong while VERIFIED: 0.
+- Under the strict scorer (the rules of 21 November, before six were relaxed after misses were read): 24/30. 95% interval of the accuracy: 66% to 93%.
+- `python scripts/check_brief.py results/heldout_v2.json`: 28 answers served, 80 proof leaves, 80 of them graph nodes.
+- Paid side experiment, is the model the bottleneck? (Claude Sonnet 5.5 plans and picks, gemini-3.1-pro arbitrates, labelled and never mixed into the headline): 26/30 (`results/heldout_v2_scaled.json`).
 <!-- /gen:heldout -->
 
 ## Run it
 
-Python 3.12, no GPU. Replaying the reported runs needs no key: the built graph and every model call they made are in the repository. `--offline` replays only the model calls; linking, the executor and the scoring run again. The `ask` line prints the answer shown in the next section.
+Python 3.12, no GPU. Replaying the reported runs needs no key: the built graph and every model call they made are in the repository. `--offline` replays only the model calls; linking, the executor and the scoring run again. The `ask` line prints the answer shown in the next section. The last command replays the held-out run as it happened and prints 25/30: the arbiter calls the free key refused are not in the cache. The side runs (the reference without that limit, the ablations, the paid run) are kept as result files; their extra model calls are not shipped.
 
 ```
 pip install -r requirements.txt
 python scripts/check_brief.py results/heldout_v2.json    # every proof leaf of every served answer is a graph node
 python scripts/report_numbers.py                          # the numbers of this README and the PDF, from results/
-TIEOUT_LLM=gemini:gemini-3.5-flash-lite python -m tieout ask --offline "What were Apple's net sales in the fourth quarter of fiscal 2026?"
+python -m tieout ask --offline "What were Apple's net sales in the fourth quarter of fiscal 2026?"
 TIEOUT_LINK_LLM=gemini:gemini-3.5-flash-lite python scripts/run_benchmark.py --bench benchmark/round2/questions.jsonl \
   --model gemini:gemini-3.5-flash-lite --checker ollama:tieout-planner-4b-v3 --pick-checker gemini:gemini-3.1-flash-lite \
   --arbiter gemini:gemini-3.6-flash,gemini:gemini-3.5-flash,gemini:gemini-3-flash-preview \
@@ -74,7 +76,7 @@ The 55 filings hold 2,800 such checks (`results/graph_stats.json`). They verify 
 2. **Link.** A line outside the statements (a segment, a count, a sentence figure) is chosen among candidate rows shown with their labels, headings and columns, and no figures.
 3. **Execute.** A deterministic executor runs the plan on the graph and returns the answer with its proof leaves, or abstains and names the missing fact.
 4. **Four eyes.** No single model's choice is served as fact. Two planners read each question: a free hosted model (`gemini-3.5-flash-lite`) and a Qwen3-4B we fine-tuned on Kaggle, on the laptop CPU. Their plans are compared on what they compute; a stronger free model arbitrates only when they differ. Two pickers choose each line and are compared on the figure each pick yields. They are not fully independent: both pickers are Gemini models, and the 4B learned from paraphrases the hosted model wrote.
-5. **A text reader: a witness and a pointer, never a source.** The baseline of this repository (passages of the filings, BM25 and `bge-small` vectors, the same free model reads them) is used inside TieOut in two ways only. As a witness it corroborates or disputes: the same figure makes a FLAGGED answer CORROBORATED; a different figure against a VERIFIED or WITNESSED answer sends the question to the arbiter. As a pointer it names a place (filing, page, figure); the node at the place it names is linked to the plan like any picker's choice, and the executor answers from the graph. Nothing the reader writes is served, and `scripts/check_brief.py` fails a run if any proof leaf of any served answer is not a node of the graph.
+5. **A text reader: a witness and a pointer, never a source.** The baseline of this repository (passages of the filings, BM25 and `bge-small` vectors, the same free model reads them) is used inside TieOut in two ways only. As a witness it corroborates or disputes: the same figure makes a FLAGGED answer CORROBORATED; a different figure against a VERIFIED or WITNESSED answer sends the question to the arbiter. As a pointer it names a place (filing, page, figure); the node at the place it names is linked to the plan like any picker's choice, and the executor answers from the graph. When it disputes a FLAGGED answer, its own answer is first recomputed from graph nodes (the node it names, a planner's plan on the rows it cited, or its own arithmetic written as one expression and evaluated by code on those nodes); then the arbiter judges which of the two derivations answers the question as asked. The judge picks a derivation and never writes a figure. Nothing the reader writes is served, and `scripts/check_brief.py` fails a run if any proof leaf of any served answer is not a node of the graph.
 
 <!-- gen:devline -->
 On the four latest development rounds (142 questions, `results/ff_r7.json` to `ff_r10.json`), the plans alone were right on 114 and the whole system on 128. `check_brief` passes on 4 of the 4 files (round 10: 31 answers served, 77 proof leaves, 77 of them graph nodes).
@@ -85,7 +87,7 @@ On the four latest development rounds (142 questions, `results/ff_r7.json` to `f
 | VERIFIED | Every number is a statement line bound by structure (no model chose the row), inside a formula that holds or solved from such numbers; both planners agree. |
 | WITNESSED | The same, but some lines were chosen by models, each choice by two models that agreed. |
 | CORROBORATED | An answer with a named weakness that the text reader repeats, figure for figure. |
-| FLAGGED | Answered, each weakness named. Every answer on a line the reader pointed at is here. |
+| FLAGGED | Answered, each weakness named. Every answer on a line the reader pointed at, or that the judge chose, is here. |
 | ABSTAIN | Not answered. Says what is missing. |
 
 ## How the benchmark was made
@@ -119,11 +121,23 @@ Files: `results/pooled_first_runs.json` (first runs rescored under both scorers)
 
 ## Where it fails, by class
 
-[[...]] On round 10's first run (`results/first_runs/round10_pointer.json`) the nine misses fall into five classes. **The planners decline what a filing prints** (NVIDIA's employee turnover rate, 3.7 percent on 10-K page 99). **A plan stops at a line it cannot place** (Coca-Cola's fall in headcount). **A look-alike line** (Walmart's square feet per unit: a sentence on page 40 against the Item 2 table on page 29). **A line the build did not read, or read in the wrong scale** (GM's 6,276 dealerships on 10-K page 7 are held by no node; Exxon's refining capacity carries its caption's thousands and Chevron's does not, so their ratio comes out 1,895 instead of 1.79). **Readings** (a balance grown over one quarter read three ways by three planners; a ranking read off a chart).
+The five held-out misses (`results/heldout_v2.json`):
 
-## The JD's four directions, measured on this graph
+- **The free key ran out of arbiter calls** (2). The stronger free models answered three calls and then refused for the day. From the third question on, a disagreement between the two planners was served as one planner's reading, FLAGGED. American Express's Delta share of Card Member loans and the restated Sam's Club grocery sales were lost this way: with the arbiter available both are right (`results/heldout_abl_none.json`, a side run on a key without that limit).
+- **A printed figure no node holds** (1). GM's share of U.S. vehicle sales, 17.2 percent on 10-K page 6: the planners said no filing gives a market share, the text reader named the page, but the table on that page was never read into the graph. There was no node to answer from, so the system abstained.
+- **An unanswerable question answered** (1). Microsoft prints no dollar figure for Azure. One planner linked "Azure" to another, larger line and its comparison was served, FLAGGED, although the text reader said the figure is not disclosed.
+- **A reading both planners shared** (1). "Which of NVIDIA's five end markets grew fastest, and how much revenue did it bring in": both planners returned another market's revenue. It was served WITNESSED, the one wrong answer above FLAGGED in this run.
 
-[[...]]
+The fresh rounds add two more classes (round 10: `results/first_runs/round10_pointer.json`). **A scale read wrong outside the money tables**: Exxon's refining capacity carries its caption's thousands and Chevron's does not, so their ratio comes out 1,895 instead of 1.79. **Look-alike lines**: Walmart's square feet per unit, a sentence on page 40 against the Item 2 table on page 29.
+
+## The role's four research directions, measured on this graph
+
+The job description names four directions for the internship. Each has a counterpart that can be measured here. The numbers, their files and their limits are in a two-page research note, [`report/note.pdf`](report/note.pdf).
+
+- **Graph quality against correctness.** With 5 percent of the statement cells damaged, 342 of 4,158 facts are silently wrong when the checks are off and 64 when they are on; the checks withhold 1,030 (`results/damage_curve.json`, five seeds, no model). On rounds 7 to 10 no wrong answer was VERIFIED at 0, 10, 25 or 50 percent damage (`results/jd_dose.json`). Of 579 figures the text reader cited, 546 are nodes of the graph (`results/jd_resolve_rate.json`).
+- **Pruning.** 1,649 of 13,384 statement cells can be recomputed by a recovered formula. Dropping the 213 facts the executor can solve for changes no verdict on 142 questions (`results/jd_prune.json`).
+- **Access control with provenance.** An answer is served only if the asker may read every proof leaf. Withholding the most cited company leaves 123 of 131 served answers, and none of them rests on a withheld leaf (`results/jd_access.json`).
+- **Shipping.** Every model call of a reported run is cached, so it replays with no key; `scripts/check_brief.py` and `scripts/clean_clone_check.py` guard each build.
 
 ## What did not work
 
@@ -131,13 +145,16 @@ Files: `results/pooled_first_runs.json` (first runs rescored under both scorers)
 - **A stronger model alone.** On round 7, `gemini-3.1-pro` planning alone on the graph scored 22 of 36 and flash-lite alone 19 (`results/v_r7_pro.json`, `results/v_r7_fl.json`, code of 22 November).
 - **The link store on new questions.** Round 8 scored 30 of 35 with the links learned on rounds 1 to 7 and 30 of 35 without them (`results/store_round8.json`, `results/nolinks_round8.json`): stored links help a question asked again, not a new one.
 - **A model judge to admit a binding** (97.0 percent precise, but it threw away 34 of 66 right proposals: `results/judge_vs_gate.json`), and **relaxing a scoring rule after reading a miss** without a counter-example test (hence the strict scorer).
+- **Measured on the last night and not adopted.** The text reader with twice the context: right alone on 91 of 142 against 89, with 13 answers better and 11 worse (`results/p_r7_b96.json` to `p_r10_b96.json`). The arbiter planning a FLAGGED answer that two planners share: no answer changed on 284 questions (`results/d1_r3.json` to `d1_r10.json`). The 8B planner as second reader: 91 of 107 against 95 for the 4B (`results/a8b_r7.json` to `a8b_r9.json`).
 
-**The fine-tuned planners.** Qwen3 models fine-tuned on Kaggle GPUs (LoRA; plans in the plan language for templated questions, paraphrased by the hosted model, leak-checked against the held-out questions), published with cards: [4B v3](https://huggingface.co/Madhvansh/tieout-planner-qwen3-4b-v3-gguf) (the second planner), [4B v2](https://huggingface.co/Madhvansh/tieout-planner-qwen3-4b-v2-gguf), [1.7B v3.1](https://huggingface.co/Madhvansh/tieout-planner-qwen3-1.7b-v3.1-gguf), [1.7B v2](https://huggingface.co/Madhvansh/tieout-planner-qwen3-1.7b-v2-gguf), [0.6B v2](https://huggingface.co/Madhvansh/tieout-planner-qwen3-0.6b-v2-gguf). Planning alone on rounds 1 to 5 and 6 to 8 (`results/v32_table_all.json`): hosted flash-lite 175 of 194 and 75 of 106, 4B v3.2 153 and 52, 8B v3.2 160 and 57. [[...]]
+**The fine-tuned planners.** Qwen3 models fine-tuned on Kaggle GPUs (LoRA; plans in the plan language for templated questions, paraphrased by the hosted model, leak-checked against the held-out questions), published with cards: [4B v3](https://huggingface.co/Madhvansh/tieout-planner-qwen3-4b-v3-gguf) (the second planner), [4B v2](https://huggingface.co/Madhvansh/tieout-planner-qwen3-4b-v2-gguf), [1.7B v3.1](https://huggingface.co/Madhvansh/tieout-planner-qwen3-1.7b-v3.1-gguf), [1.7B v2](https://huggingface.co/Madhvansh/tieout-planner-qwen3-1.7b-v2-gguf), [0.6B v2](https://huggingface.co/Madhvansh/tieout-planner-qwen3-0.6b-v2-gguf). Planning alone on rounds 1 to 5 and 6 to 8 (`results/v32_table_all.json`): hosted flash-lite 175 of 194 and 75 of 106, 4B v3.2 153 and 52, 8B v3.2 160 and 57.
 
 ## What I would do next
 
-- **A judge between two sets of lines.** When the linker's rows and the rows the reader points at disagree, show both sets to the arbiter with their headings and no figures; the executor computes on the set it picks.
-- **Periods as intervals**, so a twelve-month period that is not the fiscal year, or a quarter restated in a later table, is read. **Page-image rows**: a vision model laid out 13 pages and arithmetic accepted 318 of 445 of its rows, none in 100 shuffled controls (`vision_lab`); left out because arithmetic does not prove a label.
+- **Units and scales of tables that are not money.** Rows of counts and areas are sometimes read in the money scale: Exxon's refining capacity keeps its caption's thousands and Chevron's does not. A caption reader for such tables, checked by ratios that must be plausible across companies.
+- **The tables the ledger lists as unread.** Two pages of GM's 10-K (market share, dealerships) cost three questions in two fresh rounds.
+- **The judge on more disputes.** It was right on all 13 disputes of the development rounds and gained one answer on a fresh round. That is too few to trust beyond FLAGGED.
+- **Periods as intervals**, so a twelve-month period that is not the fiscal year, or a quarter restated in a later table, is read. **Page-image rows**: a vision model laid out 13 pages and arithmetic accepted 318 of 445 of its rows, none in 100 shuffled controls (`report/vision_rows.md`); left out because arithmetic does not prove a label.
 
 ## How I used AI
 

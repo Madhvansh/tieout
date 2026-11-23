@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "After stripping out the share belonging to minority holders, how much did Ford Motor Company make or lose in 2025?",
+ "abstain": false,
+ "answer": "Ford Motor Company had a net loss attributable to Ford Motor Company of $8,182 million in 2025.",
+ "pred": {
+  "kind": "number",
+  "value": -8182000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "F",
+   "doc": "F_FY2025_10K",
+   "page": 115,
+   "value": -8182000000.0,
+   "label": "Net income/(loss) attributable to Ford Motor Company",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

@@ -1,0 +1,46 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was Caterpillar's compound annual growth rate in total sales and revenues from 2022 to 2025, and which of those four years was the high point?",
+ "abstain": false,
+ "answer": "Caterpillar's compound annual growth rate in total sales and revenues from 2022 to 2025 was 4.41% (or 0.0441), and the high point among the four years was 2025 with $67.589 billion.",
+ "pred": {
+  "kind": "number",
+  "value": 0.0441
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "CAT",
+   "doc": "CAT_FY2024_10K",
+   "page": 53,
+   "value": 59427.0,
+   "label": "Total sales and revenues for 2022",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "CAT",
+   "doc": "CAT_FY2024_10K",
+   "page": 4,
+   "value": 64809.0,
+   "label": "Total sales and revenues for 2024",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "CAT",
+   "doc": "CAT_FY2025_10K",
+   "page": 4,
+   "value": 67589.0,
+   "label": "Total sales and revenues for 2025",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

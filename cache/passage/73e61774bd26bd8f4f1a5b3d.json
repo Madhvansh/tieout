@@ -1,0 +1,15 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Rank the four health-care companies in the set (Johnson & Johnson, Pfizer, Merck and UnitedHealth Group) by their reported 2025 effective income tax rate, highest first.",
+ "abstain": true,
+ "answer": "The passages do not contain the 2025 effective income tax rate for UnitedHealth Group.",
+ "pred": {
+  "kind": "abstain",
+  "value": null
+ },
+ "unit": "none",
+ "facts": [],
+ "facts_ok": false
+}

@@ -1,0 +1,25 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was the value of the inventories on Caterpillar's balance sheet at the end of 2025?",
+ "abstain": false,
+ "answer": "18,135 million USD",
+ "pred": {
+  "kind": "number",
+  "value": 18135000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "CAT",
+   "doc": "CAT_FY2025_10K",
+   "page": 63,
+   "value": 18135000000.0,
+   "label": "Inventories",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

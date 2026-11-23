@@ -1,0 +1,18 @@
+{
+ "model": "gemini:gemini-3.5-flash-lite",
+ "system": "You say how an SEC filing would label a financial item. Given an item phrase from a question\nand the company, list up to 4 other labels the company's annual or quarterly report might print for the\nsame item: its own term for it, a synonym, an abbreviation spelled out or the reverse. Never a number.\nAnswer as JSON: {\"labels\": [\"...\", \"...\"]}",
+ "user": "Company: General Motors Co. (GM)\nItem: pre-tax earnings from in-house lending",
+ "answer": {
+  "labels": [
+   "GM Financial earnings before income taxes",
+   "Automotive financing pre-tax income",
+   "financial services pre-tax income",
+   "earnings before income taxes from captive finance operations"
+  ]
+ },
+ "seconds": 1.16,
+ "usage": {
+  "in": 102,
+  "out": 38
+ }
+}

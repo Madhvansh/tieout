@@ -1,18 +1,273 @@
 {
- "systems": [],
- "files_missing": [
-  "heldout_v2.json",
-  "heldout_baseline_hybrid.json",
-  "heldout_baseline_dense.json",
-  "heldout_abl_onereader.json",
-  "heldout_abl_onepicker.json",
-  "heldout_abl_noarbiter.json",
-  "heldout_abl_store.json",
-  "heldout_abl_solve.json",
-  "heldout_abl_link.json",
-  "heldout_abl_checks.json",
-  "heldout_abl_words.json"
+ "systems": [
+  {
+   "label": "TieOut, the declared configuration on one free key (the headline)",
+   "file": "heldout_v2.json",
+   "kind": "",
+   "single_fact": "8/10",
+   "multi_hop": "9/10",
+   "cross_filing": "8/10",
+   "overall": "25/30",
+   "precision_macro": 0.8194444444444444,
+   "recall_macro": 0.7196428571428571,
+   "ci95": [
+    0.6644,
+    0.9266
+   ]
+  },
+  {
+   "label": "TieOut, plans alone (no text reader)",
+   "file": "heldout_v2.json",
+   "kind": "ablation",
+   "single_fact": "6/10",
+   "multi_hop": "6/10",
+   "cross_filing": "7/10",
+   "overall": "19/30"
+  },
+  {
+   "label": "Baseline: hybrid retrieval, the same model reads 16,000 characters",
+   "file": "heldout_baseline_hybrid.json",
+   "kind": "",
+   "single_fact": "7/10",
+   "multi_hop": "5/10",
+   "cross_filing": "3/10",
+   "overall": "15/30",
+   "precision_macro": 0.5287037037037037,
+   "recall_macro": 0.19345238095238096,
+   "ci95": [
+    0.3315,
+    0.6685
+   ]
+  },
+  {
+   "label": "Baseline: the same with 48,000 characters, as the text reader inside TieOut gets",
+   "file": "heldout_baseline_hybrid_b48.json",
+   "kind": "baseline",
+   "single_fact": "9/10",
+   "multi_hop": "8/10",
+   "cross_filing": "5/10",
+   "overall": "22/30",
+   "precision_macro": 0.5322222222222223,
+   "recall_macro": 0.39285714285714285,
+   "ci95": [
+    0.5555,
+    0.8582
+   ]
+  },
+  {
+   "label": "Baseline: dense retrieval, the same model reads",
+   "file": "heldout_baseline_dense.json",
+   "kind": "baseline",
+   "single_fact": "8/10",
+   "multi_hop": "4/10",
+   "cross_filing": "3/10",
+   "overall": "15/30",
+   "precision_macro": 0.4122222222222222,
+   "recall_macro": 0.16666666666666669,
+   "ci95": [
+    0.3315,
+    0.6685
+   ]
+  },
+  {
+   "label": "Paid side run: Claude Sonnet 5.5 plans and picks, gemini-3.1-pro arbitrates",
+   "file": "heldout_v2_scaled.json",
+   "kind": "scaled",
+   "single_fact": "9/10",
+   "multi_hop": "9/10",
+   "cross_filing": "8/10",
+   "overall": "26/30",
+   "precision_macro": 0.8194444444444444,
+   "recall_macro": 0.7196428571428571,
+   "ci95": [
+    0.7032,
+    0.9469
+   ]
+  },
+  {
+   "label": "Reference for the rows below: TieOut on a key without the free tier's daily limit",
+   "file": "heldout_abl_none.json",
+   "kind": "reference",
+   "single_fact": "9/10",
+   "multi_hop": "9/10",
+   "cross_filing": "9/10",
+   "overall": "27/30",
+   "precision_macro": 0.8194444444444444,
+   "recall_macro": 0.7255952380952381,
+   "ci95": [
+    0.7438,
+    0.9654
+   ]
+  },
+  {
+   "label": "... one planner (no second planner, no arbiter)",
+   "file": "heldout_abl_onereader.json",
+   "kind": "ablation",
+   "single_fact": "7/10",
+   "multi_hop": "8/10",
+   "cross_filing": "8/10",
+   "overall": "23/30",
+   "precision_macro": 0.7194444444444444,
+   "recall_macro": 0.6124999999999999,
+   "ci95": [
+    0.5907,
+    0.8821
+   ]
+  },
+  {
+   "label": "... no arbiter",
+   "file": "heldout_abl_noarbiter.json",
+   "kind": "ablation",
+   "single_fact": "7/10",
+   "multi_hop": "9/10",
+   "cross_filing": "8/10",
+   "overall": "24/30",
+   "precision_macro": 0.7527777777777778,
+   "recall_macro": 0.6839285714285713,
+   "ci95": [
+    0.6269,
+    0.905
+   ]
+  },
+  {
+   "label": "... no linking (statement concepts only)",
+   "file": "heldout_abl_link.json",
+   "kind": "ablation",
+   "single_fact": "8/10",
+   "multi_hop": "4/10",
+   "cross_filing": "9/10",
+   "overall": "21/30",
+   "precision_macro": 0.8333333333333334,
+   "recall_macro": 0.4726190476190476,
+   "ci95": [
+    0.5212,
+    0.8334
+   ]
+  },
+  {
+   "label": "... one picker (no second picker)",
+   "file": "heldout_abl_onepicker.json",
+   "kind": "ablation",
+   "single_fact": "9/10",
+   "multi_hop": "9/10",
+   "cross_filing": "9/10",
+   "overall": "27/30",
+   "precision_macro": 0.8194444444444444,
+   "recall_macro": 0.7255952380952381,
+   "ci95": [
+    0.7438,
+    0.9654
+   ]
+  },
+  {
+   "label": "... empty link store",
+   "file": "heldout_abl_store.json",
+   "kind": "ablation",
+   "single_fact": "9/10",
+   "multi_hop": "9/10",
+   "cross_filing": "9/10",
+   "overall": "27/30",
+   "precision_macro": 0.8194444444444444,
+   "recall_macro": 0.7255952380952381,
+   "ci95": [
+    0.7438,
+    0.9654
+   ]
+  },
+  {
+   "label": "... no equation solving",
+   "file": "heldout_abl_solve.json",
+   "kind": "ablation",
+   "single_fact": "9/10",
+   "multi_hop": "9/10",
+   "cross_filing": "9/10",
+   "overall": "27/30",
+   "precision_macro": 0.8194444444444444,
+   "recall_macro": 0.7255952380952381,
+   "ci95": [
+    0.7438,
+    0.9654
+   ]
+  },
+  {
+   "label": "... checks off",
+   "file": "heldout_abl_checks.json",
+   "kind": "ablation",
+   "single_fact": "9/10",
+   "multi_hop": "9/10",
+   "cross_filing": "9/10",
+   "overall": "27/30",
+   "precision_macro": 0.8194444444444444,
+   "recall_macro": 0.7255952380952381,
+   "ci95": [
+    0.7438,
+    0.9654
+   ]
+  },
+  {
+   "label": "... no checks read from the question's words",
+   "file": "heldout_abl_words.json",
+   "kind": "ablation",
+   "single_fact": "9/10",
+   "multi_hop": "9/10",
+   "cross_filing": "9/10",
+   "overall": "27/30",
+   "precision_macro": 0.8194444444444444,
+   "recall_macro": 0.7255952380952381,
+   "ci95": [
+    0.7438,
+    0.9654
+   ]
+  }
  ],
+ "files_missing": [],
+ "heldout": {
+  "tiers": "VERIFIED 4/4, WITNESSED 3/4, CORROBORATED 9/9, FLAGGED 8/11, ABSTAIN 1/2; wrong while VERIFIED: 0; wrong while WITNESSED: 1",
+  "cost": {
+   "calls_per_question": 6.8,
+   "seconds_per_question": 15.8,
+   "strong_model_calls": 3
+  },
+  "reading_cases": {
+   "arbiter alone": [
+    1,
+    1
+   ],
+   "arbiter and one reader agree": [
+    0,
+    1
+   ],
+   "two readers agree": [
+    15,
+    17
+   ],
+   "one reader only": [
+    3,
+    5
+   ],
+   "a plan on lines the text reader cited for the whole question": [
+    1,
+    1
+   ],
+   "one reader and the passage reader agree": [
+    1,
+    1
+   ],
+   "the text reader's arithmetic, computed on the graph nodes it cited": [
+    2,
+    2
+   ],
+   "the lines the text reader cited against the linker's": [
+    2,
+    2
+   ]
+  },
+  "ci95": [
+   0.6644,
+   0.9266
+  ],
+  "answered_accuracy": 0.8571428571428571
+ },
  "rounds": [
   {
    "round": "round 3",
@@ -395,7 +650,24 @@
   {
    "round": "held-out",
    "note": "run once",
-   "first_run": null,
+   "first_run": {
+    "n": 30,
+    "right": 25,
+    "right_by_tier": {
+     "VERIFIED": 4,
+     "WITNESSED": 3,
+     "CORROBORATED": 9,
+     "FLAGGED": 8,
+     "ABSTAIN": 1
+    },
+    "wrong_by_tier": {
+     "VERIFIED": 0,
+     "WITNESSED": 1,
+     "CORROBORATED": 0,
+     "FLAGGED": 3,
+     "ABSTAIN": 1
+    }
+   },
    "final_code": null,
    "first_file": "heldout_v2.json",
    "final_file": null
@@ -429,6 +701,31 @@
   "accuracy": 0.9326,
   "accuracy_when_answered": 0.9918,
   "silent_wrong_rate": 0.0077
+ },
+ "second_road": {
+  "plan_road_alone": 19,
+  "with_second_road": 25,
+  "n": 30,
+  "how_the_passage_reader_was_used": {
+   "repeats the served answer": 13,
+   "differs: not served": 3,
+   "a plan on lines the text reader cited for the whole question": 1,
+   "one reader and the passage reader agree": 1,
+   "the text reader's arithmetic, computed on the graph nodes it cited": 2,
+   "differs; no arbiter available": 1,
+   "the lines the text reader cited against the linker's": 2
+  }
+ },
+ "mcnemar_vs_dense_baseline": {
+  "n": 30,
+  "only_tieout": 14,
+  "only_baseline": 4,
+  "p_two_sided": 0.0308837890625
+ },
+ "heldout_scaled": {
+  "correct": 26,
+  "n": 30,
+  "correct_strict": 25
  },
  "round10_first_run": {
   "plan_road_alone": 24,

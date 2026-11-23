@@ -1,0 +1,34 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Chevron's total earnings fell in 2025. Which of its two operating segments, upstream or downstream, still grew earnings, and by what percentage?",
+ "abstain": false,
+ "answer": "Downstream earnings grew by approximately 75.0% (or 74.99%) in 2025.",
+ "pred": {
+  "kind": "number",
+  "value": 0.7498552403
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "CVX",
+   "doc": "CVX_FY2025_10K",
+   "page": 36,
+   "value": 3022.0,
+   "label": "Total Downstream 2025",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "CVX",
+   "doc": "CVX_FY2025_10K",
+   "page": 36,
+   "value": 1727.0,
+   "label": "Total Downstream 2024",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

@@ -1,0 +1,36 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Dividing fiscal 2026 net sales by the number of warehouses open at year-end, how much did Costco sell per warehouse?",
+ "abstain": false,
+ "answer": "Dividing fiscal 2026 net sales of $297,247,000,000 by 939 warehouses open at year-end, Costco sold approximately $316,557,082 per warehouse.",
+ "pred": {
+  "kind": "number",
+  "value": 316557081.9968051
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "COST",
+   "doc": "COST_FY2026_10K",
+   "page": 4,
+   "value": 939.0,
+   "label": "Costco operated 939, 914, and 890 warehouses worldwide at August 30, 2026, August 31, 2025, and September 1, 2024.",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "COST",
+   "doc": "COST_FY2026_10K",
+   "page": 26,
+   "value": 297247000000.0,
+   "label": "Net sales",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

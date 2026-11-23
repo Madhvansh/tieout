@@ -1,11 +1,12 @@
-% Written by Session B (the write-up). Classes from the misses of the first runs on fresh rounds (round 10:
+% Classes from the five held-out misses (results/heldout_v2.json, read after the run) and from fresh rounds (round 10:
 % results/first_runs/round10_pointer.json) until the held-out misses are read after the run; evidence rows from the
 % result files named in each row.
 \newcommand{\FailRows}{%
-The planners decline what a filing prints & Two planners answer ``filings do not report this'' for NVIDIA's employee turnover rate, printed on 10-K p99 (3.7\%). Now a node at the place the text reader names outranks that belief, served FLAGGED. \\
-A plan stops at a line it cannot place & Coca-Cola's fall in headcount: two plans abstain on ``number of employees''. Now another planner's plan is completed by pointing at its gap, served only if it gives the reader's own figure. \\
-Look-alike lines and odd periods & Walmart's square feet per unit: a sentence on p40 against the Item 2 table on p29. Six models of four families pick the right one of two look-alike rows 68 to 73\% of the time (145 clean pairs). A twelve-month period that is not the fiscal year, a quarter restated in a later table. \\
-A line the build did not read, or read in the wrong scale & GM's 6,276 dealerships (10-K p7) are held by no node. Exxon's refining capacity carries its caption's thousands and Chevron's does not, so their ratio is 1,895, not 1.79. The ledger lists 26,045 body numbers no node holds. \\
+The free key ran out of arbiter calls (2 of the 5 held-out misses) & The stronger free models answered three calls and then refused for the day, so from the third question on a disagreement between the two planners was served as one planner's reading, FLAGGED. American Express's Delta share of Card Member loans and the restated Sam's Club grocery sales were lost this way; with the arbiter available both are right (\texttt{results/heldout\_abl\_none.json}, a side run). \\
+A printed figure no node holds (1) & GM's share of U.S. vehicle sales (17.2\%, 10-K p6): the planners said no filing gives a market share, the text reader named the page, but that table was never read into the graph, so the system abstained. The ledger lists 26,045 body numbers no node holds. \\
+An unanswerable question answered (1) & Microsoft prints no dollar figure for Azure. One planner linked ``Azure'' to another, larger line; its comparison was served, FLAGGED, although the text reader said the figure is not disclosed. \\
+A reading both planners shared (1) & ``Which of NVIDIA's five end markets grew fastest, and how much revenue did it bring in'': both planners returned another market's revenue. Served WITNESSED: the one wrong answer above FLAGGED in this run. \\
+On fresh rounds also: a scale read wrong outside the money tables; look-alike lines & Exxon's refining capacity carries its caption's thousands and Chevron's does not, so their ratio is 1,895, not 1.79. Walmart's square feet per unit: a sentence on p40 against the Item 2 table on p29. \\
 }
 \newcommand{\EvidenceRows}{%
 Recovered formulas against the SEC calculation linkbase & 416 of 418 declared relations whose lines are printed (\texttt{results/lab\_linkbase.json}) \\

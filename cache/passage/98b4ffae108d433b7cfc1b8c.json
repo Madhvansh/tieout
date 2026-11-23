@@ -1,0 +1,34 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Comparing the carmakers' in-house lenders, did Ford Credit or GM Financial earn more before taxes in 2025, by how much, and which of the two grew its pre-tax earnings over 2024?",
+ "abstain": true,
+ "answer": "Ford Credit earned more before taxes in 2025 than GM Financial (not enough details provided to calculate GM Financial's exact pre-tax earnings or growth, or abstain if data is missing).",
+ "pred": {
+  "kind": "abstain",
+  "value": null
+ },
+ "unit": "text",
+ "facts": [
+  {
+   "ticker": "F",
+   "doc": "F_FY2025_10K",
+   "page": 52,
+   "value": 2557.0,
+   "label": "Ford Credit EBIT 2025",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "F",
+   "doc": "F_FY2025_10K",
+   "page": 52,
+   "value": 1654.0,
+   "label": "Ford Credit EBIT 2024",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

@@ -1,0 +1,36 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "What was Google Cloud's operating margin in the third quarter of 2025?",
+ "abstain": false,
+ "answer": "0.2371",
+ "pred": {
+  "kind": "number",
+  "value": 0.237111565613248
+ },
+ "unit": "ratio",
+ "facts": [
+  {
+   "ticker": "GOOGL",
+   "doc": "GOOGL_FY2025_Q3_10Q",
+   "page": 35,
+   "value": 15157.0,
+   "label": "Google Cloud Revenues for the Three Months Ended September 30, 2025",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  },
+  {
+   "ticker": "GOOGL",
+   "doc": "GOOGL_FY2025_Q3_10Q",
+   "page": 35,
+   "value": 3594.0,
+   "label": "Google Cloud Operating Income for the Three Months Ended September 30, 2025",
+   "in_context": true,
+   "page_found_by_figure": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

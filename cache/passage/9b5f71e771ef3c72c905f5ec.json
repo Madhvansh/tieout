@@ -1,0 +1,15 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "How much operating income did the Google Cloud segment earn in the fourth quarter of 2025?",
+ "abstain": true,
+ "answer": "None",
+ "pred": {
+  "kind": "abstain",
+  "value": null
+ },
+ "unit": "USD",
+ "facts": [],
+ "facts_ok": false
+}

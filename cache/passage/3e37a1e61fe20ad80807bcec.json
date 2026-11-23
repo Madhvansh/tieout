@@ -1,0 +1,34 @@
+{
+ "version": "passage-2",
+ "budget": 48000,
+ "model": "gemini:gemini-3.5-flash-lite",
+ "question": "Johnson & Johnson does not print a separate fourth-quarter income statement. What were its net earnings for the fiscal fourth quarter of 2025?",
+ "abstain": false,
+ "answer": "To find the net earnings for the fiscal fourth quarter of 2025, we can subtract the net earnings for the first nine months of 2025 ($21,688 million, from Passage 24) from the full year net earnings for 2025 ($26,804 million, from Passage 14). \n$26,804 million - $21,688 million = $5,116 million.",
+ "pred": {
+  "kind": "number",
+  "value": 5116000000.0
+ },
+ "unit": "USD",
+ "facts": [
+  {
+   "ticker": "JNJ",
+   "doc": "JNJ_FY2025_10K",
+   "page": 50,
+   "value": 26804000000.0,
+   "label": "Net earnings",
+   "in_context": true,
+   "printed": true
+  },
+  {
+   "ticker": "JNJ",
+   "doc": "JNJ_FY2025_Q3_10Q",
+   "page": 8,
+   "value": 21688000000.0,
+   "label": "Net earnings",
+   "in_context": true,
+   "printed": true
+  }
+ ],
+ "facts_ok": true
+}

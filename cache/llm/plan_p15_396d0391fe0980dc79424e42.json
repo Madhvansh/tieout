@@ -1,0 +1,79 @@
+{
+ "model": "gemini:gemini-3.5-flash-lite",
+ "system": "Translate a question about US public companies into a query plan over a knowledge graph of their\nSEC filings. Output JSON only: {\"steps\":[...],\"answer\":\"<id of the answering step>\"}. Never write a figure\nfrom your own knowledge; the only numbers you write are thresholds stated in the question.\n\nSTEPS (each has \"id\" s1, s2, ... and \"op\")\nget      {\"op\":\"get\",\"company\":T,\"concept\":C,\"period\":P}; instead of \"concept\": \"metric\":M, \"item\":\"words\"\n         or \"by\":MEASURE. \"as\":\"first_reported\" reads the figure as first printed\ncalc     {\"op\":\"calc\",\"expr\":\"s1 / s2\"}  + - * / ** ( ) abs() over earlier steps; a compound annual growth\n         rate over n years is \"(s2 / s1) ** (1 / n) - 1\"\nchange   {\"op\":\"change\",\"company\":T,\"concept\":C,\"from\":P,\"to\":P,\"mode\":\"pct\"|\"abs\"}\nrank     {\"op\":\"rank\",\"over\":SET,\"by\":MEASURE,\"period\":P,\"order\":\"desc\"|\"asc\",\"k\":N}\ncompare  {\"op\":\"compare\",\"of\":[\"s3\",\"s6\"],\"order\":\"desc\"|\"asc\"}  orders figures worked out in earlier steps,\n         one per side; like rank it gives the winner, every side's figure and the gap\nfilter   {\"op\":\"filter\",\"over\":SET,\"where\":{\"by\":MEASURE,\"period\":P,\"gt\"|\"lt\"|\"ge\"|\"le\":X}} or\n         {\"op\":\"filter\",\"over\":SET,\"where\":{\"attr\":A,\"eq\":\"text\"}}\ncount    {\"op\":\"count\",\"of\":\"$sN\"}  how many step sN kept, and which\nagg      {\"op\":\"agg\",\"over\":SET,\"by\":MEASURE,\"period\":P,\"fn\":\"sum\"|\"avg\"|\"median\"|\"min\"|\"max\"}\nmembers  {\"op\":\"members\",\"company\":T,\"of\":\"words naming the breakdown\",\"period\":P}  the lines adding up to\n         a total: segments, products, regions, businesses\nseries   {\"op\":\"series\",\"company\":T,\"by\":MEASURE,\"last\":N}  \"pick\":\"max\"|\"min\" for the peak year\nattr     {\"op\":\"attr\",\"company\":T,\"attr\":A}  a text fact (auditor, state of incorporation, CEO ...)\nrestated {\"op\":\"restated\",\"company\":T,\"concept\":C or \"item\":\"words\",\"period\":P}  first against latest\n         report of a figure, and why it changed\nMEASURE  {\"concept\":C} {\"metric\":M} {\"item\":\"words\"} {\"attr\":\"employees\"|\"shares_outstanding\"}\n         {\"growth\":MEASURE} percent change from the year before, {\"delta\":MEASURE} the same as an amount,\n         {\"ratio\":[MEASURE,MEASURE]}, {\"value\":true} a line's own figure (over lines)\nT        one ticker, or \"$sN\" = the top member of step sN (a company, or a line if sN ranked lines).\n         Never a list: for several companies use rank, filter or agg over a SET\nSET      \"all\" | {\"cluster\":name} | [tickers] | \"$sN\"\nP        {\"fy\":2025} {\"fy\":2025,\"q\":3} {\"fy\":2025,\"q\":3,\"ytd\":true} {\"fy\":\"latest\"} {\"fy\":\"prior\"}\n\nRULES\n1. A concept is a company-wide line of the income statement, balance sheet or cash flow statement.\n   Anything narrower or elsewhere is an item, written as the filing labels it with the segment or product\n   named: a segment, product, region or business line; a count (stores, warehouses, members, vehicles,\n   people in a region); ARR, backlog, remaining performance obligation, assets under management, client\n   assets, net new money, capital ratios. A line narrower than a concept (net sales without membership\n   fees, one share class) is an item too.\n2. Copy the fiscal year named: \"fiscal 2025\", \"FY25\", \"2025\" are {\"fy\":2025}; a balance \"at the end of\n   fiscal 2025\" is {\"fy\":2025}. No year: {\"fy\":\"latest\"}; the year before it: {\"fy\":\"prior\"}. A quarter\n   is {\"fy\":Y,\"q\":Q} with Y the fiscal year it belongs to; \"nine months\"/\"year to date\" add \"ytd\":true.\n   A fourth quarter is {\"fy\":Y,\"q\":4}: the graph derives it from the year and the nine months, so never\n   subtract periods yourself, even when the question explains the derivation.\n3. Ratios, shares, margins, per-unit figures, growth and differences are computed: a metric only when it\n   means exactly what is asked, otherwise get the parts and calc, or a growth, delta or ratio measure.\n   The exception is a percentage or rate the question says the filing itself states (\"what share does\n   the company say ...\", a capital ratio, a comparable-sales change): that is an item, read as printed.\n4. \"Which company has the highest X\": rank, k=1. \"Rank A, B and C\": rank over them, k = their number.\n5. \"Which of A or B had more X (and by how much)\": rank over [A,B], k=2; it gives both values, the winner\n   and the gap. Also when X is a growth rate or a ratio. When each side needs its own words or its own\n   arithmetic (one company's segment margin against another's, or a line each company labels\n   differently), work each side out with get and calc, then end with compare over those steps.\n6. \"How many ...\": filter then count. Do not end on count unless the question asks how many.\n7. A hop (find a company or line, then ask about it) names the earlier step as \"$sN\".\n8. \"Which segment/product/region/business ...\": members, then rank or filter over \"$sN\" by {\"value\":true},\n   {\"growth\":{\"value\":true}} (fastest growing, largest percentage change) or {\"delta\":{\"value\":true}}\n   (largest increase or decline in dollars). A ratio per line (a segment's margin) is\n   {\"ratio\":[{\"value\":true},{\"item\":\"revenue\"}]}: an item inside a measure over lines is that line's own\n   other figure. For a figure of the chosen line add get with \"company\":\"$sN\" and the period (its own\n   value) or with \"item\":\"words\" (another figure of that line, such as its revenue). The figure of one\n   segment the question names needs no members: it is an item.\n9. Thresholds in full units: $10 billion is 10000000000; 20 percent is 0.2.\n10. The size of a loss, gap or deduction uses abs() in calc: losses, costs, incentives and discounts may be\n    printed negative, so wrap them in abs() before adding them back or taking their share.\n11. General knowledge may only say WHICH listed company is meant (a brand, \"Google's parent\").\n12. {\"steps\":[],\"answer\":null,\"cannot\":\"<why>\"} when a company is not listed, or for what filings do not\n    print (stock prices, market share, forecasts, ratings) or leave to the proxy (audit fees, pay).\n    Never answer cannot because of the year (the filings run to fiscal 2026, whatever today's date\n    seems to be) or because a figure is narrower than a concept (that is an item).\n13. If the question also asks why a figure changed, plan the figure (restated explains why).\n14. Attributes are facts of the latest filing and have no period. A head-count or share count for a named\n    earlier year, by region or by share class, is an item.\n\n\nCOMPANIES AAPL: Apple Inc.; ADBE: Adobe Inc.; AMD: Advanced Micro Devices Inc.; AMZN: Amazon.com Inc.; AXP: American Express Co.; BAC: Bank of America Corp; BLK: BlackRock Inc.; C: Citigroup Inc.; CAT: Caterpillar Inc.; COST: Costco Wholesale Corp; CRM: Salesforce Inc.; CSCO: Cisco Systems Inc.; CVX: Chevron Corp; F: Ford Motor Co.; GM: General Motors Co.; GOOGL: Alphabet Inc.; GS: Goldman Sachs Group Inc.; HD: The Home Depot Inc.; JNJ: Johnson & Johnson; JPM: JPMorgan Chase & Co.; KO: The Coca-Cola Company; MA: Mastercard Inc.; MCD: McDonald's Corp; META: Meta Platforms Inc.; MRK: Merck & Co. Inc.; MS: Morgan Stanley; MSFT: Microsoft Corp; NKE: NIKE Inc.; NVDA: NVIDIA Corp; ORCL: Oracle Corp; PEP: PepsiCo Inc.; PFE: Pfizer Inc.; PG: Procter & Gamble Co.; TGT: Target Corp; TSLA: Tesla Inc.; UNH: UnitedHealth Group Inc.; V: Visa Inc.; WFC: Wells Fargo & Co.; WMT: Walmart Inc.; XOM: Exxon Mobil Corp\n\nCLUSTERS big_tech, banks_finance, consumer_retail, health, industrial_auto_energy\n\nCONCEPTS Revenue, CostOfRevenue, GrossProfit, ResearchAndDevelopment, SellingGeneralAdmin, OperatingIncome, PretaxIncome, IncomeTax, NetIncome, ConsolidatedNetIncome, EPSDiluted, EPSBasic, SharesDiluted, SharesBasic, InterestExpense, SalesAndMarketing, GeneralAndAdministrative, NoninterestIncome, NetInterestIncome, ProvisionForCreditLosses, NoninterestExpense, Cash, TotalCurrentAssets, TotalAssets, TotalCurrentLiabilities, TotalLiabilities, ShareholdersEquity, TotalEquity, AccountsReceivable, PropertyPlantEquipment, IntangibleAssets, AccountsPayable, RetainedEarnings, Loans, TotalLiabilitiesAndEquity, Inventory, Goodwill, LongTermDebt, Deposits, OperatingCashFlow, InvestingCashFlow, FinancingCashFlow, CapitalExpenditures, DepreciationAmortization, StockBasedCompensation, DividendsPaid, ShareRepurchases\nNetIncome is net income attributable to the company's shareholders (the usual \"net income\", \"profit\",\n\"earnings\"); ConsolidatedNetIncome includes noncontrolling interests. ShareholdersEquity is stockholders'\nequity (book value); TotalEquity includes noncontrolling interests. Revenue is total revenue or net sales\n(banks: total net revenue). TotalLiabilities only where printed; the metric total_liabilities also solves it.\nCapitalExpenditures, DividendsPaid, ShareRepurchases are cash paid, from the cash-flow statement, as are\nDepreciationAmortization and StockBasedCompensation. NetInterestIncome, NoninterestIncome, NoninterestExpense,\nProvisionForCreditLosses, Deposits, Loans are bank lines. SharesDiluted and SharesBasic are weighted-average\nshare counts used for EPS (shares outstanding on the cover is the attribute shares_outstanding).\n\nMETRICS gross_margin = GrossProfit / Revenue; gross_profit = GrossProfit; operating_margin = OperatingIncome / Revenue; net_margin = NetIncome / Revenue; rnd_intensity = ResearchAndDevelopment / Revenue; effective_tax_rate = abs(IncomeTax) / PretaxIncome; free_cash_flow = OperatingCashFlow - abs(CapitalExpenditures); capex_intensity = abs(CapitalExpenditures) / Revenue; return_on_equity = NetIncome / ShareholdersEquity; return_on_assets = NetIncome / TotalAssets; current_ratio = TotalCurrentAssets / TotalCurrentLiabilities; total_liabilities = TotalLiabilities; liabilities_to_equity = TotalLiabilities / TotalEquity; asset_turnover = Revenue / TotalAssets; cash_conversion = OperatingCashFlow / NetIncome; shareholder_payout = abs(DividendsPaid) + abs(ShareRepurchases); sbc_share_of_revenue = StockBasedCompensation / Revenue\n\nATTRIBUTES auditor, auditor_since, auditor_location, state_of_incorporation, fiscal_year_end, hq_city, hq_state, exchange, trading_symbol, employees, shares_outstanding, public_float_usd, ceo, cfo, cluster\n\nEXAMPLES\nQ: How much net income did Pfizer earn in the third quarter of 2025?\nA: {\"steps\":[{\"id\":\"s1\",\"op\":\"get\",\"company\":\"PFE\",\"concept\":\"NetIncome\",\"period\":{\"fy\":2025,\"q\":3}}],\"answer\":\"s1\"}\nQ: Dividing Visa's fiscal 2025 net revenue by the number of processed transactions, how much did it earn per transaction?\nA: {\"steps\":[{\"id\":\"s1\",\"op\":\"get\",\"company\":\"V\",\"concept\":\"Revenue\",\"period\":{\"fy\":2025}},{\"id\":\"s2\",\"op\":\"get\",\"company\":\"V\",\"item\":\"processed transactions\",\"period\":{\"fy\":2025}},{\"id\":\"s3\",\"op\":\"calc\",\"expr\":\"s1 / s2\"}],\"answer\":\"s3\"}\nQ: Which grew revenue faster in fiscal 2025, Microsoft or Oracle, and by how many percentage points?\nA: {\"steps\":[{\"id\":\"s1\",\"op\":\"rank\",\"over\":[\"MSFT\",\"ORCL\"],\"by\":{\"growth\":{\"concept\":\"Revenue\"}},\"period\":{\"fy\":2025},\"order\":\"desc\",\"k\":2}],\"answer\":\"s1\"}\nQ: Which bank ran leaner in 2025, Citigroup or Wells Fargo, measured as noninterest expense over total revenue?\nA: {\"steps\":[{\"id\":\"s1\",\"op\":\"rank\",\"over\":[\"C\",\"WFC\"],\"by\":{\"ratio\":[{\"concept\":\"NoninterestExpense\"},{\"concept\":\"Revenue\"}]},\"period\":{\"fy\":2025},\"order\":\"asc\",\"k\":2}],\"answer\":\"s1\"}\nQ: Which of Ford's segments lost money before interest and taxes in 2025?\nA: {\"steps\":[{\"id\":\"s1\",\"op\":\"members\",\"company\":\"F\",\"of\":\"EBIT by segment\",\"period\":{\"fy\":2025}},{\"id\":\"s2\",\"op\":\"filter\",\"over\":\"$s1\",\"where\":{\"by\":{\"value\":true},\"period\":{\"fy\":2025},\"lt\":0}}],\"answer\":\"s2\"}\nQ: Which Procter & Gamble segment earned the most before tax in fiscal 2025, and what share of its own net sales was that?\nA: {\"steps\":[{\"id\":\"s1\",\"op\":\"members\",\"company\":\"PG\",\"of\":\"earnings before income taxes by segment\",\"period\":{\"fy\":2025}},{\"id\":\"s2\",\"op\":\"rank\",\"over\":\"$s1\",\"by\":{\"value\":true},\"period\":{\"fy\":2025},\"order\":\"desc\",\"k\":1},{\"id\":\"s3\",\"op\":\"get\",\"company\":\"$s2\",\"period\":{\"fy\":2025}},{\"id\":\"s4\",\"op\":\"get\",\"company\":\"$s2\",\"item\":\"net sales\",\"period\":{\"fy\":2025}},{\"id\":\"s5\",\"op\":\"calc\",\"expr\":\"s3 / s4\"}],\"answer\":\"s5\"}",
+ "user": "Q: Comparing the carmakers' in-house lenders, did Ford Credit or GM Financial earn more before taxes in 2025, by how much, and which of the two grew its pre-tax earnings over 2024?\nA:",
+ "answer": {
+  "steps": [
+   {
+    "id": "s1",
+    "op": "get",
+    "company": "F",
+    "item": "Ford Credit pre-tax income",
+    "period": {
+     "fy": 2025
+    }
+   },
+   {
+    "id": "s2",
+    "op": "get",
+    "company": "GM",
+    "item": "GM Financial pre-tax income",
+    "period": {
+     "fy": 2025
+    }
+   },
+   {
+    "id": "s3",
+    "op": "compare",
+    "of": [
+     "s1",
+     "s2"
+    ],
+    "order": "desc"
+   },
+   {
+    "id": "s4",
+    "op": "get",
+    "company": "F",
+    "item": "Ford Credit pre-tax income",
+    "period": {
+     "fy": 2024
+    }
+   },
+   {
+    "id": "s5",
+    "op": "get",
+    "company": "GM",
+    "item": "GM Financial pre-tax income",
+    "period": {
+     "fy": 2024
+    }
+   },
+   {
+    "id": "s6",
+    "op": "calc",
+    "expr": "(s1 - s4) / abs(s4)"
+   },
+   {
+    "id": "s7",
+    "op": "calc",
+    "expr": "(s2 - s5) / abs(s5)"
+   },
+   {
+    "id": "s8",
+    "op": "compare",
+    "of": [
+     "s6",
+     "s7"
+    ],
+    "order": "desc"
+   }
+  ],
+  "answer": "s3"
+ },
+ "seconds": 2.12,
+ "usage": {
+  "in": 3411,
+  "out": 229
+ }
+}
