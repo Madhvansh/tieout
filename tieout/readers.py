@@ -68,6 +68,15 @@ def judge_mode() -> str:
     return "record" if raw == "record" else ("off" if raw in ("0", "off", "") else "on")
 
 
+# Lane J addition: an abstention (no plan ran, the planners did not decline) filled by the reader's own arithmetic
+# evaluated on the graph nodes it cited (passage.by_expression). TIEOUT_EXPR_FILL: "1" on (default), "0" off.
+EXPR_FILLED = "the text reader's arithmetic, computed on the graph nodes it cited"
+
+
+def expr_fill() -> bool:
+    return os.environ.get("TIEOUT_EXPR_FILL", "1").strip() == "1"
+
+
 UNWITNESSED = "the planners read the question differently; this reading has no second witness"
 FIGURES_DIFFER = "two readers rank these in the same order but do not compute every figure the same way"
 
@@ -165,6 +174,27 @@ def second_road(question: str, g, served: dict, readers: Readers, kw: dict) -> d
             got = pointed(s["plan"], s["result"].missing)
             if got is not None:
                 return _serve_pointed(got, s["plan"], reading, POINTED_LINES)
+        if answers and expr_fill():
+            # the reader's own arithmetic over the places it cited, evaluated by code on the graph nodes there;
+            # kept only when it gives the reader's figure (passage.by_expression). No served answer to judge
+            try:
+                got = passage.by_expression(question, reply, g, shown, model=readers.passage,
+                                            offline=kw.get("offline", False))
+            except Exception:  # noqa: BLE001
+                got = None
+            if got is not None:
+                b, expr, nodes = got
+                b.tier = "FLAGGED"
+                b.tier_reasons = [f"no plan of the planners ran; a reader of the text ({passage.cited(reply)}) wrote its "
+                                  f"arithmetic as {expr} over the places it cited, and the code computed it on the graph "
+                                  "nodes there. One model chose the arithmetic"] + list(b.tier_reasons)
+                reading["passage"]["used"] = EXPR_FILLED
+                reading["passage"]["pointed"] = nodes
+                reading["passage"]["expression"] = expr
+                plan = {"steps": [], "answer": None,
+                        "expression": {"expr": expr, "nodes": [n["id"] for n in nodes], "named_by": "the text reader"}}
+                return {"answer": render(b), "result": b, "plan": plan, "learned": [], "seconds": 0.0, "plan_errors": [],
+                        "repaired": False, "reading": {**reading, "case": EXPR_FILLED, "witnessed": False}}
         return served
     if not answers:
         if reading["case"] in WITNESSED:              # the reader has no whole answer: test the plan's lines

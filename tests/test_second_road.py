@@ -600,3 +600,25 @@ def test_a_fall_asked_as_a_size_is_reported_as_a_size():
     assert readers._as_asked("By how much did the margin fall?", {"result": rose, "answer": "2.00%"})["result"].value == 0.02
     signed = Result("number", -5.0, "USD")
     assert readers._as_asked("What was the change in cash?", {"result": signed, "answer": "-5"})["result"].value == -5.0
+
+
+def test_an_abstention_is_filled_by_the_readers_arithmetic_on_graph_nodes_unless_planners_declined(road, monkeypatch):
+    road(reply(100e6))
+    monkeypatch.setattr(passage, "node_of_answer", lambda reply, g=None: None)   # the answer is arithmetic
+    pointing(monkeypatch, None)
+    citing(monkeypatch, None)
+    _expression(monkeypatch, [_cited("revenue", 120e6, n=1), _cited("cost", 20e6, n=2)], "f1 - f2")
+    monkeypatch.setattr(readers, "_ask_judge", lambda *a: pytest.fail("an abstention has nothing to judge"))
+    monkeypatch.setenv("TIEOUT_EXPR_FILL", "1")
+    rs = [seen("maker", None), seen("checker", None)]
+    out = readers.second_road("q", G, served(ARBITER_ALONE, "maker", rs), PANEL, {"executor": object()})
+    assert out["reading"]["case"] == readers.EXPR_FILLED and out["result"].tier == "FLAGGED"
+    assert out["result"].value == pytest.approx(100e6)                  # computed by code from the two nodes
+    assert [lf.id for lf in out["result"].leaves] == ["GM_FY2025_10K:p5:x0:r1:c0", "GM_FY2025_10K:p5:x0:r2:c0"]
+    rs = [seen("maker", None, declined=True), seen("checker", None, declined=True)]   # the planners say it is not stated
+    out = readers.second_road("q", G, served(ARBITER_ALONE, "maker", rs), PANEL, {"executor": object()})
+    assert not out["result"].ok
+    monkeypatch.setenv("TIEOUT_EXPR_FILL", "0")
+    rs = [seen("maker", None), seen("checker", None)]
+    out = readers.second_road("q", G, served(ARBITER_ALONE, "maker", rs), PANEL, {"executor": object()})
+    assert not out["result"].ok
