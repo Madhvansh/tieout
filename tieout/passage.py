@@ -724,12 +724,14 @@ _EXPR_SYSTEM = (
 
 
 def _allowed_constant(c) -> bool:
-    """Plain numbers an expression may hold: small whole numbers (years, a 100 for a percentage, 1/3 for a
-    three-year rate) and powers of ten (a scale). Never a figure: the figures are the nodes."""
+    """Plain numbers an expression may hold: small whole numbers (a count of years, a 2 for an average, a 4 for
+    quarters) and one half. Never a figure, and never a scale: 100 or a power of ten would let the model move the
+    result into its own scale, and then the served figure would no longer be the nodes' (red team, 23 Nov:
+    "f1/f2*100" served 25.3 for a margin of 0.253, "f3/1000000" served 19,918 dollars for 19,918 million)."""
     if not _is_number(c):
         return False
     c = abs(float(c))
-    return (c.is_integer() and c <= 100) or c == 0.5 or any(c == 10.0 ** k for k in range(3, 13))
+    return (c.is_integer() and c <= 12) or c == 0.5
 
 
 def evaluate_expression(expr: str, values: dict) -> Optional[tuple]:
@@ -834,6 +836,11 @@ def by_expression(question: str, reply: dict, g, shown: Optional[tuple], model: 
     if done is None:
         return None
     value, unit, used = done
+    values = {k: _node_value(n) for k, n in names.items()}
+    for k in used:                                    # every node it names must move the result: "f1*0+37" is a
+        moved = evaluate_expression(expr, {**values, k: (values[k][0] * 1.01 + 1e-9, values[k][1])})   # figure of constants
+        if moved is None or abs(moved[0] - value) <= 1e-12 * max(abs(value), 1e-12):
+            return None
     leaves = [_leaf(names[k], "cited:") for k in used]
     res = Result("number", value, unit or "", leaves,
                  tree={"op": "calc", "what": expr, "value": value,

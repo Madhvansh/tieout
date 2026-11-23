@@ -164,13 +164,14 @@ _SO_FAR = re.compile(r"\b(nine|six|three)\s+months\b|\byear[- ]to[- ]date\b|\bfi
 
 _FALL = re.compile(r"\b(?:by )?how (?:much|many)\b[^?]*\b(?:fall|fell|fallen|declin\w*|decreas\w*|drop(?:ped)?|shr[aiu]nk|narrow\w*)\b"
                    r"|\bby what (?:percent\w*|amount)\b[^?]*\b(?:fall|fell|fallen|declin\w*|decreas\w*|drop(?:ped)?|shr[aiu]nk)\b", re.I)
-_RISE = re.compile(r"\b(?:ris\w*|rose|increas\w*|grow\w*|grew|improv\w*|gain\w*|expand\w*|widen\w*)\b", re.I)
+_RISE = re.compile(r"\b(?:ris\w*|rose|increas\w*|grow\w*|grew|improv\w*|expand\w*|widen\w*|chang\w*)\b", re.I)
 
 
 def fall_as_size(question: str) -> bool:
     """Does the question ask for the SIZE of a fall ("by how many points did the margin fall")? Then a
     negative change is reported as its size, the way the question's own words put it. Not when the words
-    leave the direction open ("did it decline or improve", "rise or fall")."""
+    leave the direction open ("did it decline or improve", "rise or fall") or ask for a change, which has a
+    sign ("how much did income change as demand declined")."""
     return bool(_FALL.search(question)) and not _RISE.search(question)
 
 

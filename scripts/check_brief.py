@@ -8,7 +8,8 @@ For each file this prints the answers served, their proof leaves, how many of th
 the graph (a reading of the built graph, a cell of a raw-layer row, a figure of a sentence record, at
 the filing and page the leaf states), and every leaf that is not. It also counts the answers whose
 lines a reader of the text pointed at: their figures are graph nodes like any other. The exit code is
-1 when any leaf is outside the graph. Result files written before 23 Nov carry no leaves and are
+1 when any leaf is outside the graph or an answer was served with no leaf at all (no source). Result files
+written before 23 Nov carry no leaves and are
 reported as "not recorded": rerun them to check them.
 """
 from __future__ import annotations
@@ -52,7 +53,7 @@ def main() -> int:
         if not rep["recorded"]:
             print(f"{rep['file']}: proof leaves not recorded in this file (written before 23 Nov)")
             continue
-        bad += len(rep["outside"])
+        bad += len(rep["outside"]) + len(rep["no_leaf"])     # an answer with no leaf has no source
         print(f"{rep['file']}: {rep['served']} answers served, {rep['leaves']} proof leaves, {rep['nodes']} are graph nodes, "
               f"{len(rep['outside'])} outside the graph; {rep['pointed']} answers on lines a text reader pointed at; "
               f"{len(rep['no_leaf'])} served with no leaf {rep['no_leaf'][:8]}")
@@ -60,7 +61,8 @@ def main() -> int:
             print(f"   OUTSIDE {leaf['question']}: {leaf.get('id')} ({leaf.get('doc')} page {leaf.get('page')}): {leaf['why']}")
     if a.json:
         pathlib.Path(a.json).write_text(json.dumps(reports, indent=1), encoding="utf-8")
-    print("PASS: every proof leaf is a node of the graph" if not bad else f"FAIL: {bad} leaves are not nodes of the graph")
+    print("PASS: every served answer has proof leaves and every proof leaf is a node of the graph" if not bad
+          else f"FAIL: {bad} leaves are not nodes of the graph, or answers were served with no leaf")
     return 1 if bad else 0
 
 

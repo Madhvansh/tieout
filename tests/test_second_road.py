@@ -622,3 +622,17 @@ def test_an_abstention_is_filled_by_the_readers_arithmetic_on_graph_nodes_unless
     rs = [seen("maker", None), seen("checker", None)]
     out = readers.second_road("q", G, served(ARBITER_ALONE, "maker", rs), PANEL, {"executor": object()})
     assert not out["result"].ok
+
+
+def test_an_expression_may_not_carry_a_scale_or_a_figure_of_its_own():
+    # red team, 23 Nov: a scale constant moves the result into the model's scale; a constant alone is a model's figure
+    values = {"f1": (253.0, "USD"), "f2": (1000.0, "USD")}
+    assert passage.evaluate_expression("f1 / f2", values)[0] == pytest.approx(0.253)
+    assert passage.evaluate_expression("f1 / f2 * 100", values) is None           # a percentage is the code's to print
+    assert passage.evaluate_expression("f1 / 1000000", values) is None            # a scale is the graph's
+    assert passage.evaluate_expression("(f1 + f2) / 2", values)[0] == pytest.approx(626.5)   # an average is arithmetic
+    assert passage.evaluate_expression("37", values) is None                      # no node named
+    assert not passage._allowed_constant(100) and not passage._allowed_constant(1000) and passage._allowed_constant(4)
+    from tieout import ask
+    assert not ask.fall_as_size("How much did operating income change in fiscal 2023 as demand declined?")
+    assert ask.fall_as_size("How much did unrealized gains on securities fall in 2025?")
