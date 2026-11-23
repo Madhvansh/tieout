@@ -460,3 +460,126 @@ def test_a_row_dispute_is_settled_for_the_cited_rows_for_a_figure_and_never_for_
             "result": was, "out": one} for r in ("maker", "checker")]
     out = readers.second_road("q", G, served(AGREE, "maker", rs2), PANEL, {"executor": object()})
     assert out["result"] is was and out["reading"]["case"] != readers.CITED_OVERRULED
+
+
+# ----------------------------------------------------------------- lane J: a judge between two derivations
+
+def _cited(label, value, unit="USD", page=5, n=0):
+    return {"kind": "row", "id": f"GM_FY2025_10K:p{page}:x0:r{n}:c0", "row_id": f"GM_FY2025_10K:p{page}:x0:r{n}",
+            "ticker": "GM", "doc": "GM_FY2025_10K", "page": page, "label": label, "printed": str(value),
+            "value": float(value), "unit": unit, "period": "FY2025", "verified": True,
+            "cited": f"GM_FY2025_10K page {page}", "said": label}
+
+
+def _expression(monkeypatch, nodes, expr):
+    """The reader's model writes `expr`; no model is called."""
+    import tieout.llm as llm
+    monkeypatch.setattr(passage, "cited_nodes", lambda reply, g=None: nodes)
+    monkeypatch.setattr(llm, "ask_json", lambda system, user, **k: {"expr": expr})
+
+
+def _judge_says(monkeypatch, pick_reader=True):
+    """The judge picks the reader's derivation (or the served one), wherever the hash placed it."""
+    asked = []
+
+    def fake(user, arbiters, offline):
+        asked.append(user)
+        first_is_reader = user.index("Derivation A") < user.index("reader-marker") < user.index("Derivation B")
+        letter = ("A" if first_is_reader else "B") if pick_reader else ("B" if first_is_reader else "A")
+        return letter, "the right lines", "arbiter"
+    monkeypatch.setattr(readers, "_ask_judge", fake)
+    return asked
+
+
+def test_the_readers_arithmetic_is_computed_on_graph_nodes_and_kept_only_when_it_gives_its_figure(monkeypatch):
+    nodes = [_cited("Net income", 6000e6, n=1), _cited("Revenue", 48000e6, n=2)]
+    _expression(monkeypatch, nodes, "f1 / f2")
+    got = passage.by_expression("q", {"answer": "12.5%"}, G, ("n", 12.5), model="reader")
+    assert got is not None
+    res, expr, used = got
+    assert res.value == pytest.approx(0.125) and res.unit == "ratio"   # computed by code, on the nodes' values
+    assert [lf.id for lf in res.leaves] == [nodes[0]["id"], nodes[1]["id"]]   # proof leaves are the graph's nodes
+    _expression(monkeypatch, nodes, "f2 / f1")                          # an expression that is not the reader's figure
+    assert passage.by_expression("q", {"answer": "12.5%"}, G, ("n", 12.5), model="reader") is None
+    _expression(monkeypatch, nodes, "0.125")                            # no node at all: a figure the model wrote
+    assert passage.by_expression("q", {"answer": "12.5%"}, G, ("n", 12.5), model="reader") is None
+    _expression(monkeypatch, nodes, "f1 / f2 + 0.0001")                 # a constant that is no plain number
+    assert passage.by_expression("q", {"answer": "12.5%"}, G, ("n", 12.5), model="reader") is None
+    _expression(monkeypatch, nodes, "__import__('os')")
+    assert passage.by_expression("q", {"answer": "12.5%"}, G, ("n", 12.5), model="reader") is None
+
+
+def test_a_percent_node_enters_the_readers_expression_as_a_fraction(monkeypatch):
+    nodes = [_cited("Gross margin", 40.0, unit="percent", n=1), _cited("Gross margin", 38.0, unit="percent", n=2)]
+    _expression(monkeypatch, nodes, "f1 - f2")
+    res = passage.by_expression("q", {"answer": "2 points"}, G, ("n", 0.02), model="reader")[0]
+    assert res.value == pytest.approx(0.02)
+
+
+def _flagged_dispute(monkeypatch, judge):
+    monkeypatch.setenv("TIEOUT_JUDGE", judge)
+    monkeypatch.setattr(passage, "node_of_answer", lambda reply, g=None: None)
+    pointing(monkeypatch, None)
+    citing(monkeypatch, None)
+    _expression(monkeypatch, [_cited("reader-marker revenue", 120e6, n=1), _cited("cost", 20e6, n=2)], "f1 - f2")
+    rs = [seen("maker", 54e6), seen("checker", 54e6)]
+    return served(AGREE, "maker", rs)
+
+
+def test_the_judge_serves_the_readers_derivation_computed_on_graph_nodes(road, monkeypatch):
+    road(reply(100e6))
+    one = _flagged_dispute(monkeypatch, "1")
+    asked = _judge_says(monkeypatch, pick_reader=True)
+    out = readers.second_road("q", G, one, PANEL, {"executor": object()})
+    assert len(asked) == 1                                              # one judge call
+    assert out["reading"]["case"] == readers.JUDGED and out["result"].tier == "FLAGGED"
+    assert out["result"].value == pytest.approx(100e6)                  # computed by code from the two nodes
+    assert {lf.id for lf in out["result"].leaves} == {"GM_FY2025_10K:p5:x0:r1:c0", "GM_FY2025_10K:p5:x0:r2:c0"}
+    assert "54" in out["result"].tier_reasons[0] and "b3" in out["result"].tier_reasons[0]   # both derivations named
+    assert out["reading"]["passage"]["judge"]["chose"] == "reader"
+
+
+def test_the_judge_in_record_mode_or_picking_the_served_derivation_changes_nothing(road, monkeypatch):
+    road(reply(100e6))
+    one = _flagged_dispute(monkeypatch, "record")
+    _judge_says(monkeypatch, pick_reader=True)
+    out = readers.second_road("q", G, one, PANEL, {"executor": object()})
+    assert out["result"].value == 54e6
+    assert out["reading"]["passage"]["judge"]["chose"] == "reader"      # recorded, never served
+    assert out["reading"]["passage"]["judge"]["B"]["value"] == pytest.approx(100e6)
+    road(reply(100e6))
+    one = _flagged_dispute(monkeypatch, "1")
+    _judge_says(monkeypatch, pick_reader=False)
+    out = readers.second_road("q", G, one, PANEL, {"executor": object()})
+    assert out["result"].value == 54e6 and out["reading"]["passage"]["judge"]["chose"] == "served"
+
+
+def test_the_judge_is_not_asked_without_a_candidate_switched_off_or_for_a_verified_answer(road, monkeypatch):
+    road(reply(100e6))
+    one = _flagged_dispute(monkeypatch, "1")
+    _expression(monkeypatch, [_cited("revenue", 120e6, n=1)], "f1")     # the reader's figure is no node's figure
+    monkeypatch.setattr(readers, "_ask_judge", lambda *a: pytest.fail("no candidate B: the judge must not be called"))
+    out = readers.second_road("q", G, one, PANEL, {"executor": object()})
+    assert out["result"].value == 54e6 and out["reading"]["passage"]["judge"]["candidate"] is None
+    one = _flagged_dispute(monkeypatch, "0")
+    monkeypatch.setattr(readers, "_ask_judge", lambda *a: pytest.fail("switched off"))
+    out = readers.second_road("q", G, one, PANEL, {"executor": object()})
+    assert "judge" not in out["reading"]["passage"]
+    _flagged_dispute(monkeypatch, "1")
+    monkeypatch.setattr(readers, "_ask_judge", lambda *a: pytest.fail("a VERIFIED answer is never judged"))
+    _arbiter_says(monkeypatch, 54e6)
+    rs = [seen("maker", 54e6, tier="VERIFIED"), seen("checker", 54e6, tier="VERIFIED")]
+    out = readers.second_road("q", G, served(AGREE, "maker", rs), PANEL, {"executor": object()})
+    assert out["result"].value == 54e6 and out["result"].tier == "VERIFIED"
+
+
+def test_a_judge_with_no_quota_leaves_the_served_answer(road, monkeypatch):
+    import tieout.llm as llm
+    road(reply(100e6))
+    one = _flagged_dispute(monkeypatch, "1")
+
+    def spent(*a, **k):
+        raise llm.DailyLimit("spent")
+    monkeypatch.setattr(llm, "ask_json", lambda system, user, **k: spent() if k.get("tag") == "judge" else {"expr": "f1 - f2"})
+    out = readers.second_road("q", G, one, PANEL, {"executor": object()})
+    assert out["result"].value == 54e6 and out["reading"]["passage"]["judge"]["pick"] is None

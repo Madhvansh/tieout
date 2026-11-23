@@ -705,6 +705,149 @@ def by_citing(plan: dict, g, ex, reply: dict, shown: Optional[tuple]) -> Optiona
     return None
 
 
+# ----------------------------------------------------------------- the reader's own arithmetic, on graph nodes
+#
+# When the reader's answer is its own arithmetic over the figures it cited (a margin, a growth, a sum), the
+# reader is asked once more, with the GRAPH's values at those places shown as f1..fn, to write that arithmetic
+# as one expression. The code evaluates it on the nodes' values; it is kept only when it gives the reader's
+# own figure. The reader names the arithmetic; every figure in the result is a node of the graph.
+
+EXPRESSED = "a reader of the text wrote its own arithmetic over the graph nodes it cited; the code computed it on those nodes"
+EXPR_MAX_NODES = 12              # more cited places than this: not asked
+_EXPR_SYSTEM = (
+    "You answered a question about SEC filings from passages. Below are the figures you cited, numbered f1, f2, ..., "
+    "each with its label, filing, page, the figure as printed and its value in full units (a percentage as a "
+    "fraction: 12.5% is 0.125). Write the arithmetic that gives YOUR answer as ONE expression over these names: "
+    "+ - * / ** abs( ) parentheses, the names f1..fn and plain numbers only. If your answer is one of the figures, "
+    "the expression is that name alone. If no expression over these figures gives your answer, write null. "
+    'Reply JSON {"expr": "<expression>" or null}.')
+
+
+def _allowed_constant(c) -> bool:
+    """Plain numbers an expression may hold: small whole numbers (years, a 100 for a percentage, 1/3 for a
+    three-year rate) and powers of ten (a scale). Never a figure: the figures are the nodes."""
+    if not _is_number(c):
+        return False
+    c = abs(float(c))
+    return (c.is_integer() and c <= 100) or c == 0.5 or any(c == 10.0 ** k for k in range(3, 13))
+
+
+def evaluate_expression(expr: str, values: dict) -> Optional[tuple]:
+    """(value, unit, names used) of an expression over named (value, unit) pairs, with the executor's unit
+    rules (tieout/execute.py, the calc step); None when it is not an expression of that language, names an
+    unknown figure, uses no figure, or holds a constant that is not a plain number (_allowed_constant)."""
+    import ast
+    try:
+        tree = ast.parse(str(expr), mode="eval")
+    except SyntaxError:
+        return None
+    used = []
+
+    def term(node):
+        if isinstance(node, ast.BinOp):
+            (a, ua), (b, ub) = term(node.left), term(node.right)
+            if isinstance(node.op, (ast.Add, ast.Sub)):
+                if ua and ub and ua != ub:
+                    raise ValueError("units")
+                return (a + b if isinstance(node.op, ast.Add) else a - b), ua or ub
+            if isinstance(node.op, ast.Mult):
+                return a * b, ua or ub
+            if isinstance(node.op, ast.Div):
+                if not b:
+                    raise ValueError("zero")
+                return a / b, "ratio" if ua == ub or not ua else (ua if not ub else f"{ua} per {ub.rstrip('s')}")
+            if isinstance(node.op, ast.Pow):
+                if ub not in ("", "ratio") or (a < 0 and b != int(b)) or abs(b) > 12:
+                    raise ValueError("power")
+                return a ** b, ua
+            raise ValueError("operator")
+        if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.USub, ast.UAdd)):
+            a, ua = term(node.operand)
+            return (-a if isinstance(node.op, ast.USub) else a), ua
+        if isinstance(node, ast.Call) and getattr(node.func, "id", "") == "abs" and len(node.args) == 1:
+            a, ua = term(node.args[0])
+            return abs(a), ua
+        if isinstance(node, ast.Name):
+            if node.id not in values:
+                raise ValueError("name")
+            used.append(node.id)
+            return values[node.id]
+        if isinstance(node, ast.Constant) and _allowed_constant(node.value):
+            return float(node.value), ""
+        raise ValueError("term")
+    try:
+        value, unit = term(tree.body)
+    except (ValueError, ZeroDivisionError, OverflowError, TypeError, RecursionError):
+        return None
+    if not used or not _is_number(value) or isinstance(value, complex):
+        return None
+    return float(value), unit, list(dict.fromkeys(used))
+
+
+def _node_value(node: dict) -> tuple:
+    """A node's figure as the executor reads it: a printed percentage enters as a fraction."""
+    unit = str(node.get("unit") or "")
+    if unit == "percent":
+        return float(node["value"]) / 100.0, "ratio"
+    if unit == "USD_scale_unknown":
+        unit = "USD"
+    return float(node["value"]), unit
+
+
+def _leaf(node: dict, what: str) -> Leaf:
+    return Leaf(id=str(node["id"]), ticker=node["ticker"], what=what + node["label"][:60], period=node.get("period") or "",
+                doc=node["doc"], page=node["page"], label=node["label"], printed=node["printed"],
+                status="verified" if node.get("verified") else "unverified", value=node["value"])
+
+
+def by_expression(question: str, reply: dict, g, shown: Optional[tuple], model: Optional[str] = None,
+                  offline: bool = False) -> Optional[tuple]:
+    """The reader's own arithmetic, computed on graph nodes: (Result, the expression with its names, the nodes).
+    One model call (cached like every call): the reader is shown the graph's figures at the places it cited
+    and its own answer, and writes the arithmetic as one expression over f1..fn. The code evaluates it on the
+    nodes' values; it is kept only when the result is the reader's own figure (same). None otherwise: no node
+    for a cited place, no expression, or an expression that does not give the reader's figure."""
+    from .llm import ask_json
+    if shown is None or shown[0] != "n":
+        return None
+    nodes = cited_nodes(reply, g)
+    if not nodes or len(nodes) > EXPR_MAX_NODES:
+        return None
+    names = {f"f{i + 1}": n for i, n in enumerate(nodes)}
+    listing = "\n".join(
+        f"{k}: '{n['label'][:110]}' (you called it '{str(n.get('said') or '')[:60]}') | {n['doc']} page {n['page']} | "
+        f"period {n.get('period') or 'not stated'} | printed {n['printed']} | value {_node_value(n)[0]!r} "
+        f"{_node_value(n)[1] or ''}".rstrip()
+        for k, n in names.items())
+    user = (f"Question: {question}\n\nYour answer: {str(reply.get('answer'))[:300]} (as a number: {shown[1]!r})\n\n"
+            f"The figures you cited:\n{listing}")
+    try:
+        got = ask_json(_EXPR_SYSTEM, user, model=model, tag="expr", offline=offline)
+    except DailyLimit:
+        return None
+    except Exception:  # noqa: BLE001 - no cached reply offline, a failed call: no candidate
+        return None
+    expr = got.get("expr") if isinstance(got, dict) else None
+    if not isinstance(expr, str) or not expr.strip() or len(expr) > 300:
+        return None
+    done = evaluate_expression(expr, {k: _node_value(n) for k, n in names.items()})
+    if done is None:
+        return None
+    value, unit, used = done
+    leaves = [_leaf(names[k], "cited:") for k in used]
+    res = Result("number", value, unit or "", leaves,
+                 tree={"op": "calc", "what": expr, "value": value,
+                       "children": [{"op": "read", "what": f"{k} = {names[k]['ticker']} '{names[k]['label'][:60]}'",
+                                     "value": names[k]["value"], "page": names[k]["page"], "doc": names[k]["doc"]}
+                                    for k in used]})
+    if not same(res, shown):
+        return None
+    res.tier = "FLAGGED"
+    res.tier_reasons = [EXPRESSED]
+    return res, expr, [{"name": k, **{f: names[k][f] for f in ("id", "kind", "doc", "page", "label", "printed", "cited")
+                                     if f in names[k]}} for k in used]
+
+
 def as_answer(reply: dict, g=None) -> Optional[dict]:
     """A question no plan could run, whose answer the reader says is ONE printed figure: the graph node
     at the place it names, served FLAGGED, in the shape ask.answer returns. The figure, the unit, the

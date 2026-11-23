@@ -55,6 +55,19 @@ CITED_ON = os.environ.get("TIEOUT_CITED", "1") == "1"                          #
 # a binding that repeats the reader's order with an absurd figure). So it overrules for a figure only.
 CITED_OVERRULE = os.environ.get("TIEOUT_CITED_OVERRULE", "1") == "1"
 CITED_OTHER = os.environ.get("TIEOUT_CITED_OTHER", "0") == "1"                 # a reading dispute (recorded; off)
+# Lane J, 23 Nov: a FLAGGED answer the text reader disputes. When the reader's own answer can be computed from
+# graph nodes (candidate B: one printed figure, a planner's plan on the places the reader cited, or the reader's
+# own arithmetic evaluated on those nodes), one arbiter call judges which of the two DERIVATIONS answers the
+# question as asked. It picks a derivation, never writes a figure. TIEOUT_JUDGE: "1" on (default), "record" asks
+# and records the pick but never serves, "0" off.
+JUDGED = "a judge chose the text reader's derivation, computed on graph nodes, over the served one"
+
+
+def judge_mode() -> str:
+    raw = os.environ.get("TIEOUT_JUDGE", "1").strip().lower()
+    return "record" if raw == "record" else ("off" if raw in ("0", "off", "") else "on")
+
+
 UNWITNESSED = "the planners read the question differently; this reading has no second witness"
 FIGURES_DIFFER = "two readers rank these in the same order but do not compute every figure the same way"
 
@@ -193,6 +206,7 @@ def second_road(question: str, g, served: dict, readers: Readers, kw: dict) -> d
         # agree on the lines the plan names and disagree on what the question asks. Not corroborated
         # (round 8, W05: the plan dropped "firmwide", and both read the channel total).
     alt = cited(served["plan"])                       # the served plan on the places the reader cited: always
+    runs = []                                         # (result, nodes), plan, whose plan: candidates for the judge
     if alt is not None and not same_answer(alt[0], res):   # recorded (no model call), served only when switched on
         reading["passage"]["cited_alt"] = {"answer": render(alt[0]), "kind": alt[0].kind, "value": alt[0].value,
                                            "unit": alt[0].unit, "extra": alt[0].extra, "nodes": alt[1]}
@@ -201,6 +215,7 @@ def second_road(question: str, g, served: dict, readers: Readers, kw: dict) -> d
                                   f"the linker's lines give {served['answer']}; on the graph nodes a reader of the text "
                                   f"cited for the whole question ({passage.cited(reply)}) the same plan gives that "
                                   "reader's own figure. Every figure here is a node of the graph")
+        runs.append((alt, served["plan"], "served planner"))
     if alt is None and shown is not None:
         # A reading dispute: ANOTHER planner's plan gives the reader's own figure on the rows the reader cited,
         # so a planner and the reader agree against the served reading. Recorded (no model call); served only
@@ -217,11 +232,139 @@ def second_road(question: str, g, served: dict, readers: Readers, kw: dict) -> d
                                           f"graph nodes a reader of the text cited for the whole question "
                                           f"({passage.cited(reply)}), gives that reader's own figure: a planner and the "
                                           "reader agree")
+                runs.append((other, s["plan"], s["role"]))
                 break
+    if shown is not None and res.tier == "FLAGGED" and judge_mode() != "off":
+        judged = _judge(question, g, served, reply, shown, readers, kw, runs)
+        if judged is not None:
+            return judged
     res.tier_reasons = list(res.tier_reasons) + [
         f"second reading: a reader of the text answers {str(reply.get('answer'))[:80]!r} ({passage.cited(reply)})"]
     reading["passage"].setdefault("used", "differs: not served")
     return served
+
+
+_JUDGE_SYSTEM = (
+    "You audit answers to questions about SEC filings. Two derivations, A and B, answer the same question from "
+    "figures printed in the filings; each lists the printed figures it read (label, filing, page, period), its "
+    "arithmetic and its result. Decide which derivation answers the question AS ASKED: the lines the question names "
+    "(not a look-alike line, a segment instead of a total, or a total instead of a part), the company and the "
+    "period the question asks for, the arithmetic the question implies (a ratio, a change, a sum, a margin), and a "
+    "plausible scale for the result. Do not compute an answer of your own. If neither answers the question as "
+    'asked, say neither. Reply JSON {"pick": "A" | "B" | "neither", "reason": "one or two sentences"}.')
+
+
+def _tree_words(tree, depth: int = 0) -> str:
+    """The arithmetic of a result tree in words: each operation and what it reads, without its figures."""
+    if not isinstance(tree, dict) or depth > 5:
+        return ""
+    kids = [k for k in (_tree_words(c, depth + 1) for c in tree.get("children") or []) if k]
+    out = f"{tree.get('op', '')} {tree.get('what', '')}".strip()
+    return (out + (" of (" + "; ".join(kids) + ")" if kids else ""))[:700]
+
+
+def _derivation(res: Result, plan: Optional[dict], how: str = "", names: Optional[list] = None) -> str:
+    """One derivation as the judge reads it: the printed figures read, the arithmetic, the result."""
+    import json
+    rows = []
+    for i, lf in enumerate(res.leaves[:12]):
+        name = f"{names[i]} = " if names and i < len(names) else ""
+        rows.append(f"  - {name}'{str(lf.label)[:140]}' | {lf.doc} page {lf.page} | period {lf.period or 'not stated'} "
+                    f"| printed {lf.printed}")
+    steps = (plan or {}).get("steps") if isinstance(plan, dict) else None
+    text = "figures read:\n" + ("\n".join(rows) or "  (none listed)")
+    text += f"\narithmetic: {how or _tree_words(res.tree) or 'the figure as read'}"
+    if steps:
+        text += f"\nplan: {json.dumps(steps, default=str)[:900]}"
+    return text + f"\nresult: {render(res)}"
+
+
+def _candidate_b(question: str, g, reply: dict, shown: tuple, readers: Readers, kw: dict, res: Result,
+                 runs: list) -> Optional[dict]:
+    """The reader's answer computed from graph nodes, tried in this order: (b1) one printed figure, the node at
+    the place the reader names (passage.as_answer); (b2) a planner's plan run on the nodes the reader cited for
+    the whole question that gives the reader's own figure (passage.by_citing, recorded by second_road); (b3) the
+    reader's own arithmetic, one expression evaluated by code on those nodes (passage.by_expression). None when
+    none of them gives an answer that differs from the served one."""
+    from . import passage
+    try:
+        one = passage.as_answer(reply, g)
+    except Exception:  # noqa: BLE001 - no node store: no candidate
+        one = None
+    if one is not None and passage.same(one["result"], shown) and not same_answer(one["result"], res):
+        return {"source": "b1", "result": one["result"], "plan": one["plan"],
+                "how": "the figure itself, as printed (no arithmetic)", "names": None}
+    for (got, plan, role) in runs:
+        if got is not None and not same_answer(got[0], res):
+            return {"source": f"b2 ({role})", "result": got[0], "plan": plan, "how": "", "names": None,
+                    "nodes": got[1]}
+    try:
+        expr = passage.by_expression(question, reply, g, shown, model=readers.passage, offline=kw.get("offline", False))
+    except Exception:  # noqa: BLE001
+        expr = None
+    if expr is not None and not same_answer(expr[0], res):
+        b, text, nodes = expr
+        return {"source": "b3", "result": b, "nodes": nodes, "how": f"the expression {text}",
+                "names": [n["name"] for n in nodes],
+                "plan": {"steps": [], "answer": None,
+                         "expression": {"expr": text, "nodes": [n["id"] for n in nodes], "named_by": "the text reader"}}}
+    return None
+
+
+def _ask_judge(user: str, arbiters: tuple, offline: bool) -> tuple:
+    """(pick "A" | "B" | "NEITHER", reason, model) from the first arbiter of the chain that answers; (None, why,
+    None) when none can (every quota spent, every call failed)."""
+    from .llm import ask_json
+    for model in arbiters:
+        try:
+            with impatient(model):                   # an overloaded arbiter is skipped for the next in the chain
+                got = ask_json(_JUDGE_SYSTEM, user, model=model, tag="judge", offline=offline)
+        except DailyLimit:
+            continue
+        except Exception:  # noqa: BLE001 - a failed call or a reply that is not JSON: the next arbiter
+            continue
+        pick = str((got or {}).get("pick") or "").strip().upper() if isinstance(got, dict) else ""
+        return (pick if pick in ("A", "B") else "NEITHER"), str((got or {}).get("reason") or "")[:500], model
+    return None, "no arbiter answered", None
+
+
+def _judge(question: str, g, served: dict, reply: dict, shown: tuple, readers: Readers, kw: dict,
+           runs: list) -> Optional[dict]:
+    """A FLAGGED answer the reader disputes, once no other rule settled it: candidate B (_candidate_b), then one
+    arbiter call that picks the derivation which answers the question as asked. The reader's derivation picked:
+    candidate B is served, FLAGGED (every figure a graph node). Anything else, or "record" mode: None, and the
+    served answer stands. The pick and its reason are recorded in reading["passage"]["judge"] in every case."""
+    import hashlib
+    res, reading = served["result"], served["reading"]
+    rec = reading["passage"]["judge"] = {"mode": judge_mode()}
+    cand = _candidate_b(question, g, reply, shown, readers, kw, res, runs)
+    if cand is None:
+        rec["candidate"] = None
+        return None
+    b = cand["result"]
+    rec.update(candidate=cand["source"], B={"answer": render(b), "kind": b.kind, "value": b.value, "unit": b.unit,
+                                            "extra": b.extra, "nodes": cand.get("nodes"),
+                                            "leaves": [lf.id for lf in b.leaves]})
+    a_text = _derivation(res, served.get("plan"))
+    b_text = _derivation(b, cand["plan"], cand["how"], cand["names"])
+    reader_first = int(hashlib.sha1(question.encode("utf-8")).hexdigest()[:8], 16) % 2 == 1
+    first, second = (b_text, a_text) if reader_first else (a_text, b_text)
+    user = f"Question: {question}\n\nDerivation A\n{first}\n\nDerivation B\n{second}"
+    pick, reason, model = _ask_judge(user, readers.arbiters, kw.get("offline", False))
+    reader_letter = "A" if reader_first else "B"
+    chose = None if pick is None else ("neither" if pick == "NEITHER" else ("reader" if pick == reader_letter else "served"))
+    rec.update(order="reader first" if reader_first else "served first", pick=pick, chose=chose, reason=reason,
+               model=model)
+    if chose != "reader" or judge_mode() != "on":
+        return None
+    b.tier = "FLAGGED"
+    b.tier_reasons = [f"the served derivation ({served['answer']}) and a derivation of the text reader's answer, computed "
+                      f"on graph nodes ({cand['source']}: {render(b)}), disagree; a judge ({model}) chose the reader's: "
+                      f"{reason[:200]}"] + [r for r in b.tier_reasons]
+    reading["passage"]["used"] = JUDGED
+    reading["passage"]["pointed"] = cand.get("nodes")
+    return {"answer": render(b), "result": b, "plan": cand["plan"], "learned": [], "seconds": 0.0, "plan_errors": [],
+            "repaired": False, "reading": {**reading, "case": JUDGED, "witnessed": False}}
 
 
 def _disputed(question: str, g, served: dict, readers: Readers, kw: dict) -> dict:
