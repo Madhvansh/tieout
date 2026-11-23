@@ -54,6 +54,7 @@ CITED_ON = os.environ.get("TIEOUT_CITED", "1") == "1"                          #
 # questions, 4 disputes): for a figure the cited rows were right 3 times of 3; for a ranking 0 of 1 (round 8 W18:
 # a binding that repeats the reader's order with an absurd figure). So it overrules for a figure only.
 CITED_OVERRULE = os.environ.get("TIEOUT_CITED_OVERRULE", "1") == "1"
+CITED_OTHER = os.environ.get("TIEOUT_CITED_OTHER", "0") == "1"                 # a reading dispute (recorded; off)
 UNWITNESSED = "the planners read the question differently; this reading has no second witness"
 FIGURES_DIFFER = "two readers rank these in the same order but do not compute every figure the same way"
 
@@ -200,6 +201,23 @@ def second_road(question: str, g, served: dict, readers: Readers, kw: dict) -> d
                                   f"the linker's lines give {served['answer']}; on the graph nodes a reader of the text "
                                   f"cited for the whole question ({passage.cited(reply)}) the same plan gives that "
                                   "reader's own figure. Every figure here is a node of the graph")
+    if alt is None and shown is not None:
+        # A reading dispute: ANOTHER planner's plan gives the reader's own figure on the rows the reader cited,
+        # so a planner and the reader agree against the served reading. Recorded (no model call); served only
+        # when switched on, for a figure only
+        for s in seen:
+            other = cited(s["plan"]) if s["plan"] is not served["plan"] else None
+            if other is not None and not same_answer(other[0], res):
+                reading["passage"]["cited_other"] = {"role": s["role"], "answer": render(other[0]), "kind": other[0].kind,
+                                                     "value": other[0].value, "unit": other[0].unit,
+                                                     "extra": other[0].extra, "nodes": other[1]}
+                if CITED_OTHER and shown[0] == "n":
+                    return _serve_pointed(other, s["plan"], reading, CITED_LINES,
+                                          f"the served reading gives {served['answer']}; the {s['role']}'s plan, run on the "
+                                          f"graph nodes a reader of the text cited for the whole question "
+                                          f"({passage.cited(reply)}), gives that reader's own figure: a planner and the "
+                                          "reader agree")
+                break
     res.tier_reasons = list(res.tier_reasons) + [
         f"second reading: a reader of the text answers {str(reply.get('answer'))[:80]!r} ({passage.cited(reply)})"]
     reading["passage"].setdefault("used", "differs: not served")
