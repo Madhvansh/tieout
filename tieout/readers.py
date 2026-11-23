@@ -49,7 +49,11 @@ COMPLETE_OTHER_PLANS = os.environ.get("TIEOUT_COMPLETE_PLANS", "1") == "1"     #
 CITED_LINES = "a plan on lines the text reader cited for the whole question"
 CITED_OVERRULED = "the lines the text reader cited against the linker's"
 CITED_ON = os.environ.get("TIEOUT_CITED", "1") == "1"                          # an abstention, another plan's gap
-CITED_OVERRULE = os.environ.get("TIEOUT_CITED_OVERRULE", "0") == "1"           # a served FLAGGED answer (measured first)
+# A row dispute: the served plan gives one figure on the linker's rows and the reader's own figure on the rows
+# the reader cited. Scored on rounds 3 to 10 before it was switched on (dev_scripts/a/phase6/cited_eval.py, 284
+# questions, 4 disputes): for a figure the cited rows were right 3 times of 3; for a ranking 0 of 1 (round 8 W18:
+# a binding that repeats the reader's order with an absurd figure). So it overrules for a figure only.
+CITED_OVERRULE = os.environ.get("TIEOUT_CITED_OVERRULE", "1") == "1"
 UNWITNESSED = "the planners read the question differently; this reading has no second witness"
 FIGURES_DIFFER = "two readers rank these in the same order but do not compute every figure the same way"
 
@@ -191,7 +195,7 @@ def second_road(question: str, g, served: dict, readers: Readers, kw: dict) -> d
     if alt is not None and not same_answer(alt[0], res):   # recorded (no model call), served only when switched on
         reading["passage"]["cited_alt"] = {"answer": render(alt[0]), "kind": alt[0].kind, "value": alt[0].value,
                                            "unit": alt[0].unit, "extra": alt[0].extra, "nodes": alt[1]}
-        if CITED_OVERRULE:
+        if CITED_OVERRULE and shown is not None and shown[0] == "n":
             return _serve_pointed(alt, served["plan"], reading, CITED_OVERRULED,
                                   f"the linker's lines give {served['answer']}; on the graph nodes a reader of the text "
                                   f"cited for the whole question ({passage.cited(reply)}) the same plan gives that "

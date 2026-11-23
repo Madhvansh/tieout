@@ -435,15 +435,28 @@ def test_an_abstention_is_filled_by_a_plan_on_the_places_the_reader_cited(road, 
     assert not readers.second_road("q", G, served(ARBITER_ALONE, "arbiter", rs), PANEL, {"executor": object()})["result"].ok
 
 
-def test_a_served_answer_is_overruled_by_the_cited_places_only_when_switched_on(road, monkeypatch):
+def test_a_row_dispute_is_settled_for_the_cited_rows_for_a_figure_and_never_for_a_ranking(road, monkeypatch):
+    # the served plan gives 52.8 on the linker's rows and the reader's own 63.4 on the rows the reader cited
+    monkeypatch.setattr(readers, "CITED_OVERRULE", False)
     road(reply(63.4e9))
     pointing(monkeypatch, None)
     citing(monkeypatch, ran(63.4e9))
     rs = [seen("maker", 52.8), seen("checker", 52.8)]
     out = readers.second_road("q", G, served(AGREE, "maker", rs), PANEL, {"executor": object()})
-    assert out["result"].value == 52.8                  # off by default: the served answer stands ...
+    assert out["result"].value == 52.8                  # switched off: the served answer stands ...
     assert out["reading"]["passage"]["cited_alt"]["value"] == 63.4e9   # ... and what the overrule would serve is on record
     monkeypatch.setattr(readers, "CITED_OVERRULE", True)
     out = readers.second_road("q", G, served(AGREE, "maker", [seen("maker", 52.8), seen("checker", 52.8)]), PANEL,
                               {"executor": object()})
     assert out["result"].value == 63.4e9 and out["reading"]["case"] == readers.CITED_OVERRULED
+    road(reply(["General Motors", "Ford"]))        # a ranking: a binding can repeat an order with absurd figures (round 8, W18)
+    order = Result("companies", [("GM", 1.78), ("F", 0.59)])
+    order.tier = "FLAGGED"
+    citing(monkeypatch, (order, []))
+    was = Result("companies", [("F", 0.59), ("GM", 0.56)])
+    was.tier = "FLAGGED"
+    one = {"answer": "F, GM", "result": was, "plan": {"steps": []}, "learned": []}
+    rs2 = [{"role": r, "model": r, "answer": "F, GM", "tier": "FLAGGED", "plan": one["plan"], "declined": False,
+            "result": was, "out": one} for r in ("maker", "checker")]
+    out = readers.second_road("q", G, served(AGREE, "maker", rs2), PANEL, {"executor": object()})
+    assert out["result"] is was and out["reading"]["case"] != readers.CITED_OVERRULED
