@@ -31,8 +31,9 @@ CALLS = {"live": 0, "cached": 0, "seconds": 0.0, "tokens_in": 0, "tokens_out": 0
 CALL_LOG: list = []          # one record per call: provider, model, tag, tokens, seconds, cached
 LOCAL_MODEL = "ollama:tieout-planner"              # finetune/MODEL_CARD.md: plans with no key
 LOCAL_LINKER = "ollama:tieout-planner-4b"          # the fine-tuned 4B also picks lines among labelled candidates
-REPLAY_MODEL = LOCAL_MODEL                         # offline replay: the models the shipped cache was recorded with
-REPLAY_LINKER = LOCAL_LINKER
+REPLAY_MODEL = "gemini:gemini-3.5-flash-lite"      # offline replay: the models the shipped cache was recorded with,
+REPLAY_LINKER = "gemini:gemini-3.5-flash-lite"     # the declared configuration's maker and linker (23 Nov: B's request,
+#                                                    so `python -m tieout ask --offline "..."` replays with no env var)
 _USAGE: dict = {}                                  # token counts of the last live call
 
 

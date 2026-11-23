@@ -500,6 +500,7 @@ def by_pointing(plan: dict, g, ex, model: Optional[str] = None, offline: bool = 
         if not had:
             had.update(readings=set(g.readings), facts={k: len(f.readings) for k, f in g.facts.items()})
         link.apply_link(g, entry)
+        _only(alias, key, entry["item"])
         nodes.append({"phrase": phrase, **{k: node[k] for k in ("id", "kind", "doc", "page", "label", "printed", "cited")
                                            if k in node}})
         return True
@@ -554,22 +555,154 @@ def by_pointing(plan: dict, g, ex, model: Optional[str] = None, offline: bool = 
         res.tier_reasons = [POINTED] + [r for r in res.tier_reasons if r != POINTED]
         return res, nodes
     finally:
-        # Withdraw everything this call added, so that no later question depends on it: the phrase map, the
-        # readings (a pointed link's readings are capped "unverified"; left behind they would lower the tier
-        # of a later answer whose pickers link the same row), and the facts
-        for key, keys in before.items():
-            if keys is None:
-                alias.pop(key, None)
-            else:
-                alias[key] = keys
-        if had:
-            for rid in [rid for rid in g.readings if rid not in had["readings"]]:
-                del g.readings[rid]
-            for key in list(g.facts):
-                if key not in had["facts"]:
-                    del g.facts[key]
-                elif len(g.facts[key].readings) > had["facts"][key]:
-                    del g.facts[key].readings[had["facts"][key]:]
+        _withdraw(g, alias, before, had)
+
+
+def _only(alias: dict, key: tuple, item: str) -> None:
+    """For this run the phrase reads the pointed line ONLY. The executor tries a phrase's links inside a loop
+    over period kinds (the year's flow, then its balance, then a figure with no period), so an older link of
+    the same phrase that has a dated fact beats a pointed sentence figure or an undated maturity-table row
+    even though the pointed link is newer (found 23 Nov 04:20, round 7 U07: the cited rows give 13.34%, the
+    run on them served the linker's 3.27%). The old links come back with the rest in _withdraw."""
+    if item in (alias.get(key) or []):
+        alias[key] = [item]
+
+
+def _withdraw(g, alias: dict, before: dict, had: dict) -> None:
+    """Withdraw everything a pointed or cited link added, so that no later question depends on it: the
+    phrase map, the readings (a pointed link's readings are capped "unverified"; left behind they would
+    lower the tier of a later answer whose pickers link the same row), and the facts."""
+    for key, keys in before.items():
+        if keys is None:
+            alias.pop(key, None)
+        else:
+            alias[key] = keys
+    if had:
+        for rid in [rid for rid in g.readings if rid not in had["readings"]]:
+            del g.readings[rid]
+        for key in list(g.facts):
+            if key not in had["facts"]:
+                del g.facts[key]
+            elif len(g.facts[key].readings) > had["facts"][key]:
+                del g.facts[key].readings[had["facts"][key]:]
+
+
+# ------------------------------------------- the pointer, second form: the places cited for the whole question
+#
+# Asked for ONE line out of its question, the reader does worse than on the whole question (round 10: on
+# N15 it abstains on Chevron's line alone, yet cites Chevron's figure when it answers the whole question;
+# on N09 it reads a sentence's "278 million" alone and the Item 2 table for the whole question). Every
+# fact it cites for the whole question is an address (filing, page, figure), and 546 of 579 such
+# addresses are nodes of the graph (dev_scripts/fable3/resolve_rate.py). by_citing binds the lines of a
+# planner's plan to those nodes, with no new model call, and keeps a binding only when the plan, run on
+# the graph, gives the reader's own figure for the whole question: the plan (written from the question
+# alone, never seeing a number) and the reader's own reading then agree on the figure, and every figure
+# served is a node read by the executor, with the column head choosing the period and the caption the
+# scale. The reader names rows; it never supplies a figure.
+
+CITED = "a reader of the text cited this line for the whole question; no picker chose it from the linker's shortlist"
+CITED_PER_LINE = 4               # cited nodes tried for one line of a plan, best label match first
+CITED_MAX_RUNS = 24              # bindings run per plan at most
+
+
+def cited_nodes(reply: dict, g=None) -> list:
+    """The graph node at every place the reader cited for the whole question, in the order cited. A table
+    row counts once (it is linked as a row: the column head picks the cell). A fact the reader did not
+    find printed on the page it shows, or a place with no node, is left out."""
+    out, seen = [], set()
+    for f in (reply or {}).get("facts") or []:
+        if not isinstance(f, dict) or not (f.get("in_context") and f.get("printed")):
+            continue
+        node = node_for(f, "", g)
+        if node is None:
+            continue
+        key = node.get("row_id") or node["id"]
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append({**node, "cited": f"{f.get('doc')} page {f.get('page')}", "said": str(f.get("label") or "")})
+    return out
+
+
+def _steps_of(plan: dict) -> list:
+    """(step number, company, name, words, a concept line?) of every step lines_of reads, once per step."""
+    out, seen = [], set()
+    for i, company, name, words, _ in lines_of(plan):
+        if i not in seen:
+            seen.add(i)
+            out.append((i, company, name, words, not isinstance(plan["steps"][i].get("item"), str)))
+    return out
+
+
+def _run_bound(plan: dict, g, ex, binds: list) -> Optional[tuple]:
+    """Run a plan once with each (step, node) of `binds` linked for this call only (as by_pointing links
+    a pointed line). (result, nodes) or None when a link cannot be made or the plan does not run."""
+    from . import link
+    alias, before, had, nodes = link.aliases(g), {}, {}, []
+    plan2 = copy.deepcopy(plan)
+    try:
+        for (i, ticker, _name, words, is_concept), node in binds:
+            if is_concept:                            # a concept line is read as an item named in words, this run only
+                step = plan2["steps"][i]
+                step.pop("concept", None)
+                step["item"] = words
+            entry = link_entry(g, node, ticker, words)
+            if entry is None:
+                return None
+            entry["objections"] = [CITED] + [o for o in entry["objections"] if o != POINTED]
+            key = link._phrase_key(ticker, words)
+            before.setdefault(key, list(alias[key]) if key in alias else None)
+            if not had:
+                had.update(readings=set(g.readings), facts={k: len(f.readings) for k, f in g.facts.items()})
+            link.apply_link(g, entry)
+            _only(alias, key, entry["item"])
+            nodes.append({"phrase": words, **{k: node[k] for k in ("id", "kind", "doc", "page", "label", "printed", "cited")
+                                              if k in node}})
+        res = ex.run(plan2)
+        if not res.ok:
+            return None
+        if res.tier in ("VERIFIED", "WITNESSED"):
+            res.tier = "FLAGGED"
+        res.tier_reasons = [CITED] + [r for r in res.tier_reasons if r not in (CITED, POINTED)]
+        return res, nodes
+    except Exception:  # noqa: BLE001 - a planner's plan the executor refuses can be malformed
+        return None
+    finally:
+        _withdraw(g, alias, before, had)
+
+
+def by_citing(plan: dict, g, ex, reply: dict, shown: Optional[tuple]) -> Optional[tuple]:
+    """Run a plan on the graph with its lines bound to the nodes the reader cited for the whole question.
+
+    A line of one company may take any cited node of that company (the CITED_PER_LINE that share most
+    words with the line, ties by citing order); a line of a company the reader cited nothing for keeps the
+    linker's link. Two lines never take the same node. Bindings run best match first, CITED_MAX_RUNS at
+    most, and the first whose result is the reader's own figure (or ranking) is returned: (result, nodes).
+    None when no binding gives it, so a binding that merely makes the plan run is never served."""
+    import itertools
+    from . import link
+    if shown is None or not isinstance(plan, dict) or not isinstance(plan.get("steps"), list):
+        return None
+    nodes, steps = cited_nodes(reply, g), _steps_of(plan)
+    if not nodes or not steps or len(steps) > MAX_LINES:
+        return None
+    options = []
+    for i, company, name, words, _ in steps:
+        want = set(link.tokens(words))
+        mine = [n for n in nodes if n["ticker"] == company]
+        mine.sort(key=lambda n: -len(want & set(link.tokens(f"{n['label']} {n.get('said', '')}"))))
+        options.append(list(enumerate(mine[:CITED_PER_LINE])) or [(0, None)])
+    combos = []
+    for combo in itertools.product(*options):
+        picked = [n["row_id"] if n.get("row_id") else n["id"] for _, n in combo if n is not None]
+        if picked and len(picked) == len(set(picked)):
+            combos.append((sum(rank for rank, _ in combo), combo))
+    combos.sort(key=lambda x: x[0])
+    for _, combo in combos[:CITED_MAX_RUNS]:
+        got = _run_bound(plan, g, ex, [(s, n) for s, (_, n) in zip(steps, combo) if n is not None])
+        if got is not None and same(got[0], shown):
+            return got
+    return None
 
 
 def as_answer(reply: dict, g=None) -> Optional[dict]:

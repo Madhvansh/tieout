@@ -45,6 +45,11 @@ LINES_OVERRULED = "the text reader's lines against the linker's"
 # Two rules added after round 10's misses were read (23 Nov), each with a switch so its gain can be measured:
 NODE_OVER_BELIEF = os.environ.get("TIEOUT_NODE_OVER_BELIEF", "1") == "1"       # a node at a named place outranks a decline
 COMPLETE_OTHER_PLANS = os.environ.get("TIEOUT_COMPLETE_PLANS", "1") == "1"     # point at the gap of another planner's plan
+# Session A, 23 Nov 04:05: the places the reader cited for the WHOLE question (passage.by_citing, no new call)
+CITED_LINES = "a plan on lines the text reader cited for the whole question"
+CITED_OVERRULED = "the lines the text reader cited against the linker's"
+CITED_ON = os.environ.get("TIEOUT_CITED", "1") == "1"                          # an abstention, another plan's gap
+CITED_OVERRULE = os.environ.get("TIEOUT_CITED_OVERRULE", "0") == "1"           # a served FLAGGED answer (measured first)
 UNWITNESSED = "the planners read the question differently; this reading has no second witness"
 FIGURES_DIFFER = "two readers rank these in the same order but do not compute every figure the same way"
 
@@ -101,6 +106,7 @@ def second_road(question: str, g, served: dict, readers: Readers, kw: dict) -> d
     declines = [s for s in seen if s["declined"]]
     lacking = len(declines) >= 2 or any(s["role"] == "arbiter" for s in declines)   # the planners say it is not stated
     pointed = _pointer(g, readers, kw)
+    cited = _citer(g, reply, shown, kw)
 
     if not res.ok:
         out = passage.as_answer(reply, g) if answers else None
@@ -115,6 +121,15 @@ def second_road(question: str, g, served: dict, readers: Readers, kw: dict) -> d
             return {**out, "reading": {**reading, "case": POINTED_NODE, "witnessed": False}}
         if lacking:
             return served
+        for s in seen if CITED_ON and answers else []:
+            # a planner's plan on the places the reader cited for the whole question: served only if it gives
+            # the reader's own figure (two readings agree, every figure a node); no new model call
+            got = cited(s["plan"])
+            if got is not None:
+                return _serve_pointed(got, s["plan"], reading, CITED_LINES,
+                                      f"no plan ran on the linker's lines; this {s['role']}'s plan, run on the graph nodes "
+                                      f"a reader of the text cited for the whole question ({passage.cited(reply)}), gives "
+                                      "that reader's own figure")
         for s in seen:                                # a planner's plan, its missing lines pointed at
             got = pointed(s["plan"], s["result"].missing)
             if got is not None:
@@ -146,6 +161,12 @@ def second_road(question: str, g, served: dict, readers: Readers, kw: dict) -> d
             # of two years earlier, "linked but has no value for FY2023"). With that line pointed at, the plan
             # runs on the graph; it is served only if it gives the figure the reader gives for the whole question
             if not s["result"].ok and s["result"].missing:
+                got = cited(s["plan"]) if CITED_ON else None
+                if got is not None:
+                    return _serve_pointed(got, s["plan"], reading, CITED_LINES,
+                                          "this planner's plan stopped at a line the linker could not find; on the graph "
+                                          "nodes a reader of the text cited for the whole question it gives that reader's "
+                                          f"own figure ({passage.cited(reply)})")
                 got = pointed(s["plan"], s["result"].missing)
                 if got is not None and passage.same(got[0], shown):
                     return _serve_pointed(got, s["plan"], reading, POINTED_LINES,
@@ -166,6 +187,15 @@ def second_road(question: str, g, served: dict, readers: Readers, kw: dict) -> d
         # The plan on the pointed lines repeats the graph while the reader's own answer differs: the two
         # agree on the lines the plan names and disagree on what the question asks. Not corroborated
         # (round 8, W05: the plan dropped "firmwide", and both read the channel total).
+    alt = cited(served["plan"])                       # the served plan on the places the reader cited: always
+    if alt is not None and not same_answer(alt[0], res):   # recorded (no model call), served only when switched on
+        reading["passage"]["cited_alt"] = {"answer": render(alt[0]), "kind": alt[0].kind, "value": alt[0].value,
+                                           "unit": alt[0].unit, "extra": alt[0].extra, "nodes": alt[1]}
+        if CITED_OVERRULE:
+            return _serve_pointed(alt, served["plan"], reading, CITED_OVERRULED,
+                                  f"the linker's lines give {served['answer']}; on the graph nodes a reader of the text "
+                                  f"cited for the whole question ({passage.cited(reply)}) the same plan gives that "
+                                  "reader's own figure. Every figure here is a node of the graph")
     res.tier_reasons = list(res.tier_reasons) + [
         f"second reading: a reader of the text answers {str(reply.get('answer'))[:80]!r} ({passage.cited(reply)})"]
     reading["passage"].setdefault("used", "differs: not served")
@@ -254,6 +284,21 @@ def _pointer(g, readers: Readers, kw: dict):
         except Exception:  # noqa: BLE001 - a planner's plan the executor itself refused can be malformed
             return None
     return pointed
+
+
+def _citer(g, reply: dict, shown, kw: dict):
+    """passage.by_citing for this question: plan -> (the executor's result on the nodes the reader cited for
+    the whole question, the nodes) when that result is the reader's own figure, else None. No model call."""
+    from . import passage
+
+    def cited(plan):
+        if kw.get("executor") is None or not isinstance(plan, dict) or shown is None:
+            return None
+        try:
+            return passage.by_citing(plan, g, kw["executor"], reply, shown)
+        except Exception:  # noqa: BLE001 - a planner's plan the executor itself refused can be malformed
+            return None
+    return cited
 
 
 def _overruled(served: dict, reply: dict) -> str:

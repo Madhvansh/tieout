@@ -370,3 +370,80 @@ def test_another_planners_plan_is_completed_by_pointing_when_it_gives_the_reader
     pointing(monkeypatch, ran(70000.0, "count"))        # the completed plan says something else: nothing changes
     out = readers.second_road("q", G, served(readers.ONE_READER, "checker", rs), PANEL, {"executor": object()})
     assert out["result"].value == 65900.0
+
+
+# ----------------------------------------------- the places the reader cited for the whole question (by_citing)
+
+TWO_LINES = {"steps": [{"op": "get", "company": "GM", "item": "number of dealers", "period": {"fy": 2025}},
+                       {"op": "get", "company": "F", "item": "number of dealers", "period": {"fy": 2025}},
+                       {"op": "calc", "expr": "s1 + s2"}]}
+
+
+def cited_node(nid, ticker, value, label="dealers"):
+    return {"kind": "row", "id": nid, "row_id": nid, "ticker": ticker, "doc": f"{ticker}_FY2025_10K", "page": 7,
+            "label": label, "printed": str(value), "value": float(value), "unit": "count", "period": "FY2025",
+            "cited": f"{ticker}_FY2025_10K page 7", "said": label}
+
+
+def summing(binds_seen):
+    """A fake executor run: the plan adds the figures of the nodes bound to its lines."""
+    def run_bound(plan, g, ex, binds):
+        binds_seen.append([n["id"] for _, n in binds])
+        res = Result("number", sum(n["value"] for _, n in binds), "count")
+        res.tier = "FLAGGED"
+        return res, [{"phrase": s[3], "id": n["id"]} for s, n in binds]
+    return run_bound
+
+
+def test_by_citing_keeps_only_a_binding_that_gives_the_readers_own_figure(monkeypatch):
+    nodes = [cited_node("gm-a", "GM", 4566), cited_node("gm-b", "GM", 6276), cited_node("f-a", "F", 2900)]
+    monkeypatch.setattr(passage, "cited_nodes", lambda reply, g=None: nodes)
+    tried = []
+    monkeypatch.setattr(passage, "_run_bound", summing(tried))
+    got = passage.by_citing(TWO_LINES, G, object(), {}, ("n", 6276.0 + 2900.0))
+    assert got is not None and got[0].value == 9176.0
+    assert [n["id"] for n in got[1]] == ["gm-b", "f-a"]            # each line took a node of its own company
+    assert all(len(ids) == 2 for ids in tried)                     # every line was bound in every run
+    assert passage.by_citing(TWO_LINES, G, object(), {}, ("n", 1234.0)) is None   # a run that merely runs is not served
+    assert passage.by_citing(TWO_LINES, G, object(), {}, None) is None             # no figure of the reader: nothing
+
+
+def test_by_citing_never_binds_two_lines_to_one_node(monkeypatch):
+    plan = {"steps": [{"op": "get", "company": "GM", "item": "dealers in GMNA", "period": {"fy": 2025}},
+                      {"op": "get", "company": "GM", "item": "dealers in GMI", "period": {"fy": 2025}},
+                      {"op": "calc", "expr": "s1 + s2"}]}
+    monkeypatch.setattr(passage, "cited_nodes", lambda reply, g=None: [cited_node("gm-a", "GM", 4566)])
+    monkeypatch.setattr(passage, "_run_bound", summing([]))
+    assert passage.by_citing(plan, G, object(), {}, ("n", 9132.0)) is None
+
+
+def citing(monkeypatch, result):
+    monkeypatch.setattr(passage, "by_citing", lambda plan, g, ex, reply, shown: result)
+
+
+def test_an_abstention_is_filled_by_a_plan_on_the_places_the_reader_cited(road, monkeypatch):
+    road(reply(10842.0, unit="count"))
+    monkeypatch.setattr(passage, "node_of_answer", lambda reply, g=None: None)   # the answer is arithmetic, not one figure
+    monkeypatch.setattr(passage, "by_pointing", lambda *a, **k: pytest.fail("the cited places settle it: no new call"))
+    citing(monkeypatch, ran(10842.0, "count"))
+    rs = [seen("maker", None), seen("checker", None), seen("arbiter", None)]
+    out = readers.second_road("q", G, served(ARBITER_ALONE, "arbiter", rs), PANEL, {"executor": object()})
+    assert out["result"].value == 10842.0 and out["result"].tier == "FLAGGED"
+    assert out["reading"]["case"] == readers.CITED_LINES
+    citing(monkeypatch, None)                           # no binding gives the reader's figure: the old pointer is tried
+    pointing(monkeypatch, None)
+    assert not readers.second_road("q", G, served(ARBITER_ALONE, "arbiter", rs), PANEL, {"executor": object()})["result"].ok
+
+
+def test_a_served_answer_is_overruled_by_the_cited_places_only_when_switched_on(road, monkeypatch):
+    road(reply(63.4e9))
+    pointing(monkeypatch, None)
+    citing(monkeypatch, ran(63.4e9))
+    rs = [seen("maker", 52.8), seen("checker", 52.8)]
+    out = readers.second_road("q", G, served(AGREE, "maker", rs), PANEL, {"executor": object()})
+    assert out["result"].value == 52.8                  # off by default: the served answer stands ...
+    assert out["reading"]["passage"]["cited_alt"]["value"] == 63.4e9   # ... and what the overrule would serve is on record
+    monkeypatch.setattr(readers, "CITED_OVERRULE", True)
+    out = readers.second_road("q", G, served(AGREE, "maker", [seen("maker", 52.8), seen("checker", 52.8)]), PANEL,
+                              {"executor": object()})
+    assert out["result"].value == 63.4e9 and out["reading"]["case"] == readers.CITED_OVERRULED
